@@ -10,9 +10,9 @@ It takes the input, for example the pixels of an image and applies a liner funct
 
 ## Linear Regression
 
-A linear function is just a big matrix multiply. It takes all the inputs as a big vector that we denote $ X $ and multiplies them to a weights matrix $ W $, then we add the bias $ b $. With this computation we get the scores $ y $.
+A linear function is just a big matrix multiply. It takes all the inputs as a big vector that we denote $X$ and multiplies them to a weights matrix $W$, then we add the bias $b$. With this computation we get the scores $y$.
 
-The weights and the bias is where the machine learning comes in. At training the model we want to find the values of $ W $ and $ b $ which are good at performing those predictions.
+The weights and the bias is where the machine learning comes in. At training the model we want to find the values of $W$ and $b$ which are good at performing those predictions.
 
 ## SOFTMAX
 

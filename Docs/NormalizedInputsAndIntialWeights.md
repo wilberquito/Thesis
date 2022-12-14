@@ -43,9 +43,3 @@ We always want that our weights and biasses always be initzialized a good enough
 $$ W_{0}? \hspace{5em} b_{0}? $$
 
 There are a lot of fancy schemes to find good initialization values. The simplest general method is to drop the weights randomly for a Gauss distribution of mean 0 and a standard deviation of $\sigma$.
-
-
-
-
-
-
