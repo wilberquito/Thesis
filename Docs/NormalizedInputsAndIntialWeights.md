@@ -19,9 +19,11 @@ print(a)
 On top of the numerical issues, there are also really good mathematical benefits to keep mean of 0 and equal variance when ever posible.
 
 - *MEAN*
+
 $$ \mu(X_{i}) = 0 $$
 
 - *VARIANCE*
+
 $$ \sigma(X_{i}) = \sigma(X_{j}) $$
 
 A badly condition problem means that the optimizer has to do a lot of searching to have a good solution. A well condition problem makes it more eassy to the optimizer to find a good solution.
