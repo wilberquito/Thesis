@@ -12,6 +12,6 @@ Using embedings, we can mesure how well we are doing by comparing the distance $
 
 $$ D(S,L) = -\sum_{j}L_{i}*log(S_{i}) $$
 
-The *Cross Entropy* is not symetric, because of the nasted $log$ in the equation. There will be 0 in $L$ vector where in the $S(Y)$ vector is guaranted that you always have a litle bit of probability every where, so you will never take a $log(0)$
+The `Cross Entropy` is not symetric, because of the nasted $log$ in the equation. There will be 0 in $L$ vector where in the $S(Y)$ vector is guaranted that you always have a litle bit of probability every where, so you will never take a $log(0)$
 
 $$ D(S,L) \neq D(L,S) $$ 
