@@ -20,12 +20,12 @@ The bigger the test set the less noisy the accurasity mesure will be. There is a
 
 Imagine that the validation set has 3000 examples and following the rule of *30* which level of accuracy improvement can be trust and not being confused by noice?
 
-|YES|NO|Acuracy|
-|:---:|:---:|---:|
-|X||$80\%\rightarrow81\%$|
-||X|$80\% \rightarrow 80.5\%$|
-||X|$80\% \rightarrow 80.1\%$|
-|X||$80\% \rightarrow 79\%$|
+|YES|NO|Previous|Current|
+|:---:|:---:|---:|---:|
+|X||$80\%$|$81\%$
+||X|$80\%$|$80.5\%$|
+||X|$80\%$|$80.1\%$|
+|X||$80\%$|$79\%$|
 
 $$ \frac{1.0*3000}{100} >= 30 \hspace{2.5em} \frac{0.5*3000}{100} < 30 $$
 
