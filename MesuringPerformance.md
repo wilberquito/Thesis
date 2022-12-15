@@ -27,8 +27,8 @@ Imagine that the validation set has 3000 examples and following the rule of *30*
 ||X|$80\\%$|$80.1\\%$|
 |X||$80\\%$|$79\\%$|
 
-$$ \frac{1.0*3000}{100} >= 30 \hspace{2.5em} \frac{0.5*3000}{100} < 30 $$
+$$ \frac{1.0 \times 3000}{100} >= 30 \hspace{2.5em} \frac{0.5 \times 3000}{100} < 30 $$
 
-$$ \frac{0.1*3000}{100} < 30 \hspace{2.5em} \frac{1.0*3000}{100} >= 30 $$
+$$ \frac{0.1 \times 3000}{100} < 30 \hspace{2.5em} \frac{1.0 \times 3000}{100} >= 30 $$
 
 As we can see in the first and the last case, whatever we are doing with the model is indeed changing the accuracity of the model and it can be taken in account because is hightly statistically improvable that the performance improvement or loss has being caused by noise.
