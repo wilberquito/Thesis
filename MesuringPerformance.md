@@ -10,4 +10,4 @@ The simplest way is to take a small subset of the traning set, not using in trai
 
 A solution to this problem is to take another chunk from the training set and hide it $X_{test}$. Now you can create a model based on trial and error because the final test will be done by a set of data never seen before.
 
-![Udacity](../training-test-validation.png)
+![Udacity](./Img/training-test-validation.png)
