@@ -18,16 +18,17 @@ The bigger the test set the less noisy the accurasity mesure will be. There is a
 
 ### Rule of *30*
 
-Imagine that the validation set has 3000 examples and following the rule of *30* which level of accuracy improvement can be trust and not being caused by noice?
+Imagine that the validation set has 3000 examples and following the rule of *30* which level of accuracy improvement can be trust and not being confused by noice?
 
 |YES|NO|Acuracy|
-|---|---|---|
-| X |   | $80\% \rightarrow 81\%$|
-|   | X  | $80\% \rightarrow 80.5\%$|
-|   | X  | $80\% \rightarrow 80.1\%$|
+|:---:|:---:|---:|
+|X||$80\%\rightarrow81\%$|
+||X|$80\% \rightarrow 80.5\%$|
+||X|$80\% \rightarrow 80.1\%$|
+|X||$80\% \rightarrow 79\%$|
 
-$$ \frac{1.0*3000}{100} >= 30 $$
+$$ \frac{1.0*3000}{100} >= 30 \hspace{2.5em} \frac{0.5*3000}{100} < 30 $$
 
-$$ \frac{0.5*3000}{100} < 30 $$
+$$ \frac{0.1*3000}{100} < 30 \hspace{2.5em} \frac{1.0*3000}{100} >= 30 $$
 
-$$ \frac{0.1*3000}{100} < 30 $$
+As we can see in the first and the last case, whatever we are doing with the model is indeed changing the accuracity of the model and it can be taken in account because is hightly statistically improvable that the performance improvement or loss has being caused by noise.
