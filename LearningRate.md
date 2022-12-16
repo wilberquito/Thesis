@@ -4,7 +4,7 @@ The stochastic gradient descent technique is used to develop deep learning neura
 
 Stochastic gradient descent is an optimization process that uses instances from the training data to evaluate the error for the current state, then updates the weights of the model using the back-propagation of errors procedure, sometimes known as simply backpropagation.
 
-The step size, often known as the “learning rate,” is the amount by which the weights are changed during training.
+The step size, often known as the **learning rate**, is the amount by which the weights are changed during training.
 
 The learning rate is an adjustable hyperparameter that has a modest positive value, usually between 0.0 and 1.0, and is used in the training of neural networks.
 
