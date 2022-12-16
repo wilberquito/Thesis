@@ -15,4 +15,4 @@ Of course in each iteration, derivative direction of the loss function may not b
 
 This method is the core of `Deep Learning` because it works efficient and great with both, big data and model size.
 
-![Udacity](../Img/../TFM/Img/stochastic-gradient-descent.png)
+![Udacity](./Img/stochastic-gradient-descent.png)
