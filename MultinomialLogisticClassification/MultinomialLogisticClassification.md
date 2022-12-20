@@ -24,7 +24,7 @@ Multinomial logistic classification run over a linear model, which means that th
 
 ![Udacity](../Img/derivative-of-a-linear-function.png)
 
-## Linear model are here to stay
+## Linear models are here to stay
 
 We want to keep the parameters inside a linear function, but we also want to the entire model to be not linear. We can not just multipling our inputs with a linear functions, because it is just the equivalent for a one big linear function.
 
