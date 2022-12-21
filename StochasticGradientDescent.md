@@ -15,10 +15,10 @@ Of course in each iteration, derivative direction of the loss function may not b
 
 This method is the core of `Deep Learning` because it works efficient and great with both, big data and model size.
 
-![Udacity](./Img/stochastic-gradient-descent.png)
+![Udacity](./_images/stochastic-gradient-descent.png)
 
 ## Momentum
 
 With stochast gradient descent we are taking many steps in a random direction, but on agregate those steps take us towards the minimum of the loss function. Meanwhile the process is running what we can do is to compute the average of the gradient and use this average gradient to use the direction of current batch of the data. This leads to a better convergence.
 
-![Udacity](./Img/momentum-gradient-descent.png)
+![Udacity](./_images/momentum-gradient-descent.png)

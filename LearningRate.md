@@ -16,7 +16,7 @@ This implies that a learning rate of 0.1, which is a popular default setting, me
 
 One thing that is always the case however is that is beneficial to make that step smaller and smaller as you train. Some like to apply and exponencial but there are a lot of ways to handle it. Lowering it over time is the key thing to remember.
 
-![Udacity](./Img/learning-rate-decay.png)
+![Udacity](./_images/learning-rate-decay.png)
 
 ## Learning Rate Tuning
 
@@ -33,4 +33,4 @@ As a result, we should avoid using a learning rate that is either too high or to
 
 Never trust how quickly you learn, it has often little to do in how well you train.
 
-![Udacity](./Img/learning-rate-tuning.png)
+![Udacity](./_images/learning-rate-tuning.png)
