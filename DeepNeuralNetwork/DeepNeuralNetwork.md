@@ -8,7 +8,7 @@ For every single little batch of the data in the training set we run the [Forwar
 
 Because we are lazy engineer we get something that works, the `Logistic Classifier` and do the minimount amount of changes to make it non linear. Instead of having a single matrix multiply as a classifier, we are going to insert a `ReLU` right in the middle, we now have 2 matrixes, one going from the inputs to the ReLUs and another one conecting the ReLUs to the classifier.
 
-![Udacity](../_images/DeepNeuralNetwork/neural-network-with-relu.png)
+![Udacity](../_images/DNN-neuralnetworkwithrelu.png)
 
 We solve the problem of the linearity thanks by the ReLU in the middle, but now have a new parameter to tune $H$, which correspond to the number of ReLU's units that we have in a classifier.
 

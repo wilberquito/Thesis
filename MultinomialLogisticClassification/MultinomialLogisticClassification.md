@@ -30,6 +30,6 @@ We want to keep the parameters inside a linear function, but we also want to the
 
 ![Udacity](../_images/concatenation-of-linear-functions.png)
 
-So, what we are going to do is introduce non linearity, see [Logistic Classifier to Deep Network](../DeepNeuralNetwork/LogisticClassifierToDeepNetwork.md).
+So, what we are going to do is introduce non linearity, see [Logistic Classifier to Deep Network](../DeepNeuralNetwork/DeepNeuralNetwork.md).
 
 ![Udacity](../_images/non-linearity-introduction.png)
