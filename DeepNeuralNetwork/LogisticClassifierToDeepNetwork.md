@@ -2,7 +2,7 @@
 
 A Neural Network is a supervised algorithm, where we have input data(independent variables) and output labels(dependent variable). By using the training data we will train NN to predict the output variable. In the beginning, NN makes some predictions which are almost random. These predictions are compared with the actual output and the error is computed as the difference between predicted and actual output. Our objective is to train the NN to reduce this error/cost function.
 
-For every single little batch of the data in the training set we run the [Forward Propagation](#forward-propagation) and then the [Back Propagation](#back-propagation) that will give us gradients for each of the weights in our model, then we apply the those gradients with a learning rate to the original weights and update them. We are going to repeat these proces many many times (epocs) and this is how the entire model gets optimized.
+For every single little batch of the data in the training set we run the [Forward Propagation](#forward-propagation) and then the [Back Propagation](#back-propagation) that will give us gradients for each of the weights in our model, then we apply those gradients with a learning rate to the original weights and update them. We are going to repeat these proces many many times (epocs) and this is how the entire model gets optimized.
 
 ## Logistic Classifier to Deep Neural Network
 
@@ -10,7 +10,7 @@ Because we are lazy engineer we get something that works, the `Logistic Classifi
 
 ![Udacity](../_images/DeepNeuralNetwork/neural-network-with-relu.png)
 
-We solve the problem of the linearity thanks by the RELU in the middle, but now have a new parameter to tune $H$, which correspond to the number of Relu's units that we have in a classifier.
+We solve the problem of the linearity thanks by the ReLU in the middle, but now have a new parameter to tune $H$, which correspond to the number of ReLU's units that we have in a classifier.
 
 ## Neural Network phases
 
