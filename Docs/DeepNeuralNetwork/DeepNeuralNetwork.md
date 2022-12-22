@@ -41,3 +41,19 @@ Our objective is to fine tune the network parameters to minimize the error term(
 In particular, each block of the back prop often takes about twice the memory for the forward prop and twice to compute, that's important when you want to size the model and fit into your memory.
 
 ![Udacity](../_images/DNN-backpropcostvsforwardprop.png)
+
+## Training a Deep Learning Network
+
+For now we have a small neural network, it's not particularly deep, just a few layers. We can make it more complex, by increasing the size of the hidden layers in the middle, but it turns out that increasing this $H$ is not particularly efficient in general.
+
+![Udacity](../_images/DNN-simpleneuralnetworkwithcomplexhiddenlayer.png)
+
+Instead, what we can do is add a lot of more layers. There are a lot of good reason for do that.
+
+![Udacity](../_images/DNN-deepneuralnetwork.png)
+
+One is parameter efficiency. You can typically get more performance going deeper than wider. Another one is that a lot of natural phenomena, that we may are interested in, tend to have a hierarchical structure which deep model naturally capture.
+
+For example, in the case of images, if we visualize what the model learns, you'll often find very simple things at the lowest layers, like lines or edges. Once you move up, you tend to see more complicated things like geometrics shapes, go further up and you start seeing things like objects. This is very powerful, because the model structure matches the kind of abstractions that you might expect to see in the data and as a result the model has an easier time learning them.
+
+![Udacity](../_images/DNN-patternabstraction.png)
