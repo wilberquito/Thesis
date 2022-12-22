@@ -2,6 +2,8 @@
 
 First, let's clarify that bias-variance tradeoff and overfitting-underfitting are equivalent.
 
-![jjs](_images/DNN-patternabstraction.png "a title")
+## Where does it steam for?
 
-[![Alt text](_images/DNN-backprop.png "Hola")](https://digitalocean.com)
+The overall idea behind the ML system is to model the hidden distribution of a data set from the samples collected. If you sample enough from the distribution, you can get a fairly accurate re-creation of the distribution as shown below.
+
+[![Modeling](_images/BASE-modelingdata.png "Hidden distribution")](https://towardsdatascience.com/understanding-the-bias-variance-tradeoff-and-visualizing-it-with-example-and-python-code-7af2681a10a7)
