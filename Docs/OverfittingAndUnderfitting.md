@@ -10,7 +10,7 @@ The overall idea behind the ML system is to model the hidden distribution of a d
 
 ## What is Bias and Variance in ML
 
-Both bias and variance can be addressed as the source of errors in our ML system. Suppose that we have a training dataset $D$ consisting of $(x,y)$ pairs sampled from the hidden distribution $(y=f(x)+e)$. We build a model $f`$ from the dataset $D$ such that the error between the training labels and the predicted value is minimized $error = y-f`(x)$.
+Both bias and variance can be addressed as the source of errors in our ML system. Suppose that we have a training dataset $D$ consisting of $(x,y)$ pairs sampled from the hidden distribution $(y=f(x)+e)$. We build a model $f\\`$ from the dataset $D$ such that the error between the training labels and the predicted value is minimized $error = y-f`(x)$.
 
 ### Bias
 
