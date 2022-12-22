@@ -16,7 +16,7 @@ Both bias and variance can be addressed as the source of errors in our ML system
 
 Bias is termed as the error between the average model prediction $f'(x)$ and the ground truth $f(x)$.
 
-$$ bias = \Epsilon[f'(x)] - f(x) $$
+$$ bias = \epsilon[f'(x)] - f(x) $$
 
 The bias of the estimated function tells us the capacity of the underlying model to predict the values. Simpler models, in general, fail to capture the complexity of high dimensional data, and hence they have a higher bias.
 
@@ -33,7 +33,7 @@ The high bias of a model is associated with the following
 
 Variance refers to the average variability in the model prediction for the given dataset.
 
-$$ variance = \Epsilon[(f'(x) - \Epsilon[f'(x)]^2)] $$
+$$ variance = \epsilon[(f'(x) - \epsilon[f'(x)]^2)] $$
 
 [![Hight Variance](_images/BASE-hightvarianceexample.png "Hidden distribution")](https://www.ibm.com/cloud/learn/overfitting)
 
