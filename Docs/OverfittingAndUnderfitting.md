@@ -50,6 +50,6 @@ The high variance of a model is associated with the following:
 
 In general, if you increase the complexity of the underlying system, the bias of the system decreases while the variance increases. They both are inversely proportional to each other. You can’t decrease both of them. This point will be the basis for the bias-variance tradeoff.
 
-The error is defined as $Error = bias^2 + variance + irreducible\_error$, the best model is where the error is reduced.
+The error is defined as $Error = bias^2 + variance + irreducible\ error$, the best model is where the error is reduced.
 
 ![Bias](_images/BASE-biasvariancetradeoff.png "bias-variance tradeoff")
