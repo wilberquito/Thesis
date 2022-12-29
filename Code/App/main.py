@@ -30,8 +30,8 @@ def _save_file_to_disk(file: UploadFile = File(...), path=".", save_as="default"
         os.makedirs(path)
     extension = os.path.splitext(file.filename)[-1]
     temp_file = os.path.join(path, save_as + extension)
-    with open(temp_file, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    with open(temp_file, "wb") as f:
+        shutil.copyfileobj(file.file, f)
     return temp_file
 
 @app.get("/ml-models")
