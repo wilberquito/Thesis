@@ -1,6 +1,6 @@
 import os
 import shutil
-from typing import Union
+from typing import List, Union, ValuesView
 import uuid
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks 
 from fastapi.templating import Jinja2Templates
@@ -18,63 +18,82 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 @app.post("/predict")
-async def perform_predict(file: UploadFile = File(...),):
+async def predict_single_image(file: UploadFile = File(...)):
+    folder, task_id = _mk_temporal_task()
     # content type support
-    content_type_supported = ('image/jpeg', 'image/png')
-    if file.content_type not in content_type_supported:
+    if not _is_image_sanitized(file):
         raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
-    temp_file = _save_file_to_disk(file, path="temp", save_as="latest")
+    _save_file_to_disk(file, folder, file.filename)
+    predictions = _make_predictions(task_id)
     return {
-        'filename': file.filename, 
-        'file_id': temp_file
+        'prediction': predictions 
     }
+
+async def _make_predictions(task_id, model='cnn') -> List[str]:
+    # TODO: call prediction, for now it returns the name of how it was saved
+    return ["p1", "p2"]
     
-def _save_file_to_disk(file: UploadFile = File(...), path=".", save_as="default"):
-    if not os.path.exists(path):
-        os.makedirs(path)
-    extension = os.path.splitext(file.filename)[-1]
-    temp_file = os.path.join(path, save_as + extension)
+def _save_file_to_disk(file: UploadFile = File(...), folder_name=".", save_as="default") -> str:
+    if not os.path.exists(folder_name):
+        os.mkdir(folder_name)
+    temp_file = os.path.join(folder_name, save_as)
     with open(temp_file, "wb") as f:
         shutil.copyfileobj(file.file, f)
     return temp_file
 
-@app.post("/predict_packet")
-async def perform_predict_packet(request: Request, bg_tasks: BackgroundTasks):
-    """
-    It avoids users to await to the prediction of every image. Instead, once the
-    images are downloaded I send the users the uuid of the folder where those images where saved.
+@app.post("/predict_pack")
+async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
+    '''
+    Function that saves into a unique folder the jar of images from the request. 
+    So you can consume these images, the uuid of the folder is returned
+    
+    Returns
+    -------
+    task_id: str
+        folder where the images where saved 
 
-    docs: https://fastapi.tiangolo.com/tutorial/background-tasks/?h=background
-    """
+    num_files: int
+        number of images saved
+    '''
     images = await request.form()
-    folder_name = str(uuid.uuid4())
-    os.mkdir(folder_name)
-
+    folder, task_id = _mk_temporal_task()
     for image in images.values():
-        _ = _save_file_to_disk(image, path=folder_name, save_as=image.filename)
-
-    bg_tasks.add_task(read_images_from_disk, folder_name)
+        _ = _save_file_to_disk(image, folder_name=folder, save_as=image.filename)
+    bg_tasks.add_task(_make_predictions, task_id=task_id)
     return {
-        "task_id": folder_name,
+        "task_id": task_id,
         "num_files": len(images)
     }
     
-@app.get("/ml_models")
-async def get_models():
-    allowed_extensions = ('.h5', '.txt')
-    models = list_files('models', allowed_extensions)
-    return {'support': models }
+def _mk_temporal_task():
+    task_id = str(uuid.uuid4())
+    folder = os.path.join("temp", task_id)
+    os.mkdir(folder)
+    return folder, task_id
 
-def list_files(top, allowed_extensions=()):
-    for _, _, files in os.walk(top, topdown=False):
-        return [name for name in files if name.endswith(allowed_extensions)]
+def _is_image_sanitized(uploaded: UploadFile | str) -> bool:
+    '''
+    Only accepts uploaded files that has content type of jpg or png
+    '''
+    if not isinstance(uploaded, UploadFile):
+        return False 
+    supported_content_type = ('image/jpeg', 'image/png')
+    return uploaded.content_type in supported_content_type
 
-async def load_model(filename = 'h5.txt'):
-    assert filename.endswith('.txt'), 'Only txt models are allowed'
-    with open(filename, 'r') as f:
-        content = f.read()
-    return content
+@app.get("/predict_packet_output/{task_id}")
+async def predict_images_pack_output(task_id: int):
+    '''
+    Takes the prediction from task_id folder and returns it.
+    May happen that the prediction request and the prediction output
+    where faster than the prediction process itself and may not found the prediction,
+    in this case, I recommend to consume this end point 
+    '''
+    for file_ in os.listdir(task_id):
+        if file_.endswith((".csv")):
+            # TODO: transform csv to dict object using DataFrame and return it
+            return {
+                "task_id": task_id,
+                "output": "work in progress"
+            }
+    return HTTPException(status_code=500, detail='Prediction not found for - %s - task_id' % (task_id))
 
-async def read_images_from_disk(folder_name):
-    print(folder_name)
-    pass
