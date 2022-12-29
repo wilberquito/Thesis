@@ -3,12 +3,15 @@ import shutil
 from typing import Union
 import uuid
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks 
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
