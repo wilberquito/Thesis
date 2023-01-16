@@ -71,7 +71,7 @@ def _mk_temporal_task():
     os.mkdir(folder)
     return folder, task_id
 
-def _is_image_sanitized(uploaded: UploadFile | str) -> bool:
+def _is_image_sanitized(uploaded: Union[UploadFile, str]) -> bool:
     '''
     Only accepts uploaded files that has content type of jpg or png
     '''
