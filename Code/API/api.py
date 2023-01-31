@@ -1,7 +1,6 @@
 import os
-import shutil
 from typing import List, Union, ValuesView
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks 
+from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks
 import starlette.status as status
 import fastapi
 from util import save_file_to_disk, mk_temporal_task, upload_file_sanitized
@@ -27,24 +26,24 @@ async def predict_single_image(file: UploadFile = File(...)):
     save_file_to_disk(file, file.filename, task_path)
     predictions = await _make_predictions(task_id)
     return {
-        'prediction': predictions 
+        'prediction': predictions
     }
 
 async def _make_predictions(task_id, model='cnn') -> List[str]:
     # TODO: call prediction, for now it returns the name of how it was saved
     return ["p1", "p2"]
-    
+
 
 @app.post("/predict_pack")
 async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
     '''
-    Function that saves into a unique folder the jar of images from the request. 
+    Function that saves into a unique folder the jar of images from the request.
     So you can consume these images, the uuid of the folder is returned
-    
+
     Returns
     -------
     task_id: str
-        folder where the images where saved 
+        folder where the images where saved
 
     num_files: int
         number of images saved
@@ -58,7 +57,7 @@ async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
         "task_id": task_id,
         "num_files": len(images)
     }
-    
+
 
 @app.get("/predict_packet_output/{task_id}")
 async def predict_images_pack_output(task_id: int):
@@ -66,7 +65,7 @@ async def predict_images_pack_output(task_id: int):
     Takes the prediction from task_id folder and returns it.
     May happen that the prediction request and the prediction output
     where faster than the prediction process itself and may not found the prediction,
-    in this case, I recommend to consume this end point 
+    in this case, I recommend to consume this end point
     '''
     for file_ in os.listdir(task_id):
         if file_.endswith((".csv")):

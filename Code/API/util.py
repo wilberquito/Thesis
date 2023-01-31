@@ -3,6 +3,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Backgroun
 import os
 import shutil
 import uuid
+from pathlib import Path
+from collections.abc import Sized, Iterable, Iterator
 
 
 def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_name=".") -> str:
@@ -46,3 +48,31 @@ def upload_file_sanitized(uploaded: UploadFile, supported_content_type=('image/j
     Only accepts uploaded files that has content type of jpg or png
     '''
     return uploaded.content_type in supported_content_type
+
+
+def find_files(parent_dir: Path, extensions: Iterable[str]):
+    """
+    Description
+    -----------
+
+    Grep all files from the directory that matches any of the extensions.
+    It's a recursive process.
+
+    Parameters
+    ----------
+
+    parent_dir: Path
+
+    root path to find the files that ends with any of the extension
+
+    extensions: Iterable[str]
+
+    usuful to pick the files that matches with any of this strings
+    """
+    matches = []
+    for root, _, files in os.walk(parent_dir):
+        for file in files:
+            check = [file.endswith(e) for e in extensions]
+            if any(check):
+                matches.append(Path(os.path.join(root, file)))
+    return matches
