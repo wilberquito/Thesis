@@ -1,10 +1,12 @@
 import os
 import shutil
 from typing import List, Union, ValuesView
-import uuid
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks 
 import starlette.status as status
 import fastapi
+from util import save_file_to_disk, mk_temporal_task, upload_file_sanitized
+
+PARENT_PATH_TASK = "./temp"
 
 app = FastAPI()
 
@@ -18,12 +20,12 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/predict")
 async def predict_single_image(file: UploadFile = File(...)):
-    folder, task_id = _mk_temporal_task()
+    task_path, task_id = mk_temporal_task(parent_path=PARENT_PATH_TASK)
     # content type support
-    if not _is_image_sanitized(file):
+    if not upload_file_sanitized(file):
         raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
-    _save_file_to_disk(file, folder, file.filename)
-    predictions = _make_predictions(task_id)
+    save_file_to_disk(file, file.filename, task_path)
+    predictions = await _make_predictions(task_id)
     return {
         'prediction': predictions 
     }
@@ -32,13 +34,6 @@ async def _make_predictions(task_id, model='cnn') -> List[str]:
     # TODO: call prediction, for now it returns the name of how it was saved
     return ["p1", "p2"]
     
-def _save_file_to_disk(file: UploadFile = File(...), folder_name=".", save_as="default") -> str:
-    if not os.path.exists(folder_name):
-        os.mkdir(folder_name)
-    temp_file = os.path.join(folder_name, save_as)
-    with open(temp_file, "wb") as f:
-        shutil.copyfileobj(file.file, f)
-    return temp_file
 
 @app.post("/predict_pack")
 async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
@@ -55,29 +50,15 @@ async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
         number of images saved
     '''
     images = await request.form()
-    folder, task_id = _mk_temporal_task()
+    folder, task_id = mk_temporal_task()
     for image in images.values():
-        _ = _save_file_to_disk(image, folder_name=folder, save_as=image.filename)
+        _ = save_file_to_disk(image, folder_name=folder, save_as=image.filename)
     bg_tasks.add_task(_make_predictions, task_id=task_id)
     return {
         "task_id": task_id,
         "num_files": len(images)
     }
     
-def _mk_temporal_task():
-    task_id = str(uuid.uuid4())
-    folder = os.path.join("temp", task_id)
-    os.mkdir(folder)
-    return folder, task_id
-
-def _is_image_sanitized(uploaded: Union[UploadFile, str]) -> bool:
-    '''
-    Only accepts uploaded files that has content type of jpg or png
-    '''
-    if not isinstance(uploaded, UploadFile):
-        return False 
-    supported_content_type = ('image/jpeg', 'image/png')
-    return uploaded.content_type in supported_content_type
 
 @app.get("/predict_packet_output/{task_id}")
 async def predict_images_pack_output(task_id: int):
