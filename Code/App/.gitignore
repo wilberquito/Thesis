@@ -1,9 +1,0 @@
-__pycache__/
-
-env/
-venv/
-
-temp/
-
-*.jpg
-*.png
