@@ -3,15 +3,14 @@ import shutil
 from typing import List, Union, ValuesView
 import uuid
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks 
-from fastapi.templating import Jinja2Templates
-
-templates = Jinja2Templates(directory="templates")
+import starlette.status as status
+import fastapi
 
 app = FastAPI()
 
 @app.get("/")
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return fastapi.responses.RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
