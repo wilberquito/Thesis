@@ -4,6 +4,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Backgroun
 import starlette.status as status
 import fastapi
 from util import save_file_to_disk, mk_temporal_task, upload_file_sanitized
+from vision import mk_prediction
 
 PARENT_PATH_TASK = "./temp"
 
@@ -24,15 +25,10 @@ async def predict_single_image(file: UploadFile = File(...)):
     if not upload_file_sanitized(file):
         raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
     save_file_to_disk(file, file.filename, task_path)
-    predictions = await _make_predictions(task_id)
+    predictions = await mk_prediction(task_path)
     return {
         'prediction': predictions
     }
-
-async def _make_predictions(task_id, model='cnn') -> List[str]:
-    # TODO: call prediction, for now it returns the name of how it was saved
-    return ["p1", "p2"]
-
 
 @app.post("/predict_pack")
 async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
@@ -52,7 +48,7 @@ async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
     folder, task_id = mk_temporal_task()
     for image in images.values():
         _ = save_file_to_disk(image, folder_name=folder, save_as=image.filename)
-    bg_tasks.add_task(_make_predictions, task_id=task_id)
+    bg_tasks.add_task(mk_prediction, task_id=task_id)
     return {
         "task_id": task_id,
         "num_files": len(images)

@@ -7,12 +7,13 @@ from pathlib import Path
 from util import find_files
 import pandas as pd
 
+DEFAULT_MODEL = 'AlexNet'
+
 MODELS = {
     'AlexNet': models.alexnet(pretrained=True)
 }
 
-
-def __get_model(model_name: str = "AlexNet"):
+def __get_model(model_name: str):
     model = MODELS.get(model_name)
     default_model = models.alexnet(pretrained=True)
     if model is None:
@@ -24,10 +25,14 @@ def __get_model(model_name: str = "AlexNet"):
     return model
 
 
-def predict(task_path: str, model_name: str):
+async def mk_prediction(task_path: str, model_id: str = DEFAULT_MODEL):
     extensions = ('.png', '.jpeg')
-    images = find_files(Path(task_path), extensions)
-    model = __get_model(model_name)
+    images_path = find_files(Path(task_path), extensions)
+    images_id = list(map(lambda x : x.parts[-1], images_path))
+    model = __get_model(model_id)
 
-    for img in images:
-        print(img)
+    return images_id
+
+
+
+
