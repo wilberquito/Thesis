@@ -1,3 +1,4 @@
+from typing import List
 import warnings
 import torch
 from torchvision import models
@@ -33,6 +34,11 @@ async def mk_prediction(task_path: str, model_id: str = DEFAULT_MODEL):
 
     return images_id
 
-
-
+def list_models() -> List[str]:
+    """
+    Description
+    -----------
+    Returns the name of the supported model
+    """
+    return list(MODELS.keys())
 

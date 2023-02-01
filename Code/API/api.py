@@ -4,7 +4,7 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Request, Backgroun
 import starlette.status as status
 import fastapi
 from util import save_file_to_disk, mk_temporal_task, upload_file_sanitized
-from vision import mk_prediction
+import vision
 
 PARENT_PATH_TASK = "./temp"
 
@@ -25,7 +25,7 @@ async def predict_single_image(file: UploadFile = File(...)):
     if not upload_file_sanitized(file):
         raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
     save_file_to_disk(file, file.filename, task_path)
-    predictions = await mk_prediction(task_path)
+    predictions = await vision.mk_prediction(task_path)
     return {
         'prediction': predictions
     }
@@ -48,7 +48,7 @@ async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
     folder, task_id = mk_temporal_task()
     for image in images.values():
         _ = save_file_to_disk(image, folder_name=folder, save_as=image.filename)
-    bg_tasks.add_task(mk_prediction, task_id=task_id)
+    bg_tasks.add_task(vision.mk_prediction, task_id=task_id)
     return {
         "task_id": task_id,
         "num_files": len(images)
@@ -72,3 +72,14 @@ async def predict_images_pack_output(task_id: int):
             }
     return HTTPException(status_code=500, detail='Prediction not found for - %s - task_id' % (task_id))
 
+
+@app.get("/supported_models")
+async def supported_models():
+    """
+    Description
+    ----------
+    returns the name of the available models to make prediction of skin cancers
+    """
+    return {
+        "support": vision.list_models()
+    }
