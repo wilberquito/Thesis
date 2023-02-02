@@ -7,18 +7,13 @@ import pandas as pd
 import torch
 from PIL import Image
 from skimage import io, transform
-from torchvision import models
+from torchvision.models import resnet50, ResNet50_Weights
 
 from util import find_files
 
-DEFAULT_MODEL = 'AlexNet'
 DEFAULT_MODELS_PARENT_DIR = './models'
-
-SUPPORTED_MODELS = {
-    'AlexNet': models.alexnet(pretrained=True)
-}
-
-DEFAULT_MODEL = models.alexnet(pretrained=True)
+DEFAULT_MODEL = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)
+SUPPORTED_MODELS = {}
 
 
 def __load_models_from_disk():
