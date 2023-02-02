@@ -1,38 +1,55 @@
-from typing import List
+import logging
 import warnings
+from pathlib import Path
+from typing import List
+
+import pandas as pd
 import torch
-from torchvision import models
 from PIL import Image
 from skimage import io, transform
-from pathlib import Path
+from torchvision import models
+
 from util import find_files
-import pandas as pd
 
 DEFAULT_MODEL = 'AlexNet'
+DEFAULT_MODELS_PARENT_DIR = './models'
 
-MODELS = {
+SUPPORTED_MODELS = {
     'AlexNet': models.alexnet(pretrained=True)
 }
 
-def __get_model(model_name: str):
-    model = MODELS.get(model_name)
-    default_model = models.alexnet(pretrained=True)
-    if model is None:
-        warnings.warn(
-            f"Unknown model {model_name} using default model {default_model._get_name()}))")
-        model = default_model
+DEFAULT_MODEL = models.alexnet(pretrained=True)
 
-    print(model.__dir__)
+
+def __load_models_from_disk():
+    """
+    Description
+    __________
+    Search recursively in
+    """
+    parent_path = Path(DEFAULT_MODELS_PARENT_DIR)
+    for path in parent_path:
+        model_id = path.parts[-1].split('.')[-2]
+        SUPPORTED_MODELS[model_id] = torch.load(path)
+
+
+def __get_model(model_name: str):
+    model = SUPPORTED_MODELS.get(model_name)
+    if model is None:
+        logging.warn(
+            f"Unknown model {model_name} using default model {DEFAULT_MODEL._get_name()}))")
+        model = DEFAULT_MODEL
     return model
 
 
 async def mk_prediction(task_path: str, model_id: str = DEFAULT_MODEL):
     extensions = ('.png', '.jpeg')
     images_path = find_files(Path(task_path), extensions)
-    images_id = list(map(lambda x : x.parts[-1], images_path))
+    images_id = list(map(lambda x: x.parts[-1], images_path))
     model = __get_model(model_id)
 
     return images_id
+
 
 def list_models() -> List[str]:
     """
@@ -40,5 +57,10 @@ def list_models() -> List[str]:
     -----------
     Returns the name of the supported model
     """
-    return list(MODELS.keys())
+    return list(SUPPORTED_MODELS.keys())
 
+
+def run():
+    logging.info("Loading models from disk...")
+    __load_models_from_disk()
+    logging.info(f"Models supported: {list_models()}")

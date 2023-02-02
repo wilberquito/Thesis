@@ -1,10 +1,12 @@
-from typing import List, Union
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks
 import os
 import shutil
 import uuid
+from collections.abc import Iterable, Iterator, Sized
 from pathlib import Path
-from collections.abc import Sized, Iterable, Iterator
+from typing import List, Union
+
+from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
+                     UploadFile)
 
 
 def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_name=".") -> Path:

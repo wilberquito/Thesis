@@ -1,10 +1,13 @@
 import os
 from typing import List, Union, ValuesView
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request, BackgroundTasks
-import starlette.status as status
+
 import fastapi
-from util import save_file_to_disk, mk_temporal_task, upload_file_sanitized
+import starlette.status as status
+from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
+                     UploadFile)
+
 import vision
+from util import mk_temporal_task, save_file_to_disk, upload_file_sanitized
 
 PARENT_PATH_TASK = "./temp"
 
