@@ -23,6 +23,7 @@ def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_na
 
     mk_dir(folder_name)
     filename = Path(folder_name) / Path(save_as)
+    print(filename)
     with open(filename, "wb") as f:
         shutil.copyfileobj(file.file, f)
     return filename
@@ -30,11 +31,11 @@ def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_na
 
 def mk_temporal_task(parent_path="./temp"):
     """
-    Generates a unique identifier for a task and a
+    Generates an absolute path to a new task
     """
     task_id = str(uuid.uuid4())
-    task_path = os.path.join(parent_path, task_id)
-    return task_path, task_id
+    task_path = Path(parent_path) / Path(task_id)
+    return task_path.resolve()
 
 
 def mk_dir(folder_name: str):
@@ -46,7 +47,7 @@ def mk_dir(folder_name: str):
         path.mkdir(parents=True, exist_ok=True)
 
 
-def upload_file_sanitized(uploaded: UploadFile, supported_content_type=('image/jpeg', 'image/png')) -> bool:
+def is_file_sanitized(uploaded: UploadFile, supported_content_type=('image/jpeg', 'image/png')) -> bool:
     '''
     Only accepts uploaded files that has content type of jpg or png
     '''

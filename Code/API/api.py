@@ -1,15 +1,17 @@
 import os
 from typing import List, Union, ValuesView
+import json
 
 import fastapi
 import starlette.status as status
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
-import vision
-from util import mk_temporal_task, save_file_to_disk, upload_file_sanitized
+from vision import mk_prediction
+from util import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files
+from pathlib import Path
 
-PARENT_PATH_TASK = "./temp"
+TMP_PARENT_TASKS = "./temp"
 
 app = FastAPI()
 
@@ -22,16 +24,31 @@ def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 @app.post("/predict")
-async def predict_single_image(file: UploadFile = File(...)):
-    task_path, task_id = mk_temporal_task(parent_path=PARENT_PATH_TASK)
-    # content type support
-    if not upload_file_sanitized(file):
-        raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
+async def predict_single_image(model: str, file: UploadFile = File(...)):
+
+    # Is the uploaded file and image?
+    __sanitize_file(file)
+
+    # New temporal task path
+    task_path = mk_temporal_task(parent_path=TMP_PARENT_TASKS)
+
+    # Save image inside the task folder
     save_file_to_disk(file, file.filename, task_path)
-    predictions = await vision.mk_prediction(task_path)
+
+    # Make prediction from task asyncronous
+    await mk_prediction(task_path)
+
+    # Returns the unique id of the task generated to consult the prediction late
     return {
-        'prediction': predictions
+        'uuid_task': task_path.parts[-1]
     }
+
+def __sanitize_file(file):
+    """
+    Check if the file is jpeg or png content type, if not throws and exception
+    """
+    if not is_file_sanitized(file):
+        raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
 
 @app.post("/predict_pack")
 async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
@@ -51,7 +68,7 @@ async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
     folder, task_id = mk_temporal_task()
     for image in images.values():
         _ = save_file_to_disk(image, folder_name=folder, save_as=image.filename)
-    bg_tasks.add_task(vision.mk_prediction, task_id=task_id)
+    bg_tasks.add_task(mk_prediction, task_id=task_id)
     return {
         "task_id": task_id,
         "num_files": len(images)
