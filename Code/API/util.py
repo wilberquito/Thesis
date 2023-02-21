@@ -23,7 +23,6 @@ def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_na
 
     mk_dir(folder_name)
     filename = Path(folder_name) / Path(save_as)
-    print(filename)
     with open(filename, "wb") as f:
         shutil.copyfileobj(file.file, f)
     return filename
