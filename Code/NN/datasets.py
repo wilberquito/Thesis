@@ -3,6 +3,51 @@ from tqdm import tqdm
 import numpy as np
 import os
 import pandas as pd
+from torch.utils.data import Dataset
+import cv2
+import torch
+
+class MelanomaDataset(Dataset):
+
+    def __init__(self, csv, mode, meta_features, transform=None):
+        self.csv = csv.reset_index(drop=True)
+        self.mode = mode
+        self.use_meta = meta_features is not None
+        self.meta_features = meta_features
+        self.transform = transform
+
+    def __len__(self):
+        return self.csv.shape[0]
+
+    def __getitem__(self, index):
+
+        sample = self.csv.iloc[index]
+
+        image = cv2.imread(sample.filepath)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        if self.transform is not None:
+            res = self.transform(image=image)
+            image = res['image'].astype(np.float32)
+        else:
+            image = image.astype(np.float32)
+
+        # This makes color channel first
+        image = image.transpose(2, 0, 1)
+
+        # Optionally you can ask to get also metadata in conjuntion to the image
+        if self.use_meta:
+            data = (torch.tensor(image).float(), torch.tensor(sample[self.meta_features]).float())
+        else:
+            data = torch.tensor(image).float()
+
+        # If this is just for a test porpouse you can forget to the label
+        if self.mode == 'test':
+            return data
+        else:
+            return data, torch.tensor(sample.target).long()
+
+
 
 def get_meta_data(df_train, df_test):
 
