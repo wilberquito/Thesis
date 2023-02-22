@@ -41,7 +41,7 @@ class MelanomaDataset(Dataset):
         else:
             data = torch.tensor(image).float()
 
-        # If this is just for a test porpouse you can forget to the label
+        # If this is just for a test porpouse you can forget the label
         if self.mode == 'test':
             return data
         else:
