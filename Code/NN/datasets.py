@@ -198,7 +198,8 @@ def get_df(out_dim: int, data_dir: str, data_folder: str, use_meta: bool = False
 
 def get_transforms(image_size):
     """
-
+    Returns the transformation needed to apply to images after they are processed by a net
+    and also applies image augmentation of different kinds using the albumentation library
     """
 
     transforms_train = A.Compose([
@@ -232,7 +233,5 @@ def get_transforms(image_size):
         A.Resize(image_size, image_size),
         A.Normalize()
     ])
-
-
 
     return transforms_train, transforms_val
