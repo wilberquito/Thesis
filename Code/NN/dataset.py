@@ -175,6 +175,8 @@ def get_df(out_dim: int, data_dir: str, data_folder: str, use_meta: bool = False
     df_train = pd.concat([df_train, df_train2]).reset_index(drop=True)
 
     # Create target column that represents the diagnostic using a number
+    # Notice that target is malignant only and only if diagnosis is malignant,
+    # Otherwise, is benign, in this case, diagnosis is more granular.
     diagnosis2idx = {d: idx for idx, d in enumerate(
         sorted(df_train.diagnosis.unique()))}
     df_train['target'] = df_train['diagnosis'].map(diagnosis2idx)
