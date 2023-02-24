@@ -70,6 +70,7 @@ def main():
     # load model
     models = []
     follds= [0]
+    # TODO: Ask Sanna the concept of the folds here. It generates multiple models, but why...?
     for fold in follds:
 
         if args.eval == 'best':
@@ -79,8 +80,9 @@ def main():
         if args.eval == 'final':
             model_file = os.path.join(args.model_dir, f'{args.kernel_type}_final_fold{fold}.pth')
 
+        # Creates and instance of the available model
         model = ModelClass(
-            args.enet_type,
+            args.enet_type, # Ask Sanna if it's really needed in the case you use trainned models from pytorch
             n_meta_features=n_meta_features,
             n_meta_dim=[int(nd) for nd in args.n_meta_dim.split(',')],
             out_dim=args.out_dim
@@ -94,6 +96,7 @@ def main():
             state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
             model.load_state_dict(state_dict, strict=True)
 
+        # Split the data into different GPU's if there is more than one available
         if len(os.environ['CUDA_VISIBLE_DEVICES']) > 1:
             model = torch.nn.DataParallel(model)
 
@@ -102,8 +105,9 @@ def main():
 
     # predict
     PROBS = []
-    with torch.no_grad():
+    with torch.no_grad(): # TODO: Might change to `torch.inference_mode()` decorator
         for (data) in tqdm(test_loader):
+            # If use metadata is set to be used, destructure the data into image features and metadata
             if args.use_meta:
                 data, meta = data
                 data, meta = data.to(device), meta.to(device)
@@ -133,7 +137,9 @@ def main():
     print(PROBS)
     PROBS=pd.DataFrame(PROBS)
     PROBS['image_name'] = df_test['image_name']
+    # Export the probablities per each image to be malignat or the granulars benign
     PROBS.to_csv(os.path.join(args.sub_dir, f'probs_{args.kernel_type}_{args.eval}.csv'), index=False)
+    # Export if a sample is cancer or not.
     df_test[['image_name', 'target']].to_csv(os.path.join(args.sub_dir, f'sub_{args.kernel_type}_{args.eval}.csv'), index=False)
 
 
