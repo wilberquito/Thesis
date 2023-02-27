@@ -1,28 +1,30 @@
-import os
-import time
-import random
 import argparse
+import os
+import random
+import time
+
+import apex
+import cv2
 import numpy as np
 import pandas as pd
-import cv2
 import PIL.Image
-from tqdm import tqdm
-from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import StratifiedKFold
 import torch
-from torch.utils.data import DataLoader, Dataset
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torch.optim import lr_scheduler
-from torch.utils.data.sampler import RandomSampler, SequentialSampler
-from torch.optim.lr_scheduler import CosineAnnealingLR
-from util import GradualWarmupSchedulerV2
-import apex
 from apex import amp
-from dataset import get_df, get_transforms, MelanomaDataset
-from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import StratifiedKFold
+from torch.optim import lr_scheduler
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from torch.utils.data import DataLoader, Dataset
+from torch.utils.data.sampler import RandomSampler, SequentialSampler
+from tqdm import tqdm
 from train import get_trans
+from util import GradualWarmupSchedulerV2
+
+from dataset import MelanomaDataset, get_df, get_transforms
+from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
 
 
 def parse_args():
@@ -52,7 +54,7 @@ def parse_args():
 
 def main():
 
-    # TODO: ask Sanna what was kernel type, again :c. Because if I refactor the code, it's not needed anymore
+    # TODO: Ask Sanna what was kernel type, again :c. Because if I refactor the code, it's not needed anymore
     _, df_test, meta_features, n_meta_features, mel_idx = get_df(
         args.out_dim,
         args.data_dir,
@@ -67,12 +69,9 @@ def main():
     dataset_test = MelanomaDataset(df_test, 'test', meta_features, transform=transforms_val)
     test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, num_workers=args.num_workers)
 
-    # load model
+    # Load the models
     models = []
-    follds= [0]
-    # TODO: Ask Sanna the concept of the folds here. It generates multiple models, but why...?
-    for fold in follds:
-
+    for fold in range(1):
         if args.eval == 'best':
             model_file = os.path.join(args.model_dir, f'{args.kernel_type}_best_fold{fold}.pth')
         elif args.eval == 'best_20':
