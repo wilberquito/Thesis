@@ -4,6 +4,7 @@ import uuid
 from collections.abc import Iterable, Iterator, Sized
 from pathlib import Path
 from typing import List, Union
+import cv2
 
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
@@ -79,3 +80,10 @@ def find_files(parent_dir: Path, extensions: Iterable[str]) -> List[Path]:
             if any(check):
                 matches.append(Path(os.path.join(root, file)))
     return matches
+
+
+def read_img(img_path: Path):
+    """ Read img from path, transforming to tree channels, rgb """
+    img = cv2.imread(img_path)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    return img
