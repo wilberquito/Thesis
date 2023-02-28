@@ -54,8 +54,9 @@ def parse_args():
 
 def main():
 
-    # TODO: Ask Sanna what was kernel type, again :c. Because if I refactor the code, it's not needed anymore
-    _, df_test, meta_features, n_meta_features, mel_idx = get_df(
+    # TODO: ask Sanna what was kernel type, again :c.
+    # Because if I refactor the code, it's not needed anymore
+    _, df_test, mel_idx = get_df(
         args.out_dim,
         args.data_dir,
         args.data_folder,
@@ -66,7 +67,7 @@ def main():
 
     if args.DEBUG:
         df_test = df_test.sample(args.batch_size * 3)
-    dataset_test = MelanomaDataset(df_test, 'test', meta_features, transform=transforms_val)
+    dataset_test = MelanomaDataset(df_test, 'test', transform=transforms_val)
     test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, num_workers=args.num_workers)
 
     # Load the models
@@ -82,8 +83,6 @@ def main():
         # Creates and instance of the available model
         model = ModelClass(
             args.enet_type, # Ask Sanna if it's really needed in the case you use trainned models from pytorch
-            n_meta_features=n_meta_features,
-            n_meta_dim=[int(nd) for nd in args.n_meta_dim.split(',')],
             out_dim=args.out_dim
         )
         model = model.to(device)

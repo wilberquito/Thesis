@@ -30,25 +30,13 @@ class Swish_Module(nn.Module):
 # if you have a classifier, what you do is deactivate the trainable layers (conv2d, regularizers...),
 # and you change the latest part of the net (the classifier part)
 class Effnet_Melanoma(nn.Module):
-    def __init__(self, enet_type, out_dim, n_meta_features=0, n_meta_dim=[512, 128], pretrained=False):
+    def __init__(self, enet_type, out_dim, pretrained=False):
         super(Effnet_Melanoma, self).__init__()
-        self.n_meta_features = n_meta_features
         self.enet = geffnet.create_model(enet_type, pretrained=pretrained)
         self.dropouts = nn.ModuleList([
             nn.Dropout(0.5) for _ in range(5)
         ])
         in_ch = self.enet.classifier.in_features
-        if n_meta_features > 0:
-            self.meta = nn.Sequential(
-                nn.Linear(n_meta_features, n_meta_dim[0]),
-                nn.BatchNorm1d(n_meta_dim[0]),
-                Swish_Module(),
-                nn.Dropout(p=0.3),
-                nn.Linear(n_meta_dim[0], n_meta_dim[1]),
-                nn.BatchNorm1d(n_meta_dim[1]),
-                Swish_Module(),
-            )
-            in_ch += n_meta_dim[1]
         self.myfc = nn.Linear(in_ch, out_dim)
         self.enet.classifier = nn.Identity()
 
@@ -71,25 +59,13 @@ class Effnet_Melanoma(nn.Module):
 
 
 class Resnest_Melanoma(nn.Module):
-    def __init__(self, enet_type, out_dim, n_meta_features=0, n_meta_dim=[512, 128], pretrained=False):
+    def __init__(self, enet_type, out_dim, pretrained=False):
         super(Resnest_Melanoma, self).__init__()
-        self.n_meta_features = n_meta_features
         self.enet = resnest101(pretrained=pretrained)
         self.dropouts = nn.ModuleList([
             nn.Dropout(0.5) for _ in range(5)
         ])
         in_ch = self.enet.fc.in_features
-        if n_meta_features > 0:
-            self.meta = nn.Sequential(
-                nn.Linear(n_meta_features, n_meta_dim[0]),
-                nn.BatchNorm1d(n_meta_dim[0]),
-                Swish_Module(),
-                nn.Dropout(p=0.3),
-                nn.Linear(n_meta_dim[0], n_meta_dim[1]),
-                nn.BatchNorm1d(n_meta_dim[1]),
-                Swish_Module(),
-            )
-            in_ch += n_meta_dim[1]
         self.myfc = nn.Linear(in_ch, out_dim)
         self.enet.fc = nn.Identity()
 
@@ -112,9 +88,8 @@ class Resnest_Melanoma(nn.Module):
 
 
 class Seresnext_Melanoma(nn.Module):
-    def __init__(self, enet_type, out_dim, n_meta_features=0, n_meta_dim=[512, 128], pretrained=False):
+    def __init__(self, enet_type, out_dim, pretrained=False):
         super(Seresnext_Melanoma, self).__init__()
-        self.n_meta_features = n_meta_features
         if pretrained:
             self.enet = se_resnext101_32x4d(num_classes=1000, pretrained='imagenet')
         else:
@@ -124,17 +99,6 @@ class Seresnext_Melanoma(nn.Module):
             nn.Dropout(0.5) for _ in range(5)
         ])
         in_ch = self.enet.last_linear.in_features
-        if n_meta_features > 0:
-            self.meta = nn.Sequential(
-                nn.Linear(n_meta_features, n_meta_dim[0]),
-                nn.BatchNorm1d(n_meta_dim[0]),
-                Swish_Module(),
-                nn.Dropout(p=0.3),
-                nn.Linear(n_meta_dim[0], n_meta_dim[1]),
-                nn.BatchNorm1d(n_meta_dim[1]),
-                Swish_Module(),
-            )
-            in_ch += n_meta_dim[1]
         self.myfc = nn.Linear(in_ch, out_dim)
         self.enet.last_linear = nn.Identity()
 
