@@ -5,93 +5,84 @@ from typing import List, Union
 
 import pandas as pd
 import torch
-from PIL import Image
-from skimage import io, transform
-from torchvision.models import resnet50, ResNet50_Weights
 import torchvision
 import torchvision.transforms as transforms
-
-from util import find_files
-
+from PIL import Image
+from skimage import io, transform
 # Write a custom dataset class (inherits from torch.utils.data.Dataset)
 from torch.utils.data import Dataset
+from torchvision.models import ResNet50_Weights, resnet50
+
+from dataset import MelanomaDataset, get_transforms
+from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
+from util import find_files, read_img
+from torch.utils.data import DataLoader
 
 # 1. Subclass torch.utils.data.Dataset
 
 DEFAULT_MODELS_PARENT_DIR = './models'
 DEFAULT_MODEL = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)
 SUPPORTED_MODELS = {}
+IMG_SIZE = 576
+device = 'cpu'
 
+
+def __mk_net(net_type, out_dim, pretrained) -> torch.nn.Module:
+    if net_type == 'resnest101':
+        net = Resnest_Melanoma(net_type, out_dim, pretrained)
+    elif net_type == 'seresnext101':
+        net = Seresnext_Melanoma(net_type, out_dim, pretrained)
+    elif 'efficientnet' in net_type:
+        net = Effnet_Melanoma(net_type, out_dim, pretrained)
+    else:
+        raise NotImplementedError()
+    return net
 
 def __load_models_from_disk():
     """
     Description
-    __________
-    Search recursively in
-    """
-    # parent_path = Path(DEFAULT_MODELS_PARENT_DIR)
-    # for path in parent_path:
-    #     model_id = path.parts[-1].split('.')[-2]
-    #     SUPPORTED_MODELS[model_id] = torch.load(path)
-    pass
-
-
-def __get_model(model_name: str):
-    model = SUPPORTED_MODELS.get(model_name)
-    if model is None:
-        logging.warn(
-            f"Unknown model {model_name} using default model {DEFAULT_MODEL._get_name()}))")
-        model = DEFAULT_MODEL
-    return model
-
-
-async def mk_prediction(targ_dir: Path):
-    paths = find_files(targ_dir, ('.png', '.jpeg')) # note: you'd have to update this if you've got .png's or .jpeg's
-    images = [Image.open(img).convert('RGB') for img in paths]
-    prediction = [__default_prediction(img) for img in images]
-    export_prediction_to_csv(targ_dir / Path('prediction.csv'), paths, prediction)
-
-def export_prediction_to_csv(csv_name, images_paths, predictions):
-    pass
-
-def __pil_to_tensor(pil):
-    transform = transforms.Compose([
-        transforms.PILToTensor()
-    ])
-    return transform(pil)
-
-
-def __default_prediction(img: Image.Image):
-    from torchvision.io import read_image
-    from torchvision.models import resnet50, ResNet50_Weights
-
-    # Step 1: Initialize model with the best available weights
-    weights = ResNet50_Weights.DEFAULT
-    model = resnet50(weights=weights)
-    model.eval()
-
-    # Step 2: Initialize the inference transforms
-    preprocess = weights.transforms()
-
-    # Step 3: Apply inference preprocessing transforms
-    batch = preprocess(img).unsqueeze(0)
-
-    # Step 4: Use the model and print the predicted category
-    prediction = model(batch).squeeze(0).softmax(0)
-    class_id = prediction.argmax().item()
-    score = prediction[class_id].item()
-    category_name = weights.meta["categories"][class_id]
-    print(f"{category_name}: {100 * score:.1f}%")
-    return {
-        'category_id': class_id,
-        'category_name': category_name,
-        'score': score
-    }
-
-def list_models() -> List[str]:
-    """
-    Description
     -----------
+    Finds files with .pth and .pt extension in subfolder <DEFAULT_MODEL_PARENT_DIR>
+    """
+    paths = find_files(DEFAULT_MODELS_PARENT_DIR, ('.pth'))
+    models = []
+    for path in paths:
+        # Take the filename model from the path
+        net_type = path.parts[-1].split('.')[0]
+        # Save path to the model (k, v)
+        SUPPORTED_MODELS[net_type] = path
+
+
+async def mk_prediction(net_type, targ_dir: Path, save_as='task_prediction.csv'):
+    paths = find_files(targ_dir, ('.png', '.jpeg')) # note: you'd have to update this if you've got .png's or .jpeg's
+    _, transforms_val = get_transforms(IMG_SIZE)
+    csv = pd.DataFrame({ 'filepath': paths })
+    dataset = MelanomaDataset(csv, 'test', transforms_val)
+    dataloader = DataLoader(dataset)
+
+    y_pred_class = []
+
+    net = __mk_net(net_type, 8, True)
+    net = net.to(device)
+    net.eval()
+    with torch.inference_mode():
+        for X in dataloader:
+            X = X.to(device)
+            logits = net(X)
+            pred = torch.argmax(torch.softmax(logits))
+            y_pred_class.append(pred)
+
+    task_prediction = pd.DataFrame({
+        'filepath': csv.filepath,
+        'prediction': y_pred_class
+    })
+
+    save_path = targ_dir / Path(save_as)
+    task_prediction.to_csv(save_path)
+
+
+def get_supported_models() -> List[str]:
+    """
     Returns the name of the supported model
     """
     return list(SUPPORTED_MODELS.keys())
@@ -100,4 +91,8 @@ def list_models() -> List[str]:
 def run():
     logging.info("Loading models from disk...")
     __load_models_from_disk()
-    logging.info(f"Models supported: {list_models()}")
+    logging.info(f"Models loaded : {get_supported_models()}")
+    logging.info('Selecting device to work with')
+    global device
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    logging.info('Device selected to work with: {device}')
