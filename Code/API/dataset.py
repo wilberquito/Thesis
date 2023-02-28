@@ -8,6 +8,7 @@ import cv2
 import torch
 import albumentations as A
 
+# TODO: this repeated in NN and API module (take care of it!!)
 
 class MelanomaDataset(Dataset):
 
@@ -18,7 +19,6 @@ class MelanomaDataset(Dataset):
 
     def __len__(self):
         return self.csv.shape[0]
-
 
     def __getitem__(self, index):
 
