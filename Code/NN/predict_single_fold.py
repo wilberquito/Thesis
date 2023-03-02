@@ -27,6 +27,11 @@ from dataset import MelanomaDataset, get_df, get_transforms
 from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
 
 
+device = 'cpu'
+args = {}
+ModelClass = None
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--kernel-type', type=str, required=True)
@@ -141,11 +146,15 @@ def main():
     df_test[['image_name', 'target']].to_csv(os.path.join(args.sub_dir, f'sub_{args.kernel_type}_{args.eval}.csv'), index=False)
 
 
-if __name__ == '__main__':
+def run(**kargs):
+    global device
+    global args
+    global ModelClass
 
-    args = parse_args()
+    args = kargs
+    print(args)
     os.makedirs(args.sub_dir, exist_ok=True)
-    os.environ['CUDA_VISIBLE_DEVICES'] = args.CUDA_VISIBLE_DEVICES
+
     if args.enet_type == 'resnest101':
         ModelClass = Resnest_Melanoma
     elif args.enet_type == 'seresnext101':
@@ -155,8 +164,29 @@ if __name__ == '__main__':
     else:
         raise NotImplementedError()
 
-    DP = len(os.environ['CUDA_VISIBLE_DEVICES']) > 1
+    device = 'cuda' if torch.cuda_is_available() else torch.device('cuda')
+    print(f'Single fold running on: {device}')
 
-    device = torch.device('cuda')
 
-    main()
+
+
+
+# if __name__ == '__main__':
+
+#     args = parse_args()
+#     os.makedirs(args.sub_dir, exist_ok=True)
+#     os.environ['CUDA_VISIBLE_DEVICES'] = args.CUDA_VISIBLE_DEVICES
+#     if args.enet_type == 'resnest101':
+#         ModelClass = Resnest_Melanoma
+#     elif args.enet_type == 'seresnext101':
+#         ModelClass = Seresnext_Melanoma
+#     elif 'efficientnet' in args.enet_type:
+#         ModelClass = Effnet_Melanoma
+#     else:
+#         raise NotImplementedError()
+
+#     DP = len(os.environ['CUDA_VISIBLE_DEVICES']) > 1
+
+#     device = torch.device('cuda')
+
+#     main()
