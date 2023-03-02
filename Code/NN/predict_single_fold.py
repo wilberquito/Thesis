@@ -3,25 +3,11 @@ import os
 import random
 import time
 
-import apex
-import cv2
-import numpy as np
 import pandas as pd
-import PIL.Image
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from apex import amp
-from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import StratifiedKFold
-from torch.optim import lr_scheduler
-from torch.optim.lr_scheduler import CosineAnnealingLR
-from torch.utils.data import DataLoader, Dataset
-from torch.utils.data.sampler import RandomSampler, SequentialSampler
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 from train import get_trans
-from util import GradualWarmupSchedulerV2
 
 from dataset import MelanomaDataset, get_df, get_transforms
 from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
@@ -59,21 +45,20 @@ def parse_args():
 
 def main():
 
-    # TODO: ask Sanna what was kernel type, again :c.
-    # Because if I refactor the code, it's not needed anymore
     _, df_test, mel_idx = get_df(
         args.out_dim,
         args.data_dir,
-        args.data_folder,
-        args.use_meta
+        args.data_folder
     )
 
     _, transforms_val = get_transforms(args.image_size)
 
-    if args.DEBUG:
+    # In case I just one to know if it's working, I pick
+    # a sample of the total test dataframe.
+    if args.debug:
         df_test = df_test.sample(args.batch_size * 3)
     dataset_test = MelanomaDataset(df_test, 'test', transform=transforms_val)
-    test_loader = torch.utils.data.DataLoader(dataset_test, batch_size=args.batch_size, num_workers=args.num_workers)
+    test_loader = DataLoader(dataset_test, batch_size=args.batch_size, num_workers=args.num_workers)
 
     # Load the models
     models = []
@@ -166,27 +151,3 @@ def run(**kargs):
 
     device = 'cuda' if torch.cuda_is_available() else torch.device('cuda')
     print(f'Single fold running on: {device}')
-
-
-
-
-
-# if __name__ == '__main__':
-
-#     args = parse_args()
-#     os.makedirs(args.sub_dir, exist_ok=True)
-#     os.environ['CUDA_VISIBLE_DEVICES'] = args.CUDA_VISIBLE_DEVICES
-#     if args.enet_type == 'resnest101':
-#         ModelClass = Resnest_Melanoma
-#     elif args.enet_type == 'seresnext101':
-#         ModelClass = Seresnext_Melanoma
-#     elif 'efficientnet' in args.enet_type:
-#         ModelClass = Effnet_Melanoma
-#     else:
-#         raise NotImplementedError()
-
-#     DP = len(os.environ['CUDA_VISIBLE_DEVICES']) > 1
-
-#     device = torch.device('cuda')
-
-#     main()
