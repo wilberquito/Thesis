@@ -1,41 +1,72 @@
 <script>
-  import { onMount } from "svelte";
+  import ky from "ky";
 
   let images = [];
 
   function handleFiles(event) {
+    // Removes previous images
     images = [];
+
     const files = event.target.files;
 
-    for (let i = 0; i < files.length; i++) {
+    for (const file of files) {
       const reader = new FileReader();
-
-      reader.onload = (e) => {
-        images = [...images, e.target.result];
-      };
-
-      reader.readAsDataURL(files[i]);
+      reader.onload = (e) => (images = [...images, e.target.result]);
+      reader.readAsDataURL(file);
     }
   }
+
+  async function uploadImages(images) {
+    try {
+      const formData = new FormData();
+
+      // Append each image to the FormData object
+      for (const image of images) {
+        formData.append("images[]", image);
+      }
+
+      // Makes a post request with all images
+      const response = await ky.post("https://example.com/upload", {
+        body: formData,
+      });
+
+      // Handle the response here
+      console.log(await response.json());
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 </script>
 
-<div class="file-input-wrapper">
-  <button class="file-input-button">Select Images</button>
-  <input type="file" multiple on:change={handleFiles} />
-</div>
+<form on:submit|preventDefault={() => uploadImages(images)} class="file-input-wrapper">
+  <label class="upload-btn">
+    <p>Upload images</p>
+    <input
+      type="file"
+      class="upload file-input-buttom"
+      multiple
+      on:change={handleFiles}
+    />
+  </label>
+  <label class="upload-btn">
+    <p>Make prediction</p>
+    <input type="submit" class="upload file-input-buttom" />
+  </label>
+</form>
 
 <div class="container">
   <div class="img-grid">
     {#each images as image}
       <div class="img-container">
-        <img src={image} alt="User uploaded image" />
+        <img src={image} alt="Possible cancer img" />
       </div>
     {/each}
   </div>
 </div>
 
 <style>
-
   .container {
     margin: auto;
   }
@@ -53,7 +84,7 @@
   }
 
   img:hover {
-    opacity: 0.5;
+    opacity: 0.9;
     cursor: pointer;
   }
 
@@ -94,7 +125,35 @@
     margin-bottom: 1rem;
   }
 
-  .file-input-wrapper input[type="file"] {
+  .upload-btn {
+    position: relative;
+    display: inline-block;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    min-width: 116px;
+    padding: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid;
+    background-color: #4045ba;
+    border-color: #4045ba;
+    border-radius: 10px;
+    line-height: 26px;
+    font-size: 14px;
+  }
+
+  .upload {
+    margin: 0;
+  }
+
+  .upload-btn:hover {
+    /* background-color: #7a7dcb;
+    border-color: #7a7dcb; */
+    opacity: 0.9;
+  }
+
+  .file-input-wrapper input {
     position: absolute;
     top: 0;
     left: 0;
@@ -102,22 +161,5 @@
     height: 100%;
     opacity: 0;
     cursor: pointer;
-  }
-  .file-input-button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.5;
-    color: #fff;
-    background-color: #007bff;
-    border-radius: 0.25rem;
-    transition: background-color 0.15s ease-in-out,
-      border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    cursor: pointer;
-  }
-
-  .file-input-button:hover {
-    background-color: #0069d9;
   }
 </style>
