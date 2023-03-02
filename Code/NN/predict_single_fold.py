@@ -1,17 +1,14 @@
 import argparse
 import os
-import random
-import time
 
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from train import get_trans
+from augmentation import transform
 
 from dataset import MelanomaDataset, get_df, get_transforms
 from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
-
 
 device = 'cpu'
 args = {}
@@ -34,7 +31,8 @@ def parse_args():
     parser.add_argument('--model-dir', type=str, default='./test_weights')
     parser.add_argument('--log-dir', type=str, default='./logs')
     parser.add_argument('--sub-dir', type=str, default='./subs')
-    parser.add_argument('--eval', type=str, choices=['best', 'best_20', 'final'], default="best")
+    parser.add_argument('--eval', type=str,
+                        choices=['best', 'best_20', 'final'], default="best")
     parser.add_argument('--n-test', type=int, default=8)
     parser.add_argument('--CUDA_VISIBLE_DEVICES', type=str, default='0')
     parser.add_argument('--n-meta-dim', type=str, default='512,128')
@@ -58,21 +56,26 @@ def main():
     if args.debug:
         df_test = df_test.sample(args.batch_size * 3)
     dataset_test = MelanomaDataset(df_test, 'test', transform=transforms_val)
-    test_loader = DataLoader(dataset_test, batch_size=args.batch_size, num_workers=args.num_workers)
+    test_loader = DataLoader(
+        dataset_test, batch_size=args.batch_size, num_workers=args.num_workers)
 
     # Load the models
     models = []
     for fold in range(1):
         if args.eval == 'best':
-            model_file = os.path.join(args.model_dir, f'{args.kernel_type}_best_fold{fold}.pth')
+            model_file = os.path.join(
+                args.model_dir, f'{args.kernel_type}_best_fold{fold}.pth')
         elif args.eval == 'best_20':
-            model_file = os.path.join(args.model_dir, f'{args.kernel_type}_best_20_fold{fold}.pth')
+            model_file = os.path.join(
+                args.model_dir, f'{args.kernel_type}_best_20_fold{fold}.pth')
         if args.eval == 'final':
-            model_file = os.path.join(args.model_dir, f'{args.kernel_type}_final_fold{fold}.pth')
+            model_file = os.path.join(
+                args.model_dir, f'{args.kernel_type}_final_fold{fold}.pth')
 
         # Creates and instance of the available model
         model = ModelClass(
-            args.enet_type, # Ask Sanna if it's really needed in the case you use trainned models from pytorch
+            # Ask Sanna if it's really needed in the case you use trainned models from pytorch
+            args.enet_type,
             out_dim=args.out_dim
         )
         model = model.to(device)
@@ -81,7 +84,8 @@ def main():
             model.load_state_dict(torch.load(model_file), strict=True)
         except:  # multi GPU model_file
             state_dict = torch.load(model_file)
-            state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
+            state_dict = {k[7:] if k.startswith(
+                'module.') else k: state_dict[k] for k in state_dict.keys()}
             model.load_state_dict(state_dict, strict=True)
 
         # Split the data into different GPU's if there is more than one available
@@ -93,24 +97,14 @@ def main():
 
     # predict
     PROBS = []
-    with torch.no_grad(): # TODO: Might change to `torch.inference_mode()` decorator
-        for (data) in tqdm(test_loader):
-            # If use metadata is set to be used, destructure the data into image features and metadata
-            if args.use_meta:
-                data, meta = data
-                data, meta = data.to(device), meta.to(device)
-                probs = torch.zeros((data.shape[0], args.out_dim)).to(device)
-                for model in models:
-                    for I in range(args.n_test):
-                        l = model(get_trans(data, I), meta)
-                        probs += l.softmax(1)
-            else:
-                data = data.to(device)
-                probs = torch.zeros((data.shape[0], args.out_dim)).to(device)
-                for model in models:
-                    for I in range(args.n_test):
-                        l = model(get_trans(data, I))
-                        probs += l.softmax(1)
+    with torch.inference_mode():
+        for X in tqdm(test_loader):
+            X = X.to(device)
+            probs = torch.zeros((X.shape[0], args.out_dim)).to(device)
+            for model in models:
+                for n in range(args.n_test):
+                    logits = model(transform(X, n))
+                    probs += logits.softmax(1)
 
             probs /= args.n_test
             probs /= len(models)
@@ -120,15 +114,17 @@ def main():
     PROBS = torch.cat(PROBS).numpy()
 
     # save cvs
-    #this is where you can get the labels
+    # this is where you can get the labels
     df_test['target'] = PROBS[:, mel_idx]
     print(PROBS)
-    PROBS=pd.DataFrame(PROBS)
+    PROBS = pd.DataFrame(PROBS)
     PROBS['image_name'] = df_test['image_name']
     # Export the probablities per each image to be malignat or the granulars benign
-    PROBS.to_csv(os.path.join(args.sub_dir, f'probs_{args.kernel_type}_{args.eval}.csv'), index=False)
+    PROBS.to_csv(os.path.join(
+        args.sub_dir, f'probs_{args.kernel_type}_{args.eval}.csv'), index=False)
     # Export if a sample is cancer or not.
-    df_test[['image_name', 'target']].to_csv(os.path.join(args.sub_dir, f'sub_{args.kernel_type}_{args.eval}.csv'), index=False)
+    df_test[['image_name', 'target']].to_csv(os.path.join(
+        args.sub_dir, f'sub_{args.kernel_type}_{args.eval}.csv'), index=False)
 
 
 def run(**kargs):
