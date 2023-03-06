@@ -4,6 +4,7 @@ import geffnet
 from resnest.torch import resnest101
 from pretrainedmodels import se_resnext101_32x4d
 
+# `fc` comes from fully connected layer
 
 sigmoid = nn.Sigmoid()
 
@@ -18,7 +19,9 @@ class Effnet_Melanoma(nn.Module):
             nn.Dropout(0.5) for _ in range(5)
         ])
         in_ch = self.enet.classifier.in_features
-        self.myfc = nn.Linear(in_ch, out_dim)
+        self.fc = nn.Linear(in_ch, out_dim)
+        # Replace the classifier with nn.Identity,
+        # This will skip the layer during forward propagation
         self.enet.classifier = nn.Identity()
 
     def extract(self, x):
@@ -32,9 +35,9 @@ class Effnet_Melanoma(nn.Module):
             x = torch.cat((x, x_meta), dim=1)
         for i, dropout in enumerate(self.dropouts):
             if i == 0:
-                out = self.myfc(dropout(x))
+                out = self.fc(dropout(x))
             else:
-                out += self.myfc(dropout(x))
+                out += self.fc(dropout(x))
         out /= len(self.dropouts)
         return out
 
@@ -47,7 +50,7 @@ class Resnest_Melanoma(nn.Module):
             nn.Dropout(0.5) for _ in range(5)
         ])
         in_ch = self.enet.fc.in_features
-        self.myfc = nn.Linear(in_ch, out_dim)
+        self.fc = nn.Linear(in_ch, out_dim)
         self.enet.fc = nn.Identity()
 
     def extract(self, x):
@@ -61,9 +64,9 @@ class Resnest_Melanoma(nn.Module):
             x = torch.cat((x, x_meta), dim=1)
         for i, dropout in enumerate(self.dropouts):
             if i == 0:
-                out = self.myfc(dropout(x))
+                out = self.fc(dropout(x))
             else:
-                out += self.myfc(dropout(x))
+                out += self.fc(dropout(x))
         out /= len(self.dropouts)
         return out
 
@@ -80,7 +83,7 @@ class Seresnext_Melanoma(nn.Module):
             nn.Dropout(0.5) for _ in range(5)
         ])
         in_ch = self.enet.last_linear.in_features
-        self.myfc = nn.Linear(in_ch, out_dim)
+        self.fc = nn.Linear(in_ch, out_dim)
         self.enet.last_linear = nn.Identity()
 
     def extract(self, x):
@@ -94,8 +97,8 @@ class Seresnext_Melanoma(nn.Module):
             x = torch.cat((x, x_meta), dim=1)
         for i, dropout in enumerate(self.dropouts):
             if i == 0:
-                out = self.myfc(dropout(x))
+                out = self.fc(dropout(x))
             else:
-                out += self.myfc(dropout(x))
+                out += self.fc(dropout(x))
         out /= len(self.dropouts)
         return out
