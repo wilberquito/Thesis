@@ -7,25 +7,6 @@ from pretrainedmodels import se_resnext101_32x4d
 
 sigmoid = nn.Sigmoid()
 
-
-class Swish(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, i):
-        result = i * sigmoid(i)
-        ctx.save_for_backward(i)
-        return result
-    @staticmethod
-    def backward(ctx, grad_output):
-        i = ctx.saved_variables[0]
-        sigmoid_i = sigmoid(i)
-        return grad_output * (sigmoid_i * (1 + i * (1 - sigmoid_i)))
-
-
-class Swish_Module(nn.Module):
-    def forward(self, x):
-        return Swish.apply(x)
-
-
 # Ask Sanna how it works because what I've read from transfer learning is that
 # if you have a classifier, what you do is deactivate the trainable layers (conv2d, regularizers...),
 # and you change the latest part of the net (the classifier part)
