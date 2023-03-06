@@ -21,6 +21,8 @@ def transform(img: torch.tensor, transform_type: int):
 def model_input_size(model_name):
     model_name = model_name.lower()
     mapping = {
-        'effnet': 600
+        'effnet': 600,
+        'resnet': 232,
+        'convnext': 232
     }
     return mapping[model_name]
