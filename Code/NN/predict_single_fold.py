@@ -5,7 +5,7 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from augmentation import transform
+from utility import transform
 
 from dataset import MelanomaDataset, get_df, get_transforms
 from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma

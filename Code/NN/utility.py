@@ -16,3 +16,11 @@ def transform(img: torch.tensor, transform_type: int):
     # Flip img in axis 0 and 1
     elif transform_type % 4 == 3:
         return img.flip(2).flip(3)
+
+
+def model_input_size(model_name):
+    model_name = model_name.lower()
+    mapping = {
+        'effnet': 600
+    }
+    return mapping[model_name]
