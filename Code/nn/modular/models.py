@@ -19,6 +19,10 @@ class Effnet_Melanoma(nn.Module):
         self.net = models.efficientnet_b7(
             weights=EfficientNet_B7_Weights.DEFAULT)
 
+        # Don't compute the gradients for net feature
+        for param in self.net.features.parameters():
+            param.requires_grad = False
+
         # Define the classifier for the melanoma problem into a separated layer
         in_dim = self.net.classifier.in_features
         self.classifier = nn.Linear(in_dim, out_dim)
@@ -62,6 +66,10 @@ class Resnest_Melanoma(nn.Module):
         # Take Resnet152 as base
         self.net = models.resnet152(ResNet152_Weights.DEFAULT)
 
+        # Don't compute the gradients for net feature
+        for param in self.net.features.parameters():
+            param.requires_grad = False
+
         # Define the classifier for the melanoma problem into a separated layer
         in_dim = self.net.classifier.in_features
         self.classifier = nn.Linear(in_dim, out_dim)
@@ -104,6 +112,10 @@ class ConvNext_Melanoma(nn.Module):
 
         # Take ConvNext Base as base
         self.net = models.convnext_base(ConvNeXt_Base_Weights.DEFAULT)
+
+        # Don't compute the gradients for net feature
+        for param in self.net.features.parameters():
+            param.requires_grad = False
 
         # Define the classifier for the melanoma problem into a separated layer
         in_dim = self.net.classifier.in_features
