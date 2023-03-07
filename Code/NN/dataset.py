@@ -129,6 +129,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
 
 
 def get_transforms(image_size):
+
     """
     Returns a pair of transformers.
     The first transformer applies image augmentation of different kinds and resize the image.
