@@ -1,3 +1,7 @@
+"""
+Model classes where transfer learning is used.
+I use already trainned as base of image detection.
+"""
 import torch.nn as nn
 import torchvision.models as models
 from torchvision.models import (ConvNeXt_Base_Weights, EfficientNet_B7_Weights,
