@@ -1,12 +1,13 @@
-from pathlib import Path
-from tqdm import tqdm
-import numpy as np
 import os
-import pandas as pd
-from torch.utils.data import Dataset
-import cv2
-import torch
+from pathlib import Path
+
 import albumentations as A
+import cv2
+import numpy as np
+import pandas as pd
+import torch
+from torch.utils.data import Dataset
+from tqdm import tqdm
 
 # TODO: this repeated in NN and API module (take care of it!!)
 
@@ -48,7 +49,7 @@ class MelanomaDataset(Dataset):
 
 
 # Get the dataframe to work with
-def get_df(out_dim: int, data_dir: str, data_folder: str):
+def get_df(out_dim: int, data_dir: Path, data_folder: str):
 
     """Create a train an test dataframe that handles the train and test images"""
 
@@ -56,8 +57,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
     assert out_dim in [4, 8]
 
     # 2020 data
-    train_path = Path(
-        data_dir) / Path(f'jpeg-melanoma-{data_folder}x{data_folder}/train.csv')
+    train_path = data_dir / Path(f'jpeg-melanoma-{data_folder}x{data_folder}/train.csv')
     df_train = pd.read_csv(train_path)
 
     # Drops samples where tfrecord is -1
@@ -68,8 +68,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
     df_train['is_ext'] = 0
 
     # 2018 and 2019 data
-    train_path = Path(
-        data_dir) / Path(f'jpeg-isic2019-{data_folder}x{data_folder}/train.csv')
+    train_path = data_dir / Path(f'jpeg-isic2019-{data_folder}x{data_folder}/train.csv')
     df_train2 = pd.read_csv(train_path)
     df_train2 = df_train2[df_train2['tfrecord'] >= 0].reset_index(drop=True)
     df_train2['filepath'] = df_train2['image_name'].apply(
@@ -124,8 +123,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
     mel_idx = diagnosis2idx['melanoma']
 
     # Test dataframe
-    test_path = Path(data_dir) / \
-        Path(f'jpeg-melanoma-{data_folder}x{data_folder}/test.csv')
+    test_path = data_dir / Path(f'jpeg-melanoma-{data_folder}x{data_folder}/test.csv')
     df_test = pd.read_csv(test_path)
     df_test['filepath'] = df_test['image_name'].apply(
         lambda img: test_path.parents[0] / Path(f'test/{img}.jpg'))
