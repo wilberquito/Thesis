@@ -6,6 +6,7 @@ import torch.nn as nn
 import torchvision.models as models
 from torchvision.models import (ConvNeXt_Base_Weights, EfficientNet_B7_Weights,
                                 ResNet152_Weights)
+from utility import model_input_size
 
 
 class Effnet_Melanoma(nn.Module):
@@ -148,3 +149,10 @@ class ConvNext_Melanoma(nn.Module):
         out /= len(self.dropouts)
 
         return out
+
+def get_input_size(model_name):
+
+    """Ask which is the recomended input size for the supported models"""
+
+    assert model_name in ['effnet', 'resnet', 'convnext']
+    return model_input_size(model_name)
