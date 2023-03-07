@@ -6,7 +6,7 @@ import torch.nn as nn
 import torchvision.models as models
 from torchvision.models import (ConvNeXt_Base_Weights, EfficientNet_B7_Weights,
                                 ResNet152_Weights)
-from utility import model_input_size
+from .utility import model_input_size
 
 
 class Effnet_Melanoma(nn.Module):
