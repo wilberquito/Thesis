@@ -50,6 +50,11 @@ class MelanomaDataset(Dataset):
 # Get the dataframe to work with
 def get_df(out_dim: int, data_dir: str, data_folder: str):
 
+    """Create a train an test dataframe that handles the train and test images"""
+
+    # Supported output dimentions, meaning the classes to predict :)
+    assert out_dim in [4, 8]
+
     # 2020 data
     train_path = Path(
         data_dir) / Path(f'jpeg-melanoma-{data_folder}x{data_folder}/train.csv')
