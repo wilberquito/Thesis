@@ -174,7 +174,6 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
     """Plots nrows*ncols random images"""
     torch.manual_seed(42)
     fig = plt.figure(figsize=(9, 9))
-    class_names = dataset.classes
     for i in range(1, rows * cols + 1):
         random_idx = torch.randint(0, len(dataset), size=[1]).item()
         if not dataset.mode == 'test':
@@ -185,5 +184,5 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
         print(img.shape)
         fig.add_subplot(rows, cols, i)
         plt.imshow(img.squeeze())
-        plt.title('' if dataset.mode == 'test' else class_names[label])
+        plt.title('' if dataset.mode == 'test' else label)
         plt.axis(False);
