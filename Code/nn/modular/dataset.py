@@ -25,7 +25,7 @@ class MelanomaDataset(Dataset):
         sample = self.csv.iloc[index]
 
         # Read image from path, transforming to tree channels, rgb
-        image = cv2.imread(str(sample.filepath))
+        image = cv2.imread(sample.filepath)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # Transform the images using `albumentation`
@@ -58,7 +58,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
     df_train = df_train[df_train['tfrecord'] >= 0].reset_index(drop=True)
     df_train['fold'] = df_train['tfrecord']
     df_train['filepath'] = df_train['image_name'].apply(
-        lambda img: train_path.parents[0] / Path(f'train/{img}.jpg'))
+        lambda image: train_path.parents[0] / Path(f'train/{image}.jpg'))
     df_train['is_ext'] = 0
 
     # 2018 and 2019 data
@@ -67,7 +67,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
     df_train2 = pd.read_csv(train_path)
     df_train2 = df_train2[df_train2['tfrecord'] >= 0].reset_index(drop=True)
     df_train2['filepath'] = df_train2['image_name'].apply(
-        lambda img: train_path.parents[0] / Path(f'train/{img}.jpg'))
+        lambda image: train_path.parents[0] / Path(f'train/{image}.jpg'))
     df_train2['is_ext'] = 1
 
     # Preprocess Target
@@ -122,7 +122,7 @@ def get_df(out_dim: int, data_dir: str, data_folder: str):
         Path(f'jpeg-melanoma-{data_folder}x{data_folder}/test.csv')
     df_test = pd.read_csv(test_path)
     df_test['filepath'] = df_test['image_name'].apply(
-        lambda img: test_path.parents[0] / Path(f'test/{img}.jpg'))
+        lambda image: test_path.parents[0] / Path(f'test/{image}.jpg'))
 
     return df_train, df_test, mel_idx
 
@@ -177,12 +177,13 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
     for i in range(1, rows * cols + 1):
         random_idx = torch.randint(0, len(dataset), size=[1]).item()
         if not dataset.mode == 'test':
-            img, label = dataset[random_idx]
+            image, label = dataset[random_idx]
         else:
-            img = dataset[random_idx]
-        img = img.cpu().numpy()
-        print(img.shape)
+            image = dataset[random_idx]
+        image = image.transpose(1, 2, 0)
+        image = image.cpu().numpy()
+        print(image.shape)
         fig.add_subplot(rows, cols, i)
-        plt.imshow(img.squeeze())
+        plt.imshow(image.squeeze())
         plt.title('' if dataset.mode == 'test' else label)
         plt.axis(False);
