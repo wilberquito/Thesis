@@ -172,7 +172,8 @@ def get_transforms(image_size):
 
 def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3, seed=None):
     """Plots nrows*ncols random images"""
-    torch.manual_seed(seed)
+    if seed is not None:
+        torch.manual_seed(seed)
     fig = plt.figure(figsize=(9, 9))
     for i in range(1, rows * cols + 1):
         random_idx = torch.randint(0, len(dataset), size=[1]).item()
