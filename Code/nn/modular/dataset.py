@@ -170,9 +170,9 @@ def get_transforms(image_size):
     return transforms_train, transforms_val
 
 
-def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
+def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3, seed=None):
     """Plots nrows*ncols random images"""
-    torch.manual_seed(42)
+    torch.manual_seed(seed)
     fig = plt.figure(figsize=(9, 9))
     for i in range(1, rows * cols + 1):
         random_idx = torch.randint(0, len(dataset), size=[1]).item()
@@ -187,8 +187,6 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
         image = image.cpu().numpy()
         image = np.array(image,np.int32)
         fig.add_subplot(rows, cols, i)
-        print(image.squeeze().shape)
-        print(label)
         plt.imshow(image.squeeze())
         plt.title('' if dataset.mode == 'test' else label)
         plt.axis(False)
