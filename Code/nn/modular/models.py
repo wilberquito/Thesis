@@ -25,7 +25,7 @@ class Effnet_Melanoma(nn.Module):
             param.requires_grad = False
 
         # Define the classifier for the melanoma problem into a separated layer
-        in_dim = self.net.classifier.in_features
+        in_dim = self.net.classifier[-1].in_features
         self.classifier = nn.Linear(in_dim, out_dim)
 
         # Disable efficient net b7 classifier
