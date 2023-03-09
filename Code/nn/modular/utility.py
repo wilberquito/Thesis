@@ -3,7 +3,10 @@ Contains various utility functions for PyTorch model training and saving.
 """
 
 from pathlib import Path
+
+import matplotlib.pyplot as plt
 import torch
+
 
 def transform(img: torch.tensor, transform_type: int):
     # Reverse the image applying a transpose
@@ -64,3 +67,17 @@ def save_model(model: torch.nn.Module,
     print(f"[INFO] Saving model to: {model_save_path}")
     torch.save(obj=model.state_dict(),
              f=model_save_path)
+
+
+def plot_images(dataset: torch.utils.data.Dataset, rows=3, cols=3):
+    """Plots nrows*ncols random images"""
+    torch.manual_seed(42)
+    fig = plt.figure(figsize=(9, 9))
+    class_names = dataset.classes
+    for i in range(1, rows * cols + 1):
+        random_idx = torch.randint(0, len(dataset), size=[1]).item()
+        img, label = dataset[random_idx]
+        fig.add_subplot(rows, cols, i)
+        plt.imshow(img.squeeze(), cmap="gray")
+        plt.title(class_names[label])
+        plt.axis(False);
