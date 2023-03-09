@@ -186,6 +186,8 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
         # From agnositic device to numpy
         image = image.cpu().numpy()
         fig.add_subplot(rows, cols, i)
+        print(image.squeeze().shape)
+        print(label)
         plt.imshow(image.squeeze())
         plt.title('' if dataset.mode == 'test' else label)
         plt.axis(False)
