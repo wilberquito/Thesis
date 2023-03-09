@@ -1,12 +1,12 @@
 from pathlib import Path
-from tqdm import tqdm
-import numpy as np
-import os
-import pandas as pd
-from torch.utils.data import Dataset
-import cv2
-import torch
+
 import albumentations as A
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import torch
+from torch.utils.data import Dataset
 
 
 class MelanomaDataset(Dataset):
@@ -18,7 +18,6 @@ class MelanomaDataset(Dataset):
 
     def __len__(self):
         return self.csv.shape[0]
-
 
     def __getitem__(self, index):
 
@@ -169,3 +168,22 @@ def get_transforms(image_size):
     ])
 
     return transforms_train, transforms_val
+
+
+def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
+    """Plots nrows*ncols random images"""
+    torch.manual_seed(42)
+    fig = plt.figure(figsize=(9, 9))
+    class_names = dataset.classes
+    for i in range(1, rows * cols + 1):
+        random_idx = torch.randint(0, len(dataset), size=[1]).item()
+        if not dataset.mode == 'test':
+            img, label = dataset[random_idx]
+        else:
+            img = dataset[random_idx]
+        img = img.cpu().numpy()
+        print(img.shape)
+        fig.add_subplot(rows, cols, i)
+        plt.imshow(img.squeeze())
+        plt.title('' if dataset.mode == 'test' else class_names[label])
+        plt.axis(False);

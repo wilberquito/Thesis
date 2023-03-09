@@ -4,7 +4,6 @@ Contains various utility functions for PyTorch model training and saving.
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import torch
 
 
