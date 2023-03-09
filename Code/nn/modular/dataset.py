@@ -43,7 +43,7 @@ class MelanomaDataset(Dataset):
         if self.mode == 'test':
             return data
         else:
-            return data, torch.tensor(sample['target']).long()
+            return data, torch.tensor(sample['target']).item()
 
 
 # Get the dataframe to work with
@@ -185,6 +185,7 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
         image = image.permute(1, 2, 0)
         # From agnositic device to numpy
         image = image.cpu().numpy()
+        image = np.array(image,np.int32)
         fig.add_subplot(rows, cols, i)
         print(image.squeeze().shape)
         print(label)
