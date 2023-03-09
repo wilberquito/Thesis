@@ -180,10 +180,12 @@ def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3):
             image, label = dataset[random_idx]
         else:
             image = dataset[random_idx]
-        image = image.transpose(1, 2, 0)
+
+        # Make color channel last
+        image = image.permute(1, 2, 0)
+        # From agnositic device to numpy
         image = image.cpu().numpy()
-        print(image.shape)
         fig.add_subplot(rows, cols, i)
         plt.imshow(image.squeeze())
         plt.title('' if dataset.mode == 'test' else label)
-        plt.axis(False);
+        plt.axis(False)
