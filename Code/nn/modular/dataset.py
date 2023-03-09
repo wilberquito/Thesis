@@ -25,7 +25,7 @@ class MelanomaDataset(Dataset):
         sample = self.csv.iloc[index]
 
         # Read image from path, transforming to tree channels, rgb
-        image = cv2.imread(sample.filepath)
+        image = cv2.imread(str(sample.filepath))
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # Transform the images using `albumentation`
