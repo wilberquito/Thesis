@@ -39,12 +39,14 @@ class Effnet_Melanoma(BaseMelanoma):
         self.net = models.efficientnet_b7(
             weights=EfficientNet_B7_Weights.DEFAULT)
 
-        # Define the classifier for the melanoma problem into a separated layer
+        # Take the input of the fully connected layer of effnet
         in_dim = self.net.classifier[-1].in_features
-        self.classifier = nn.Linear(in_dim, out_dim)
 
         # Disable efficient net b7 classifier
         self.net.classifier = nn.Identity()
+
+        # Declare the fully connected layer
+        self.classifier = nn.Linear(in_dim, out_dim)
 
         # Definition of multiple dropout
         self.dropouts = nn.ModuleList([nn.Dropout(0.5) for _ in range(5)])
@@ -79,12 +81,14 @@ class Resnest_Melanoma(BaseMelanoma):
         # Take Resnet152 as base
         self.net = models.resnet152(weights=ResNet152_Weights.DEFAULT)
 
-        # Define the classifier for the melanoma problem into a separated layer
+        # Take the input of the fully connected layer of resnet
         in_dim = self.net.fc.in_features
-        self.classifier = nn.Linear(in_dim, out_dim)
 
         # Disable efficient net b7 classifier
         self.net.fc = nn.Identity()
+
+        # Declare the fully connected layer
+        self.classifier = nn.Linear(in_dim, out_dim)
 
         # Definition of multiple dropout
         self.dropouts = nn.ModuleList([nn.Dropout(0.5) for _ in range(5)])
@@ -119,12 +123,14 @@ class ConvNext_Melanoma(BaseMelanoma):
         # Take ConvNext Base as base
         self.net = models.convnext_base(weights=ConvNeXt_Base_Weights.DEFAULT)
 
-        # Define the classifier for the melanoma problem into a separated layer
+        # Take the input of the fully connected layer of convnext
         in_dim = self.net.classifier[-1].in_features
-        self.classifier = nn.Linear(in_dim, out_dim)
 
-        # Disable efficient net b7 classifier
+        # Disable conv next net classifier
         self.net.classifier = nn.Identity()
+
+        # Declare the fully connected layer
+        self.classifier = nn.Linear(in_dim, out_dim)
 
         # Definition of multiple dropout
         self.dropouts = nn.ModuleList([nn.Dropout(0.5) for _ in range(5)])
