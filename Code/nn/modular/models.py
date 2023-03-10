@@ -25,7 +25,7 @@ class BaseMelanoma(nn.Module):
 
     def freeze(self):
         # Don't compute the gradients for net feature
-        for param in self.net.features.parameters():
+        for _, param in self.net.named_parameters():
             param.requires_grad = False
 
 
