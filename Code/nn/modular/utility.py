@@ -2,8 +2,10 @@
 Contains various utility functions for PyTorch model training and saving.
 """
 
+import random
 from pathlib import Path
 
+import numpy as np
 import torch
 
 
@@ -67,16 +69,11 @@ def save_model(model: torch.nn.Module,
     torch.save(obj=model.state_dict(),
              f=model_save_path)
 
-
-def plot_images(dataset: torch.utils.data.Dataset, rows=3, cols=3):
-    """Plots nrows*ncols random images"""
-    torch.manual_seed(42)
-    fig = plt.figure(figsize=(9, 9))
-    class_names = dataset.classes
-    for i in range(1, rows * cols + 1):
-        random_idx = torch.randint(0, len(dataset), size=[1]).item()
-        img, label = dataset[random_idx]
-        fig.add_subplot(rows, cols, i)
-        plt.imshow(img.squeeze(), cmap="gray")
-        plt.title(class_names[label])
-        plt.axis(False);
+def set_seed(seed=42):
+    """Force determinism in different libraries"""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
