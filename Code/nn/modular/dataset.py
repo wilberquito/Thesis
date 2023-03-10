@@ -163,9 +163,9 @@ def get_transforms(image_size):
                            border_mode=0,
                            p=0.85),
         A.Resize(image_size, image_size),
-        A.CoarseDropout(num_holes=1,
-                        max_h_size=int(image_size * 0.375),
-                        max_w_size=int(image_size * 0.375),
+        A.CoarseDropout(max_holes=1,
+                        max_height=int(image_size * 0.375),
+                        max_width=int(image_size * 0.375),
                         p=0.7),
         A.Normalize()
     ])
