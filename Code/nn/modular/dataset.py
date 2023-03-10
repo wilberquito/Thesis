@@ -140,7 +140,7 @@ def get_transforms(image_size):
         A.VerticalFlip(p=0.5),
         A.HorizontalFlip(p=0.5),
         A.RandomBrightness(limit=0.2, p=0.75),
-        A.RandomBrightnessContrast(limit=0.2, p=0.75),
+        A.RandomBrightnessContrast(contrast_limit=0.2, p=0.75),
         A.OneOf([
             A.MotionBlur(blur_limit=5),
             A.MedianBlur(blur_limit=5),
