@@ -33,7 +33,7 @@ class Effnet_Melanoma(BaseMelanoma):
     """It uses efficientnet b7 to have a good classifier please make sure to use images of 600x600"""
 
     def __init__(self, out_dim):
-        super(self).__init__()
+        super(Effnet_Melanoma, self).__init__()
 
         # Take the efficient net b7 as base
         self.net = models.efficientnet_b7(
@@ -74,7 +74,7 @@ class Resnest_Melanoma(BaseMelanoma):
     """It uses resnet152 to have a good classifier please make sure to use images of 232x232"""
 
     def __init__(self, out_dim):
-        super(self).__init__()
+        super(Resnest_Melanoma, self).__init__()
 
         # Take Resnet152 as base
         self.net = models.resnet152(weights=ResNet152_Weights.DEFAULT)
