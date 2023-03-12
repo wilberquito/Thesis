@@ -1,6 +1,6 @@
 <script lang="ts">
-  // import ky from "ky";
-  import type { UploadedImage } from "$lib/types";
+  import ky from "ky";
+  import type { UploadedImage, ImagePayload } from "$lib/types";
   import Displayer from "./Displayer.svelte";
 
   let uploadedImages: UploadedImage[] = [];
@@ -18,31 +18,52 @@
         blob: blob,
         url: URL.createObjectURL(blob),
       };
-      console.log(img);
       uploadedImages = [img, ...uploadedImages];
     }
+    uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
   async function postImages(images: UploadedImage[]) {
     try {
-      const formData = new FormData();
+      const pack: ImagePayload[] = [];
+      // Append each image to the FormData object
+      for (const image of images) {
+        const base64 = await blobToBase64(image.blob);
+        if (base64) {
+          pack.push({
+            name: image.name,
+            base64: base64,
+          });
+        }
+      }
 
-      // // Append each image to the FormData object
-      // for (const image of images)
-      //   formData.append(
-      //     "images[]",
-      //     new Blo;([image.buffer], { type: "image/jpeg" })
-      //   );
+      const message = {
+        pack: pack
+      }
 
-      // Makes a post request with all files
-      // const response = await ky.post("https://example.com/upload", {
-      //   body: formData,
-      // });
+      const request = await ky.post("https://example.com/upload", {
+        method: "POST",
+        body: JSON.stringify(message),
+        headers: {
+		'content-type': 'application/json'
+	}
 
-      // Handle the response here
-      // console.log(await response.json());
+      });
+
+      const response = await request.json();
+      console.log(response);
     } catch (error) {
       console.error(error);
+    }
+
+    function blobToBase64(blob: Blob): Promise<string | ArrayBuffer | null> {
+      return new Promise(
+        (resolve: (a: string | ArrayBuffer | null) => void, _) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        }
+      );
     }
   }
 </script>
@@ -67,11 +88,10 @@
 </form>
 
 {#if uploadedImages.length >= 1}
-  <Displayer images={uploadedImages}/>
+  <Displayer images={uploadedImages} />
 {/if}
 
 <style>
-
   .file-input-wrapper {
     position: relative;
     display: inline-block;

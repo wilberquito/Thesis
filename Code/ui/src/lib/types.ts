@@ -3,3 +3,8 @@ export type UploadedImage = {
     blob: Blob,
     url: string
 }
+
+export type ImagePayload = {
+    name: string,
+    base64: string | ArrayBuffer
+}

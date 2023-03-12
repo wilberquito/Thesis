@@ -8,7 +8,6 @@
     <div class="img-grid">
         {#each images as img}
             <div class="img-container">
-                <span>{img.url}</span>
                 <img src={img.url} alt="whatever" />
             </div>
         {/each}
