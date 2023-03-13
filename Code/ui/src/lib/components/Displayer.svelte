@@ -43,31 +43,9 @@
   /* CSS Grid*/
   .img-grid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-gap: 5px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
   }
 
-  /* Media Query for changing grid on bigger screens*/
-
-  /* Bigger than Phones(tablet) */
-  @media only screen and (min-width: 768px) {
-    .img-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  /* Bigger than Phones(laptop / desktop) */
-  @media only screen and (min-width: 992px) {
-    .img-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  /* Bigger than Phones(laptop / desktop) */
-  @media only screen and (min-width: 1200px) {
-    .img-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
 
 </style>
