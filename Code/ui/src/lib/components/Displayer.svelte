@@ -2,14 +2,17 @@
   import type { UploadedImage } from "$lib/types";
 
   export let images: UploadedImage[] = [];
+  export let closeHandler: (n: number) => void = (n) => {}
+
 </script>
 
 <div class="container">
   <div class="img-grid">
-    {#each images as img}
+    {#each images as img, i}
       <div class="img-container">
         <img src={img.url} alt="whatever" />
-        <div class="img-close" />
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="img-close" on:click={() => closeHandler(i)} />
       </div>
     {/each}
   </div>
@@ -34,11 +37,6 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
-  }
-
-  img:hover {
-    opacity: 0.9;
-    cursor: pointer;
   }
 
   /* CSS Grid*/
