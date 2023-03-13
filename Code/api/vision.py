@@ -1,7 +1,7 @@
 import logging
-import warnings
 from pathlib import Path
 from typing import List, Union
+
 
 import pandas as pd
 import torch
@@ -11,8 +11,8 @@ import torchvision.transforms as transforms
 from torch.utils.data import Dataset
 from torchvision.models import ResNet50_Weights, resnet50
 
-from dataset import MelanomaDataset, get_transforms
-from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
+from modular.dataset import MelanomaDataset, get_transforms
+from modular.models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
 from util import find_files, read_img
 from torch.utils.data import DataLoader
 
