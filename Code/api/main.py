@@ -3,11 +3,11 @@ import subprocess
 
 import uvicorn
 
-import vision
+import api.vision as vision
 
 
 def pull_shared_code():
-    subprocess.call(['sh', 'pull_shared_code.sh'])
+    subprocess.call(['sh', 'pull_nn_code.sh'])
 
 def main():
     pull_shared_code()

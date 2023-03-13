@@ -4,8 +4,8 @@ import uuid
 from collections.abc import Iterable, Iterator, Sized
 from pathlib import Path
 from typing import List, Union
-import cv2
 
+import cv2
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
