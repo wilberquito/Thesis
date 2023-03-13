@@ -1,8 +1,15 @@
 name: melanoma_api
 channels:
   - defaults
+  - conda-forge
 dependencies:
-  - opencv
-  - fastapi
   - uvicorn
-prefix: /home/wilber/anaconda3/envs/melanoma_api
+  - python=3.9
+  - opencv
+  - pandas
+  - torchvision
+  - pytorch
+  - fastapi
+  - matplotlib
+  - albumentations
+  - tqdm
