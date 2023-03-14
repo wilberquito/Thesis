@@ -204,7 +204,16 @@ def train(model: torch.nn.Module,
         network_learned = test_loss < valid_loss_min
         if network_learned:
           valid_loss_min = test_loss
-          torch.save(model.state_dict(), save_as)
+          data_dict = {
+            'train_loss': results.train_loss,
+            'train_acc': results.train_acc,
+            'test_loss': results.test_loss,
+            'test_acc': results.test_acc,
+            'epoch': epoch,
+            'optimizer': optimizer.state_dict(),
+            'model': model.state_dict()
+          }
+          torch.save(data_dict, save_as)
 
 
     # Return the filled results at the end of the epochs
