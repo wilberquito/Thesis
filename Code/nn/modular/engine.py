@@ -47,6 +47,8 @@ def train_step(model: torch.nn.Module,
         # 1. Forward pass
         y_pred = model(X)
 
+        print('train_step', y_pred.shape, y.shape)
+
         # 2. Calculate  and accumulate loss
         loss = loss_fn(y_pred, y)
         train_loss += loss.item()
