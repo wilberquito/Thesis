@@ -17,9 +17,11 @@ class BaseMelanoma(nn.Module):
 
 
     def extract(self, x):
+        print(x.shape)
         x = self.net(x)     \
             .squeeze(-1)    \
             .squeeze(-1)  # One squeeze could be enough
+        print(x.shape)
         return x
 
 
