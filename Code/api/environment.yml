@@ -13,3 +13,4 @@ dependencies:
   - matplotlib
   - albumentations
   - tqdm
+  - python-multipart
