@@ -3,7 +3,7 @@ import subprocess
 
 import uvicorn
 
-import api.vision as vision
+import modular.vision as vision
 
 
 def pull_shared_code():
