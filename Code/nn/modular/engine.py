@@ -1,10 +1,13 @@
 """
 Contains functions for training and testing a PyTorch model.
 """
-import torch
-
-from tqdm.auto import tqdm
+from pathlib import Path
 from typing import Dict, List, Tuple
+
+import numpy as np
+import torch
+from tqdm.auto import tqdm
+
 
 def train_step(model: torch.nn.Module,
                dataloader: torch.utils.data.DataLoader,
@@ -125,7 +128,8 @@ def train(model: torch.nn.Module,
           optimizer: torch.optim.Optimizer,
           loss_fn: torch.nn.Module,
           epochs: int,
-          device: torch.device) -> Dict[str, List]:
+          device: torch.device,
+          save_as: Path) -> Dict[str, List]:
     """Trains and tests a PyTorch model.
 
     Passes a target PyTorch models through train_step() and test_step()
@@ -167,6 +171,8 @@ def train(model: torch.nn.Module,
     # Make sure model on target device
     model.to(device)
 
+    valid_loss_min = np.Inf
+
     # Loop through training and testing steps for a number of epochs
     for epoch in tqdm(range(epochs)):
         train_loss, train_acc = train_step(model=model,
@@ -174,10 +180,11 @@ def train(model: torch.nn.Module,
                                           loss_fn=loss_fn,
                                           optimizer=optimizer,
                                           device=device)
+
         test_loss, test_acc = test_step(model=model,
-          dataloader=test_dataloader,
-          loss_fn=loss_fn,
-          device=device)
+                                        dataloader=test_dataloader,
+                                        loss_fn=loss_fn,
+                                        device=device)
 
         # Print out what's happening
         print(
@@ -193,6 +200,12 @@ def train(model: torch.nn.Module,
         results["train_acc"].append(train_acc)
         results["test_loss"].append(test_loss)
         results["test_acc"].append(test_acc)
+
+        network_learned = test_loss < valid_loss_min
+        if network_learned:
+          valid_loss_min = test_loss
+          torch.save(model.state_dict(), save_as)
+
 
     # Return the filled results at the end of the epochs
     return results
