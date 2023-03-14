@@ -8,7 +8,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
-from skimage import io, transform
 # Write a custom dataset class (inherits from torch.utils.data.Dataset)
 from torch.utils.data import Dataset
 from torchvision.models import ResNet50_Weights, resnet50

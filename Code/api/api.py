@@ -10,6 +10,7 @@ from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
 from vision import mk_prediction
 from util import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files
 from pathlib import Path
+import payload
 
 TMP_PARENT_TASKS = "./temp"
 
@@ -23,8 +24,15 @@ def home(request: Request):
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+@app.post('/test')
+async def predict(data: payload.IMGC):
+    data = data.dict
+    name, base64 = data.name, data.base64
+    print(name, base64)
+
+
 @app.post("/predict")
-async def predict_single_image(model: str, file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...), net_type='efnet'):
 
     # Is the uploaded file and image?
     __sanitize_file(file)
@@ -36,7 +44,7 @@ async def predict_single_image(model: str, file: UploadFile = File(...)):
     save_file_to_disk(file, file.filename, task_path)
 
     # Make prediction from task asyncronous
-    await mk_prediction(task_path)
+    await mk_prediction(net_type, task_path)
 
     # Returns the unique id of the task generated to consult the prediction late
     return {
@@ -50,8 +58,8 @@ def __sanitize_file(file):
     if not is_file_sanitized(file):
         raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
 
-@app.post("/predict_pack")
-async def predict_images_pack(request: Request, bg_tasks: BackgroundTasks):
+@app.post("/predict_bulk")
+async def predict_bulk(request: Request, bg_tasks: BackgroundTasks):
     '''
     Function that saves into a unique folder the jar of images from the request.
     So you can consume these images, the uuid of the folder is returned
