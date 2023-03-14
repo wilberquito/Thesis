@@ -13,7 +13,7 @@ from torchvision.models import ResNet50_Weights, resnet50
 
 from .utility import find_files, read_img
 from nn.modular.dataset import MelanomaDataset, get_transforms
-from nn.modular.models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
+from nn.modular.models import Effnet_Melanoma, Resnest_Melanoma
 
 # 1. Subclass torch.utils.data.Dataset
 
