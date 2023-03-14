@@ -7,8 +7,8 @@ import starlette.status as status
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
-from api.vision import mk_prediction
-from api.utility import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files
+from modular.vision import mk_prediction
+from modular.utility import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files
 from pathlib import Path
 import payload
 
