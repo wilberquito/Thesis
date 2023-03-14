@@ -1,5 +1,4 @@
 import logging
-import warnings
 from pathlib import Path
 from typing import List, Union
 
@@ -9,13 +8,12 @@ import torchvision
 import torchvision.transforms as transforms
 from PIL import Image
 # Write a custom dataset class (inherits from torch.utils.data.Dataset)
-from torch.utils.data import Dataset
+from torch.utils.data import DataLoader, Dataset
 from torchvision.models import ResNet50_Weights, resnet50
 
-from dataset import MelanomaDataset, get_transforms
-from models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
-from util import find_files, read_img
-from torch.utils.data import DataLoader
+from api.utility import find_files, read_img
+from nn.dataset import MelanomaDataset, get_transforms
+from nn.models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
 
 # 1. Subclass torch.utils.data.Dataset
 

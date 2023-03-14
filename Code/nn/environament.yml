@@ -1,15 +1,13 @@
-name: melanoma_api
+name: melanoma_nn
 channels:
   - defaults
   - conda-forge
 dependencies:
-  - uvicorn
   - python=3.9
   - opencv
   - pandas
   - torchvision
   - pytorch
-  - fastapi
   - matplotlib
   - albumentations
   - tqdm

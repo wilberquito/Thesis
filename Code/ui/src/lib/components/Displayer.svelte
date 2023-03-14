@@ -1,19 +1,22 @@
 <script lang="ts">
-    import type { UploadedImage } from "$lib/types";
+  import type { UploadedImage } from "$lib/types";
 
-    export let images: UploadedImage[] = [];
+  export let images: UploadedImage[] = [];
+  export let closeHandler: (n: number) => void = (n) => {}
+
 </script>
 
 <div class="container">
-    <div class="img-grid">
-        {#each images as img}
-            <div class="img-container">
-                <img src={img.url} alt="whatever" />
-            </div>
-        {/each}
-    </div>
+  <div class="img-grid">
+    {#each images as img, i}
+      <div class="img-container">
+        <img src={img.url} alt="whatever" />
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <div class="img-close" on:click={() => closeHandler(i)} />
+      </div>
+    {/each}
+  </div>
 </div>
-
 
 <style>
   .container {
@@ -26,6 +29,7 @@
   .img-container {
     width: 100%;
     height: 100%;
+    position: relative;
   }
 
   /* make images fill their container*/
@@ -35,11 +39,6 @@
     height: 100%;
   }
 
-  img:hover {
-    opacity: 0.9;
-    cursor: pointer;
-  }
-
   /* CSS Grid*/
   .img-grid {
     display: grid;
@@ -47,5 +46,23 @@
     grid-gap: 10px;
   }
 
+  .img-close {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: center;
+    line-height: 24px;
+    z-index: 1;
+    cursor: pointer;
+  }
 
+  .img-close:after {
+    content: "✖";
+    font-size: 14px;
+    color: white;
+  }
 </style>

@@ -5,13 +5,23 @@
 
   let uploadedImages: UploadedImage[] = [];
 
-  async function handleFiles(event: any) {
-    // Removes previous uploadedFiles
-    uploadedImages = [];
+  function onImageClose(i: number) {
+    uploadedImages = uploadedImages
+      .slice(0, i)
+      .concat(uploadedImages.slice(i + 1, uploadedImages.length));
+  }
 
+  async function handleFiles(event: any) {
+    // Treat uploaded images
     const files = event.target.files;
 
     for (const file of files) {
+      // Checks if the image is already loaded
+      const inMemory =
+        uploadedImages.filter((e) => e.name == file.name).length > 0;
+      if (inMemory) continue;
+
+      // If the image is not already loaded, adds the image to the collection
       const blob = new Blob([file], { type: file.type });
       const img: UploadedImage = {
         name: file.name,
@@ -20,6 +30,8 @@
       };
       uploadedImages = [img, ...uploadedImages];
     }
+
+    // Once all images are loaded, it sort the array by image name
     uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
@@ -85,7 +97,7 @@
   </form>
 
   {#if uploadedImages.length >= 1}
-    <Displayer images={uploadedImages} />
+    <Displayer images={uploadedImages} closeHandler={onImageClose}/>
   {/if}
 </div>
 
