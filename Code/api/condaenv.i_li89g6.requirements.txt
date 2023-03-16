@@ -1,0 +1,10 @@
+pandas==0.24.2
+torch
+torchvision
+opencv_python==4.4.0.42
+albumentations==0.4.6
+resnest==0.0.6b20200823
+geffnet==0.9.8
+pretrainedmodels==0.7.4
+warmup-scheduler
+numpy==1.18.1
