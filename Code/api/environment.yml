@@ -11,14 +11,13 @@ dependencies:
   - pathlib
   - pip
   - pip:
-    - pandas==0.24.2
+    - pandas
+    - numpy
     - torch
     - torchvision
-    - opencv_python==4.4.0.42
+    - opencv_python
     - albumentations==0.4.6
-    - resnest==0.0.6b20200823
-    - geffnet==0.9.8
-    - pretrainedmodels==0.7.4
+    - resnest
+    - geffnet
+    - pretrainedmodels
     - warmup-scheduler
-    - numpy==1.18.1
-

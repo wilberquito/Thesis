@@ -3,7 +3,7 @@ from dataset import get_df
 from pathlib import Path
 import torch
 
-def get_model_class(net_type='resnet101'):
+def get_model_class(net_type='resnest101'):
     if net_type == 'resnest101':
         ModelClass = Resnest_Melanoma
     elif net_type == 'seresnext101':
@@ -19,7 +19,7 @@ def get_pth_file(parent_dir: Path, eval_type, kernel_type='8c_b3_768_512_18ep', 
         model_file = parent_dir / Path(f'{kernel_type}_best_fold{fold}.pth')
     elif eval_type == 'best_20':
         model_file = parent_dir / Path(f'{kernel_type}_best_20_fold{fold}.pth')
-    if eval_type == 'final':
+    elif eval_type == 'final':
         model_file = parent_dir / Path(f'{kernel_type}_final_fold{fold}.pth')
     else:
         raise NotImplementedError()
@@ -27,18 +27,12 @@ def get_pth_file(parent_dir: Path, eval_type, kernel_type='8c_b3_768_512_18ep', 
 
 if __name__ == "__main__":
 
-    net_type = 'resnet101'
-    models_parent_dir = Path('/home/wilber/repos/Thesis/Code/api/pytorch_models')
-    eval_type = 'best'
-    kernel_type = '8c_b3_768_512_18ep'
-    fold = 0
-
-    net_type = 'resnet101'
+    net_type = 'resnest101'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     out_dim = 8
 
     params = {
-        'models_parent_dir' : Path('/home/wilber/repos/Thesis/Code/api/pytorch_models'),
+        'parent_dir' : Path('/home/wilber/repos/Thesis/Code/api/pytorch_models'),
         'eval_type' : 'best',
         'kernel_type' : '8c_b3_768_512_18ep',
         'fold' : 0
