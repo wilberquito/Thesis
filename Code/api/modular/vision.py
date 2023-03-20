@@ -5,12 +5,13 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
-import vicorobot
+import vicorobot.dataset as vd
+import vicorobot.utility as vu
 
 from modular.dataset import TaskDataset, get_csv
 
 
-PATH_PYTORCH_MODELS = Path('/home/wilberquito/pytorch/trained/melanoma')
+PATH_PYTORCH_MODELS = Path('/home/wilber/pytorch/trained/melanoma')
 PYTORCH_MODELS = {
     'vicorobot.efficientnet_b3': {
         'net_type': 'efficientnet_b3',
@@ -33,11 +34,11 @@ def __load_vicorobot_model(device: str,
                            out_dim: int = 8,
                            kernel_type: str = '8c_b3_768_512_18ep',
                            fold: int=0) -> torch.nn.Module:
-    nn = vicorobot.utility.get_model_class(net_type=net_type)
-    pth_file = vicorobot.utility.get_path_file(parent_dir=parent_dir,
-                                        eval_type=eval_type,
-                                        kernel_type=kernel_type,
-                                        fold=fold)
+    nn = vu.get_model_class(net_type=net_type)
+    pth_file = vu.get_pth_file(parent_dir=parent_dir,
+                               eval_type=eval_type,
+                               kernel_type=kernel_type,
+                               fold=fold)
 
     model = nn(
         enet_type=net_type,
@@ -78,7 +79,7 @@ def __mk_net(device: str,
 def get_transforms(model_id: str, image_size: int):
 
     if 'vicorobot' in model_id:
-        return vicorobot.dataset.get_transforms(image_size=image_size)
+        return vd.get_transforms(image_size=image_size)
     else:
         raise NotImplementedError()
 
@@ -98,7 +99,7 @@ async def mk_prediction(model_id: str,
                                        image_size=metadata['image_size'])
 
     # Loads the pytorch model
-    nn = __mk_net(model_id)
+    nn = __mk_net(device=device, net_id=model_id)
 
     # Create the csv to work with
     csv = get_csv(task_id)

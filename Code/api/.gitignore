@@ -1,3 +1,4 @@
 nn/
 pytorch_models/
-
+build/
+**egg-info/
