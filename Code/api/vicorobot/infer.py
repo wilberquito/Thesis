@@ -14,11 +14,10 @@ def get_model_class(net_type='resnest101'):
         raise NotImplementedError()
     return ModelClass
 
-def get_pth_file(
-        parent_dir: Path,
-        eval_type,
-        kernel_type='8c_b3_768_512_18ep',
-        fold=0) -> Path:
+def get_pth_file(parent_dir: Path,
+                 eval_type,
+                 kernel_type='8c_b3_768_512_18ep',
+                 fold=0) -> Path:
     if eval_type == 'best':
         model_file = parent_dir / Path(f'{kernel_type}_best_fold{fold}.pth')
     elif eval_type == 'best_20':
@@ -31,7 +30,9 @@ def get_pth_file(
 
 if __name__ == "__main__":
 
-    net_type = 'resnest101'
+    # net_type = 'resnest101'
+    # net_type = 'seresnext101'
+    net_type = 'efficientnet_b3'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     out_dim = 8
 
@@ -54,11 +55,12 @@ if __name__ == "__main__":
     model = model.to(device)
 
     try:
-        model.load_state_dict(torch.load(pth_file, map_location=device), strict=True)
+        model.load_state_dict(torch.load(pth_file,
+                                         map_location=device),
+                              strict=True)
     except Exception as e:
-        state_dict = torch.load(pth_file)
+        state_dict = torch.load(pth_file,
+                                map_location=device)
+
         state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
         model.load_state_dict(state_dict, strict=True)
-
-
-    print(model)
