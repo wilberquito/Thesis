@@ -4,13 +4,19 @@ import uuid
 from collections.abc import Iterable, Iterator, Sized
 from pathlib import Path
 from typing import List, Union
+import torch
+import numpy as np
+
+from PIL import Image
 
 import cv2
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
 
-def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_name=".") -> Path:
+def save_file_to_disk(parent_dir: Path,
+                      file: UploadFile = File(...),
+                      save_as: str ="default") -> Path:
     """
     Save a file into a directory that may exist or not.
     Once the directory is saved return it's content
@@ -22,14 +28,14 @@ def save_file_to_disk(file: UploadFile = File(...), save_as="default", folder_na
         folder_name: path where the file is saved
     """
 
-    mk_dir(folder_name)
-    filename = Path(folder_name) / Path(save_as)
+    mk_dir(parent_dir)
+    filename = Path(parent_dir) / Path(save_as)
     with open(filename, "wb") as f:
         shutil.copyfileobj(file.file, f)
     return filename
 
 
-def mk_temporal_task(parent_path="./temp"):
+def mk_temporal_task(parent_path="./temp") -> Path:
     """
     Generates an absolute path to a new task
     """
@@ -38,7 +44,7 @@ def mk_temporal_task(parent_path="./temp"):
     return task_path.resolve()
 
 
-def mk_dir(folder_name: str):
+def mk_dir(folder_name: Union[str,Path]):
     """
     Makes directory if not exist
     """
@@ -51,7 +57,13 @@ def is_file_sanitized(uploaded: UploadFile, supported_content_type=('image/jpeg'
     '''
     Only accepts uploaded files that has content type of jpg or png
     '''
-    return uploaded.content_type in supported_content_type
+    check_content_type = uploaded.content_type in supported_content_type
+    check_name = uploaded.filename is None
+
+    return all([
+                   check_content_type,
+                   check_name
+               ])
 
 
 def find_files(parent_dir: Path, extensions: Iterable[str]) -> List[Path]:
@@ -82,8 +94,20 @@ def find_files(parent_dir: Path, extensions: Iterable[str]) -> List[Path]:
     return matches
 
 
-def read_img(img_path: Path):
-    """ Read img from path, transforming to tree channels, rgb """
-    img = cv2.imread(img_path)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    return img
+def path_to_tensor(img_path: Path, transform=None) -> torch.Tensor:
+    # Load img as PIL object
+    pil_img = Image(img_path)
+
+    if transform is not None:
+        res = transform(image=pil_img)
+        img = res['image'].astype(np.float32)
+    else:
+        img = img.astype(np.float32)
+
+    # Channel first
+    img = img.transpose(2, 0, 1)
+
+    # Convert PIL img to Pytorch tensor
+    tensor =  torch.Tensor(img)
+
+    return tensor

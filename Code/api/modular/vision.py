@@ -1,95 +1,139 @@
-import logging
 from pathlib import Path
 from typing import List, Union
 
 import pandas as pd
 import torch
-import torchvision
-import torchvision.transforms as transforms
-from PIL import Image
-# Write a custom dataset class (inherits from torch.utils.data.Dataset)
-from torch.utils.data import DataLoader, Dataset
-from torchvision.models import ResNet50_Weights, resnet50
+from torch.utils.data import DataLoader
 
-from .utility import find_files, read_img
-from nn.modular.dataset import MelanomaDataset, get_transforms
-from nn.modular.models import Effnet_Melanoma, Resnest_Melanoma
+import vicorobot as vi
+
+from .dataset import TaskDataset, get_csv
 
 # 1. Subclass torch.utils.data.Dataset
 
-DEFAULT_MODELS_PARENT_DIR = './models'
-DEFAULT_MODEL = resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)
-SUPPORTED_MODELS = {}
-IMG_SIZE = 576
-device = 'cpu'
+PATH_PYTORCH_MODELS = Path('/home/wilberquito/pytorch/trained/melanoma')
+PYTORCH_MODELS = {
+    'vicorobot.efficientnet_b3': {
+        'net_type': 'efficientnet_b3',
+        'image_size': 320,
+        'pth_file': {
+            'parent_dir': PATH_PYTORCH_MODELS / Path('vicorobot'),
+            'eval_type': 'best',
+            'out_dim': 8,
+            'kernel_type': '8c_b3_768_512_18ep',
+            'fold': 0
+        }
+
+    }
+}
+
+def __load_vicorobot_model(device: str,
+                           net_type: str,
+                           parent_dir: Path,
+                           eval_type: str = 'best',
+                           out_dim: int = 8,
+                           kernel_type: str = '8c_b3_768_512_18ep',
+                           fold: int=0) -> torch.nn.Module:
+    nn = vi.utility.get_model_class(net_type=net_type)
+    pth_file = vi.utility.get_path_file(parent_dir=parent_dir,
+                                        eval_type=eval_type,
+                                        kernel_type=kernel_type,
+                                        fold=fold)
+
+    model = nn(
+        enet_type=net_type,
+        n_meta_features=0,
+        n_meta_dim=[],
+        out_dim=out_dim)
+
+    model = model.to(device)
+
+    try:
+        model.load_state_dict(torch.load(pth_file,
+                                         map_location=device),
+                              strict=True)
+    except Exception as e:
+        state_dict = torch.load(pth_file,
+                                map_location=device)
+
+        state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
+        model.load_state_dict(state_dict, strict=True)
+
+    return model
 
 
-def __mk_net(net_type, out_dim, pretrained) -> torch.nn.Module:
-    if net_type == 'resnest101':
-        net = Resnest_Melanoma(net_type, out_dim, pretrained)
-    elif net_type == 'seresnext101':
-        net = Seresnext_Melanoma(net_type, out_dim, pretrained)
-    elif 'efficientnet' in net_type:
-        net = Effnet_Melanoma(net_type, out_dim, pretrained)
+def __mk_net(device: str,
+             net_id: str) -> torch.nn.Module:
+
+    meta_model = PYTORCH_MODELS[net_id]
+
+    if 'vicorobot' in net_id:
+        model = __load_vicorobot_model(device=device,
+                                       net_type=meta_model['net_type'],
+                                       **meta_model['pth_file'])
     else:
         raise NotImplementedError()
-    return net
 
-def __load_models_from_disk():
-    """
-    Description
-    -----------
-    Finds files with .pth and .pt extension in subfolder <DEFAULT_MODEL_PARENT_DIR>
-    """
-    paths = find_files(DEFAULT_MODELS_PARENT_DIR, ('.pth'))
-    models = []
-    for path in paths:
-        # Take the filename model from the path
-        net_type = path.parts[-1].split('.')[0]
-        # Save path to the model (k, v)
-        SUPPORTED_MODELS[net_type] = path
+    return model
+
+def get_transforms(model_id: str, image_size: int):
+
+    if 'vicorobot' in model_id:
+        return vi.dataset.get_transforms
+    else:
+        raise NotImplementedError()
 
 
-async def mk_prediction(net_type, targ_dir: Path, save_as='task_prediction.csv'):
-    paths = find_files(targ_dir, ('.png', '.jpeg')) # note: you'd have to update this if you've got .png's or .jpeg's
-    _, transforms_val = get_transforms(IMG_SIZE)
-    csv = pd.DataFrame({ 'filepath': paths })
-    dataset = MelanomaDataset(csv, 'test', transforms_val)
-    dataloader = DataLoader(dataset)
+async def mk_prediction(model_id: str,
+                        task_id: Path,
+                        save_as='task_prediction.csv') -> None:
 
-    y_pred_class = []
+    # Agnostic code
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    net = __mk_net(net_type, 8, True)
-    net = net.to(device)
-    net.eval()
+    # Model metadata
+    metadata = PYTORCH_MODELS[model_id]
+
+    # Required transformation to make the prediction
+    _, val_transforms = get_transforms(model_id=model_id,
+                                       image_size=metadata['image_size'])
+
+    # Loads the pytorch model
+    nn = __mk_net(model_id)
+
+    # Create the csv to work with
+    csv = get_csv(task_id)
+
+    # Task dataset
+    task_dataset = TaskDataset(csv=csv, transform=val_transforms)
+
+    # Task dataloader
+    task_dataloader = DataLoader(dataset=task_dataset,
+                                 batch_size=8,
+                                 shuffle=False)
+
+    predictions = []
+    names = csv.name
+
     with torch.inference_mode():
-        for X in dataloader:
+         for X in task_dataloader:
             X = X.to(device)
-            logits = net(X)
+            logits = nn(X)
             pred = torch.argmax(torch.softmax(logits))
-            y_pred_class.append(pred)
+            predictions.append(pred)
 
-    task_prediction = pd.DataFrame({
-        'filepath': csv.filepath,
-        'prediction': y_pred_class
+    predictions_csv = pd.DataFrame({
+        'name': names,
+        'prediction': predictions
     })
 
-    save_path = targ_dir / Path(save_as)
-    task_prediction.to_csv(save_path)
+    predictions_csv.to_csv(task_id / Path(save_as))
 
 
 def get_supported_models() -> List[str]:
     """
     Returns the name of the supported model
     """
-    return list(SUPPORTED_MODELS.keys())
+    global NAMES_PYTORCH_MODELS
+    return NAMES_PYTORCH_MODELS.keys()
 
-
-def run():
-    logging.info("Loading models from disk...")
-    __load_models_from_disk()
-    logging.info(f"Models loaded : {get_supported_models()}")
-    logging.info('Selecting device to work with')
-    global device
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    logging.info('Device selected to work with: {device}')
