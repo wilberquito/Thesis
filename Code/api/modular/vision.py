@@ -5,11 +5,10 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
-import vicorobot as vi
+import vicorobot
 
-from .dataset import TaskDataset, get_csv
+from modular.dataset import TaskDataset, get_csv
 
-# 1. Subclass torch.utils.data.Dataset
 
 PATH_PYTORCH_MODELS = Path('/home/wilberquito/pytorch/trained/melanoma')
 PYTORCH_MODELS = {
@@ -34,8 +33,8 @@ def __load_vicorobot_model(device: str,
                            out_dim: int = 8,
                            kernel_type: str = '8c_b3_768_512_18ep',
                            fold: int=0) -> torch.nn.Module:
-    nn = vi.utility.get_model_class(net_type=net_type)
-    pth_file = vi.utility.get_path_file(parent_dir=parent_dir,
+    nn = vicorobot.utility.get_model_class(net_type=net_type)
+    pth_file = vicorobot.utility.get_path_file(parent_dir=parent_dir,
                                         eval_type=eval_type,
                                         kernel_type=kernel_type,
                                         fold=fold)
@@ -79,7 +78,7 @@ def __mk_net(device: str,
 def get_transforms(model_id: str, image_size: int):
 
     if 'vicorobot' in model_id:
-        return vi.dataset.get_transforms
+        return vicorobot.dataset.get_transforms(image_size=image_size)
     else:
         raise NotImplementedError()
 

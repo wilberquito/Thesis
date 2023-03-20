@@ -58,7 +58,7 @@ def is_file_sanitized(uploaded: UploadFile, supported_content_type=('image/jpeg'
     Only accepts uploaded files that has content type of jpg or png
     '''
     check_content_type = uploaded.content_type in supported_content_type
-    check_name = uploaded.filename is None
+    check_name = uploaded.filename is not None
 
     return all([
                    check_content_type,

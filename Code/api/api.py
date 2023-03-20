@@ -7,7 +7,7 @@ import starlette.status as status
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
-from modular.vision import mk_prediction
+from modular.vision import mk_prediction, get_supported_models
 from modular.utility import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files
 
 from pathlib import Path
@@ -27,25 +27,26 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...), net_type='efficientnet_b3'):
+async def predict(file: UploadFile = File(...), model_id='vicorobot.efficientnet_b3'):
 
     # Is the uploaded file and image?
     __sanitize_file(file)
 
     # New temporal task path
-    task_path: Path = mk_temporal_task(parent_path=TMP_PARENT_TASKS)
+    task_id: Path = mk_temporal_task(parent_path=TMP_PARENT_TASKS)
 
     # Save image inside the task folder
-    save_file_to_disk(parent_dir=task_path,
+    save_file_to_disk(parent_dir=task_id,
                       file=file,
                       save_as=str(file.filename))
 
     # Make prediction from task asyncronous
-    await mk_prediction(net_type, task_path)
+    await mk_prediction(model_id=model_id,
+                        task_id=task_id)
 
     # Returns the unique id of the task generated to consult the prediction late
     return {
-        'uuid_task': task_path.parts[-1]
+        'uuid_task': task_id.parts[-1]
     }
 
 def __sanitize_file(file):
@@ -106,5 +107,5 @@ async def supported_models():
     returns the name of the available models to make prediction of skin cancers
     """
     return {
-        "support": vision.list_models()
+        "models": get_supported_models()
     }

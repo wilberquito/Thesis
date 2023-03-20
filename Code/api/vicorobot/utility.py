@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from .dataset import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
+from .models import Effnet_Melanoma, Resnest_Melanoma, Seresnext_Melanoma
 
 
 def get_model_class(net_type='resnest101'):
