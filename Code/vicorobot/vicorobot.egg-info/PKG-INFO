@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: vicorobot
+Version: 1.0
+Summary: A module
+Author: wilberquito
+Author-email: wbq.software@gmail.com
+
+# Vicorobot model
+
+To install this package to the environment
+
+```python
+pip install .
+```
