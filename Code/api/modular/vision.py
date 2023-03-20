@@ -109,7 +109,7 @@ async def mk_prediction(model_id: str,
 
     # Task dataloader
     task_dataloader = DataLoader(dataset=task_dataset,
-                                 batch_size=8,
+                                 batch_size=len(task_dataset),
                                  shuffle=False)
 
     predictions = []
