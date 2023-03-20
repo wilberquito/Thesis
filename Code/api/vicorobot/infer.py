@@ -8,7 +8,7 @@ def get_model_class(net_type='resnest101'):
         ModelClass = Resnest_Melanoma
     elif net_type == 'seresnext101':
         ModelClass = Seresnext_Melanoma
-    elif 'efficientnet' in net_type:
+    elif net_type == 'efficientnet_b3':
         ModelClass = Effnet_Melanoma
     else:
         raise NotImplementedError()
@@ -64,3 +64,4 @@ if __name__ == "__main__":
 
         state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
         model.load_state_dict(state_dict, strict=True)
+
