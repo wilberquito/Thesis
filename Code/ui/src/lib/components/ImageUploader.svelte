@@ -55,7 +55,16 @@
         'Content-Type': 'multipart/form-data'
       }
 
-      for (const img of images) formData.append("file", img.blob, img.name);
+      if (images.length == 1) {
+        const img = images[0]
+        formData.append("file", img.blob, img.name)
+      }
+      else if(images.length >= 1) {
+        for (const img of images) formData.append("files", img.blob, img.name);
+      }
+      else {
+        console.warn("The prediction request was canceled because none image found to send")
+      }
 
       axios.post(endpoint, formData, {
         params: params,
