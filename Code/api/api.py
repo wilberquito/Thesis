@@ -1,6 +1,7 @@
 import os
 from typing import List, Union, ValuesView
 import json
+import pandas as pd
 
 import fastapi
 import starlette.status as status
@@ -33,7 +34,7 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.efficientnet
     __sanitize_file(file)
 
     # New temporal task path
-    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORALTASKS'])
+    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
 
     # Save image inside the task folder
     save_file_to_disk(parent_dir=task_id,
@@ -42,7 +43,8 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.efficientnet
 
     # Make prediction from task asyncronous
     await mk_prediction(model_id=model_id,
-                        task_id=task_id)
+                        task_id=task_id,
+                        save_as=conf['PREDICTION_SAVE_AS'])
 
     # Returns the unique id of the task generated to consult the prediction late
     return {
@@ -78,7 +80,7 @@ async def predict_bulk(request: Request,
     files = await request.form()
 
     # Creates a new task
-    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORALTASKS'])
+    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
 
     # Sanitize each image and save inside the task
     for file in files.values():
@@ -93,7 +95,8 @@ async def predict_bulk(request: Request,
 
     bg_tasks.add_task(mk_prediction,
                       model_id=model_id,
-                      task_id=task_id)
+                      task_id=task_id,
+                      save_as=conf['PREDICTION_SAVE_AS'])
 
     return {
         "task_id": task_id,
@@ -101,22 +104,31 @@ async def predict_bulk(request: Request,
     }
 
 
-@app.get("/predict_packet_output/{task_id}")
-async def predict_images_pack_output(task_id: int):
+@app.get("/from_task/{task_id}")
+async def predict_images_pack_output(task_id: str):
     '''
     Takes the prediction from task_id folder and returns it.
     May happen that the prediction request and the prediction output
-    where faster than the prediction process itself and may not found the prediction,
-    in this case, I recommend to consume this end point
+    where faster than the prediction process itself and may not found the prediction, in this case, I recommend to consume this end point
     '''
-    for file_ in os.listdir(task_id):
-        if file_.endswith((".csv")):
-            # TODO: transform csv to dict object using DataFrame and return it
-            return {
-                "task_id": task_id,
-                "output": "work in progress"
-            }
-    return HTTPException(status_code=500, detail='Prediction not found for - %s - task_id' % (task_id))
+
+    task_id = task_id.strip()
+
+    task_path: Path = Path(conf['TEMPORAL_TASKS_PATH']) / Path(task_id)
+
+    if not task_path.exists():
+        return HTTPException(status_code=500,
+                             detail=f'Task - {task_id} - not found')
+
+    predict_path = task_path / Path(conf['PREDICTION_SAVE_AS'])
+
+    if not predict_path.exists():
+        return HTTPException(status_code=500,
+                             detail=f'Task - {task_id} - exist but the prediction is not yet ready. Try it latter')
+
+    csv: pd.DataFrame = pd.read_csv(predict_path)
+    print(csv)
+    return 'hola'
 
 
 @app.get("/supported_models")

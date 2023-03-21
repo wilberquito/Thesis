@@ -1,3 +1,5 @@
-MODELSPATH: '/home/wilber/pytorch/trained/melanoma'
+MODELS_PATH: '/home/wilber/pytorch/trained/melanoma'
 
-TEMPORALTASKS: '/home/wilber/Descargas/tasks'
+TEMPORAL_TASKS_PATH: '/home/wilber/Descargas/tasks'
+
+PREDICTION_SAVE_AS: 'prediction.csv'
