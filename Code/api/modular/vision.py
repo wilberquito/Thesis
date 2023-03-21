@@ -136,6 +136,5 @@ def get_supported_models() -> List[str]:
     """
     Returns the name of the supported model
     """
-    global NAMES_PYTORCH_MODELS
-    return NAMES_PYTORCH_MODELS.keys()
+    return list(PYTORCH_MODELS.keys())
 

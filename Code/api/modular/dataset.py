@@ -41,8 +41,7 @@ class TaskDataset(torch.utils.data.Dataset):
         return tensor
 
 
-def get_csv(parent_dir: Path,
-            extensions=('png')):
+def get_csv(parent_dir: Path):
 
     # Loads the images
     images_path = find_files(parent_dir=parent_dir,
