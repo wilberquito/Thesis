@@ -30,9 +30,37 @@ def home(request: Request):
     return fastapi.responses.RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/supported_models")
+async def supported_models():
+    """
+    Description
+    ----------
+    returns the name of the available models to make prediction of skin cancers
+    """
+    return {
+        "models": get_supported_models()
+    }
+
+
+@app.get("/from_task/{task_id}")
+async def from_task(task_id: str):
+    '''
+    Consult a task resulting predictions
+    '''
+
+    task_path: Path = Path(conf['TEMPORAL_TASKS_PATH']) / Path(task_id)
+
+    __sanitize_path(path=task_path,
+                    detail=f'Task - {task_id} - not found')
+
+    predict_path = task_path / Path(conf['PREDICTION_SAVE_AS'])
+
+    __sanitize_path(path=predict_path,
+                    detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
+
+    csv: pd.DataFrame = pd.read_csv(predict_path)
+    csv: dict = csv.to_dict('records')
+    return csv
 
 
 @app.post("/predict")
@@ -53,21 +81,15 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
                       file=file,
                       save_as=str(file.filename))
 
+
+    # Save and make the prediction into the task directory
+    await mk_prediction(model_id=model_id,
+                        task_id=task_path,
+                        save_as=conf['PREDICTION_SAVE_AS'])
+
     return {
         'uuid_task': task_id
     }
-
-def __sanitize_model(model_id: str):
-    if not is_model_supported(model_id):
-        raise HTTPException(status_code=400,
-                            detail=f'Pytorch model - {model_id} - not found')
-
-def __sanitize_file(file):
-    """
-    Check if the file is jpeg or png content type, if not throws and exception
-    """
-    if not is_uploaded_image_sanitized(file):
-        raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
 
 
 @app.post("/predict_bulk")
@@ -115,41 +137,21 @@ async def predict_bulk(request: Request,
     }
 
 
-@app.get("/from_task/{task_id}")
-async def from_task(task_id: str):
-    '''
-    Takes the prediction from task_id folder and returns it.
-    May happen that the prediction request and the prediction output
-    where faster than the prediction process itself and may not found the prediction, in this case, I recommend to consume this end point
-    '''
+def __sanitize_model(model_id: str):
+    if not is_model_supported(model_id):
+        raise HTTPException(status_code=400,
+                            detail=f'Pytorch model - {model_id} - not found')
 
-    task_path: Path = Path(conf['TEMPORAL_TASKS_PATH']) / Path(task_id)
+def __sanitize_file(file):
+    """
+    Check if the file is jpeg or png content type, if not throws and exception
+    """
+    if not is_uploaded_image_sanitized(file):
+        raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
 
-    __sanitize_path(path=task_path,
-                    detail=f'Task - {task_id} - not found')
-
-    predict_path = task_path / Path(conf['PREDICTION_SAVE_AS'])
-
-    __sanitize_path(path=predict_path,
-                    detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
-
-    csv: pd.DataFrame = pd.read_csv(predict_path)
-    csv: dict = csv.to_dict('records')
-    return csv
 
 def __sanitize_path(path: Path, detail: str):
 
     if not path.exists():
         return HTTPException(status_code=500,
                              detail=detail)
-
-@app.get("/supported_models")
-async def supported_models():
-    """
-    Description
-    ----------
-    returns the name of the available models to make prediction of skin cancers
-    """
-    return {
-        "models": get_supported_models()
-    }
