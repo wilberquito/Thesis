@@ -41,7 +41,7 @@
   async function postImages(images: UploadedImage[]) {
     try {
       const formData = new FormData();
-      const modelId = "vicorobot.efficientnet_b3"
+      const modelId = "vicorobot.8c_b3_768_512_18ep_best_20_fold0"
       const endpoint =
         images.length == 1
           ? "http://127.0.0.1:8081/predict"
@@ -55,7 +55,7 @@
         'Content-Type': 'multipart/form-data'
       }
 
-      for (const img of images) formData.append("file", img.blob);
+      for (const img of images) formData.append("file", img.blob, img.name);
 
       axios.post(endpoint, formData, {
         params: params,
