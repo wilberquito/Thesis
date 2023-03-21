@@ -13,9 +13,19 @@ from modular.utility import mk_temporal_task, save_file_to_disk, is_uploaded_ima
 
 from pathlib import Path
 
+from fastapi.middleware.cors import CORSMiddleware
+
 conf = read_yaml('./api.conf.yml')
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_methods=['*'],
+    allow_headers=['*']
+)
+
 
 @app.get("/")
 def home(request: Request):
