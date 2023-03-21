@@ -42,7 +42,7 @@
   async function postImages(images: UploadedImage[]) {
     try {
       const formData = new FormData();
-      const modelId = "vicorbot.efficientnet_b3"
+      const modelId = "vicorobot.efficientnet_b3"
       const endpoint =
         images.length == 1
           ? "http://127.0.0.1:8081/predict"
@@ -52,12 +52,17 @@
         model_id: modelId
       }
 
-      for (const img of images) formData.append("images[]", img.blob);
+      const headers = {
+        'Content-Type': 'multipart/form-data'
+      }
+
+      for (const img of images) formData.append("file", img.blob);
 
       axios.post(endpoint, formData, {
-        params: params
-      })
-      .then(console.log)
+        params: params,
+        headers: headers
+      }).then(console.log)
+
     } catch (error) {
       console.error(error);
     }

@@ -5,5 +5,11 @@ TEMPORAL_TASKS_PATH: '/home/wilber/Descargas/tasks'
 PREDICTION_SAVE_AS: 'prediction.csv'
 
 VICOROBOT:
+  0: melanoma
   1: melanoma
   2: unknown
+  3: melanoma
+  4: melanoma
+  5: unknown
+  6: unknown
+  7: unknown
