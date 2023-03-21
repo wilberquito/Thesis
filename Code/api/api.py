@@ -1,6 +1,4 @@
-import os
 from typing import List, Union, ValuesView
-import json
 import pandas as pd
 
 import fastapi
@@ -8,7 +6,7 @@ import starlette.status as status
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
-from modular.vision import mk_prediction, get_supported_models
+from modular.vision import mk_prediction, get_supported_models, is_model_supported
 from modular.utility import mk_temporal_task, save_file_to_disk, is_uploaded_image_sanitized, read_yaml
 
 from pathlib import Path
@@ -38,28 +36,36 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...), model_id='vicorobot.efficientnet_b3'):
+async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
+
+    # Check if the Pytorch model is available
+    __sanitize_model(model_id)
 
     # Is the uploaded file and image?
     __sanitize_file(file)
 
     # New temporal task path
-    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
+    task_path: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
+    task_id: str = task_path.parts[-1]
 
     # Save image inside the task folder
-    save_file_to_disk(parent_dir=task_id,
+    save_file_to_disk(parent_dir=task_path,
                       file=file,
                       save_as=str(file.filename))
 
     # Make prediction from task asyncronous
     await mk_prediction(model_id=model_id,
-                        task_id=task_id,
+                        task_id=task_path,
                         save_as=conf['PREDICTION_SAVE_AS'])
 
-    # Returns the unique id of the task generated to consult the prediction late
     return {
-        'uuid_task': task_id.parts[-1]
+        'uuid_task': task_id
     }
+
+def __sanitize_model(model_id: str):
+    if not is_model_supported(model_id):
+        raise HTTPException(status_code=400,
+                            detail=f'Pytorch model - {model_id} - not found')
 
 def __sanitize_file(file):
     """
@@ -115,31 +121,32 @@ async def predict_bulk(request: Request,
 
 
 @app.get("/from_task/{task_id}")
-async def predict_images_pack_output(task_id: str):
+async def from_task(task_id: str):
     '''
     Takes the prediction from task_id folder and returns it.
     May happen that the prediction request and the prediction output
     where faster than the prediction process itself and may not found the prediction, in this case, I recommend to consume this end point
     '''
 
-    task_id = task_id.strip()
-
     task_path: Path = Path(conf['TEMPORAL_TASKS_PATH']) / Path(task_id)
 
-    if not task_path.exists():
-        return HTTPException(status_code=500,
-                             detail=f'Task - {task_id} - not found')
+    __sanitize_path(path=task_path,
+                    detail=f'Task - {task_id} - not found')
 
     predict_path = task_path / Path(conf['PREDICTION_SAVE_AS'])
 
-    if not predict_path.exists():
-        return HTTPException(status_code=500,
-                             detail=f'Task - {task_id} - exist but the prediction is not yet ready. Try it latter')
+    __sanitize_path(path=predict_path,
+                    detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
 
     csv: pd.DataFrame = pd.read_csv(predict_path)
     csv: dict = csv.to_dict('records')
     return csv
 
+def __sanitize_path(path: Path, detail: str):
+
+    if not path.exists():
+        return HTTPException(status_code=500,
+                             detail=detail)
 
 @app.get("/supported_models")
 async def supported_models():

@@ -1,15 +1,50 @@
-MODELS_PATH: '/home/wilber/pytorch/trained/melanoma'
-
 TEMPORAL_TASKS_PATH: '/home/wilber/Descargas/tasks'
 
 PREDICTION_SAVE_AS: 'prediction.csv'
 
-VICOROBOT:
-  0: melanoma
-  1: melanoma
-  2: unknown
-  3: melanoma
-  4: melanoma
-  5: unknown
-  6: unknown
-  7: unknown
+PYTORCH_MODELS:
+
+    vicorobot.8c_b3_768_512_18ep_best_20_fold0:
+      net_type: 'efficientnet_b3'
+      pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_best_20_fold0.pth
+      image_size: 320
+      out_dim: 8
+      map:
+        0: melanoma
+        1: melanoma
+        2: unknown
+        3: melanoma
+        4: melanoma
+        5: unknown
+        6: unknown
+        7: unknown
+
+    vicorobot.8c_b3_768_512_18ep_best_fold0:
+      net_type: 'efficientnet_b3'
+      pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_best_fold0.pth
+      image_size: 320
+      out_dim: 8
+      map:
+        0: melanoma
+        1: melanoma
+        2: unknown
+        3: melanoma
+        4: melanoma
+        5: unknown
+        6: unknown
+        7: unknown
+
+    vicorobot.8c_b3_768_512_18ep_final_fold0:
+      net_type: 'efficientnet_b3'
+      pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_final_fold0.pth
+      image_size: 320
+      out_dim: 8
+      map:
+        0: melanoma
+        1: melanoma
+        2: unknown
+        3: melanoma
+        4: melanoma
+        5: unknown
+        6: unknown
+        7: unknown

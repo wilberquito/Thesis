@@ -9,42 +9,26 @@ import vicorobot.dataset as vd
 import vicorobot.utility as vu
 
 from modular.dataset import TaskDataset, get_csv
+from modular.utility import read_yaml
 
+conf = read_yaml('./api.conf.yml')
 
-PATH_PYTORCH_MODELS = Path('/home/wilber/pytorch/trained/melanoma')
-PYTORCH_MODELS = {
-    'vicorobot.efficientnet_b3': {
-        'net_type': 'efficientnet_b3',
-        'image_size': 320,
-        'pth_file': {
-            'parent_dir': PATH_PYTORCH_MODELS / Path('vicorobot'),
-            'eval_type': 'best',
-            'out_dim': 8,
-            'kernel_type': '8c_b3_768_512_18ep',
-            'fold': 0
-        }
+def __load_vicorobot_model(net_type: str,
+                           out_dim: int,
+                           pth_path: str,
+                           device: str) -> torch.nn.Module:
 
-    }
-}
-
-def __load_vicorobot_model(device: str,
-                           net_type: str,
-                           parent_dir: Path,
-                           eval_type: str = 'best',
-                           out_dim: int = 8,
-                           kernel_type: str = '8c_b3_768_512_18ep',
-                           fold: int=0) -> torch.nn.Module:
     nn = vu.get_model_class(net_type=net_type)
-    pth_file = vu.get_pth_file(parent_dir=parent_dir,
-                               eval_type=eval_type,
-                               kernel_type=kernel_type,
-                               fold=fold)
 
-    model = nn(
-        enet_type=net_type,
-        n_meta_features=0,
-        n_meta_dim=[],
-        out_dim=out_dim)
+    pth_file: Path = Path(pth_path)
+
+    if not pth_file.exists():
+        raise Exception(f"Vicorobot model - {str(pth_file)} - not found")
+
+    model = nn(enet_type=net_type,
+               n_meta_features=0,
+               n_meta_dim=[],
+               out_dim=out_dim)
 
     model = model.to(device)
 
@@ -62,24 +46,26 @@ def __load_vicorobot_model(device: str,
     return model
 
 
-def __mk_net(device: str,
-             net_id: str) -> torch.nn.Module:
+def __load_net(model_id: str, device: str) -> torch.nn.Module:
 
-    meta_model = PYTORCH_MODELS[net_id]
+    meta = get_model_metadata(model_id)
 
-    if 'vicorobot' in net_id:
-        model = __load_vicorobot_model(device=device,
-                                       net_type=meta_model['net_type'],
-                                       **meta_model['pth_file'])
+    if 'vicorobot' in model_id:
+        model = __load_vicorobot_model(net_type=meta['net_type'],
+                                       out_dim=meta['out_dim'],
+                                       pth_path=meta['pth_path'],
+                                       device=device)
     else:
         raise NotImplementedError()
 
     return model
 
-def get_transforms(model_id: str, image_size: int):
+def __load_transforms(model_id: str):
+
+    meta = get_model_metadata(model_id)
 
     if 'vicorobot' in model_id:
-        return vd.get_transforms(image_size=image_size)
+        return vd.get_transforms(image_size=meta['image_size'])
     else:
         raise NotImplementedError()
 
@@ -91,15 +77,11 @@ async def mk_prediction(model_id: str,
     # Agnostic code
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    # Model metadata
-    metadata = PYTORCH_MODELS[model_id]
-
     # Required transformation to make the prediction
-    _, val_transforms = get_transforms(model_id=model_id,
-                                       image_size=metadata['image_size'])
+    _, val_transforms = __load_transforms(model_id)
 
     # Loads the pytorch model
-    nn = __mk_net(device=device, net_id=model_id)
+    nn = __load_net(model_id=model_id, device=device)
 
     # Create the csv to work with
     csv = get_csv(task_id)
@@ -128,13 +110,24 @@ async def mk_prediction(model_id: str,
         'prediction': predictions
     })
 
-    predictions_csv.to_csv(task_id / Path(save_as),
-                           index=False)
+    predictions_csv.to_csv(task_id / Path(save_as), index=False)
+
+
+def get_model_metadata(model_id: str) -> dict:
+
+    if not is_model_supported(model_id):
+        raise Exception(f'Pytorch model - {model_id} - does not exist')
+
+    return conf['PYTORCH_MODELS'][model_id]
+
+
+def is_model_supported(model_id: str) -> bool:
+    return model_id in get_supported_models()
 
 
 def get_supported_models() -> List[str]:
     """
     Returns the name of the supported model
     """
-    return list(PYTORCH_MODELS.keys())
+    return list(conf['PYTORCH_MODELS'].keys())
 
