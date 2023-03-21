@@ -1,7 +1,0 @@
-albumentations==0.4.6
-resnest==0.0.6b20200823
-geffnet==0.9.8
-apex==0.1
-pretrainedmodels==0.7.4
-warmup-scheduler
-apex from nvidia
