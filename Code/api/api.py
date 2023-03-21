@@ -127,7 +127,8 @@ async def predict_images_pack_output(task_id: str):
                              detail=f'Task - {task_id} - exist but the prediction is not yet ready. Try it latter')
 
     csv: pd.DataFrame = pd.read_csv(predict_path)
-    return 'hola'
+    csv: dict = csv.to_dict('records')
+    return csv
 
 
 @app.get("/supported_models")
