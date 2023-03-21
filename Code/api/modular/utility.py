@@ -66,7 +66,7 @@ def is_uploaded_image_sanitized(uploaded: UploadFile,
                ])
 
 
-def find_files(parent_dir: Path, extensions: Iterable[str]) -> List[Path]:
+def find_files(parent_dir: Path, extensions: list[str]) -> List[Path]:
     """
     Description
     -----------

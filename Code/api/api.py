@@ -1,4 +1,4 @@
-from typing import List, Union, ValuesView
+from typing import List, Union, ValuesView, Annotated
 import pandas as pd
 
 import fastapi
@@ -84,18 +84,18 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
 
     # Save and make the prediction into the task directory
     await mk_prediction(model_id=model_id,
-                        task_id=task_path,
+                        task_path=task_path,
                         save_as=conf['PREDICTION_SAVE_AS'])
 
     return {
-        'uuid_task': task_id
+        'task_uuid': task_id
     }
 
 
 @app.post("/predict_bulk")
-async def predict_bulk(request: Request,
-                       bg_tasks: BackgroundTasks,
-                       model_id='vicorobot.efficientnet_b3'):
+async def predict_bulk(bg_tasks: BackgroundTasks,
+                       files: Annotated[list[UploadFile], File(description="Multiple image files as UploadFile")],
+                       model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
 
     '''
     Function that saves into a unique folder the jar of images from the request.
@@ -109,31 +109,33 @@ async def predict_bulk(request: Request,
     num_files: int
         number of images saved
     '''
-    # Takes the files from the form request
-    files = await request.form()
+
+    # Check if the Pytorch model is available
+    __sanitize_model(model_id)
 
     # Creates a new task
-    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
+    task_path: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
+    task_id: str = task_path.parts[-1]
 
     # Sanitize each image and save inside the task
-    for file in files.values():
+    for file in files:
 
         # Check the state of the file
         __sanitize_file(file)
 
         # Save image inside the task folder
-        save_file_to_disk(parent_dir=task_id,
+        save_file_to_disk(parent_dir=task_path,
                           file=file,
                           save_as=str(file.filename))
 
     bg_tasks.add_task(mk_prediction,
                       model_id=model_id,
-                      task_id=task_id,
+                      task_path=task_path,
                       save_as=conf['PREDICTION_SAVE_AS'])
 
     return {
-        "task_id": task_id,
-        "num_files": len(files)
+        "task_uuid": task_id,
+        "num_images": len(files)
     }
 
 

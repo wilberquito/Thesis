@@ -71,7 +71,7 @@ def __load_transforms(model_id: str):
 
 
 async def mk_prediction(model_id: str,
-                        task_id: Path,
+                        task_path: Path,
                         save_as='task_prediction.csv') -> None:
 
     # Agnostic code
@@ -84,7 +84,7 @@ async def mk_prediction(model_id: str,
     nn = __load_net(model_id=model_id, device=device)
 
     # Create the csv to work with
-    csv = get_csv(task_id)
+    csv = get_csv(task_path)
 
     # Task dataset
     task_dataset = TaskDataset(csv=csv, transform=val_transforms)
@@ -94,7 +94,7 @@ async def mk_prediction(model_id: str,
                                  batch_size=len(task_dataset),
                                  shuffle=False)
 
-    predictions = []
+    predictions = torch.tensor([])
     names = csv.name
 
     with torch.inference_mode():
@@ -103,14 +103,14 @@ async def mk_prediction(model_id: str,
             logits = nn(X)
             pred = torch.argmax(torch.softmax(logits,
                                               dim=1), dim=1)
-            predictions.append(pred.item())
+            predictions = torch.cat((predictions, pred))
 
     predictions_csv = pd.DataFrame({
         'name': names,
-        'prediction': predictions
+        'prediction': predictions.numpy()
     })
 
-    predictions_csv.to_csv(task_id / Path(save_as), index=False)
+    predictions_csv.to_csv(task_path / Path(save_as), index=False)
 
 
 def get_model_metadata(model_id: str) -> dict:
