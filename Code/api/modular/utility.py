@@ -52,7 +52,8 @@ def mk_dir(folder_name: Union[str,Path]):
         path.mkdir(parents=True, exist_ok=True)
 
 
-def is_file_sanitized(uploaded: UploadFile, supported_content_type=('image/jpeg', 'image/png')) -> bool:
+def is_uploaded_image_sanitized(uploaded: UploadFile,
+                      supported_content_type=('image/jpeg', 'image/png')) -> bool:
     '''
     Only accepts uploaded files that has content type of jpg or png
     '''
