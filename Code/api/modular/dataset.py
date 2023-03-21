@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import PIL as pil
+import cv2
 import torch
 
 from modular.utility import find_files
@@ -22,24 +22,21 @@ class TaskDataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
 
         sample = self.csv.iloc[index]
-        img_path: Path = sample['path']
-        img = pil.Image(img_path)
+        filepath: Path = sample.filepath
+        image = cv2.imread(str(filepath))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         if self.transform is not None:
-            res = self.transform(image=img)
-            img = res['image'].astype(np.float32)
+            res = self.transform(image=image)
+            image = res['image'].astype(np.float32)
         else:
-            img = img.astype(np.float32)
-
-        print(img.shape)
+            image = image.astype(np.float32)
 
         # Channel first
-        img = img.transpose(2, 0, 1)
+        image = image.transpose(2, 0, 1)
 
-        # Convert PIL img to Pytorch tensor
-        tensor =  torch.tensor(img).float()
-
-        print(img.shape)
+        # Convert PIL image to Pytorch tensor
+        tensor =  torch.tensor(image).float()
 
         return tensor
 
@@ -50,12 +47,12 @@ def get_csv(parent_dir: Path,
     # Loads the images
     images_path = find_files(parent_dir=parent_dir,
                              extensions=('.png'))
-    names = [img.name for img in images_path]
+    names = [image.name for image in images_path]
 
     # Built the csv
     csv = pd.DataFrame({
         'name': names,
-        'path': images_path
+        'filepath': images_path
     })
 
     return csv

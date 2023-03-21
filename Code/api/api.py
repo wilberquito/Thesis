@@ -8,11 +8,11 @@ from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
 
 from modular.vision import mk_prediction, get_supported_models
-from modular.utility import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files
+from modular.utility import mk_temporal_task, save_file_to_disk, is_file_sanitized, find_files, read_yaml
 
 from pathlib import Path
 
-TMP_PARENT_TASKS = "./temp"
+conf = read_yaml('./api.conf.yml')
 
 app = FastAPI()
 
@@ -33,7 +33,7 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.efficientnet
     __sanitize_file(file)
 
     # New temporal task path
-    task_id: Path = mk_temporal_task(parent_path=TMP_PARENT_TASKS)
+    task_id: Path = mk_temporal_task(parent_path=conf['TEMPORALTASKS'])
 
     # Save image inside the task folder
     save_file_to_disk(parent_dir=task_id,

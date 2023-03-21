@@ -4,14 +4,13 @@ import uuid
 from collections.abc import Iterable, Iterator, Sized
 from pathlib import Path
 from typing import List, Union
-import torch
+
 import numpy as np
-
-from PIL import Image
-
-import cv2
+import torch
+import yaml
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
+from PIL import Image
 
 
 def save_file_to_disk(parent_dir: Path,
@@ -111,3 +110,8 @@ def path_to_tensor(img_path: Path, transform=None) -> torch.Tensor:
     tensor =  torch.Tensor(img)
 
     return tensor
+
+
+def read_yaml(file_path: Path):
+    with open(file_path, 'r') as f:
+        return yaml.safe_load(f)

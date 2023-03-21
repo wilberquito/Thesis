@@ -1,0 +1,3 @@
+MODELSPATH: '/home/wilber/pytorch/trained/melanoma'
+
+TEMPORALTASKS: '/home/wilber/Descargas/tasks'

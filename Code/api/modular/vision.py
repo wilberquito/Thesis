@@ -119,15 +119,17 @@ async def mk_prediction(model_id: str,
          for X in task_dataloader:
             X = X.to(device)
             logits = nn(X)
-            pred = torch.argmax(torch.softmax(logits))
-            predictions.append(pred)
+            pred = torch.argmax(torch.softmax(logits,
+                                              dim=1), dim=1)
+            predictions.append(pred.item())
 
     predictions_csv = pd.DataFrame({
         'name': names,
         'prediction': predictions
     })
 
-    predictions_csv.to_csv(task_id / Path(save_as))
+    predictions_csv.to_csv(task_id / Path(save_as),
+                           index=False)
 
 
 def get_supported_models() -> List[str]:

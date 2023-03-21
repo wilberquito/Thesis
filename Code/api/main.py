@@ -4,6 +4,7 @@ import uvicorn
 
 
 def main():
+
     logging.basicConfig(filename='myapp.log',
                         level=logging.INFO,
                         datefmt='%m/%d/%Y %I:%M:%S %p')
