@@ -3,3 +3,7 @@ MODELS_PATH: '/home/wilber/pytorch/trained/melanoma'
 TEMPORAL_TASKS_PATH: '/home/wilber/Descargas/tasks'
 
 PREDICTION_SAVE_AS: 'prediction.csv'
+
+VICOROBOT:
+  1: melanoma
+  2: unknown
