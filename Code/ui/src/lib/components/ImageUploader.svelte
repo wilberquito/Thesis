@@ -1,5 +1,8 @@
 <script lang="ts">
   import ky from "ky";
+
+  import axios from 'axios';
+
   import type { UploadedImage } from "$lib/types";
   import Displayer from "./Displayer.svelte";
 
@@ -19,6 +22,7 @@
       // Checks if the image is already loaded
       const inMemory =
         uploadedImages.filter((e) => e.name == file.name).length > 0;
+
       if (inMemory) continue;
 
       // If the image is not already loaded, adds the image to the collection
@@ -38,33 +42,22 @@
   async function postImages(images: UploadedImage[]) {
     try {
       const formData = new FormData();
+      const modelId = "vicorbot.efficientnet_b3"
       const endpoint =
         images.length == 1
-          ? "https://127.0.0.1:8080/predict"
-          : "https://127.0.0.1:8080/predict_bulk";
+          ? "http://127.0.0.1:8081/predict"
+          : "http://127.0.0.1:8081/predict_bulk";
+
+      const params = {
+        model_id: modelId
+      }
 
       for (const img of images) formData.append("images[]", img.blob);
 
-      const request = await ky.post(endpoint, {
-        method: "POST",
-        body: formData,
-        headers: {
-          "content-type": "application/json",
-        },
-        onDownloadProgress: (progress, chunk) => {
-          // Example output:
-          // `0% - 0 of 1271 bytes`
-          // `100% - 1271 of 1271 bytes`
-          console.log(
-            `${progress.percent * 100}% - ${progress.transferredBytes} of ${
-              progress.totalBytes
-            } bytes`
-          );
-        },
-      });
-
-      const response = await request.json();
-      console.log(response);
+      axios.post(endpoint, formData, {
+        params: params
+      })
+      .then(console.log)
     } catch (error) {
       console.error(error);
     }
