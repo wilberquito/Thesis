@@ -53,11 +53,6 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
                       file=file,
                       save_as=str(file.filename))
 
-    # Make prediction from task asyncronous
-    await mk_prediction(model_id=model_id,
-                        task_id=task_path,
-                        save_as=conf['PREDICTION_SAVE_AS'])
-
     return {
         'uuid_task': task_id
     }
