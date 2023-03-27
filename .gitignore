@@ -2,3 +2,6 @@ __pycache__/
 temp/
 
 *.log
+*.zip
+
+data/
