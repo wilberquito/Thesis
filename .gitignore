@@ -5,3 +5,5 @@ temp/
 *.zip
 
 data/
+
+.ipynb_checkpoints/
