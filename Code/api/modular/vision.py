@@ -105,9 +105,12 @@ async def mk_prediction(model_id: str,
                                               dim=1), dim=1)
             predictions = torch.cat((predictions, pred))
 
+    predictions = predictions.to('cpu')
+    predictions = predictions.numpy()
+
     predictions_csv = pd.DataFrame({
         'name': names,
-        'prediction': predictions.numpy()
+        'prediction': predictions
     })
 
     predictions_csv.to_csv(task_path / Path(save_as), index=False)
