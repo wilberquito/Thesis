@@ -203,6 +203,12 @@ def get_df(kernel_type, out_dim, data_dir, data_folder, use_meta):
     else:
         raise NotImplementedError()
 
+    ignored_diagnosis = ['unknown',
+                         'cafe-au-lait macule',
+                         'atypical melanocytic proliferation']
+    df_train = df_train[~df_train['diagnosis'].isin(ignored_diagnosis)]
+    df_train2 = df_train2[~df_train2['diagnosis'].isin(ignored_diagnosis)]
+
     # concat train data
     df_train = pd.concat([df_train, df_train2]).reset_index(drop=True)
     #print("break point:len final df train",len (df_train))
