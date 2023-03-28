@@ -105,8 +105,7 @@ async def mk_prediction(model_id: str,
          for X in task_dataloader:
             X = X.to(device)
             logits = nn(X)
-            pred = torch.argmax(torch.softmax(logits,
-                                              dim=1), dim=1)
+            pred = torch.argmax(logits, dim=1)
             predictions = torch.cat((predictions, pred))
 
     predictions = predictions.to('cpu')
