@@ -9,42 +9,42 @@ PYTORCH_MODELS:
       pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_best_20_fold0.pth
       image_size: 320
       out_dim: 8
-      map:
-        0: melanoma
-        1: melanoma
-        2: unknown
-        3: melanoma
-        4: melanoma
-        5: unknown
-        6: unknown
-        7: unknown
+      mapping:
+        0: AK
+        1: BCC
+        2: BKL
+        3: DF
+        4: SCC
+        5: VASC
+        6: melanoma
+        7: nevus
 
     vicorobot.8c_b3_768_512_18ep_best_fold0:
       net_type: 'efficientnet_b3'
       pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_best_fold0.pth
       image_size: 320
       out_dim: 8
-      map:
-        0: melanoma
-        1: melanoma
-        2: unknown
-        3: melanoma
-        4: melanoma
-        5: unknown
-        6: unknown
-        7: unknown
+      mapping:
+        0: AK
+        1: BCC
+        2: BKL
+        3: DF
+        4: SCC
+        5: VASC
+        6: melanoma
+        7: nevus
 
     vicorobot.8c_b3_768_512_18ep_final_fold0:
       net_type: 'efficientnet_b3'
       pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_final_fold0.pth
       image_size: 320
       out_dim: 8
-      map:
-        0: melanoma
-        1: melanoma
-        2: unknown
-        3: melanoma
-        4: melanoma
-        5: unknown
-        6: unknown
-        7: unknown
+      mapping:
+        0: AK
+        1: BCC
+        2: BKL
+        3: DF
+        4: SCC
+        5: VASC
+        6: melanoma
+        7: nevus

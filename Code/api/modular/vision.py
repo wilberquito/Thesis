@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Union
+from typing import Dict, List, Tuple
 
 import pandas as pd
 import torch
@@ -46,19 +46,23 @@ def __load_vicorobot_model(net_type: str,
     return model
 
 
-def __load_net(model_id: str, device: str) -> torch.nn.Module:
+def __load_net(model_id: str, device: str) -> Tuple[torch.nn.Module, Dict]:
 
     meta = get_model_metadata(model_id)
+    net_type = meta['net_type']
+    out_dim = meta['out_dim']
+    pth_path = meta['pth_path']
+    mapping = meta['mapping']
 
     if 'vicorobot' in model_id:
-        model = __load_vicorobot_model(net_type=meta['net_type'],
-                                       out_dim=meta['out_dim'],
-                                       pth_path=meta['pth_path'],
+        model = __load_vicorobot_model(net_type=net_type,
+                                       out_dim=out_dim,
+                                       pth_path=pth_path,
                                        device=device)
     else:
         raise NotImplementedError()
 
-    return model
+    return model, mapping
 
 def __load_transforms(model_id: str):
 
@@ -81,7 +85,7 @@ async def mk_prediction(model_id: str,
     _, val_transforms = __load_transforms(model_id)
 
     # Loads the pytorch model
-    nn = __load_net(model_id=model_id, device=device)
+    nn, mapping = __load_net(model_id=model_id, device=device)
 
     # Create the csv to work with
     csv = get_csv(task_path)
@@ -112,6 +116,8 @@ async def mk_prediction(model_id: str,
         'name': names,
         'prediction': predictions
     })
+
+    predictions_csv['target'] = predictions_csv['prediction'].map(mapping)
 
     predictions_csv.to_csv(task_path / Path(save_as), index=False)
 
