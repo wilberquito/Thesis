@@ -101,6 +101,7 @@ async def mk_prediction(model_id: str,
     predictions = torch.tensor([])
     names = csv.name
 
+    nn.eval()
     with torch.inference_mode():
          for X in task_dataloader:
             X = X.to(device)
