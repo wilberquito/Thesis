@@ -13,7 +13,7 @@ from pathlib import Path
 
 from fastapi.middleware.cors import CORSMiddleware
 
-conf = read_yaml('./api.conf.yml')
+conf = read_yaml(Path('./api.conf.yml'))
 
 app = FastAPI()
 
@@ -26,7 +26,7 @@ app.add_middleware(
 
 
 @app.get("/")
-def home(request: Request):
+def home(_: Request):
     return fastapi.responses.RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 
@@ -59,8 +59,7 @@ async def from_task(task_id: str):
                     detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
 
     csv: pd.DataFrame = pd.read_csv(predict_path)
-    csv: dict = csv.to_dict('records')
-    return csv
+    return csv.to_dict('records')
 
 
 @app.post("/predict")
