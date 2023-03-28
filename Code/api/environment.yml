@@ -17,8 +17,4 @@ dependencies:
     - torch
     - torchvision
     - opencv_python
-    - albumentations==0.4.6
-    - resnest
-    - geffnet
-    - pretrainedmodels
-    - warmup-scheduler
+    - fastapi-versioning

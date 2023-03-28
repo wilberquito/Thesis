@@ -1,28 +1,22 @@
-from typing import List, Union, ValuesView, Annotated
-import pandas as pd
+from pathlib import Path
+from typing import Annotated, List, Union, ValuesView
 
 import fastapi
+import pandas as pd
 import starlette.status as status
 from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
                      UploadFile)
-
-from modular.vision import mk_prediction, get_supported_models, is_model_supported
-from modular.utility import mk_temporal_task, save_file_to_disk, is_uploaded_image_sanitized, read_yaml
-
-from pathlib import Path
-
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_versioning import VersionedFastAPI, version
+
+from modular.utility import (is_uploaded_image_sanitized, mk_temporal_task,
+                             read_yaml, save_file_to_disk)
+from modular.vision import (get_supported_models, is_model_supported,
+                            mk_prediction)
 
 conf = read_yaml(Path('./api.conf.yml'))
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods=['*'],
-    allow_headers=['*']
-)
+app = FastAPI(title="SIIM-ISIC Melanoma Classification")
 
 
 @app.get("/")
@@ -31,6 +25,7 @@ def home(_: Request):
 
 
 @app.get("/supported_models")
+@version(1, 0)
 async def supported_models():
     """
     Description
@@ -43,6 +38,7 @@ async def supported_models():
 
 
 @app.get("/from_task/{task_id}")
+@version(1, 0)
 async def from_task(task_id: str):
     '''
     Consult a task resulting predictions
@@ -63,6 +59,7 @@ async def from_task(task_id: str):
 
 
 @app.post("/predict")
+@version(1, 0)
 async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
 
     # Check if the Pytorch model is available
@@ -92,6 +89,7 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
 
 
 @app.post("/predict_bulk")
+@version(1, 0)
 async def predict_bulk(bg_tasks: BackgroundTasks,
                        files: Annotated[list[UploadFile], File(description="Multiple image files as UploadFile")],
                        model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
@@ -156,3 +154,11 @@ def __sanitize_path(path: Path, detail: str):
     if not path.exists():
         return HTTPException(status_code=500,
                              detail=detail)
+
+
+app.add_middleware(CORSMiddleware,
+                   allow_origins=['*'],
+                   allow_methods=['*'],
+                   allow_headers=['*'])
+
+app = VersionedFastAPI(app, default_api_version=(1, 0))
