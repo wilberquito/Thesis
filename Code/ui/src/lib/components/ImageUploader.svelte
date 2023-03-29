@@ -8,6 +8,8 @@
   import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
   let uploadedImages: UploadedImage[] = [];
+  let runningPrediction = false;
+  $: disableRequestBtn = uploadedImages.length <= 0 || runningPrediction;
 
   function onImageClose(i: number) {
     uploadedImages = uploadedImages
@@ -143,7 +145,7 @@
       on:submit|preventDefault={() => postImages(uploadedImages)}
       class="file-input-wrapper"
     >
-      <label class="btn">
+      <label class="btn select-images">
         <p>Select Your Images+</p>
         <input
           type="file"
@@ -153,8 +155,9 @@
         />
       </label>
       <br />
-      <label class="upload-btn btn">
-        <p>Make prediction</p>
+      <label class="upload-btn btn"
+             class:disabled-btn={disableRequestBtn}>
+        <p>Predict</p>
         <input
           type="submit"
           class="upload"
@@ -173,6 +176,17 @@
     </div>
 
 <style>
+
+  .select-images {
+    background-color: #eee;
+    border: 1px solid #b3b3b3;
+
+  }
+
+  .disabled-btn {
+    background-color: #eeeeee !important;
+  }
+
   p {
     margin: 0;
   }
@@ -212,7 +226,7 @@
   .upload-btn {
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
-    width: calc(100% - 14px);
+    width: calc(100% - 12px);
     padding: 1rem 6px !important;
     background-color: #1779ba;
     color: white !important;
@@ -241,7 +255,6 @@
     min-width: 116px;
     padding: 1rem 6px;
     transition: all 0.3s ease;
-    border: 1px solid #1779ba;
     font-size: 14px;
     color: #1779ba;
   }
