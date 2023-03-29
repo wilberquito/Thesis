@@ -4,6 +4,7 @@
 
   import type { UploadedImage } from "$lib/types";
   import Displayer from "./Displayer.svelte";
+  import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
 
   let uploadedImages: UploadedImage[] = [];
 
@@ -41,11 +42,11 @@
   async function postImages(images: UploadedImage[]) {
     try {
       const formData = new FormData();
-      const modelId = "vicorobot.8c_b3_768_512_18ep_best_20_fold0"
+      const modelId = PUBLIC_DEFAULT_MODEL
       const endpoint =
         images.length == 1
-          ? "http://127.0.0.1:8081/predict"
-          : "http://127.0.0.1:8081/predict_bulk";
+          ? PUBLIC_URL_SERVICE + "/predict"
+          : PUBLIC_URL_SERVICE + "/predict_bulk";
 
       const params = {
         model_id: modelId
