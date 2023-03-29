@@ -54,16 +54,17 @@
     try {
       const resp = await axios.get(url)
       const predictions = resp.data
+      console.log(predictions)
 
       for (const pred of predictions) {
         const target = pred.target
         const imgName = pred.name
 
-        if (target === PUBLIC_MELANOMA_TARGET) {
+        if (target == PUBLIC_MELANOMA_TARGET) {
           const i = uploadedImages.findIndex(e => e.name === imgName)
           if (i >= 0) {
             const img = { ... uploadedImages[i] }
-            img.prediction = 'Melanoma'
+            img.prediction = 'Cancer'
             uploadedImages = uploadedImages
               .slice(0, i)
               .concat(img)
@@ -76,7 +77,7 @@
         else {
           const img = uploadedImages.find(e => e.name === imgName)
           if (img) {
-            img.prediction = 'NotWorrying'
+            img.prediction = 'NotCancer'
             uploadedImages = [... uploadedImages]
           } else {
             console.warn("Trying to update an element that does not exist")

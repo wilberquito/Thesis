@@ -1,8 +1,9 @@
-export type PredictionState  = 'Melanoma' | 'NotWorrying'
+export type Prediction  = 'Cancer' | 'NotCancer'
 
 export type UploadedImage = {
     name: string,
     blob: Blob,
     url: string,
-    prediction?: PredictionState
+    prediction?: Prediction,
+    description?: string
 }
