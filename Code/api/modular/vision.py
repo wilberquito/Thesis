@@ -114,10 +114,10 @@ async def mk_prediction(model_id: str,
 
     predictions_csv = pd.DataFrame({
         'name': names,
-        'prediction': predictions
+        'target': predictions
     })
 
-    predictions_csv['target'] = predictions_csv['prediction'].map(mapping)
+    predictions_csv['prediction'] = predictions_csv['target'].map(mapping)
 
     predictions_csv.to_csv(task_path / Path(save_as), index=False)
 
