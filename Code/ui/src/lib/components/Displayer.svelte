@@ -11,7 +11,8 @@
     {#each images as img, i}
       <div class="img-container"
            class:cancer={img?.prediction === 'Cancer'}
-           class:not-cancer={img?.prediction === 'NotCancer'}>
+           class:not-cancer={img?.prediction === 'NotCancer'}
+           class:info={img?.prediction}>
         <img src={img.url} alt="whatever" />
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="img-close" on:click={() => closeHandler(i)} />
@@ -36,10 +37,15 @@
     background-color: #00FF00 !important;
   }
 
+  .info {
+    cursor: pointer;
+  }
+
   .img-container {
     position: relative;
     padding: 2px;
     background-color: transparent;
+    border-radius: 2px;
   }
 
   /* make images fill their container*/
