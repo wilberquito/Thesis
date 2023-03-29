@@ -5,6 +5,7 @@
   import type { UploadedImage } from "$lib/types";
   import Displayer from "./Displayer.svelte";
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
+  import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
   let uploadedImages: UploadedImage[] = [];
 
@@ -52,7 +53,37 @@
 
     try {
       const resp = await axios.get(url)
-      console.log(resp)
+      const predictions = resp.data
+
+      for (const pred of predictions) {
+        const target = pred.target
+        const imgName = pred.name
+
+        if (target === PUBLIC_MELANOMA_TARGET) {
+          const i = uploadedImages.findIndex(e => e.name === imgName)
+          if (i >= 0) {
+            const img = { ... uploadedImages[i] }
+            img.prediction = 'Melanoma'
+            uploadedImages = uploadedImages
+              .slice(0, i)
+              .concat(img)
+              .concat(uploadedImages.slice(i + 1, uploadedImages.length));
+          }
+          else {
+            console.warn("Trying to update an element that does not exist")
+          }
+        }
+        else {
+          const img = uploadedImages.find(e => e.name === imgName)
+          if (img) {
+            img.prediction = 'NotWorrying'
+            uploadedImages = [... uploadedImages]
+          } else {
+            console.warn("Trying to update an element that does not exist")
+          }
+        }
+      }
+      console.log(uploadedImages)
     } catch(error)  {
       console.log(error)
     }
@@ -97,7 +128,7 @@
                                       headers: headers
                                     })
       const taskId = resp.data['task_uuid']
-      const _ = await fromTaskId(taskId)
+      await fromTaskId(taskId)
     } catch (error) {
       console.error(error);
     }

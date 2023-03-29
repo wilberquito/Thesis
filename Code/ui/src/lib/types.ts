@@ -1,5 +1,8 @@
+export type PredictionState  = 'Melanoma' | 'NotWorrying'
+
 export type UploadedImage = {
     name: string,
     blob: Blob,
-    url: string
+    url: string,
+    prediction?: PredictionState
 }

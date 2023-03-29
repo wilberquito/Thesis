@@ -9,7 +9,9 @@
 <div class="container">
   <div class="img-grid">
     {#each images as img, i}
-      <div class="img-container">
+      <div class="img-container"
+           class:melanoma={img?.prediction === 'Melanoma'}
+           class:not-worrying={img?.prediction === 'NotWorrying'}>
         <img src={img.url} alt="whatever" />
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="img-close" on:click={() => closeHandler(i)} />
@@ -26,10 +28,18 @@
     padding: 0.75rem;
   }
 
+  .melanoma {
+    background-color: #FF0000
+  }
+
+  .not-worrying {
+    background-color: #00FF00;
+  }
+
   .img-container {
-    width: 100%;
-    height: 100%;
     position: relative;
+    padding: 1px;
+    background-color: transparent;
   }
 
   /* make images fill their container*/
