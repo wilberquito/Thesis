@@ -136,70 +136,81 @@
   }
 </script>
 
-<div class="layout">
-  <form
-    on:submit|preventDefault={() => postImages(uploadedImages)}
-    class="file-input-wrapper"
-  >
-    <label class="btn">
-      <p>Select Your Images+</p>
-      <input
-        type="file"
-        class="upload selectable file-input-buttom"
-        multiple
-        on:change={handleFiles}
-      />
-    </label>
-    <br />
-    <label class="upload-btn btn">
-      <p>Make prediction</p>
-      <input
-        type="submit"
-        class="upload"
-        disabled={uploadedImages.length < 1}
-      />
-    </label>
-  </form>
+<div class="layout-wrapper">
 
-  {#if uploadedImages.length >= 1}
-    <div class="displayer-wrapper">
-      <Displayer images={uploadedImages} closeHandler={onImageClose}/>
+  <div class="layout">
+    <form
+      on:submit|preventDefault={() => postImages(uploadedImages)}
+      class="file-input-wrapper"
+    >
+      <label class="btn">
+        <p>Select Your Images+</p>
+        <input
+          type="file"
+          class="upload selectable file-input-buttom"
+          multiple
+          on:change={handleFiles}
+        />
+      </label>
+      <br />
+      <label class="upload-btn btn">
+        <p>Make prediction</p>
+        <input
+          type="submit"
+          class="upload"
+          disabled={uploadedImages.length < 1}
+        />
+      </label>
+    </form>
+
+    {#if uploadedImages.length >= 1}
+      <div class="displayer-wrapper">
+        <Displayer images={uploadedImages} closeHandler={onImageClose}/>
+      </div>
+    {/if}
+  </div>
+
     </div>
-  {/if}
-</div>
 
 <style>
   p {
     margin: 0;
   }
 
-  .layout {
+  .layout-wrapper {
     position: relative;
     padding: 1rem 1rem;
-    display: flex;
-    flex-direction: column;
-    max-height: 100%;
+    height: calc(100% - 2rem);
   }
 
-   @media only screen and (min-width: 768px) {
-    .layout {
+  .layout {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .layout-wrapper {
       padding: 1rem 10vw;
     }
   }
   /* Bigger than Phones(laptop / desktop) */
   @media only screen and (min-width: 992px) {
-    .layout {
+    .layout-wrapper {
       padding: 1rem 15vw;
     }
   }
   /* Bigger than Phones(laptop / desktop) */
   @media only screen and (min-width: 1200px) {
-    .layout {
+    .layout-wrapper {
       padding: 1rem 20vw;
     }
   }
 
   .upload-btn {
+    margin-bottom: 0.5rem;
     margin-top: 0.5rem;
     width: calc(100% - 14px);
     padding: 1rem 6px !important;
