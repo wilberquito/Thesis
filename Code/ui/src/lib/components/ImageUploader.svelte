@@ -39,11 +39,34 @@
     uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
-  async function postImages(images: UploadedImage[]) {
+  async function fromTaskId(taskId: string) {
+    /**
+      Uses the taskId to recover the predictions.
+      Once the predictions are recovered;
+
+        1) stops the background processes
+        2) shows per each images the class that was classified as
+    */
+
+    const url = PUBLIC_URL_SERVICE + "/from_task" + `/${taskId}`
+
     try {
+      const resp = await axios.get(url)
+      console.log(resp)
+    } catch(error)  {
+      console.log(error)
+    }
+
+  }
+
+  async function postImages(images: UploadedImage[]) {
+    /**
+      Post the images to the api service to make the predictions,
+      if the post was correct. Then it recover the prediction by taskId
+    */
       const formData = new FormData();
       const modelId = PUBLIC_DEFAULT_MODEL
-      const endpoint =
+      const url =
         images.length == 1
           ? PUBLIC_URL_SERVICE + "/predict"
           : PUBLIC_URL_SERVICE + "/predict_bulk";
@@ -67,11 +90,14 @@
         console.warn("The prediction request was canceled because none image found to send")
       }
 
-      axios.post(endpoint, formData, {
-        params: params,
-        headers: headers
-      }).then(console.log)
-
+    try {
+      const resp = await axios.post(url,
+                                    formData, {
+                                      params: params,
+                                      headers: headers
+                                    })
+      const taskId = resp.data['task_uuid']
+      const _ = await fromTaskId(taskId)
     } catch (error) {
       console.error(error);
     }
