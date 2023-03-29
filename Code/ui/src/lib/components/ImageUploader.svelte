@@ -162,7 +162,9 @@
   </form>
 
   {#if uploadedImages.length >= 1}
-    <Displayer images={uploadedImages} closeHandler={onImageClose}/>
+    <div class="displayer-wrapper">
+      <Displayer images={uploadedImages} closeHandler={onImageClose}/>
+    </div>
   {/if}
 </div>
 
@@ -173,33 +175,34 @@
 
   .layout {
     position: relative;
-    padding: 0 1rem;
+    padding: 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
   }
 
-  @media only screen and (min-width: 768px) {
+   @media only screen and (min-width: 768px) {
     .layout {
-      padding: 0 10vw;
+      padding: 1rem 10vw;
     }
   }
-
   /* Bigger than Phones(laptop / desktop) */
   @media only screen and (min-width: 992px) {
     .layout {
-      padding: 0 20vw;
+      padding: 1rem 15vw;
     }
   }
-
   /* Bigger than Phones(laptop / desktop) */
   @media only screen and (min-width: 1200px) {
     .layout {
-      padding: 0 25vw;
+      padding: 1rem 20vw;
     }
   }
 
   .upload-btn {
     margin-top: 0.5rem;
     width: calc(100% - 14px);
-    padding: 1.25rem 6px !important;
+    padding: 1rem 6px !important;
     background-color: #1779ba;
     color: white !important;
   }
@@ -216,8 +219,6 @@
 
   .file-input-wrapper {
     position: relative;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
   }
 
   .btn {
@@ -251,4 +252,10 @@
     opacity: 0;
     cursor: pointer;
   }
+
+  .displayer-wrapper {
+    position: relative;
+    overflow: scroll;
+  }
+
 </style>
