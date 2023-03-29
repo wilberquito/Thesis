@@ -1,7 +1,14 @@
+# Cross origin allowed
+ALLOW_ORIGINS:
+ - "*"
+
+# Folder where the task will remain
 TEMPORAL_TASKS_PATH: '/home/wilber/Descargas/tasks'
 
+# The name of the expoted csv per each task
 PREDICTION_SAVE_AS: 'prediction.csv'
 
+# Metadata of the exposed models
 PYTORCH_MODELS:
 
     vicorobot.8c_b3_768_512_18ep_best_20_fold0:

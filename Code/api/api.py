@@ -4,7 +4,7 @@ from typing import Annotated, List, Union, ValuesView
 import fastapi
 import pandas as pd
 import starlette.status as status
-from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
+from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request, Response,
                      UploadFile)
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_versioning import VersionedFastAPI, version
@@ -24,9 +24,9 @@ def home(_: Request):
     return fastapi.responses.RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 
-@app.get("/supported_models")
+@app.get("/public_models")
 @version(1, 0)
-async def supported_models():
+async def public_models():
     """
     Description
     ----------
@@ -155,10 +155,14 @@ def __sanitize_path(path: Path, detail: str):
         return HTTPException(status_code=500,
                              detail=detail)
 
-
-app.add_middleware(CORSMiddleware,
-                   allow_origins=['*'],
-                   allow_methods=['*'],
-                   allow_headers=['*'])
-
 app = VersionedFastAPI(app, default_api_version=(1, 0))
+
+origins = conf['ALLOW_ORIGINS']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
