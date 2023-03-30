@@ -4,6 +4,7 @@
 
   import type { UploadedImage } from "$lib/types";
   import Displayer from "./Displayer.svelte";
+  import LoaderLine from "./LoaderLine.svelte";
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
   import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
@@ -42,7 +43,7 @@
     uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
-  async function fromTaskId(taskId: string) {
+  async function fromTaskId(taskId: string, onComplete?: () => {} | undefined) {
     /**
       Uses the taskId to recover the predictions.
       Once the predictions are recovered;
@@ -56,7 +57,8 @@
     try {
       const resp = await axios.get(url)
       const predictions = resp.data
-      console.log(predictions)
+
+      if (onComplete) onComplete();
 
       for (const pred of predictions) {
         const target = pred.target
@@ -86,9 +88,9 @@
           }
         }
       }
-      console.log(uploadedImages)
     } catch(error)  {
       console.log(error)
+      if (onComplete) onComplete()
     }
 
   }
@@ -125,18 +127,26 @@
       }
 
     try {
+      runningPrediction = true;
       const resp = await axios.post(url,
                                     formData, {
                                       params: params,
                                       headers: headers
                                     })
       const taskId = resp.data['task_uuid']
-      await fromTaskId(taskId)
+      await fromTaskId(taskId, () => runningPrediction = false)
     } catch (error) {
+      runningPrediction = false;
       console.error(error);
     }
   }
 </script>
+
+{#if runningPrediction}
+<div class="loader-position">
+  <LoaderLine onLoading={true}></LoaderLine>
+</div>
+{/if}
 
 <div class="layout-wrapper">
 
@@ -279,7 +289,12 @@
 
   .displayer-wrapper {
     position: relative;
-    overflow: scroll;
+    overflow-y: scroll;
+  }
+
+  .loader-position {
+    width: 100%;
+    position: absolute;
   }
 
 </style>
