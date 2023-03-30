@@ -8,9 +8,12 @@
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
   import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
+  let interactiveText = "Predict";
   let uploadedImages: UploadedImage[] = [];
   let runningPrediction = false;
-  $: disableRequestBtn = uploadedImages.length <= 0 || runningPrediction;
+  let toggledInteractiveButton = -1;
+  $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
+  $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
 
   function onImageClose(i: number) {
     uploadedImages = uploadedImages
@@ -43,7 +46,9 @@
     uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
-  async function fromTaskId(taskId: string, onComplete?: () => {} | undefined) {
+  async function fromTaskId(taskId: string,
+                            onSuccess?: () => void | undefined,
+                            onFailure?: () => void | undefined) {
     /**
       Uses the taskId to recover the predictions.
       Once the predictions are recovered;
@@ -58,7 +63,7 @@
       const resp = await axios.get(url)
       const predictions = resp.data
 
-      if (onComplete) onComplete();
+      if (onSuccess) onSuccess();
 
       for (const pred of predictions) {
         const target = pred.target
@@ -90,9 +95,19 @@
       }
     } catch(error)  {
       console.log(error)
-      if (onComplete) onComplete()
+      if (onFailure) onFailure()
     }
+  }
 
+  async function mayPostImageOrReset(images: UploadedImage[]) {
+    toggledInteractiveButton = toggledInteractiveButton + 1;
+    if (toggledInteractiveButton % 2 === 0) {
+      postImages(images);
+    }
+    else {
+      uploadedImages = [];
+      interactiveText = "Predict";
+    }
   }
 
   async function postImages(images: UploadedImage[]) {
@@ -134,12 +149,29 @@
                                       headers: headers
                                     })
       const taskId = resp.data['task_uuid']
-      await fromTaskId(taskId, () => runningPrediction = false)
+      await fromTaskId(taskId, onPredictionSuccess)
     } catch (error) {
       runningPrediction = false;
       console.error(error);
     }
   }
+
+  function onPredictionSuccess() {
+    /** Function that resets the state
+        when the prediction succeded
+    */
+    runningPrediction = false;
+    interactiveText = "Reset"
+  }
+
+  function onPredictionFailure() {
+    /** Function that resets the state
+        when the prediction succeded
+    */
+    runningPrediction = false;
+    interactiveText = "Prediction failed, reset"
+  }
+
 </script>
 
 {#if runningPrediction}
@@ -152,24 +184,24 @@
 
   <div class="layout">
     <form
-      on:submit|preventDefault={() => postImages(uploadedImages)}
+      on:submit|preventDefault={() => mayPostImageOrReset(uploadedImages)}
       class="file-input-wrapper"
     >
       <label class="btn select-images"
-             class:disabled-btn={runningPrediction}>
+             class:disabled-btn={disabledUploadButton}>
         <p>Select Your Images+</p>
         <input
           type="file"
           class="upload selectable file-input-buttom"
           multiple
           on:change={handleFiles}
-          disabled={runningPrediction}
+          disabled={disabledUploadButton}
         />
       </label>
       <br />
       <label class="upload-btn btn"
-             class:disabled-btn={disableRequestBtn}>
-        <p>Predict</p>
+             class:disabled-btn={disabledInteractiveButton}>
+        <p>{interactiveText}</p>
         <input
           type="submit"
           class="upload"
