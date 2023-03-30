@@ -155,13 +155,15 @@
       on:submit|preventDefault={() => postImages(uploadedImages)}
       class="file-input-wrapper"
     >
-      <label class="btn select-images">
+      <label class="btn select-images"
+             class:disabled-btn={runningPrediction}>
         <p>Select Your Images+</p>
         <input
           type="file"
           class="upload selectable file-input-buttom"
           multiple
           on:change={handleFiles}
+          disabled={runningPrediction}
         />
       </label>
       <br />
@@ -194,7 +196,12 @@
   }
 
   .disabled-btn {
-    background-color: #eeeeee !important;
+    opacity: 0.7;
+    cursor: default !important;
+  }
+
+  .disabled-btn input {
+    cursor: default !important;
   }
 
   p {
@@ -246,10 +253,14 @@
     font-size: 1.2rem !important;
   }
 
-  .upload-btn:has(> input[disabled]) {
-    background-color: #cccccc;
-    border-color: #4e7691;
-    color: #666666;
+
+  input[type="file"] {
+    position: absolute;
+    z-index: -1;
+    top: 10px;
+    left: 8px;
+    font-size: 17px;
+    color: #b8b8b8;
   }
 
   .file-input-wrapper {
@@ -267,9 +278,6 @@
     transition: all 0.3s ease;
     font-size: 14px;
     color: #1779ba;
-  }
-
-  .selectable {
     cursor: pointer;
   }
 
