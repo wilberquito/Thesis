@@ -100,7 +100,7 @@
   }
 
   async function mayPostImageOrReset(images: UploadedImage[]) {
-    toggledInteractiveButton = toggledInteractiveButton + 1;
+    toggledInteractiveButton = (toggledInteractiveButton + 1) % 2;
     if (toggledInteractiveButton % 2 === 0) {
       postImages(images);
     }
@@ -212,7 +212,9 @@
 
     {#if uploadedImages.length >= 1}
       <div class="displayer-wrapper">
-        <Displayer images={uploadedImages} closeHandler={onImageClose}/>
+        <Displayer images={uploadedImages}
+                   letClose={!disabledUploadButton}
+                   closeHandler={onImageClose}/>
       </div>
     {/if}
   </div>

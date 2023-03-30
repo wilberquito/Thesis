@@ -2,6 +2,7 @@
   import type { UploadedImage } from "$lib/types";
 
   export let images: UploadedImage[] = [];
+  export let letClose: boolean = false;
   export let closeHandler: (n: number) => void = (n) => {}
 
 </script>
@@ -9,13 +10,16 @@
 <div class="container">
   <div class="img-grid">
     {#each images as img, i}
-      <div class="img-container"
+      <div id={img.name}
+           class="img-container"
            class:cancer={img?.prediction === 'Cancer'}
            class:not-cancer={img?.prediction === 'NotCancer'}
            class:info={img?.prediction}>
         <img src={img.url} alt="whatever" />
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="img-close" on:click={() => closeHandler(i)} />
+        {#if letClose}
+          <div class="img-close" on:click={() => closeHandler(i)} />
+        {/if}
       </div>
     {/each}
   </div>
@@ -81,4 +85,5 @@
     font-size: 14px;
     color: white;
   }
+
 </style>
