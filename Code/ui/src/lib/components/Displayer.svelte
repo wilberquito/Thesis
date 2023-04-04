@@ -4,6 +4,7 @@
   export let images: UploadedImage[] = [];
   export let letClose: boolean = false;
   export let closeHandler: (n: number) => void = (_) => {}
+  export let expandHandler: (n: number) => void = (_) => {}
 
 </script>
 
@@ -24,8 +25,10 @@
             </span>
           </div>
         {/if}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         {#if img.meta}
-          <div class="interactive-btn-img">
+          <div class="interactive-btn-img"
+               on:click={() => expandHandler(i)}>
             <span class="material-icons">
             fullscreen
             </span>

@@ -1,5 +1,13 @@
 export type Prediction  = 'Cancer' | 'NotCancer'
 
+export type DialogData = {
+  url: string,
+  name: string,
+  pred: string,
+  target: number,
+  probabilities?: [string, number][]
+}
+
 export type PredResponse = {
   name: string,
   pred: string,

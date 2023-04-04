@@ -2,9 +2,14 @@
 
   import axios from 'axios';
 
-  import type { UploadedImage, UploadedImageMetadata, PredResponse } from "$lib/types";
+  import type {
+    UploadedImage,
+    UploadedImageMetadata,
+    PredResponse,
+    DialogData} from "$lib/types";
   import Displayer from "./Displayer.svelte";
   import LoaderLine from "./LoaderLine.svelte";
+  import Dialog from "./Dialog.svelte";
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
   import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
@@ -12,14 +17,10 @@
   let uploadedImages: UploadedImage[] = [];
   let runningPrediction = false;
   let toggledInteractiveButton = -1;
+  let dialogData: DialogData | undefined = undefined;
+
   $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
-
-  function onImageClose(i: number) {
-    uploadedImages = uploadedImages
-      .slice(0, i)
-      .concat(uploadedImages.slice(i + 1, uploadedImages.length));
-  }
 
   async function handleFiles(event: any) {
     // Treat uploaded images
@@ -151,6 +152,12 @@
     }
   }
 
+  function onImageClose(i: number) {
+    uploadedImages = uploadedImages
+      .slice(0, i)
+      .concat(uploadedImages.slice(i + 1, uploadedImages.length));
+  }
+
   function onPredictionSuccess() {
     /** Function that resets the state
         when the prediction succeded
@@ -167,6 +174,36 @@
     interactiveText = "Prediction failed, reset"
   }
 
+  function onDialogOpen(i: number) {
+    /** Expects the index of the uploaded images opened
+        to create the dialog data and show the image
+    */
+    const img = uploadedImages[i];
+    const meta = img.meta;
+
+    if (!meta) {
+      console.error('Image metadata is not found')
+      return;
+    }
+
+    const { name, url} = img;
+    const { pred, target, probabilities } = meta;
+
+    const data: DialogData = {
+      name: name,
+      url,
+      pred,
+      target,
+      probabilities
+    }
+
+    dialogData = {... data}
+  }
+
+  function onDialogClose() {
+    dialogData = undefined;
+  }
+
 </script>
 
 {#if runningPrediction}
@@ -176,6 +213,10 @@
 {/if}
 
 <div class="layout-wrapper">
+
+  {#if dialogData}
+    <Dialog onClose={onDialogClose}></Dialog>
+  {/if}
 
   <div class="layout">
     <form
@@ -209,7 +250,8 @@
       <div class="displayer-wrapper">
         <Displayer images={uploadedImages}
                    letClose={!disabledUploadButton}
-                   closeHandler={onImageClose}/>
+                   closeHandler={onImageClose}
+                   expandHandler={onDialogOpen}/>
       </div>
     {/if}
   </div>
