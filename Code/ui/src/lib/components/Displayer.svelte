@@ -3,7 +3,8 @@
 
   export let images: UploadedImage[] = [];
   export let letClose: boolean = false;
-  export let closeHandler: (n: number) => void = (n) => {}
+  export let closeHandler: (n: number) => void = (_) => {}
+  $: letInfo = !letClose;
 
 </script>
 
@@ -12,9 +13,9 @@
     {#each images as img, i}
       <div id={img.name}
            class="img-container"
-           class:cancer={img?.prediction === 'Cancer'}
-           class:not-cancer={img?.prediction === 'NotCancer'}
-           class:info={img?.prediction}>
+           class:cancer={img?.meta?.pred === 'Cancer'}
+           class:not-cancer={img?.meta?.pred === 'NotCancer'}
+           class:info={letInfo}>
         <img src={img.url} alt="whatever" />
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         {#if letClose}

@@ -2,7 +2,7 @@
 
   import axios from 'axios';
 
-  import type { UploadedImage } from "$lib/types";
+  import type { UploadedImage, UploadedImageMetadata, PredResponse } from "$lib/types";
   import Displayer from "./Displayer.svelte";
   import LoaderLine from "./LoaderLine.svelte";
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
@@ -60,37 +60,32 @@
     const url = PUBLIC_URL_SERVICE + "/from_task" + `/${taskId}`
 
     try {
-      const resp = await axios.get(url)
-      const predictions = resp.data
+      const resp  = await axios.get<PredResponse[]>(url)
+      const predictions: PredResponse[] = resp.data
 
       if (onSuccess) onSuccess();
 
       for (const pred of predictions) {
-        const target = pred.target
-        const imgName = pred.name
 
-        if (target == PUBLIC_MELANOMA_TARGET) {
-          const i = uploadedImages.findIndex(e => e.name === imgName)
-          if (i >= 0) {
-            const img = { ... uploadedImages[i] }
-            img.prediction = 'Cancer'
-            uploadedImages = uploadedImages
-              .slice(0, i)
-              .concat(img)
-              .concat(uploadedImages.slice(i + 1, uploadedImages.length));
+        const i = uploadedImages.findIndex(e => e.name === pred.name)
+        if (i >= 0) {
+          const meta: UploadedImageMetadata = {
+            pred: pred.target === Number(PUBLIC_MELANOMA_TARGET) ? "Cancer" : "NotCancer",
+            target: pred.target,
+            probabilities: pred.probabilities,
           }
-          else {
-            console.warn("Trying to update an element that does not exist")
+          const inMemoryImg = uploadedImages[i];
+          const img = {
+            ... inMemoryImg,
+            meta
           }
+          uploadedImages = uploadedImages
+            .slice(0, i)
+            .concat(img)
+            .concat(uploadedImages.slice(i + 1, uploadedImages.length));
         }
         else {
-          const img = uploadedImages.find(e => e.name === imgName)
-          if (img) {
-            img.prediction = 'NotCancer'
-            uploadedImages = [... uploadedImages]
-          } else {
-            console.warn("Trying to update an element that does not exist")
-          }
+          console.warn("Trying to update an element that does not exist")
         }
       }
     } catch(error)  {
