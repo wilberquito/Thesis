@@ -4,7 +4,6 @@
   export let images: UploadedImage[] = [];
   export let letClose: boolean = false;
   export let closeHandler: (n: number) => void = (_) => {}
-  $: letInfo = !letClose;
 
 </script>
 
@@ -14,12 +13,23 @@
       <div id={img.name}
            class="img-container"
            class:cancer={img?.meta?.pred === 'Cancer'}
-           class:not-cancer={img?.meta?.pred === 'NotCancer'}
-           class:info={letInfo}>
+           class:not-cancer={img?.meta?.pred === 'NotCancer'}>
         <img src={img.url} alt="whatever" />
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         {#if letClose}
-          <div class="img-close" on:click={() => closeHandler(i)} />
+          <div class="interactive-btn-img"
+               on:click={() => closeHandler(i)}>
+            <span class="material-icons">
+            close
+            </span>
+          </div>
+        {/if}
+        {#if img.meta}
+          <div class="interactive-btn-img">
+            <span class="material-icons">
+            fullscreen
+            </span>
+          </div>
         {/if}
       </div>
     {/each}
@@ -40,10 +50,6 @@
 
   .not-cancer {
     background-color: #00FF00 !important;
-  }
-
-  .info {
-    cursor: pointer;
   }
 
   .img-container {
@@ -67,24 +73,25 @@
     grid-gap: 10px;
   }
 
-  .img-close {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
+  .interactive-btn-img {
+    width: 21px;
+    height: 21px;
     position: absolute;
     top: 10px;
     right: 10px;
-    text-align: center;
+    z-index: 1;
+    border-radius: 50%;
     line-height: 24px;
     z-index: 1;
     cursor: pointer;
+    background-color: black;
+    color: white;
+    text-align: center;
+    opacity: 0.6;
   }
 
-  .img-close:after {
-    content: "✖";
-    font-size: 14px;
-    color: white;
+  .interactive-btn-img span {
+    font-size: 21px;
   }
 
 </style>
