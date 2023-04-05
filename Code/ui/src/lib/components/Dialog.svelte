@@ -126,6 +126,8 @@
   }
 
   .dialog {
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
     z-index: 1000;
