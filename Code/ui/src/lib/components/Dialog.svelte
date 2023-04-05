@@ -9,14 +9,27 @@
 <div class="dialog-mask">
   <div class="dialog">
     <div class="dialog-content">
+      <div class="dialog-banner">
+        <p>{dialogData.name}</p>
+      </div>
       <div class="dialog-content-main">
         <div class="dialog-content-img">
           <img src={dialogData.url} alt="whatever" />
         </div>
-        <div class="dialog-content-info"></div>
-      </div>
-      <div class="model-banner">
-        <p>{dialogData.model}</p>
+        <div class="dialog-content-info">
+          <div class="entry-header">
+            <p>About image</p>
+          </div>
+          <div></div>
+          <div class="entry-header">
+            <p>About prediction</p>
+          </div>
+          <div></div>
+          <div class="entry-header">
+            <p>About model</p>
+          </div>
+          <div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -24,13 +37,14 @@
 
 <style>
 
-  .model-banner {
+  .dialog-banner {
     height: 2rem;
     display: flex;
     align-items: center;
+    padding-bottom: 0.25rem;
   }
 
-  .model-banner p {
+  .dialog-banner p {
     width: 100%;
     align-items: left;
     padding: 0;
@@ -71,6 +85,37 @@
   .dialog-content-info {
     flex: 2;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dialog-content-info p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .dialog-content-info > div {
+    width: 100;
+
+  }
+
+  .entry-header {
+    width: unset !important;
+    padding-right: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+  }
+
+  .dialog-content-info > div:nth-child(even) {
+    background: blue;
+    flex: 1;
+  }
+
+  .dialog-content-info > div:nth-child(odd) {
+    width: 100%;
+    height: 2rem;
+    background: red;
   }
 
   .dialog {
@@ -89,8 +134,8 @@
   @media only screen and (min-width: 1200px) {
 
     .dialog {
-      height: 75vh;
-      width: 65vw;
+      height: 52rem;
+      width: 80rem;
     }
 
   }

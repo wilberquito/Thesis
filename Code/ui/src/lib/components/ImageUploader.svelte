@@ -300,12 +300,14 @@
       padding: 1rem 10vw;
     }
   }
+
   /* Bigger than Phones(laptop / desktop) */
   @media only screen and (min-width: 992px) {
     .layout-wrapper {
       padding: 1rem 15vw;
     }
   }
+
   /* Bigger than Phones(laptop / desktop) */
   @media only screen and (min-width: 1200px) {
     .layout-wrapper {
