@@ -194,7 +194,8 @@
       url,
       pred,
       target,
-      probabilities
+      probabilities,
+      model: PUBLIC_DEFAULT_MODEL
     }
 
     dialogData = {... data}
@@ -215,7 +216,8 @@
 <div class="layout-wrapper">
 
   {#if dialogData}
-    <Dialog onClose={onDialogClose}></Dialog>
+    <Dialog dialogData={dialogData}
+      onClose={onDialogClose}></Dialog>
   {/if}
 
   <div class="layout">

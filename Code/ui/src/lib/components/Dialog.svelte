@@ -1,7 +1,8 @@
 <script lang="ts">
+  import type { DialogData } from "$lib/types";
 
   export let onClose: () => void = () => {}
-  let message="helllo"
+  export let dialogData: DialogData;
 
 </script>
 
@@ -9,11 +10,13 @@
   <div class="dialog">
     <div class="dialog-content">
       <div class="dialog-content-main">
-        <div class="dialog-content-img"></div>
+        <div class="dialog-content-img">
+          <img src={dialogData.url} alt="whatever" />
+        </div>
         <div class="dialog-content-info"></div>
       </div>
       <div class="model-banner">
-        <p>Model name</p>
+        <p>{dialogData.model}</p>
       </div>
     </div>
   </div>
@@ -23,7 +26,6 @@
 
   .model-banner {
     height: 2rem;
-    background-color: whitesmoke;
     display: flex;
     align-items: center;
   }
@@ -56,6 +58,14 @@
     flex: 3;
     height: 100%;
     background-color: red;
+    position: relative;
+  }
+
+  .dialog-content-img img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
   }
 
   .dialog-content-info {
@@ -67,11 +77,22 @@
     display: flex;
     flex-direction: column;
     z-index: 1000;
-    height: 70vh;
-    width: 70%;
+    height: 85vh;
+    width: 90vw;
     transform: scale(1);
     position: relative;
-    background-color: white;
+    background: #eee;
+    border: 1px solid #ccc;
+  }
+
+  /* Bigger than Phones(laptop / desktop) */
+  @media only screen and (min-width: 1200px) {
+
+    .dialog {
+      height: 75vh;
+      width: 65vw;
+    }
+
   }
 
   .dialog-mask {

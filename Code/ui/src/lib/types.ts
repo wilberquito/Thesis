@@ -5,6 +5,7 @@ export type DialogData = {
   name: string,
   pred: string,
   target: number,
+  model: string,
   probabilities?: [string, number][]
 }
 
