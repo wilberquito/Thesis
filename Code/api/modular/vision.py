@@ -99,6 +99,7 @@ async def mk_prediction(model_id: str,
                                  shuffle=False)
 
     predictions = torch.tensor([])
+    probabilities = torch.tensor([])
     names = csv.name
 
     nn.eval()
@@ -106,15 +107,19 @@ async def mk_prediction(model_id: str,
          for X in task_dataloader:
             X = X.to(device)
             logits = nn(X)
-            pred = torch.argmax(logits, dim=1)
-            predictions = torch.cat((predictions, pred))
+            prob = torch.softmax(logits, dim=1)
+            out_prob, out_pred = torch.max(prob, dim=1)
+            predictions = torch.cat((predictions, out_pred))
+            probabilities = torch.cat((probabilities, out_prob))
 
     predictions = predictions.to('cpu')
     predictions = predictions.numpy()
+    probabilities = probabilities.numpy()
 
     predictions_csv = pd.DataFrame({
         'name': names,
-        'target': predictions
+        'target': predictions,
+        'probability': probabilities
     })
 
     predictions_csv['prediction'] = predictions_csv['target'].map(mapping)
@@ -139,4 +144,3 @@ def get_supported_models() -> List[str]:
     Returns the name of the supported model
     """
     return list(conf['PYTORCH_MODELS'].keys())
-
