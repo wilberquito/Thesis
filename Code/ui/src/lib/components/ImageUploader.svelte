@@ -35,13 +35,23 @@
 
       // If the image is not already loaded, adds the image to the collection
       const blob = new Blob([file], { type: file.type });
-      const img: UploadedImage = {
+      const url = URL.createObjectURL(blob);
+      const uploadedImage: UploadedImage = {
+        blob,
+        url,
         name: file.name,
-        blob: blob,
-        url: URL.createObjectURL(blob),
       };
-      uploadedImages = [img, ...uploadedImages];
+      const img = new Image();
+      img.onload = () => {
+        const height = img.height;
+        const width = img.width;
+        uploadedImage.height = height;
+        uploadedImage.width = width;
+      }
+      img.src = url;
+      uploadedImages = [uploadedImage, ...uploadedImages];
     }
+
 
     // Once all images are loaded, it sort the array by image name
     uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
@@ -73,7 +83,7 @@
           const meta: UploadedImageMetadata = {
             pred: pred.target === Number(PUBLIC_MELANOMA_TARGET) ? "Cancer" : "NotCancer",
             target: pred.target,
-            probabilities: pred.probabilities,
+            probability: pred.probability,
           }
           const inMemoryImg = uploadedImages[i];
           const img = {
@@ -186,19 +196,29 @@
       return;
     }
 
-    const { name, url} = img;
-    const { pred, target, probabilities } = meta;
+    const {
+      name,
+      url,
+      height,
+      width } = img;
+    const {
+      pred,
+      target,
+      probability } = meta;
 
     const data: DialogData = {
-      name: name,
+      name,
+      height,
+      width,
       url,
       pred,
       target,
-      probabilities,
+      probability,
       model: PUBLIC_DEFAULT_MODEL
     }
 
     dialogData = {... data}
+
   }
 
   function onDialogClose() {

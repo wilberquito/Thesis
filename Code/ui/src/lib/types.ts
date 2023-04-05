@@ -3,28 +3,32 @@ export type Prediction  = 'Cancer' | 'NotCancer'
 export type DialogData = {
   url: string,
   name: string,
+  height?: number,
+  width?: number,
   pred: string,
   target: number,
   model: string,
-  probabilities?: [string, number][]
+  probability: number
 }
 
 export type PredResponse = {
   name: string,
   pred: string,
   target: number,
-  probabilities?: [string,number][]
+  probability: number
 }
 
 export type UploadedImageMetadata = {
   pred: Prediction,
   target: number,
-  probabilities?: [string,number][]
+  probability: number
 }
 
 export type UploadedImage = {
-    name: string,
-    blob: Blob,
-    url: string,
-    meta?: UploadedImageMetadata;
+  name: string,
+  blob: Blob,
+  url: string,
+  height?: number,
+  width?: number,
+  meta?: UploadedImageMetadata;
 }
