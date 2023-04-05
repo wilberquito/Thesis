@@ -11,6 +11,13 @@
     <div class="dialog-content">
       <div class="dialog-banner">
         <p>{dialogData.name}</p>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <div class="interactive-btn-img"
+               on:click={onClose}>
+            <span class="material-icons">
+            close
+            </span>
+          </div>
       </div>
       <div class="dialog-content-main">
         <div class="dialog-content-img">
@@ -41,7 +48,7 @@
     height: 2rem;
     display: flex;
     align-items: center;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.5rem;
   }
 
   .dialog-banner p {
@@ -154,6 +161,26 @@
     justify-content: center;
     transition-property: background-color;
     transition-duration: 0.2s;
+  }
+
+  .interactive-btn-img {
+    width: 21px;
+    height: 21px;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    border-radius: 50%;
+    line-height: 24px;
+    z-index: 1;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    text-align: center;
+    opacity: 0.6;
+  }
+
+  .interactive-btn-img span {
+    font-size: 21px;
   }
 
 </style>
