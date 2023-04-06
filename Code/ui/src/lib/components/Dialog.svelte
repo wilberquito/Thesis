@@ -23,10 +23,11 @@
           </div>
       </div>
       <div class="dialog-content-main upper-case">
-        <div class="dialog-content-img">
-          <RadarChart></RadarChart>
-          <!-- <img src={dialogData.url} alt="whatever" /> -->
+        <div class="img-container">
+          <!-- <RadarChart></RadarChart> -->
+          <img src={dialogData.url} alt="whatever" />
         </div>
+          <div style="width: 0.5rem"></div>
         <div class="dialog-content-info">
           <div class="entry-header">
             <p>Class</p>
@@ -59,11 +60,13 @@
             <p>60192929</p>
           </div>
 
-          <!-- <RadarChart></RadarChart> -->
-
-          <div class="img-container">
-            <img src={dialogData.url} alt="whatever" />
+            <div class="radar-container">
+          <RadarChart></RadarChart>
           </div>
+
+          <!-- <div class="img-container"> -->
+          <!--   <img src={dialogData.url} alt="whatever" /> -->
+          <!-- </div> -->
 
         </div>
       </div>
@@ -72,6 +75,19 @@
 </div>
 
 <style>
+
+  .radar-container {
+    position: relative;
+    flex: auto;
+    background: transparent !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .radar-container > * {
+    position: absolute;
+  }
 
   .dialog-banner {
     height: 2rem;
@@ -104,21 +120,8 @@
     height: 100%;
   }
 
-  .dialog-content-img {
-    flex: 3;
-    height: 100%;
-    position: relative;
-  }
-
-  .dialog-content-img img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-  }
-
   .dialog-content-info {
-    flex: 2;
+    flex: 3;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -190,7 +193,7 @@
   .interactive-btn-img {
     width: 21px;
     height: 21px;
-    right: 16px;
+    right: 1rem;
     z-index: 1;
     border-radius: 50%;
     line-height: 24px;
@@ -215,7 +218,7 @@
     padding: 0 !important;
     width: unset !important;
     height: unset !important;
-    flex: 1;
+    flex: 4;
     position: relative;
     padding: 2px;
     background-color: transparent;
