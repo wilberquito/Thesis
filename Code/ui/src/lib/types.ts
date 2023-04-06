@@ -5,7 +5,7 @@ export type DialogData = {
   name: string,
   height?: number,
   width?: number,
-  pred: string,
+  prediction: string,
   target: number,
   model: string,
   probability: number
@@ -13,13 +13,7 @@ export type DialogData = {
 
 export type PredResponse = {
   name: string,
-  pred: string,
-  target: number,
-  probability: number
-}
-
-export type UploadedImageMetadata = {
-  pred: Prediction,
+  prediction: string,
   target: number,
   probability: number
 }
@@ -31,4 +25,11 @@ export type UploadedImage = {
   height?: number,
   width?: number,
   meta?: UploadedImageMetadata;
+}
+
+export type UploadedImageMetadata = {
+  pred: Prediction,
+  prediction: string,
+  target: number,
+  probability: number
 }

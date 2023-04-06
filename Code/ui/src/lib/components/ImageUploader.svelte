@@ -1,7 +1,5 @@
 <script lang="ts">
-
   import axios from 'axios';
-
   import type {
     UploadedImage,
     UploadedImageMetadata,
@@ -81,6 +79,7 @@
         const i = uploadedImages.findIndex(e => e.name === pred.name)
         if (i >= 0) {
           const meta: UploadedImageMetadata = {
+            prediction: pred.prediction,
             pred: pred.target === Number(PUBLIC_MELANOMA_TARGET) ? "Cancer" : "NotCancer",
             target: pred.target,
             probability: pred.probability,
@@ -202,7 +201,7 @@
       height,
       width } = img;
     const {
-      pred,
+      prediction,
       target,
       probability } = meta;
 
@@ -211,7 +210,7 @@
       height,
       width,
       url,
-      pred,
+      prediction,
       target,
       probability,
       model: PUBLIC_DEFAULT_MODEL

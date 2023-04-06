@@ -4,6 +4,8 @@
   export let onClose: () => void = () => {}
   export let dialogData: DialogData;
 
+  console.log(dialogData)
+
 </script>
 
 <div class="dialog-mask">
@@ -19,23 +21,47 @@
             </span>
           </div>
       </div>
-      <div class="dialog-content-main">
+      <div class="dialog-content-main upper-case">
         <div class="dialog-content-img">
           <img src={dialogData.url} alt="whatever" />
         </div>
         <div class="dialog-content-info">
           <div class="entry-header">
-            <p>About image</p>
+            <p>Class</p>
           </div>
-          <div></div>
+          <div>
+            <p>melanoma</p>
+          </div>
           <div class="entry-header">
-            <p>About prediction</p>
+            <p>Model name</p>
           </div>
-          <div></div>
+          <div>
+            <p>vicorobot...</p>
+          </div>
           <div class="entry-header">
-            <p>About model</p>
+            <p>Base model</p>
           </div>
-          <div></div>
+          <div>
+            <p>Information.... ...</p>
+          </div>
+          <div class="entry-header">
+            <p>Height</p>
+          </div>
+          <div>
+            <p>60px</p>
+          </div>
+          <div class="entry-header">
+            <p>Width</p>
+          </div>
+          <div>
+            <p>60px</p>
+          </div>
+          <div class="entry-header">
+            <p>Size</p>
+          </div>
+          <div>
+            <p>60192929</p>
+          </div>
         </div>
       </div>
     </div>
@@ -102,12 +128,6 @@
   }
 
   .dialog-content-info > div {
-    width: 100;
-
-  }
-
-  .entry-header {
-    width: unset !important;
     padding-right: 0.5rem;
     display: flex;
     align-items: center;
@@ -115,14 +135,14 @@
   }
 
   .dialog-content-info > div:nth-child(even) {
-    background: blue;
-    flex: 1;
+    background: #e4e4e4;
+    height: 2rem;
   }
 
   .dialog-content-info > div:nth-child(odd) {
-    width: 100%;
     height: 2rem;
-    background: red;
+    background: #1779ba;
+    color: white;
   }
 
   .dialog {
@@ -183,6 +203,10 @@
 
   .interactive-btn-img span {
     font-size: 21px;
+  }
+
+  .upper-case {
+    text-transform: uppercase;
   }
 
 </style>
