@@ -1,4 +1,5 @@
 <script lang="ts">
+  import RadarChart from "./RadarChart.svelte"
   import type { DialogData } from "$lib/types";
 
   export let onClose: () => void = () => {}
@@ -23,7 +24,8 @@
       </div>
       <div class="dialog-content-main upper-case">
         <div class="dialog-content-img">
-          <img src={dialogData.url} alt="whatever" />
+          <RadarChart></RadarChart>
+          <!-- <img src={dialogData.url} alt="whatever" /> -->
         </div>
         <div class="dialog-content-info">
           <div class="entry-header">
@@ -45,16 +47,10 @@
             <p>Information.... ...</p>
           </div>
           <div class="entry-header">
-            <p>Height</p>
+            <p>Shape</p>
           </div>
           <div>
-            <p>60px</p>
-          </div>
-          <div class="entry-header">
-            <p>Width</p>
-          </div>
-          <div>
-            <p>60px</p>
+            <p>60px, 60px</p>
           </div>
           <div class="entry-header">
             <p>Size</p>
@@ -62,6 +58,13 @@
           <div>
             <p>60192929</p>
           </div>
+
+          <!-- <RadarChart></RadarChart> -->
+
+          <div class="img-container">
+            <img src={dialogData.url} alt="whatever" />
+          </div>
+
         </div>
       </div>
     </div>
@@ -104,7 +107,6 @@
   .dialog-content-img {
     flex: 3;
     height: 100%;
-    background-color: red;
     position: relative;
   }
 
@@ -128,10 +130,10 @@
   }
 
   .dialog-content-info > div {
-    padding-right: 0.5rem;
+    padding-left: 0.5rem;
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: left;
   }
 
   .dialog-content-info > div:nth-child(even) {
@@ -163,7 +165,7 @@
   @media only screen and (min-width: 1200px) {
 
     .dialog {
-      height: 52rem;
+      height: 55rem;
       width: 80rem;
     }
 
@@ -207,6 +209,25 @@
 
   .upper-case {
     text-transform: uppercase;
+  }
+
+  .img-container {
+    padding: 0 !important;
+    width: unset !important;
+    height: unset !important;
+    flex: 1;
+    position: relative;
+    padding: 2px;
+    background-color: transparent;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .img-container img {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
   }
 
 </style>
