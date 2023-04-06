@@ -76,12 +76,12 @@
   .dialog-banner {
     height: 2rem;
     display: flex;
-    align-items: center;
     padding-bottom: 0.5rem;
+    align-items: center;
+    justify-content: center;
   }
 
   .dialog-banner p {
-    width: 100%;
     align-items: left;
     padding: 0;
     margin: 0;
@@ -190,8 +190,7 @@
   .interactive-btn-img {
     width: 21px;
     height: 21px;
-    top: 10px;
-    right: 10px;
+    right: 16px;
     z-index: 1;
     border-radius: 50%;
     line-height: 24px;
@@ -201,6 +200,7 @@
     color: white;
     text-align: center;
     opacity: 0.6;
+    position: absolute;
   }
 
   .interactive-btn-img span {
