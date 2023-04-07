@@ -76,13 +76,13 @@ def __load_transforms(model_id: str):
 
 async def mk_prediction(model_id: str,
                         task_path: Path,
-                        save_as='task_prediction.csv') -> None:
+                        save_as: Tuple[str, str]=('classification.csv', 'probabilities.csv')) -> None:
 
     # Agnostic code
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # Required transformation to make the prediction
-    _, val_transforms = __load_transforms(model_id)
+    _, val_transforms = __load_transforms(model_id=model_id)
 
     # Loads the pytorch model
     nn, mapping = __load_net(model_id=model_id, device=device)
@@ -98,8 +98,11 @@ async def mk_prediction(model_id: str,
                                  batch_size=len(task_dataset),
                                  shuffle=False)
 
-    predictions = torch.tensor([])
+    # Prediction for each image
+    labels = torch.tensor([])
+    # Probabilities for all classes
     probabilities = torch.tensor([])
+    # Picture names
     names = csv.name
 
     nn.eval()
@@ -107,24 +110,29 @@ async def mk_prediction(model_id: str,
          for X in task_dataloader:
             X = X.to(device)
             logits = nn(X)
-            prob = torch.softmax(logits, dim=1)
-            out_prob, out_pred = torch.max(prob, dim=1)
-            predictions = torch.cat((predictions, out_pred))
-            probabilities = torch.cat((probabilities, out_prob))
+            probs = torch.softmax(logits, dim=1)
+            label = torch.argmax(probs, dim=1)
+            labels = torch.cat((labels, label))
+            probabilities = torch.cat((probabilities, probs))
 
-    predictions = predictions.to('cpu')
-    predictions = predictions.numpy()
-    probabilities = probabilities.numpy()
+    labels = labels.to('cpu').numpy()
+    probabilities = probabilities.to('cpu').numpy()
 
     predictions_csv = pd.DataFrame({
         'name': names,
-        'target': predictions,
-        'probability': probabilities
+        'target': labels
     })
-
     predictions_csv['prediction'] = predictions_csv['target'].map(mapping)
 
-    predictions_csv.to_csv(task_path / Path(save_as), index=False)
+    classes = list(mapping.values())
+    probabilities_csv = pd.DataFrame()
+    probabilities_csv['name'] = names
+    probabilities_csv[classes] = probabilities
+
+    # Saves the classification and the probabilities into 2 separed files
+    class_filename, prob_filename = save_as
+    predictions_csv.to_csv(task_path / Path(class_filename), index=False)
+    probabilities_csv.to_csv(task_path / Path(prob_filename), index=False)
 
 
 def get_model_metadata(model_id: str) -> dict:

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Annotated, List, Union, ValuesView
+from typing import Annotated, cast, Dict
 
 import fastapi
 import pandas as pd
@@ -15,6 +15,8 @@ from modular.vision import (get_supported_models, is_model_supported,
                             mk_prediction)
 
 conf = read_yaml(Path('./api.conf.yml'))
+KEY_PROBS = 'PROBABILITIES_SAVE_AS'
+KEY_CLASS = 'CLASSIFICATION_SAVE_AS'
 
 app = FastAPI(title="SIIM-ISIC Melanoma Classification")
 
@@ -49,20 +51,30 @@ async def from_task(task_id: str):
     __sanitize_path(path=task_path,
                     detail=f'Task - {task_id} - not found')
 
-    predict_path = task_path / Path(conf['PREDICTION_SAVE_AS'])
+    class_filename, probs_filename = (conf[KEY_CLASS], conf[KEY_PROBS])
+    class_path = task_path / Path(class_filename)
+    probs_path = task_path / Path(probs_filename)
 
-    __sanitize_path(path=predict_path,
-                    detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
+    for filepath in [class_path, probs_path]:
+        __sanitize_path(path=filepath,
+                        detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
 
-    csv: pd.DataFrame = pd.read_csv(predict_path)
-    return csv.to_dict('records')
+    class_csv = cast(pd.DataFrame, pd.read_csv(class_path))
+    probs_csv = cast(pd.DataFrame, pd.read_csv(probs_path))
+
+    response = class_csv.to_dict('records')
+    for resp in response:
+        name = resp['name']
+        probs = cast(pd.DataFrame, probs_csv[probs_csv['name'] == name])
+        probs = probs.drop('name', axis=1)
+        resp['probs'] = cast(Dict, probs.to_dict('records'))
+
+    return response
 
 
 @app.post("/predict")
 @version(1, 0)
-async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
-
-    # Check if the Pytorch model is available
+async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'): # Check if the Pytorch model is available
     __sanitize_model(model_id)
 
     # Is the uploaded file and image?
@@ -78,10 +90,11 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
                       save_as=str(file.filename))
 
 
+    save_as = (conf[KEY_CLASS], conf[KEY_PROBS])
     # Save and make the prediction into the task directory
     await mk_prediction(model_id=model_id,
                         task_path=task_path,
-                        save_as=conf['PREDICTION_SAVE_AS'])
+                        save_as=save_as)
 
     return {
         'task_uuid': task_id
@@ -125,10 +138,11 @@ async def predict_bulk(bg_tasks: BackgroundTasks,
                           file=file,
                           save_as=str(file.filename))
 
+    save_as = (conf[KEY_CLASS], conf[KEY_PROBS])
     bg_tasks.add_task(mk_prediction,
                       model_id=model_id,
                       task_path=task_path,
-                      save_as=conf['PREDICTION_SAVE_AS'])
+                      save_as=save_as)
 
     return {
         "task_uuid": task_id,

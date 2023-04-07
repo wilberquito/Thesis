@@ -6,7 +6,8 @@ ALLOW_ORIGINS:
 TEMPORAL_TASKS_PATH: '/home/wilber/Descargas/tasks'
 
 # The name of the expoted csv per each task
-PREDICTION_SAVE_AS: 'prediction.csv'
+CLASSIFICATION_SAVE_AS: 'classification.csv'
+PROBABILITIES_SAVE_AS: 'probabilities.csv'
 
 # Metadata of the exposed models
 PYTORCH_MODELS:
