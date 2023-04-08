@@ -82,7 +82,7 @@
             prediction: pred.prediction,
             pred: pred.target === Number(PUBLIC_MELANOMA_TARGET) ? "Cancer" : "NotCancer",
             target: pred.target,
-            probability: pred.probability,
+            probs: pred.probs
           }
           const inMemoryImg = uploadedImages[i];
           const img = {
@@ -203,21 +203,20 @@
     const {
       prediction,
       target,
-      probability } = meta;
+      probs } = meta;
 
     const data: DialogData = {
+      probs,
       name,
       height,
       width,
       url,
       prediction,
       target,
-      probability,
       model: PUBLIC_DEFAULT_MODEL
     }
 
     dialogData = {... data}
-
   }
 
   function onDialogClose() {

@@ -4,9 +4,6 @@
 
   export let onClose: () => void = () => {}
   export let dialogData: DialogData;
-
-  console.log(dialogData)
-
 </script>
 
 <div class="dialog-mask">
@@ -61,13 +58,8 @@
           </div>
 
             <div class="radar-container">
-          <RadarChart></RadarChart>
+          <RadarChart inputs={dialogData.probs}></RadarChart>
           </div>
-
-          <!-- <div class="img-container"> -->
-          <!--   <img src={dialogData.url} alt="whatever" /> -->
-          <!-- </div> -->
-
         </div>
       </div>
     </div>

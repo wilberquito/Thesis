@@ -48,7 +48,7 @@
   }
 
   .cancer {
-    background-color: #FF0000 !important;
+    background-color: rgba(255, 99, 132) !important;
   }
 
   .not-cancer {

@@ -3,56 +3,56 @@
   import { onMount } from 'svelte';
   import type { ChartConfiguration } from 'chart.js/auto'
 
+  export let inputs = {}
   let chart: Chart;
 
-  const data = {
-    labels: [
-      'Eating',
-      'Drinking',
-      'Sleeping',
-      'Designing',
-      'Coding',
-      'Cycling',
-      'Running'
-    ],
-    datasets: [{
-      label: '',
-      data: [65, 59, 90, 81, 56, 55, 40],
-      fill: true,
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgb(255, 99, 132)',
-      pointBackgroundColor: 'rgb(255, 99, 132)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgb(255, 99, 132)'
-    }]
-  };
+  function initChart() {
+    const labels = (Object.keys(inputs) as string[]).map(str => str.toUpperCase())
+    const values = (Object.values(inputs) as number[]).map(n => (n*100).toFixed(2))
 
-  const config: ChartConfiguration<'radar'> = {
-    type: 'radar',
-    data: data,
-    options: {
-      plugins: {
-        legend: {
-          display: false
-        }
-      },
-      scales: {
-        r: {
-          ticks: {
+    const data = {
+      labels: labels,
+      datasets: [{
+        label: '',
+        data: values,
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgb(255, 99, 132)',
+        pointBackgroundColor: 'rgb(255, 99, 132)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(255, 99, 132)',
+        pointStyle: 'circle',
+        pointHoverRadius: 6,
+        pointRadius: 5,
+      }]
+    };
+
+    const config: ChartConfiguration<'radar'> = {
+      type: 'radar',
+      data: data,
+      options: {
+        plugins: {
+          legend: {
             display: false
+          }
+        },
+        scales: {
+          r: {
+            ticks: {
+              display: false
+            },
+            suggestedMax: 100
+          }
+        },
+        elements: {
+          line: {
+            borderWidth: 3
           }
         }
       },
-      elements: {
-        line: {
-          borderWidth: 3
-        }
-      }
-    },
-  };
+    };
 
-  function initChart() {
     const canvas = document.getElementById('radarChart') as HTMLCanvasElement;
     // const ctx = canvas?.getContext('2d');
     chart = new Chart(canvas, config);

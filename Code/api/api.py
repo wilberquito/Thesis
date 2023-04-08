@@ -67,7 +67,7 @@ async def from_task(task_id: str):
         name = resp['name']
         probs = cast(pd.DataFrame, probs_csv[probs_csv['name'] == name])
         probs = probs.drop('name', axis=1)
-        resp['probs'] = cast(Dict, probs.to_dict('records'))
+        resp['probs'] = cast(Dict, probs.to_dict('records')[0])
 
     return response
 

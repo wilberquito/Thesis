@@ -8,14 +8,14 @@ export type DialogData = {
   prediction: string,
   target: number,
   model: string,
-  probability: number
+  probs: {[key:string]: number}
 }
 
 export type PredResponse = {
   name: string,
   prediction: string,
   target: number,
-  probability: number
+  probs: {[key:string]: number}
 }
 
 export type UploadedImage = {
@@ -31,5 +31,5 @@ export type UploadedImageMetadata = {
   pred: Prediction,
   prediction: string,
   target: number,
-  probability: number
+  probs: {[key:string]: number}
 }
