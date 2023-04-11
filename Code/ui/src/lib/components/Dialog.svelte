@@ -21,7 +21,6 @@
       </div>
       <div class="dialog-content-main upper-case">
         <div class="img-container">
-          <!-- <RadarChart></RadarChart> -->
           <img src={dialogData.url} alt="whatever" />
         </div>
           <div style="width: 0.5rem"></div>
@@ -160,7 +159,7 @@
   @media only screen and (min-width: 1200px) {
 
     .dialog {
-      height: 55rem;
+      height: 52rem;
       width: 80rem;
     }
 

@@ -6,9 +6,13 @@
   export let inputs = {}
   let chart: Chart;
 
+  Chart.defaults.backgroundColor = '#9BD0F5';
+  Chart.defaults.borderColor = '#1779ba';
+  Chart.defaults.color = '#000';
+
   function initChart() {
     const labels = (Object.keys(inputs) as string[]).map(str => str.toUpperCase())
-    const values = (Object.values(inputs) as number[]).map(n => (n*100).toFixed(2))
+    const values = (Object.values(inputs) as number[]).map(n => Number((n*100).toFixed(2)))
 
     const data = {
       labels: labels,
@@ -42,7 +46,8 @@
             ticks: {
               display: false
             },
-            suggestedMax: 100
+            suggestedMax: 100,
+            beginAtZero: true
           }
         },
         elements: {
