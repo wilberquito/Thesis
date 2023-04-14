@@ -4,7 +4,12 @@ from typing import Annotated, cast, Dict
 import fastapi
 import pandas as pd
 import starlette.status as status
-from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request, Response,
+from fastapi import (BackgroundTasks,
+                     FastAPI,
+                     File,
+                     HTTPException,
+                     Request,
+                     Response,
                      UploadFile)
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_versioning import VersionedFastAPI, version
