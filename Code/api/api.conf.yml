@@ -15,7 +15,7 @@ PYTORCH_MODELS:
     vicorobot.8c_b3_768_512_18ep_best_20_fold0:
       net_type: 'efficientnet_b3'
       pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_best_20_fold0.pth
-      image_size: 320
+      img_size: 320
       out_dim: 8
       mapping:
         0: AK
@@ -30,7 +30,7 @@ PYTORCH_MODELS:
     vicorobot.8c_b3_768_512_18ep_best_fold0:
       net_type: 'efficientnet_b3'
       pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_best_fold0.pth
-      image_size: 320
+      img_size: 320
       out_dim: 8
       mapping:
         0: AK
@@ -45,7 +45,7 @@ PYTORCH_MODELS:
     vicorobot.8c_b3_768_512_18ep_final_fold0:
       net_type: 'efficientnet_b3'
       pth_path: /home/wilber/pytorch/trained/melanoma/vicorobot.8c_b3_768_512_18ep_final_fold0.pth
-      image_size: 320
+      img_size: 320
       out_dim: 8
       mapping:
         0: AK

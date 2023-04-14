@@ -69,7 +69,7 @@ def __load_transforms(model_id: str):
     meta = get_model_metadata(model_id)
 
     if 'vicorobot' in model_id:
-        return vd.get_transforms(image_size=meta['image_size'])
+        return vd.get_transforms(image_size=meta['img_size'])
     else:
         raise NotImplementedError()
 
