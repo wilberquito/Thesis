@@ -1,2 +1,3 @@
-# nn module will be downloaded by the pull_nn_code.sh
 nn/
+
+__pycache__/
