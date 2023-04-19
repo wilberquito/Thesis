@@ -1,26 +1,26 @@
-FROM continuumio/miniconda3
+# Use an official Anaconda runtime as a parent image
+FROM continuumio/anaconda3:latest
 
-# Conda requires a shell to run
-RUN conda init bash
+# Libraries inside docker
+RUN apt-get update && apt-get install -y libgl1-mesa-glx
 
-WORKDIR /api
-
-# Create the environment:
+# Copy the environment.yml file to the container
 COPY environment.yml .
+
+# Create a new conda environment using the environment.yml file
 RUN conda env create -f environment.yml
 
-# Activate the environment
-RUN conda activate melanoma_api
+# Activate the conda environment
+RUN echo "source activate $(head -1 environment.yml | cut -d' ' -f2)" > ~/.bashrc
 
-# Demonstrate the environment is activated:
-RUN echo "Testing if the environment is installed"
-RUN python -c "import fastapi"
+# Set the working directory to /app
+WORKDIR /app
 
-# Copy the code to container
-COPY . .
+# Copy the contents of the local directory into the container at /app
+COPY . /app
 
-# Install vicorobot module
-RUN cd vicorobot \
-    && pip install vicorobot
+# Expose port 8000 for web application access
+EXPOSE 8000
 
-ENTRYPOINT ["python", "main.py"]
+# Run the command to start the application
+CMD ["python", "main.py"]
