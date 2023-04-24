@@ -2,18 +2,19 @@
 Contains functions for training and testing a PyTorch model.
 """
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional, cast
 
 import numpy as np
 import torch
 from tqdm.auto import tqdm
+from .utils import save_model
 
 
-def train_step(model: torch.nn.Module,
-               dataloader: torch.utils.data.DataLoader,
-               loss_fn: torch.nn.Module,
+def train_step(model: torch.nn.Module, dataloader: torch.utils.data.DataLoader,
+               criterion: torch.nn.Module,
                optimizer: torch.optim.Optimizer,
-               device: torch.device) -> Tuple[float, float]:
+               device: torch.device,
+               scheduler: torch.optim.lr_scheduler._LRScheduler = None) -> Tuple[float, float]:
     """Trains a PyTorch model for a single epoch.
 
     Turns a target PyTorch model to training mode and then
@@ -40,20 +41,16 @@ def train_step(model: torch.nn.Module,
     train_loss, train_acc = 0, 0
 
     # Loop through data loader data batches
-    for batch, (X, y) in enumerate(dataloader):
-        # Send data to target device
-        X, y = X.to(device), y.to(device)
+    for batch, (inputs, labels) in tqdm(enumerate(dataloader)):
+        # 0. Send data to target device
+        inputs, labels = inputs.to(device), labels.to(device)
 
         # 1. Forward pass
-        y_pred = model(X)
-
-        y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
-        print('train_step', y_pred.shape, y.shape, y_pred_class)
-        print('train_step', y_pred[:5], y[:5], y_pred_class[:5])
+        outputs = model(inputs)
 
         # 2. Calculate  and accumulate loss
-        loss = loss_fn(y_pred, y)
-        train_loss += loss.item()
+        loss = criterion(outputs, labels)
+        train_loss += loss.item() * inputs.size(0)
 
         # 3. Optimizer zero grad
         optimizer.zero_grad()
@@ -64,18 +61,22 @@ def train_step(model: torch.nn.Module,
         # 5. Optimizer step
         optimizer.step()
 
-        # Calculate and accumulate accuracy metric across all batches
-        y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
-        train_acc += (y_pred_class == y).sum().item()/len(y_pred)
+        # 6. Update the lr base on the predefined scheduler
+        if scheduler:
+            scheduler.step()
 
-    # Adjust metrics to get average loss and accuracy per batch
-    train_loss = train_loss / len(dataloader)
-    train_acc = train_acc / len(dataloader)
+        # 7. Calculate and accumulate accuracy metric across all batches
+        preds = torch.argmax(outputs, dim=1)
+        train_acc += torch.sum(preds == labels).item()
+
+    train_loss = train_loss / len(dataloader.dataset)
+    train_acc = train_acc / len(dataloader.dataset)
     return train_loss, train_acc
+
 
 def test_step(model: torch.nn.Module,
               dataloader: torch.utils.data.DataLoader,
-              loss_fn: torch.nn.Module,
+              criterion: torch.nn.Module,
               device: torch.device) -> Tuple[float, float]:
     """Tests a PyTorch model for a single epoch.
 
@@ -103,37 +104,37 @@ def test_step(model: torch.nn.Module,
     # Turn on inference context manager
     with torch.inference_mode():
         # Loop through DataLoader batches
-        for batch, (X, y) in enumerate(dataloader):
-            # Send data to target device
-            X, y = X.to(device), y.to(device)
+        for batch, (inputs, labels) in tqdm(enumerate(dataloader)):
+            # 0. Send data to target device
+            inputs, labels = inputs.to(device), labels.to(device)
 
             # 1. Forward pass
-            test_pred_logits = model(X)
+            outputs = model(inputs)
 
             # 2. Calculate and accumulate loss
-            loss = loss_fn(test_pred_logits, y)
-            test_loss += loss.item()
+            loss = criterion(outputs, labels)
+            test_loss += loss.item() * inputs.size(0)
 
-            # Calculate and accumulate accuracy
-            test_pred_labels = test_pred_logits.argmax(dim=1)
-            test_acc += ((test_pred_labels == y).sum().item()/len(test_pred_labels))
+            # 3. Calculate and accumulate accuracy metric across all batches
+            preds = outputs.argmax(dim=1)
+            test_acc += torch.sum(preds == labels).item()
 
-    # Adjust metrics to get average loss and accuracy per batch
-    test_loss = test_loss / len(dataloader)
-    test_acc = test_acc / len(dataloader)
+    test_loss = test_loss / len(dataloader.dataset)
+    test_acc = test_acc / len(dataloader.dataset)
+
     return test_loss, test_acc
 
-# TODO: list of todo
-# - implement early stop here
-# - implement save points each time the model improve in the validaton set
+
 def train(model: torch.nn.Module,
           train_dataloader: torch.utils.data.DataLoader,
           test_dataloader: torch.utils.data.DataLoader,
           optimizer: torch.optim.Optimizer,
-          loss_fn: torch.nn.Module,
+          criterion: torch.nn.Module,
           epochs: int,
           device: torch.device,
-          save_as: Path) -> Dict[str, List]:
+          patience: int = 5,
+          scheduler: torch.optim.lr_scheduler._LRScheduler = None,
+          save_as: Optional[Path] = None) -> Dict[str, List]:
     """Trains and tests a PyTorch model.
 
     Passes a target PyTorch models through train_step() and test_step()
@@ -165,29 +166,39 @@ def train(model: torch.nn.Module,
               test_loss: [1.2641, 1.5706],
               test_acc: [0.3400, 0.2973]}
     """
+
     # Create empty results dictionary
-    results = {"train_loss": [],
-               "train_acc": [],
-               "test_loss": [],
-               "test_acc": []
+    results = {
+        "train_loss": [],
+        "train_acc": [],
+        "test_loss": [],
+        "test_acc": []
     }
 
-    # Make sure model on target device
+    # Makes sure model on target device
     model.to(device)
 
+    # Init loss
     valid_loss_min = np.Inf
+
+    # Init early stop
+    early_stop_count = 0
+
+    # Is save checkpoint required?
+    is_save_required = save_as is not None
 
     # Loop through training and testing steps for a number of epochs
     for epoch in tqdm(range(epochs)):
         train_loss, train_acc = train_step(model=model,
-                                          dataloader=train_dataloader,
-                                          loss_fn=loss_fn,
-                                          optimizer=optimizer,
-                                          device=device)
+                                           dataloader=train_dataloader,
+                                           criterion=criterion,
+                                           optimizer=optimizer,
+                                           device=device,
+                                           scheduler=scheduler)
 
         test_loss, test_acc = test_step(model=model,
                                         dataloader=test_dataloader,
-                                        loss_fn=loss_fn,
+                                        criterion=criterion,
                                         device=device)
 
         # Print out what's happening
@@ -205,20 +216,30 @@ def train(model: torch.nn.Module,
         results["test_loss"].append(test_loss)
         results["test_acc"].append(test_acc)
 
+        # Compute if network learned comparing the test loss
         network_learned = test_loss < valid_loss_min
+
         if network_learned:
-          valid_loss_min = test_loss
-          data_dict = {
-            'train_loss': results.train_loss,
-            'train_acc': results.train_acc,
-            'test_loss': results.test_loss,
-            'test_acc': results.test_acc,
-            'epoch': epoch,
-            'optimizer': optimizer.state_dict(),
-            'model': model.state_dict()
-          }
-          torch.save(data_dict, save_as)
+            valid_loss_min = test_loss
+            early_stop_count = 0
 
+            # Save network checkpoint
+            if is_save_required:
+                data_dict = {
+                    'train_loss': results["train_loss"],
+                    'train_acc': results["train_acc"],
+                    'test_loss': results["test_loss"],
+                    'test_acc': results["test_acc"],
+                    'epoch': epoch,
+                    'optimizer': optimizer.state_dict(),
+                    'model': model.state_dict()
+                }
+                save_model(data_dict, cast(Path, save_as))
+        else:
+            early_stop_count += 1
+            if early_stop_count >= patience:
+                print(f'Early stopping after {epoch} epochs')
+                break
 
-    # Return the filled results at the end of the epochs
+    # Returns train history
     return results

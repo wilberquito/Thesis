@@ -1,5 +1,4 @@
-vicorobot/
-vicorobot
+vicorobot.pkg/
 nn/
 pytorch_models/
 build/

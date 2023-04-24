@@ -11,7 +11,13 @@ COPY environment.yml .
 RUN conda env create -f environment.yml
 
 # Activate the conda environment
-RUN echo "source activate $(head -1 environment.yml | cut -d' ' -f2)" > ~/.bashrc
+RUN echo "source activate melanoma_api" > ~/.bashrc
+
+# Copy the package files to the container
+COPY vicorobot.pkg /vicorobot.pkg
+
+# Activate the conda environment and install the package within the environment
+RUN /bin/bash -c "source activate melanoma_api && cd /vicorobot.pkg/ && pip install ."
 
 # Set the working directory to /app
 WORKDIR /app
@@ -19,8 +25,8 @@ WORKDIR /app
 # Copy the contents of the local directory into the container at /app
 COPY . /app
 
-# Expose port 8000 for web application access
-EXPOSE 8000
+# Expose port 8080 for api application
+EXPOSE 8080
 
 # Run the command to start the application
 CMD ["python", "main.py"]
