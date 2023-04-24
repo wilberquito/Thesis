@@ -26,7 +26,9 @@ WORKDIR /app
 COPY . /app
 
 # Expose port 8080 for api application
-EXPOSE 8080
+# EXPOSE 8080
 
 # Run the command to start the application
-CMD ["python", "main.py"]
+# CMD ["python", "main.py"]
+
+ENTRYPOINT ["conda", "run", "-n", "melanoma_api", "python", "main.py"]
