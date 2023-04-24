@@ -18,3 +18,4 @@ dependencies:
     - torchvision
     - opencv_python
     - fastapi-versioning
+    - PyYAML
