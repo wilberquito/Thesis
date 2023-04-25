@@ -25,10 +25,5 @@ WORKDIR /app
 # Copy the contents of the local directory into the container at /app
 COPY . /app
 
-# Expose port 8080 for api application
-# EXPOSE 8080
-
-# Run the command to start the application
-# CMD ["python", "main.py"]
-
-ENTRYPOINT ["conda", "run", "-n", "melanoma_api", "python", "main.py"]
+# Run api using conda environment
+CMD conda run -n melanoma_api python main.py
