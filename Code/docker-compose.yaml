@@ -1,6 +1,9 @@
 version: '3'
 services:
-  web:
+  api:
     image: localhost/nnapi:latest
     ports:
         - "8081:8081"
+    volumes:
+      - /home/wilberquito/volumns/api/trained:/trained:Z
+      - /home/wilberquito/volumns/api/api.conf.yml:/app/api.conf.yml:Z
