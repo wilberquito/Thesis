@@ -36,3 +36,22 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Create docker image
+
+To create a docker image from this project,
+first of all build it and execute:
+
+```bash
+sudo podman build --tag nnui:latest -f ./Dockerfile
+```
+
+## Create container from image
+
+```bash
+ sudo podman run \
+    --name ui-demo \
+    --rm \
+    -p 5173:5173 \
+    nnui:latest
+```

@@ -1,15 +1,16 @@
-# Wake up the services
+# Hello services!
 
-You need docker compose. I am using [podman](https://docs.oracle.com/en/learn/podman-compose/index.html#create-a-docker-compose-file).
+You need docker compose.
+I am using [podman](https://docs.oracle.com/en/learn/podman-compose/index.html#create-a-docker-compose-file).
 
 ## Run the services
 
-```sh
+```bash
 sudo podman-compose up -d
 ```
 
-## Shutdown the services
+## Shut the services
 
-```sh
+```bash
 sudo podman-compose down
 ```

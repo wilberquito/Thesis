@@ -1,20 +1,23 @@
-# Use a lightweight Node.js image
-FROM node:16-alpine
+# Use Node.js 18.15.0 LTS as the base image
+FROM node:18.15.0
 
-# Set the working directory
-WORKDIR /ui
+# Create and set the working directory for the app
+WORKDIR /app
 
-# Copy package.json and package-lock.json files to the container
+# Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the container
+# Copy the entire app directory to the container
 COPY . .
 
-# Build the application
+# Build the app
 RUN npm run build
 
-# Start the application
-CMD ["npm", "run", "start"]
+# Expose port 5173 for the app
+# EXPOSE 5173
+
+# Start the app
+CMD ["npm", "run", "host"]
