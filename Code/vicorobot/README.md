@@ -1,6 +1,8 @@
 # Vicorobot model
 
-To install this package to the environment
+Distribuible module of vicorobot.
+
+To install this package to the environment:
 
 ```python
 pip install .

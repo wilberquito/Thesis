@@ -49,9 +49,9 @@ sudo podman build --tag nnui:latest -f ./Dockerfile
 ## Create container from image
 
 ```bash
- sudo podman run \
-    --name ui-demo \
-    --rm \
-    -p 5173:5173 \
+ sudo podman run    \
+    --name ui-demo  \
+    --rm            \
+    -p 5173:5173    \
     nnui:latest
 ```
