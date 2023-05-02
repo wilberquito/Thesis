@@ -1,28 +1,29 @@
 # A platform for Melanoma classifer
 
-The goal of the project is to create a platform
-that exposses Melanoma deep learner models
-throw an API. The project will have some models already
-trainned from the VICOROBOT UdG group and some of them
-trainned by myself. Along with the API, I'll create an
-user interface to load images and allow user make inference.
-The UI will also give information to the user about
-the distribution of probabilities to being Melanoma or being
-from other classes.
+The goal of this project is to create a platform that
+exposes Melanoma deep learning models through an API.
+The project will have some models pre-trained by the
+VICOROBOT UdG group and others trained by myself.
+In addition to the API, I will create a user interface
+to load images and allow users to make inferences.
+The UI will also provide information to the user
+about the distribution of probabilities
+of being Melanoma or being from other classes.
 
-More than having incredible results, the projec seeks a way
-to expose the use of deep learning technologies.
-All this infrastructure will run over the Docker technology,
-and hosted in any hosting service or in any of my machines.
+More than producing incredible results,
+the project seeks to showcase the use of deep learning technologies.
+All of this infrastructure will run on Docker technology and
+can be hosted on any hosting service or on any of my machines.
 
-This project perfectly fits into as master thesis
-in data science because one of the pilars
-is how to take profit from data of different kinds
-and knowing the technologies we need to use to acomplish that.
-Talking about the technologies, the deep learning part of the
-project will run over Pytorch, the API will be created using
-python and the framework FastAPI, the user interface will be
-made with SvelteKit which is framework to create web applications.
+This project is a perfect fit for a master's thesis
+in data science because one of the pillars is how to
+leverage data of different kinds and knowing
+the technologies we need to use to accomplish that.
+Regarding the technologies, the deep learning
+part of the project will run on PyTorch,
+the API will be created using Python and the
+FastAPI framework, and the user interface
+will be built with SvelteKit, which is a
+framework for creating web applications.
 
-The project will be guided by VICOROBOT lab and people from
-Acenture company.
+The project will be supervised by the VICOROBOT lab and professionals from Accenture.
