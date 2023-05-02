@@ -1,0 +1,16 @@
+version: '3'
+services:
+  api:
+    image: ${API_IMG}
+    ports:
+      - ${API_PORT}:8081
+    volumes:
+      - ${API_VOLUME_MODELS_PATH}:${API_VOLUME_MODELS_PATH_IMG}:Z
+      - ${API_VOLUME_CONF_PATH}:${API_VOLUME_CONF_PATH_IMG}:Z
+  ui:
+    image: ${UI_IMG}
+    ports:
+      - ${UI_PORT}:5173
+      - ${UI_VOLUME_CONF_PATH}:${UI_VOLUME_CONF_PATH_IMG}:Z
+    depends_on:
+      - api
