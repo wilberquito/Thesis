@@ -7,7 +7,7 @@ mkdir -p $WORKING_DIR
 
 # Clone private (till the momement) this script
 # was created from GitHub
-THESIS_URL=https://gitlab.com/wilberquito/open.thesis.git
+THESIS_URL=git@github.com:wilberquito/Thesis.git
 THESIS_SAVE_AS=$WORKING_DIR/thesis/
 
 git clone $THESIS_URL $THESIS_SAVE_AS
