@@ -1,19 +1,17 @@
 # Hello services!
 
-You need docker compose.
-I am using [podman](https://docs.oracle.com/en/learn/podman-compose/index.html#create-a-docker-compose-file).
+To create the infrastructure of this project,
+you need:
 
-If you are using `Ubunut`, here are the instructions to install
-[docker](https://docs.docker.com/engine/install/ubuntu/)
+ - Git / Git LFS
+ - Some tool to work with docker technology as `Docker` or `Podman`
 
-## Run the services
+To make the construction use the `Make.sh` script that runs
+on `bash`.
 
-```bash
-sudo podman-compose up -d
-```
+If the source code of the thesis till being private, you need to
+ask for permition to the GitHub user `wilberquito`. You can
+contact me as:
 
-## Shut the services
-
-```bash
-sudo podman-compose down
-```
+ - wbq.software@gmail.com
+ - typingwil@gmail.com
