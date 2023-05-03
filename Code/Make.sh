@@ -2,6 +2,9 @@
 
 WORKING_DIR=$HOME/thesis_deploy
 
+# Creates the path to the working dir
+mkdir -p $WORKING_DIR
+
 # Clone private (till the momement) this script
 # was created from GitHub
 THESIS_URL=https://gitlab.com/wilberquito/open.thesis.git
