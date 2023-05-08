@@ -11,6 +11,7 @@ services:
     image: ${UI_IMG}
     ports:
       - "${UI_PORT}:5173"
+    volumes:
       - ${UI_VOLUME_CONF_PATH}:${UI_VOLUME_CONF_PATH_IMG}:Z
     depends_on:
       - api
