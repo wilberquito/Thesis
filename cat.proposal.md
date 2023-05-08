@@ -1,4 +1,4 @@
-# Una plataforma per classificar Melanomas
+# Una plataforma per classificar melanomes
 
 L'objectiu d'aquest projecte és crear una
 plataforma que exposi models entrenats d'aprenentatge profund
