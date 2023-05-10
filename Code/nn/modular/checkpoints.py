@@ -21,11 +21,8 @@ def load_checkpoint(resume_weights: str,
     return checkpoint
 
 
-def save_checkpoint(state: Dict, is_best, history: Optional[Dict] filename='/output/checkpoint.pth.tar'):
+def save_checkpoint(state: Dict,
+                    filename='/output/checkpoint.pth.tar'):
     """Save checkpoint if a new best is achieved"""
-
-    if is_best:
-        print("=> Saving a new best")
-        torch.save(state, filename)  # save checkpoint
-    else:
-        print("=> Validation Accuracy did not improve")
+    print("=> Saving a new checkpoint")
+    torch.save(state, filename)  # save checkpoint

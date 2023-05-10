@@ -1,30 +1,40 @@
 """
 Contains functions for training and testing a PyTorch model.
 """
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional, cast
+from typing import Dict, Callable
 
-import numpy as np
 import torch
-from tqdm.auto import tqdm
 import time
 import torch.nn as nn
 import copy
 
 
 def train_model(model: nn.Module,
-                criterion: nn.Module,
-                optimizer: torch.optim.Optimizer,
-                scheduler: torch.optim.lr_scheduler.LRScheduler,
-                device: torch.device,
                 dataloaders: Dict,
                 dataset_sizes: Dict,
+                device: torch.device,
+                criterion: nn.Module,
+                optimizer: torch.optim.Optimizer,
+                scheduler: torch.optim.lr_scheduler.LRScheduler = None,
                 num_epochs: int = 25,
-                history: Dict = None):
+                patience: int = 3,
+                writter: Callable[[Dict], None] = None):
+
     since = time.time()
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
+
+    results = {
+        "train_loss": [],
+        "train_acc": [],
+        "test_loss": [],
+        "test_acc": []
+    }
+
+    is_save_required = writter is not None
+
+    early_stop_count = 0
 
     for epoch in range(num_epochs):
         print(f'Epoch {epoch}/{num_epochs - 1}')
@@ -40,16 +50,16 @@ def train_model(model: nn.Module,
             running_loss = 0.0
             running_corrects = 0
 
-            # Iterate over data.
+            # Iterate over data (batches).
             for inputs, labels in dataloaders[phase]:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
-                # zero the parameter gradients
+                # Zero the parameter gradients
                 optimizer.zero_grad()
 
-                # forward
-                # track history if only in train
+                # Forward
+                # Track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     _, preds = torch.max(outputs, 1)
@@ -63,23 +73,55 @@ def train_model(model: nn.Module,
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
-            if phase == 'train':
-                scheduler.step()
 
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double() / dataset_sizes[phase]
 
             print(f'{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}')
 
-            # deep copy the model
-            if phase == 'val' and epoch_acc > best_acc:
-                best_acc = epoch_acc
-                best_model_wts = copy.deepcopy(model.state_dict())
+            # Update results dictionary
+            results[f"{phase}_loss"].append(epoch_loss)
+            results[f"{phase}_acc"].append(epoch_acc)
+
+            # Scheduler step
+            if phase == 'train' and scheduler:
+                scheduler.step()
+
+            # Valid phase
+            if phase == 'val':
+                # Check if network has learned
+                network_learned = epoch_acc > best_acc
+
+                # Deep copy of the network weights and save it (if required)
+                if network_learned:
+                    early_stop_count = 0
+                    best_acc = epoch_acc
+                    best_model_wts = copy.deepcopy(model.state_dict())
+
+                    if is_save_required:
+                        optimizer_wts = optimizer.state_dict()
+                        scheduler_wts = \
+                            scheduler.state_dict() if scheduler else None
+                        checkpoint = {
+                            'results': results,
+                            'epoch': epoch,
+                            'optimizer': optimizer_wts,
+                            'scheduler': scheduler_wts,
+                            'best_model_wts': best_model_wts
+                        }
+                        writter(checkpoint)
+                else:
+                    # Early stop the training
+                    early_stop_count += 1
+                    if early_stop_count >= patience:
+                        print(f'Early stopping after {epoch} epochs')
+                        break
 
     time_elapsed = time.time() - since
-    print(f'Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
+    print(f'Training complete in \
+        {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
     print(f'Best val Acc: {best_acc:4f}')
 
-    # load best model weights
+    # Load best model weights
     model.load_state_dict(best_model_wts)
     return model
