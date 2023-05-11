@@ -66,7 +66,7 @@ def get_df(data_dir: str, data_folder: str):
 
     def csv_path_builder(src: str, kind: str):
         return os.path.join(data_dir,
-                            f'jpeg-{src}-{data_folder}x{data_folder}/{kind}',
+                            f'jpeg-{src}-{data_folder}x{data_folder}',
                             f'{kind}.csv')
     # 2020 data
     train_path = csv_path_builder('melanoma', 'train')
