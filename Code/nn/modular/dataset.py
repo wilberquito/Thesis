@@ -2,11 +2,11 @@ from pathlib import Path
 
 import albumentations as A
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
+import os
 
 
 class MelanomaDataset(Dataset):
@@ -47,85 +47,84 @@ class MelanomaDataset(Dataset):
             return data, torch.tensor(sample['target']).item()
 
 
-# Get the dataframe to work with
-def get_df(out_dim: int, data_dir: str, data_folder: str):
+def get_df(data_dir: str, data_folder: str):
+    """
+    Description
+    -----------
+    Generates the training and testing dataframe
+    Joins the classes of the differents competitions into 8 final classes.
+    Returns
+    -------
+        (train_df: pd.DataFrame,
+        test_df: pd.DataFrame,
+        mapping_classes: Dict)
+    """
+    def img_path_builder(src: str, image_name: str, kind: str):
+        return os.path.join(data_dir,
+                            f'jpeg-{src}-{data_folder}x{data_folder}/{kind}',
+                            f'{image_name}.jpg')
 
+    def csv_path_builder(src: str, kind: str):
+        return os.path.join(data_dir,
+                            f'jpeg-{src}-{data_folder}x{data_folder}/{kind}',
+                            f'{kind}.csv')
     # 2020 data
-    train_path = Path(
-        data_dir) / Path(f'jpeg-melanoma-{data_folder}x{data_folder}/train.csv')
+    train_path = csv_path_builder('melanoma', 'train')
     df_train = pd.read_csv(train_path)
 
-    # Drops samples where tfrecord is -1
-    df_train = df_train[df_train['tfrecord'] >= 0].reset_index(drop=True)
-    df_train['fold'] = df_train['tfrecord']
-    df_train['filepath'] = df_train['image_name'].apply(
-        lambda image: train_path.parents[0] / Path(f'train/{image}.jpg'))
-    df_train['is_ext'] = 0
+    # Drop samples without `tfrecord`
+    df_train = df_train[df_train['tfrecord'] >= 0] \
+        .reset_index(drop=True)
 
-    # 2018 and 2019 data
-    train_path = Path(
-        data_dir) / Path(f'jpeg-isic2019-{data_folder}x{data_folder}/train.csv')
-    df_train2 = pd.read_csv(train_path)
-    df_train2 = df_train2[df_train2['tfrecord'] >= 0].reset_index(drop=True)
-    df_train2['filepath'] = df_train2['image_name'].apply(
-        lambda image: train_path.parents[0] / Path(f'train/{image}.jpg'))
-    df_train2['is_ext'] = 1
+    # Generates new column with the path of each img
+    df_train['filepath'] = df_train['image_name'] \
+        .apply(lambda name: img_path_builder('melanoma', name, 'train'))
+
+    # 2018, 2019 data (external data)
+    ext_train_path = csv_path_builder('isic2019', 'train')
+    ext_df_train = pd.read_csv(ext_train_path)
+
+    # Drop samples without `tfrecord`
+    ext_df_train = ext_df_train[ext_df_train['tfrecord'] >= 0] \
+        .reset_index(drop=True)
+
+    # Generates new column with the path of each img
+    ext_df_train['filepath'] = ext_df_train['image_name'] \
+        .apply(lambda name: img_path_builder('isic2019', name))
 
     # Preprocess Target
-    df_train['diagnosis'] = df_train['diagnosis'].apply(
-        lambda x: x.replace('seborrheic keratosis', 'BKL'))
-    df_train['diagnosis'] = df_train['diagnosis'].apply(
-        lambda x: x.replace('lichenoid keratosis', 'BKL'))
-    df_train['diagnosis'] = df_train['diagnosis'].apply(
-        lambda x: x.replace('solar lentigo', 'BKL'))
-    df_train['diagnosis'] = df_train['diagnosis'].apply(
-        lambda x: x.replace('lentigo NOS', 'BKL'))
+    df_train['diagnosis'] = df_train['diagnosis'] \
+        .apply(lambda x: x.replace('seborrheic keratosis', 'BKL'))
+    df_train['diagnosis'] = df_train['diagnosis'] \
+        .apply(lambda x: x.replace('lichenoid keratosis', 'BKL'))
+    df_train['diagnosis'] = df_train['diagnosis'] \
+        .apply(lambda x: x.replace('solar lentigo', 'BKL'))
+    df_train['diagnosis'] = df_train['diagnosis'] \
+        .apply(lambda x: x.replace('lentigo NOS', 'BKL'))
+    df_train['diagnosis'] = df_train['diagnosis'] \
+        .apply(lambda x: x.replace('cafe-au-lait macule', 'unknown'))
+    df_train['diagnosis'] = df_train['diagnosis'] \
+        .apply(lambda x: x.replace('atypical melanocytic proliferation', 'unknown'))
 
-    # Join categorical variables to adapt to the output of the nn
-    if out_dim == 8:
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('NV', 'nevus'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('MEL', 'melanoma'))
-    elif out_dim == 4:
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('NV', 'nevus'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('MEL', 'melanoma'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('DF', 'unknown'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('AK', 'unknown'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('SCC', 'unknown'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('VASC', 'unknown'))
-        df_train2['diagnosis'] = df_train2['diagnosis'].apply(
-            lambda x: x.replace('BCC', 'unknown'))
-    else:
-        raise NotImplementedError()
+    ext_df_train['diagnosis'] = ext_df_train['diagnosis'] \
+        .apply(lambda x: x.replace('NV', 'nevus'))
+    ext_df_train['diagnosis'] = ext_df_train['diagnosis'] \
+        .apply(lambda x: x.replace('MEL', 'melanoma'))
 
-    # Definition of the hole train dataframe
-    df_train = pd.concat([df_train, df_train2]).reset_index(drop=True)
+    # Concat train data
+    df_train = pd.concat([df_train, ext_df_train]) \
+        .reset_index(drop=True)
 
-    # Create target column that represents the diagnostic using a number
-    # Notice that target is malignant only and only if diagnosis is malignant,
-    # Otherwise, is benign, in this case, diagnosis is more granular.
-    diagnosis2idx = {d: idx for idx, d in enumerate(
-        sorted(df_train.diagnosis.unique()))}
+    # Test data
+    df_test = pd.read_csv(csv_path_builder('melanoma', 'test'))
+    df_test['filepath'] = df_test['image_name'] \
+        .apply(lambda name: img_path_builder('melanoma', name, 'test'))
+
+    # Mapping
+    diagnosis2idx = {d: idx for idx, d in enumerate(sorted(df_train.diagnosis.unique()))}
     df_train['target'] = df_train['diagnosis'].map(diagnosis2idx)
 
-    # Save which idx represent the melanoma
-    mel_idx = diagnosis2idx['melanoma']
-
-    # Test dataframe
-    test_path = Path(data_dir) / \
-        Path(f'jpeg-melanoma-{data_folder}x{data_folder}/test.csv')
-    df_test = pd.read_csv(test_path)
-    df_test['filepath'] = df_test['image_name'].apply(
-        lambda image: test_path.parents[0] / Path(f'test/{image}.jpg'))
-
-    return df_train, df_test, mel_idx
+    return df_train, df_test, diagnosis2idx
 
 
 def get_transforms(image_size):
@@ -175,27 +174,3 @@ def get_transforms(image_size):
     ])
 
     return transforms_train, transforms_val
-
-
-def plot_dataset_samples(dataset: MelanomaDataset, rows=3, cols=3, seed=None):
-    """Plots nrows*ncols random images"""
-
-    if seed is not None:
-        torch.manual_seed(seed)
-    fig = plt.figure(figsize=(9, 9))
-    for i in range(1, rows * cols + 1):
-        random_idx = torch.randint(0, len(dataset), size=[1]).item()
-        if not dataset.mode == 'test':
-            image, label = dataset[random_idx]
-        else:
-            image = dataset[random_idx]
-
-        # Make color channel last
-        image = image.permute(1, 2, 0)
-        # From agnositic device to numpy
-        image = image.cpu().numpy()
-        image = np.array(image,np.int32)
-        fig.add_subplot(rows, cols, i)
-        plt.imshow(image.squeeze())
-        plt.title('' if dataset.mode == 'test' else label)
-        plt.axis(False)
