@@ -90,7 +90,7 @@ def get_df(data_dir: str, data_folder: str):
 
     # Generates new column with the path of each img
     ext_df_train['filepath'] = ext_df_train['image_name'] \
-        .apply(lambda name: img_path_builder('isic2019', name))
+        .apply(lambda name: img_path_builder('isic2019', name, 'train'))
 
     # Preprocess Target
     df_train['diagnosis'] = df_train['diagnosis'] \
