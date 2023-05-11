@@ -1,6 +1,12 @@
 """
-Contains functions for training and testing a PyTorch model.
+Module to train neural network. It supports
+
+ - Early stop
+ - Scheduler
+ - Numer of epochs
+ - Writter
 """
+
 from typing import Dict, Callable
 
 import torch
@@ -124,4 +130,4 @@ def train_model(model: nn.Module,
 
     # Load best model weights
     model.load_state_dict(best_model_wts)
-    return model
+    return model, results

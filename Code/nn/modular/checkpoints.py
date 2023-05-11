@@ -1,3 +1,10 @@
+"""
+Module to handle checkpoint with models
+
+ - load checkpoint
+ - save checkpoint
+"""
+
 import os
 import torch
 from typing import Optional, Dict
