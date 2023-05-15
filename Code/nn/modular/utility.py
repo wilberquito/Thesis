@@ -150,7 +150,6 @@ def pred_and_plot_image(
     plt.title(title)
 
 
-
 def save_model(model: torch.nn.Module,
                target_dir: str,
                model_name: str):
@@ -181,6 +180,7 @@ def save_model(model: torch.nn.Module,
     torch.save(obj=model.state_dict(),
              f=model_save_path)
 
+
 def set_seed(seed=42):
     """Force determinism in different libraries"""
     random.seed(seed)
@@ -189,3 +189,46 @@ def set_seed(seed=42):
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
+
+
+def display_random_images(dataset: torch.utils.data.dataset.Dataset,
+                          n: int = 10,
+                          display_label: bool = True,
+                          display_shape: bool = True,
+                          seed: int = None):
+    """Display random images from a dataset collection"""
+
+    # 2. Adjust display if n too high
+    if n > 10:
+        display_shape = False
+        print("""For display purposes, n shouldn't
+        be larger than 10, setting to 10 and removing shape display.""")
+
+    # 3. Set random seed
+    if seed:
+        random.seed(seed)
+
+    # 4. Get random sample indexes
+    random_samples_idx = random.sample(range(len(dataset)), k=n)
+
+    # 5. Setup plot
+    plt.figure(figsize=(16, 8))
+
+    # 6. Loop through samples and display random samples
+    for i, targ_sample in enumerate(random_samples_idx):
+        targ_image, targ_label = dataset[targ_sample][0], dataset[targ_sample][1]
+
+        # 7. Adjust image tensor shape for plotting:
+        # [color_channels, height, width] -> [height, width, color_channels]
+        targ_image_adjust = targ_image.transpose(1, 2, 0)
+        targ_image_adjust = targ_image_adjust / 255
+
+        # Plot adjusted samples
+        plt.subplot(n // 10 + 1, n if n <= 10 else n // 2, i+1)
+        plt.imshow(targ_image_adjust)
+        plt.axis("off")
+        if display_label:
+            title = dataset.idx_to_class[targ_label]
+        if display_shape:
+            title = title + f"\nshape: {targ_image_adjust.shape}"
+        plt.title(title)
