@@ -10,14 +10,15 @@ from skimage import io
 class MelanomaDataset(Dataset):
     """Definition of the dataset for the melanoma problem"""
 
-    def __init__(self, csv: pd.DataFrame, mode: str, transform=None):
+    def __init__(self,
+                 csv: pd.DataFrame,
+                 mode: str,
+                 transform=None,
+                 idx_to_class: dict = None):
         self.csv = csv.reset_index(drop=True)
         self.mode = mode
         self.transform = transform
-
-        if self.mode == 'train':
-            mapping = csv.set_index('target')['diagnosis'].items()
-            self.idx_to_class = dict(sorted(mapping))
+        self.idx_to_class = idx_to_class
 
     def __len__(self):
         return self.csv.shape[0]
