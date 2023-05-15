@@ -1,21 +1,23 @@
-from pathlib import Path
-
 import albumentations as A
-import cv2
 import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
 import os
+from skimage import io
 
 
 class MelanomaDataset(Dataset):
     """Definition of the dataset for the melanoma problem"""
 
-    def __init__(self, csv, mode, transform=None):
+    def __init__(self, csv: pd.DataFrame, mode: str, transform=None):
         self.csv = csv.reset_index(drop=True)
         self.mode = mode
         self.transform = transform
+
+        if self.mode == 'train':
+            mapping = csv.set_index('target')['diagnosis'].items()
+            self.idx_to_class = dict(sorted(mapping))
 
     def __len__(self):
         return self.csv.shape[0]
@@ -23,11 +25,11 @@ class MelanomaDataset(Dataset):
     def __getitem__(self, index):
 
         # Get image path
-        sample = self.csv.iloc[index]
+        csv_sample = self.csv.iloc[index]
 
         # Read image from path, transforming to tree channels, rgb
-        image = cv2.imread(str(sample.filepath))
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        img_name = csv_sample['filepath']
+        image = io.imread(img_name)
 
         # Transform the images using `albumentation`
         if self.transform is not None:
@@ -38,13 +40,14 @@ class MelanomaDataset(Dataset):
 
         # Make color channel first
         image = image.transpose(2, 0, 1)
-        data = torch.tensor(image).float()
 
         # If this is just for a test porpouse you can forget the label
         if self.mode == 'test':
-            return data
+            label = -1
+            return image, label
         else:
-            return data, torch.tensor(sample['target']).item()
+            label = csv_sample['target']
+            return image, torch.tensor(label).item()
 
 
 def get_df(data_dir: str, data_folder: str):
@@ -121,7 +124,8 @@ def get_df(data_dir: str, data_folder: str):
         .apply(lambda name: img_path_builder('melanoma', name, 'test'))
 
     # Mapping
-    diagnosis2idx = {d: idx for idx, d in enumerate(sorted(df_train.diagnosis.unique()))}
+    uniques = enumerate(sorted(df_train['diagnosis'].unique()))
+    diagnosis2idx = {d: idx for idx, d in uniques}
     df_train['target'] = df_train['diagnosis'].map(diagnosis2idx)
 
     return df_train, df_test, diagnosis2idx
