@@ -5,6 +5,7 @@ import torch
 from torch.utils.data import Dataset
 import os
 from skimage import io
+from sklearn.model_selection import train_test_split
 
 
 class MelanomaDataset(Dataset):
@@ -179,3 +180,19 @@ def get_transforms(image_size):
     ])
 
     return transforms_train, transforms_val
+
+
+def train_validate_split(df: pd.DataFrame,
+                         random_state: int = 42,
+                         validate_size: int = 0.25):
+    """Split dataframe into random train and validate dataframe"""
+
+    X_train, X_val = train_test_split(df,
+                                      random_state=random_state,
+                                      train_size=(1-validate_size))
+    X_train = pd.DataFrame(X_train)
+    X_train.columns = df.columns
+    X_val = pd.DataFrame(X_val)
+    X_val.columns = df.columns
+
+    return X_train, X_val
