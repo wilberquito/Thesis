@@ -1,10 +1,9 @@
 import albumentations as A
 import numpy as np
 import pandas as pd
-import torch
 from torch.utils.data import Dataset
 import os
-from skimage import io
+from PIL import Image
 from sklearn.model_selection import train_test_split
 
 
@@ -30,15 +29,20 @@ class MelanomaDataset(Dataset):
         csv_sample = self.csv.iloc[index]
 
         # Read image from path, transforming to tree channels, rgb
-        img_name = csv_sample['filepath']
-        image = io.imread(img_name)
+        image_path = csv_sample['filepath']
+        image = Image.open(image_path)
+        image = image.convert('rgb')
+
+        print('Debugging')
+        print(type(image), image.shape)
 
         # Transform the images using `albumentation`
         if self.transform is not None:
-            res = self.transform(image=image)
-            image = res['image'].astype(np.float32)
+            image = self.transform(image)
         else:
-            image = image.astype(np.float32)
+            image = np.asarray(image)
+
+        print(image.shape)
 
         # Make color channel first
         image = image.transpose(2, 0, 1)
@@ -48,7 +52,7 @@ class MelanomaDataset(Dataset):
             return image
         else:
             label = csv_sample['target']
-            return image, torch.tensor(label).item()
+            return image, label
 
 
 def get_df(data_dir: str, data_folder: str):
