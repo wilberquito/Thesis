@@ -45,8 +45,7 @@ class MelanomaDataset(Dataset):
 
         # If this is just for a test porpouse you can forget the label
         if self.mode == 'test':
-            label = -1
-            return image, label
+            return image
         else:
             label = csv_sample['target']
             return image, torch.tensor(label).item()
