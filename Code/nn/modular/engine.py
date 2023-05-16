@@ -34,8 +34,8 @@ def train_model(model: nn.Module,
     results = {
         "train_loss": [],
         "train_acc": [],
-        "test_loss": [],
-        "test_acc": []
+        "val_loss": [],
+        "val_acc": []
     }
 
     is_save_required = writter is not None
@@ -43,7 +43,7 @@ def train_model(model: nn.Module,
     early_stop_count = 0
 
     for epoch in range(num_epochs):
-        print(f'Epoch {epoch}/{num_epochs - 1}')
+        print(f'Epoch {epoch + 1}/{num_epochs}')
         print('-' * 10)
 
         # Each epoch has a training and validation phase
@@ -115,7 +115,8 @@ def train_model(model: nn.Module,
                             'scheduler': scheduler_wts,
                             'best_model_wts': best_model_wts
                         }
-                        writter(checkpoint)
+                        if (writter):
+                            writter(checkpoint)
                 else:
                     # Early stop the training
                     early_stop_count += 1
