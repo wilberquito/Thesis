@@ -31,21 +31,13 @@ class MelanomaDataset(Dataset):
         # Read image from path, transforming to tree channels, rgb
         image_path = csv_sample['filepath']
         image = Image.open(image_path)
-        image = image.convert('rgb')
-
-        print('Debugging')
-        print(type(image), image.shape)
+        image = image.convert('RGB')
 
         # Transform the images using `albumentation`
         if self.transform is not None:
-            image = self.transform(image)
+            image = self.transform(image)  # Spected tensor transformation
         else:
             image = np.asarray(image)
-
-        print(image.shape)
-
-        # Make color channel first
-        image = image.transpose(2, 0, 1)
 
         # If this is just for a test porpouse you can forget the label
         if self.mode == 'test':
