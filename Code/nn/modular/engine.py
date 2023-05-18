@@ -99,31 +99,32 @@ def train_model(model: nn.Module,
                 # Check if network has learned
                 network_learned = epoch_acc > best_acc
 
-                # Deep copy of the network weights and save it (if required)
-                if network_learned:
-                    early_stop_count = 0
-                    best_acc = epoch_acc
-                    best_model_wts = copy.deepcopy(model.state_dict())
+        # Save model if required after every epoch
+        if network_learned:
+            early_stop_count = 0
+            best_acc = epoch_acc
+            best_model_wts = copy.deepcopy(model.state_dict())
 
-                    if is_save_required:
-                        optimizer_wts = optimizer.state_dict()
-                        scheduler_wts = \
-                            scheduler.state_dict() if scheduler else None
-                        checkpoint = {
-                            'epoch': epoch,
-                            'optimizer_state_dict': optimizer_wts,
-                            'scheduler_state_dict': scheduler_wts,
-                            'model_state_dict': best_model_wts,
-                            'stats': stats,
-                        }
-                        if (writter):
-                            writter(checkpoint)
-                else:
-                    # Early stop the training
-                    early_stop_count += 1
-                    if early_stop_count >= patience:
-                        print(f'Early stopping after {epoch} epochs')
-                        break
+            if is_save_required:
+                optimizer_wts = optimizer.state_dict()
+                scheduler_wts = \
+                    scheduler.state_dict() if scheduler else None
+                checkpoint = {
+                    'epoch': epoch,
+                    'optimizer_state_dict': optimizer_wts,
+                    'scheduler_state_dict': scheduler_wts,
+                    'model_state_dict': best_model_wts,
+                    'stats': stats,
+                }
+                if (writter):
+                    writter(checkpoint)
+        else:
+            # Early stop the training
+            early_stop_count += 1
+            if early_stop_count >= patience:
+                print(f'Early stopping after {epoch} epochs')
+                break
+
 
     time_elapsed = time.time() - since
     print(f'Training complete in \
