@@ -31,7 +31,7 @@ def train_model(model: nn.Module,
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
 
-    results = {
+    stats = {
         "train_loss": [],
         "train_acc": [],
         "val_loss": [],
@@ -83,11 +83,12 @@ def train_model(model: nn.Module,
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double() / dataset_sizes[phase]
 
-            print(f'{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}')
+            print(f'{phase.capitalize()} Loss: {epoch_loss:.4f} ' +
+                  f'{phase.capitalize()} Acc: {epoch_acc:.4f}')
 
             # Update results dictionary
-            results[f"{phase}_loss"].append(epoch_loss)
-            results[f"{phase}_acc"].append(epoch_acc)
+            stats[f"{phase}_loss"].append(epoch_loss)
+            stats[f"{phase}_acc"].append(epoch_acc)
 
             # Scheduler step
             if phase == 'train' and scheduler:
@@ -109,7 +110,7 @@ def train_model(model: nn.Module,
                         scheduler_wts = \
                             scheduler.state_dict() if scheduler else None
                         checkpoint = {
-                            'results': results,
+                            'stats': stats,
                             'epoch': epoch,
                             'optimizer': optimizer_wts,
                             'scheduler': scheduler_wts,
@@ -131,4 +132,4 @@ def train_model(model: nn.Module,
 
     # Load best model weights
     model.load_state_dict(best_model_wts)
-    return model, results
+    return model, stats
