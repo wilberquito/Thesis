@@ -7,11 +7,15 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import pandas as pd
 
 
 import matplotlib.pyplot as plt
-from typing import List
+from typing import List, Dict
 import torchvision
+
+import os
+import checkpoint
 
 
 # Calculate accuracy (a classification metric)
@@ -232,3 +236,23 @@ def display_random_images(dataset: torch.utils.data.dataset.Dataset,
         if display_shape:
             title = title + f"\nshape: {targ_image_adjust.shape}"
         plt.title(title)
+
+
+def model_logger(filename: str):
+
+    def writter(point: Dict):
+        # Save checkpoint
+        checkpoint.save_chekpoint(point)
+
+        # Loggin the trainning
+        log_filename = filename.split('.')[0] + '.csv'
+        stats = checkpoint['stats']
+        last_stats = {k: v[-1] for k, v in stats.items()}
+
+        if (os.path.exists(filename)):
+            csv = pd.read_csv(filename)
+        else:
+            csv = pd.DataFrame(last_stats)
+        csv.to_csv(log_filename)
+        pass
+    return writter

@@ -3,7 +3,7 @@ Module to train neural network. It supports
 
  - Early stop
  - Scheduler
- - Numer of epochs
+ - Number of epochs
  - Writter
 """
 
@@ -110,11 +110,11 @@ def train_model(model: nn.Module,
                         scheduler_wts = \
                             scheduler.state_dict() if scheduler else None
                         checkpoint = {
-                            'stats': stats,
                             'epoch': epoch,
-                            'optimizer': optimizer_wts,
-                            'scheduler': scheduler_wts,
-                            'best_model_wts': best_model_wts
+                            'optimizer_state_dict': optimizer_wts,
+                            'scheduler_state_dict': scheduler_wts,
+                            'model_state_dict': best_model_wts,
+                            'stats': stats,
                         }
                         if (writter):
                             writter(checkpoint)
