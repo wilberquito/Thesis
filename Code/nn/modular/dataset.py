@@ -1,14 +1,16 @@
 import albumentations as A
-import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
+import torchvision as tv
 import os
 from PIL import Image
 from sklearn.model_selection import train_test_split
 
 
 class MelanomaDataset(Dataset):
-    """Definition of the dataset for the melanoma problem"""
+    """Definition of the dataset for the melanoma problem.
+    By default takes the PIL image and transform to a tensor.
+    """
 
     def __init__(self,
                  csv: pd.DataFrame,
@@ -37,7 +39,7 @@ class MelanomaDataset(Dataset):
         if self.transform is not None:
             image = self.transform(image)  # Spected tensor transformation
         else:
-            image = np.asarray(image)
+            image = tv.transforms.PILToTensor()(image)
 
         # If this is just for a test porpouse you can forget the label
         if self.mode == 'test':

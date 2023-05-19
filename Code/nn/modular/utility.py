@@ -15,7 +15,7 @@ from typing import List, Dict
 import torchvision
 
 import os
-import checkpoint
+import modular.checkpoint as checkpoint
 
 
 # Calculate accuracy (a classification metric)
@@ -224,6 +224,7 @@ def display_random_images(dataset: torch.utils.data.dataset.Dataset,
 
         # 7. Adjust image tensor shape for plotting:
         # [color_channels, height, width] -> [height, width, color_channels]
+        targ_image = targ_image.cpu().numpy()
         targ_image_adjust = targ_image.transpose(1, 2, 0)
         targ_image_adjust = targ_image_adjust / 255
 
