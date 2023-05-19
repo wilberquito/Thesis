@@ -122,12 +122,11 @@ def train_model(model: nn.Module,
             # Early stop the training
             early_stop_count += 1
             if early_stop_count >= patience:
-                print(f'Early stopping after {epoch} epochs')
+                print(f'\nEarly stopping after {epoch} epochs')
                 break
 
-
     time_elapsed = time.time() - since
-    print(f'Training complete in \
+    print(f'\nTraining complete in \
         {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
     print(f'Best val Acc: {best_acc:4f}')
 
