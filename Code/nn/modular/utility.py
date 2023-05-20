@@ -239,21 +239,18 @@ def display_random_images(dataset: torch.utils.data.dataset.Dataset,
         plt.title(title)
 
 
-def model_logger(filename: str):
+def model_writter(model_name: str):
+    """Saves the pythorch trainned model and generates
+    a log file in csv format"""
 
     def writter(point: Dict):
         # Save checkpoint
-        checkpoint.save_chekpoint(point)
+        checkpoint.save_chekpoint(point,
+                                  model_name + 'pth.tar')
 
         # Loggin the trainning
-        log_filename = filename.split('.')[0] + '.csv'
+        log_filename = model_name + '.csv'
         stats = checkpoint['stats']
-        last_stats = {k: v[-1] for k, v in stats.items()}
+        pd.DataFrame(stats).to_csv(log_filename)
 
-        if (os.path.exists(filename)):
-            csv = pd.read_csv(filename)
-        else:
-            csv = pd.DataFrame(last_stats)
-        csv.to_csv(log_filename)
-        pass
     return writter
