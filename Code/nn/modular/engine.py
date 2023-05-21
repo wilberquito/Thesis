@@ -78,17 +78,17 @@ def train_model(model: nn.Module,
 
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
+                running_corrects += torch.sum(preds == labels.data).item()
 
             epoch_loss = running_loss / dataset_sizes[phase]
-            epoch_acc = running_corrects.double() / dataset_sizes[phase]
+            epoch_acc = running_corrects / dataset_sizes[phase]
 
             print(f'{phase.capitalize()} Loss: {epoch_loss:.4f} ' +
                   f'{phase.capitalize()} Acc: {epoch_acc:.4f}')
 
             # Update results dictionary
-            stats[f"{phase}_loss"].append(epoch_loss)
-            stats[f"{phase}_acc"].append(epoch_acc)
+            stats[f"{phase}_loss"].append(round(epoch_loss, 4))
+            stats[f"{phase}_acc"].append(round(epoch_acc, 4))
 
             # Scheduler step
             if phase == 'train' and scheduler:
@@ -109,7 +109,7 @@ def train_model(model: nn.Module,
                 optimizer_wts = optimizer.state_dict()
                 scheduler_wts = \
                     scheduler.state_dict() if scheduler else None
-                checkpoint = {
+                save_point = {
                     'epoch': epoch,
                     'optimizer_state_dict': optimizer_wts,
                     'scheduler_state_dict': scheduler_wts,
@@ -117,7 +117,7 @@ def train_model(model: nn.Module,
                     'stats': stats,
                 }
                 if (writter):
-                    writter(checkpoint)
+                    writter(save_point)
         else:
             # Early stop the training
             early_stop_count += 1

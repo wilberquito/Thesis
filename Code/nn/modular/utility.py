@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 from typing import List, Dict
 import torchvision
 
-import os
 import modular.checkpoint as checkpoint
 
 
@@ -245,12 +244,12 @@ def model_writter(model_name: str):
 
     def writter(point: Dict):
         # Save checkpoint
-        checkpoint.save_chekpoint(point,
-                                  model_name + 'pth.tar')
+        checkpoint.save_checkpoint(point,
+                                   model_name + 'pth.tar')
 
-        # Loggin the trainning
+        # Logging the trainning
         log_filename = model_name + '.csv'
-        stats = checkpoint['stats']
+        stats = point['stats']
         pd.DataFrame(stats).to_csv(log_filename)
 
     return writter
