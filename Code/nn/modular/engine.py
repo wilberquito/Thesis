@@ -112,8 +112,8 @@ def train_model(model: nn.Module,
                                       PROBS[:, mel_idx])
 
             cphase = phase.capitalize()
-            print(f'{cphase} Auc: {epoch_auc:.4f} ' +
-                  f'{cphase} Loss: {epoch_loss:.4f} ' +
+            print(f'{cphase} Auc: {epoch_auc:.4f} \t|\t' +
+                  f'{cphase} Loss: {epoch_loss:.4f} \t|\t' +
                   f'{cphase} Acc: {epoch_acc:.4f}')
 
             # Update results dictionary
