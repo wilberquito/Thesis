@@ -21,6 +21,7 @@ class MelanomaDataset(Dataset):
         self.mode = mode
         self.transform = transform
         self.idx_to_class = idx_to_class
+        self.classes = list(idx_to_class.keys())
 
     def __len__(self):
         return self.csv.shape[0]
