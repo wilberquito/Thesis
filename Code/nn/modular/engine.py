@@ -7,12 +7,17 @@ Module to train neural network. It supports
  - Writter
 """
 
-from typing import Dict, Callable
+from typing import Dict, Callable, NewType
 
 import torch
 import time
 import torch.nn as nn
 import copy
+
+StopEvaluator = NewType("StopEvaluator",
+                        Callable[[torch.Tensor, torch.Tensor], torch.Tensor])
+
+Writter = NewType("Writter", Callable[[Dict], None])
 
 
 def train_model(model: nn.Module,
@@ -24,7 +29,8 @@ def train_model(model: nn.Module,
                 scheduler: torch.optim.lr_scheduler.LRScheduler = None,
                 num_epochs: int = 25,
                 patience: int = 3,
-                writter: Callable[[Dict], None] = None):
+                early_stop_evaluator: StopEvaluator = None,
+                writter: Writter = None):
 
     since = time.time()
 
@@ -42,8 +48,8 @@ def train_model(model: nn.Module,
 
     early_stop_count = 0
 
-    for epoch in range(num_epochs):
-        print(f'Epoch {epoch + 1}/{num_epochs}')
+    for epoch in range(1, num_epochs + 1):
+        print(f'Epoch {epoch}/{num_epochs}')
         print('-' * 10)
 
         # Each epoch has a training and validation phase
@@ -128,7 +134,7 @@ def train_model(model: nn.Module,
     time_elapsed = time.time() - since
     print(f'\nTraining complete in \
         {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
-    print(f'Best val Acc: {best_acc:4f}')
+    print(f'Best Val Acc: {best_acc:4f}')
 
     # Load best model weights
     model.load_state_dict(best_model_wts)
