@@ -57,9 +57,15 @@ def plot_loss_curves(results):
         results (dict): dictionary containing list of values, e.g.
             {"train_loss": [...],
              "train_acc": [...],
+             "train_auc": [...],
              "val_loss": [...],
+             "val_auc": [...],
              "val_acc": [...]}
     """
+
+    auc = results["train_auc"]
+    val_auc = results["val_auc"]
+
     loss = results["train_loss"]
     val_loss = results["val_loss"]
 
@@ -70,18 +76,26 @@ def plot_loss_curves(results):
 
     plt.figure(figsize=(15, 7))
 
+    # Plot auc
+    plt.subplot(1, 3, 1)
+    plt.plot(range(1, epochs), auc, label="train_auc")
+    plt.plot(range(1, epochs), val_auc, label="val_auc")
+    plt.title("Area Under the Curve")
+    plt.xlabel("Epochs")
+    plt.legend()
+
     # Plot loss
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs, loss, label="train_loss")
-    plt.plot(epochs, val_loss, label="val_loss")
+    plt.subplot(1, 3, 2)
+    plt.plot(range(1, epochs), loss, label="train_loss")
+    plt.plot(range(1, epochs), val_loss, label="val_loss")
     plt.title("Loss")
     plt.xlabel("Epochs")
     plt.legend()
 
     # Plot accuracy
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs, accuracy, label="train_accuracy")
-    plt.plot(epochs, val_accuracy, label="val_accuracy")
+    plt.subplot(1, 3, 3)
+    plt.plot(range(1, epochs), accuracy, label="train_accuracy")
+    plt.plot(range(1, epochs), val_accuracy, label="val_accuracy")
     plt.title("Accuracy")
     plt.xlabel("Epochs")
     plt.legend()
