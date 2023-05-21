@@ -4,6 +4,7 @@ Module to train neural network. It supports
  - Early stop
  - Scheduler
  - Number of epochs
+ - Test-time augmentation
  - Writter
 """
 
@@ -22,20 +23,22 @@ Writter = NewType("Writter", Callable[[Dict], None])
 
 def train_model(model: nn.Module,
                 dataloaders: Dict,
-                dataset_sizes: Dict,
+                datasets_size: Dict,
                 device: torch.device,
                 criterion: nn.Module,
                 optimizer: torch.optim.Optimizer,
                 scheduler: torch.optim.lr_scheduler.LRScheduler = None,
                 num_epochs: int = 25,
-                patience: int = 3,
+                patience: int = 5,
                 early_stop_evaluator: StopEvaluator = None,
-                writter: Writter = None):
+                writter: Writter = None,
+                val_times: int = 1):
 
     since = time.time()
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
+    best_estimator = 0.0
 
     stats = {
         "train_loss": [],
@@ -45,7 +48,7 @@ def train_model(model: nn.Module,
     }
 
     is_save_required = writter is not None
-
+    val_agumentation_required = val_times > 1
     early_stop_count = 0
 
     for epoch in range(1, num_epochs + 1):
@@ -73,7 +76,11 @@ def train_model(model: nn.Module,
                 # Forward
                 # Track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(inputs)
+                    if phase == 'val' and val_agumentation_required:
+                        outputs = val_augmentation(model, inputs, val_times)
+                    else:
+                        outputs = model(inputs)
+
                     _, preds = torch.max(outputs, 1)
                     loss = criterion(outputs, labels)
 
@@ -103,7 +110,11 @@ def train_model(model: nn.Module,
             # Valid phase
             if phase == 'val':
                 # Check if network has learned
-                network_learned = epoch_acc > best_acc
+                if early_stop_evaluator:
+                    epoch_estimator = early_stop_evaluator(preds, labels)
+                    network_learned = epoch_estimator > best_estimator
+                else:
+                    network_learned = epoch_acc > best_acc
 
         # Save model if required after every epoch
         if network_learned:
@@ -139,3 +150,30 @@ def train_model(model: nn.Module,
     # Load best model weights
     model.load_state_dict(best_model_wts)
     return model, stats
+
+
+@torch.inference_mode()
+def tta_validation(model: torch.nn, inputs: torch.Tensor, val_times: int):
+    predictions = []
+    for n in range(val_times):
+        augmented_img = tta_transform(inputs, n)
+        augmented_img = torch.unsqueeze(augmented_img, 0)
+        outputs = model(tta_transform(inputs, n))
+        probabilities = torch.softmax(outputs, dim=1)
+        predictions.append(probabilities)
+
+    averaged_predictions = torch.mean(predictions, dim=0)
+    return averaged_predictions
+
+
+def tta_transform(img: torch.Tensor, n: int):
+    if n >= 4:
+        img = img.transpose(2, 3)
+    if n % 4 == 0:
+        return img
+    elif n % 4 == 1:
+        return img.flip(2)
+    elif n % 4 == 2:
+        return img.flip(3)
+    elif n % 4 == 3:
+        return img.flip(2).flip(3)
