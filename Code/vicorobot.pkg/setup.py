@@ -22,5 +22,5 @@ setup(
         'geffnet',
         'pretrainedmodels',
         'warmup-scheduler'
-       ],
+       ]
 )
