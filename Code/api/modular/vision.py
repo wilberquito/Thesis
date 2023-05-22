@@ -13,6 +13,7 @@ from modular.utility import read_yaml
 
 conf = read_yaml('./api.conf.yml')
 
+
 def __load_vicorobot_model(net_type: str,
                            out_dim: int,
                            pth_path: str,
@@ -63,6 +64,7 @@ def __load_net(model_id: str, device: str) -> Tuple[torch.nn.Module, Dict]:
         raise NotImplementedError()
 
     return model, mapping
+
 
 def __load_transforms(model_id: str):
 

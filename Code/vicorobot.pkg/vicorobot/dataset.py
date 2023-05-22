@@ -82,8 +82,6 @@ def get_transforms(image_size):
         albumentations.Normalize()
     ])
 
-
-
     return transforms_train, transforms_val
 
 
