@@ -112,29 +112,29 @@ def plot_curves(results):
 
     epochs = range(len(results["train_loss"]))
 
-    plt.figure(figsize=(15, 7))
-
-    # Plot auc
-    plt.subplot(1, 3, 1)
-    plt.plot(range(1, epochs), auc, label="train_auc")
-    plt.plot(range(1, epochs), val_auc, label="val_auc")
-    plt.title("Area Under the Curve")
-    plt.xlabel("Epochs")
-    plt.legend()
+    plt.figure(figsize=(21, 7))
 
     # Plot loss
-    plt.subplot(1, 3, 2)
-    plt.plot(range(1, epochs), loss, label="train_loss")
-    plt.plot(range(1, epochs), val_loss, label="val_loss")
+    plt.subplot(1, 3, 1)
+    plt.plot(epochs, loss, label="train_loss")
+    plt.plot(epochs, val_loss, label="val_loss")
     plt.title("Loss")
     plt.xlabel("Epochs")
     plt.legend()
 
     # Plot accuracy
-    plt.subplot(1, 3, 3)
-    plt.plot(range(1, epochs), accuracy, label="train_accuracy")
-    plt.plot(range(1, epochs), val_accuracy, label="val_accuracy")
+    plt.subplot(1, 3, 2)
+    plt.plot(epochs, accuracy, label="train_accuracy")
+    plt.plot(epochs, val_accuracy, label="val_accuracy")
     plt.title("Accuracy")
+    plt.xlabel("Epochs")
+    plt.legend()
+
+    # Plot auc
+    plt.subplot(1, 3, 3)
+    plt.plot(epochs, auc, label="train_auc")
+    plt.plot(epochs, val_auc, label="val_auc")
+    plt.title("Area Under Curve")
     plt.xlabel("Epochs")
     plt.legend()
 
@@ -297,7 +297,7 @@ def model_writter(model_name: str):
     def writter(point: Dict):
         # Save checkpoint
         checkpoint.save_checkpoint(point,
-                                   model_name + 'pth.tar')
+                                   model_name + '.pth.tar')
 
         # Logging the trainning
         log_filename = model_name + '.csv'
