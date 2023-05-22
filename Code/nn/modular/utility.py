@@ -13,6 +13,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from typing import List, Dict
 import torchvision
+from torchmetrics import ConfusionMatrix
+import mlxtend.plotting as plotting
 
 import modular.checkpoint as checkpoint
 
@@ -47,6 +49,42 @@ def print_train_time(start, end, device=None):
     total_time = end - start
     print(f"\nTrain time on {device}: {total_time:.3f} seconds")
     return total_time
+
+
+@torch.inference_mode()
+def plot_confusion_matrix(model: torch.nn.Module,
+                          val_dataloader: torch.utils.data.DataLoader,
+                          class_names: list,
+                          device: torch.device):
+
+    y_preds = []
+    y_labels = []
+    model.eval()
+
+    for inputs, labels in val_dataloader:
+        # Send data and targets to target device
+        inputs, labels = inputs.to(device), labels.to(device)
+        # Do the forward pass
+        y_logit = model(inputs)
+        # Turn predictions from logits to labels
+        y_pred = torch.softmax(y_logit, dim=1).argmax(dim=1)
+        # Put predictions on CPU for evaluation
+        y_preds.append(y_pred.cpu())
+        # Put the labels on CPU for evaluation
+        y_labels.append(labels.cpu())
+
+    # Concatenate list of predictions into a tensor
+    y_pred_tensor = torch.cat(y_preds)
+    y_labels_tensor = torch.cat(y_labels)
+
+    confmat = ConfusionMatrix(num_classes=len(class_names), task='multiclass')
+    confmat_tensor = confmat(preds=y_pred_tensor,
+                             target=y_labels_tensor)
+
+    fig, ax = plotting.plot_confusion_matrix(
+        conf_mat=confmat_tensor.numpy(),
+        class_names=class_names,
+        figsize=(10, 7))
 
 
 # Plot loss curves of a model

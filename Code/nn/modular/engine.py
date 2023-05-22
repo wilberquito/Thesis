@@ -31,7 +31,6 @@ def train_model(model: nn.Module,
                 scheduler: torch.optim.lr_scheduler.LRScheduler = None,
                 num_epochs: int = 25,
                 patience: int = 5,
-                patience_metric: str = "auc",
                 writter: Writter = None,
                 val_times: int = 1):
 
