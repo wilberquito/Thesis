@@ -50,7 +50,7 @@ def print_train_time(start, end, device=None):
 
 
 # Plot loss curves of a model
-def plot_loss_curves(results):
+def plot_curves(results):
     """Plots training curves of a results dictionary.
 
     Args:
