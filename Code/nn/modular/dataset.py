@@ -4,7 +4,7 @@ import torchvision as tv
 import os
 from PIL import Image
 from sklearn.model_selection import train_test_split
-import albumentation as A
+import albumentations as A
 from typing import Tuple
 
 
@@ -16,11 +16,11 @@ class MelanomaDataset(Dataset):
     def __init__(self,
                  csv: pd.DataFrame,
                  mode: str,
-                 transform=None,
+                 transforms=None,
                  idx_to_class: dict = None):
         self.csv = csv.reset_index(drop=True)
         self.mode = mode
-        self.transform = transform
+        self.transforms = transforms
         self.idx_to_class = idx_to_class
         self.classes = list(idx_to_class.keys())
 
@@ -38,8 +38,8 @@ class MelanomaDataset(Dataset):
         image = image.convert('RGB')
 
         # Transform the images using `albumentation`
-        if self.transform is not None:
-            augmented = self.transform(image)
+        if self.transforms is not None:
+            augmented = self.transforms(image)
             image = augmented['image']  # Spected tensor transformation
         else:
             image = tv.transforms.PILToTensor()(image)
@@ -180,13 +180,13 @@ def get_transforms(image_size: int,
                         max_width=int(image_size * 0.375),
                         p=0.7),
         A.Normalize(mean=mean, std=std),
-        A.ToTensor()
+        A.pytorch.ToTensorV2()
     ])
 
     transforms_val = A.Compose([
         A.Resize(image_size, image_size),
         A.Normalize(mean=mean, std=std),
-        A.ToTensor()
+        A.pytorch.ToTensorV2()
     ])
 
     return transforms_train, transforms_val
