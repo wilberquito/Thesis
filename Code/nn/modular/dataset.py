@@ -38,7 +38,8 @@ class MelanomaDataset(Dataset):
 
         # Transform the images using `albumentation`
         if self.transform is not None:
-            image = self.transform(image)  # Spected tensor transformation
+            augmented = self.transform(image)
+            image = augmented['image']  # Spected tensor transformation
         else:
             image = tv.transforms.PILToTensor()(image)
 
