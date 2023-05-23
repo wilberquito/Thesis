@@ -133,12 +133,11 @@ def train_model(model: nn.Module,
         if network_learned:
             early_stop_count = 0
             best_auc = epoch_auc
-            best_model_wts = copy.deepcopy(model.state_dict())
 
             if is_save_required:
+                best_model_wts = model.state_dict()
                 optimizer_wts = optimizer.state_dict()
-                scheduler_wts = \
-                    scheduler.state_dict() if scheduler else None
+                scheduler_wts = scheduler.state_dict() if scheduler else None
                 save_point = {
                     'epoch': epoch,
                     'optimizer_state_dict': optimizer_wts,

@@ -1,11 +1,12 @@
 import pandas as pd
 from torch.utils.data import Dataset
-import torchvision as tv
 import os
-from PIL import Image
+import numpy as np
+import cv2
 from sklearn.model_selection import train_test_split
 import albumentations as A
 from typing import Tuple
+import torch
 
 
 class MelanomaDataset(Dataset):
@@ -34,22 +35,25 @@ class MelanomaDataset(Dataset):
 
         # Read image from path, transforming to tree channels, rgb
         image_path = csv_sample['filepath']
-        image = Image.open(image_path)
-        image = image.convert('RGB')
+        image = cv2.imread(image_path)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         # Transform the images using `albumentation`
         if self.transforms is not None:
-            augmented = self.transforms(image)
-            image = augmented['image']  # Spected tensor transformation
+            augmented = self.transforms(image=image)
+            image = augmented['image'].astype(np.float32)
         else:
-            image = tv.transforms.PILToTensor()(image)
+            image = image.astype(np.float32)
+
+        # Channel first
+        image = image.transpose(2, 0, 1)
 
         # If this is just for a test porpouse you can forget the label
         if self.mode == 'test':
-            return image
+            return torch.tensor(image).float()
         else:
             label = csv_sample['target']
-            return image, label
+            return torch.tensor(image).float(), label
 
 
 def get_df(data_dir: str, data_folder: str):
@@ -179,14 +183,12 @@ def get_transforms(image_size: int,
                         max_height=int(image_size * 0.375),
                         max_width=int(image_size * 0.375),
                         p=0.7),
-        A.Normalize(mean=mean, std=std),
-        A.pytorch.ToTensorV2()
+        A.Normalize(mean=mean, std=std)
     ])
 
     transforms_val = A.Compose([
         A.Resize(image_size, image_size),
-        A.Normalize(mean=mean, std=std),
-        A.pytorch.ToTensorV2()
+        A.Normalize(mean=mean, std=std)
     ])
 
     return transforms_train, transforms_val
