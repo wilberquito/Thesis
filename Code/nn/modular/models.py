@@ -23,6 +23,7 @@ class ResNet18_Melanoma(nn.Module):
 
     def forward(self, x: torch.Tensor):
         x = self.transfer(x).squeeze(-1).squeeze(-1)
+        x = self.myfc(x)
         return x
 
 
