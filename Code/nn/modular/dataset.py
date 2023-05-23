@@ -1,10 +1,10 @@
-import albumentations as A
 import pandas as pd
 from torch.utils.data import Dataset
 import torchvision as tv
 import os
 from PIL import Image
 from sklearn.model_selection import train_test_split
+import albumentation as A
 
 
 class MelanomaDataset(Dataset):
@@ -131,12 +131,18 @@ def get_df(data_dir: str, data_folder: str):
     return df_train, df_test, diagnosis2idx
 
 
-def get_transforms(image_size):
+def get_transforms(image_size: int, mean: int = None, std: int = None):
     """
     Returns a pair of transformers.
     The first transformer applies image augmentation of different kinds and resize the image.
     The second transformer, is thought to be used in test data, resizes and normalize the image.
     """
+
+    # Standard values for imagenet models
+    if mean is None:
+        mean = (0.485, 0.456, 0.406)
+    if std is None:
+        std = (0.229, 0.224, 0.225)
 
     transforms_train = A.Compose([
         A.Transpose(p=0.5),
@@ -169,12 +175,14 @@ def get_transforms(image_size):
                         max_height=int(image_size * 0.375),
                         max_width=int(image_size * 0.375),
                         p=0.7),
-        A.Normalize()
+        A.Normalize(mean=mean, std=std),
+        A.ToTensor()
     ])
 
     transforms_val = A.Compose([
         A.Resize(image_size, image_size),
-        A.Normalize()
+        A.Normalize(mean=mean, std=std),
+        A.ToTensor()
     ])
 
     return transforms_train, transforms_val
