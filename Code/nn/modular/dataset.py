@@ -5,6 +5,7 @@ import os
 from PIL import Image
 from sklearn.model_selection import train_test_split
 import albumentation as A
+from typing import Tuple
 
 
 class MelanomaDataset(Dataset):
@@ -132,7 +133,9 @@ def get_df(data_dir: str, data_folder: str):
     return df_train, df_test, diagnosis2idx
 
 
-def get_transforms(image_size: int, mean: int = None, std: int = None):
+def get_transforms(image_size: int,
+                   mean: Tuple[int, int, int] = None,
+                   std: Tuple[int, int, int] = None):
     """
     Returns a pair of transformers.
     The first transformer applies image augmentation of different kinds and resize the image.
