@@ -55,6 +55,8 @@ def train_model(model: nn.Module,
     val_augmentation_required = val_times > 1
     # Patience counter early stop
     early_stop_count = 0
+    # Last early saved epoch
+    best_epoch = 0
 
     dataloaders, datasets = about_data['dataloaders'], about_data['datasets']
 
@@ -128,35 +130,41 @@ def train_model(model: nn.Module,
                 # Check if network has learned
                 network_learned = epoch_ovr > best_ovr
 
-        # Save model if required after every epoch
+        # Updates metadata of the trainning
         if network_learned:
             early_stop_count = 0
             best_ovr = epoch_ovr
-
-            if is_save_required:
-                best_model_wts = model.state_dict()
-                optimizer_wts = optimizer.state_dict()
-                scheduler_wts = scheduler.state_dict() if scheduler else None
-                save_point = {
-                    'epoch': epoch,
-                    'optimizer_state_dict': optimizer_wts,
-                    'scheduler_state_dict': scheduler_wts,
-                    'model_state_dict': best_model_wts,
-                    'stats': stats,
-                }
-                if (writter):
-                    writter(save_point)
+            best_epoch = epoch
         else:
-            # Early stop the training
             early_stop_count += 1
-            if early_stop_count >= patience:
-                print(f'\nEarly stopping after {epoch} epochs')
-                break
+
+        # Save model state after every epoch if writter is defined
+        if is_save_required:
+            best_model_wts = model.state_dict()
+            optimizer_wts = optimizer.state_dict()
+            scheduler_wts = scheduler.state_dict() if scheduler else None
+            save_point = {
+                'epoch': epoch,
+                'optimizer_state_dict': optimizer_wts,
+                'scheduler_state_dict': scheduler_wts,
+                'model_state_dict': best_model_wts,
+                'stats': stats,
+                'best_epoch': best_epoch
+            }
+            writter(save_point)
+
+        # Stop trainning
+        if early_stop_count >= patience:
+            print(f'\nEarly stopping after {epoch} epochs')
+            break
 
     time_elapsed = time.time() - since
     print(f'\nTraining complete in \
         {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
-    print(f'Best Val OvR: {best_ovr:4f}')
+    print(f'Best Epoch: \
+        {best_epoch}')
+    print(f'Best Val OvR: \
+        {best_ovr:4f}')
 
     # Load best model weights
     model.load_state_dict(best_model_wts)
