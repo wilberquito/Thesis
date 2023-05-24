@@ -55,7 +55,8 @@ def print_train_time(start, end, device=None):
 def plot_confusion_matrix(model: torch.nn.Module,
                           val_dataloader: torch.utils.data.DataLoader,
                           class_names: list,
-                          device: torch.device):
+                          device: torch.device,
+                          show_normed: bool = False):
 
     y_preds = []
     y_labels = []
@@ -84,7 +85,8 @@ def plot_confusion_matrix(model: torch.nn.Module,
     fig, ax = plotting.plot_confusion_matrix(
         conf_mat=confmat_tensor.numpy(),
         class_names=class_names,
-        figsize=(10, 7))
+        figsize=(10, 7),
+        show_normed=show_normed)
 
 
 # Plot loss curves of a model
