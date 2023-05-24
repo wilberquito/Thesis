@@ -17,6 +17,8 @@ from torchmetrics import ConfusionMatrix
 import mlxtend.plotting as plotting
 
 import modular.checkpoint as checkpoint
+from sklearn.metrics import RocCurveDisplay
+from sklearn.preprocessing import LabelBinarizer
 
 
 # Calculate accuracy (a classification metric)
@@ -49,6 +51,55 @@ def print_train_time(start, end, device=None):
     total_time = end - start
     print(f"\nTrain time on {device}: {total_time:.3f} seconds")
     return total_time
+
+
+@torch.inference_mode()
+def plot_ovr_multiclass_roc(model: torch.nn.Module,
+                            class_id: int,
+                            val_dataloader: torch.utils.data.DataLoader,
+                            device: torch.device,
+                            title="One vs Rest"):
+    y_preds = []
+    y_labels = []
+    model.eval()
+
+    for inputs, labels in val_dataloader:
+        # Send data and targets to target device
+        inputs, labels = inputs.to(device), labels.to(device)
+        # Do the forward pass
+        y_logit = model(inputs)
+        # Turn predictions from logits to labels
+        y_pred = torch.softmax(y_logit, dim=1)
+        # Put predictions on CPU for evaluation
+        y_preds.append(y_pred.cpu())
+        # Put the labels on CPU for evaluation
+        y_labels.append(labels.cpu())
+
+    # Scores and labels to numpy
+    y_preds = torch.cat(y_preds).numpy()
+    y_labels = torch.cat(y_labels).numpy()
+
+    label_binarizer = LabelBinarizer()
+    y_onehot_test = label_binarizer.fit_transform(y_labels)
+
+    print(y_onehot_test.shape)
+    print(y_preds.shape)
+
+    print(y_onehot_test[2:])
+    print(y_preds[2:])
+
+    RocCurveDisplay.from_predictions(
+        y_onehot_test[:, class_id],
+        y_preds[:, class_id],
+        color="darkorange",
+    )
+    plt.plot([0, 1], [0, 1], "k--", label="chance level (AUC = 0.5)")
+    plt.axis("square")
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title(title)
+    plt.legend()
+    plt.show()
 
 
 @torch.inference_mode()
@@ -97,10 +148,10 @@ def plot_curves(results):
         results (dict): dictionary containing list of values, e.g.
             {"train_loss": [...],
              "train_acc": [...],
-             "train_auc": [...],
+             "train_ovr": [...],
              "val_loss": [...],
              "val_ovr": [...],
-             "val_ovr": [...]}
+             "val_acc": [...]}
     """
 
     ovr = results["train_ovr"]
@@ -225,8 +276,7 @@ def save_model(model: torch.nn.Module,
     """
     # Create target directory
     target_dir_path = Path(target_dir)
-    target_dir_path.mkdir(parents=True,
-                        exist_ok=True)
+    target_dir_path.mkdir(parents=True, exist_ok=True)
 
     # Create model save path
     assert model_name.endswith(".pth") or model_name.endswith(".pt"), "model_name should end with '.pt' or '.pth'"
@@ -234,8 +284,7 @@ def save_model(model: torch.nn.Module,
 
     # Save the model state_dict()
     print(f"[INFO] Saving model to: {model_save_path}")
-    torch.save(obj=model.state_dict(),
-             f=model_save_path)
+    torch.save(obj=model.state_dict(), f=model_save_path)
 
 
 def set_seed(seed=42):
