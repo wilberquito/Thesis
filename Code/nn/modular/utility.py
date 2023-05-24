@@ -82,12 +82,6 @@ def plot_ovr_multiclass_roc(model: torch.nn.Module,
     label_binarizer = LabelBinarizer()
     y_onehot_test = label_binarizer.fit_transform(y_labels)
 
-    print(y_onehot_test.shape)
-    print(y_preds.shape)
-
-    print(y_onehot_test[2:])
-    print(y_preds[2:])
-
     RocCurveDisplay.from_predictions(
         y_onehot_test[:, class_id],
         y_preds[:, class_id],
