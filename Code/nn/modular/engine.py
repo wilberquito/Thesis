@@ -38,7 +38,11 @@ def train_model(model: nn.Module,
     since = time.time()
 
     best_model_wts = copy.deepcopy(model.state_dict())
+    best_optimizer_wts = copy.deepcopy(optimizer.state_dict())
+    best_scheduler_wts = \
+        copy.deepcopy(scheduler.state_dict()) if scheduler else None
     best_ovr = 0
+    best_epoch = 0
 
     stats = {
         "train_loss": [],
@@ -55,8 +59,6 @@ def train_model(model: nn.Module,
     val_augmentation_required = val_times > 1
     # Patience counter early stop
     early_stop_count = 0
-    # Last early saved epoch
-    best_epoch = 0
 
     dataloaders, datasets = about_data['dataloaders'], about_data['datasets']
 
@@ -132,24 +134,27 @@ def train_model(model: nn.Module,
 
         # Updates metadata of the trainning
         if network_learned:
+            # Reset early stopping
             early_stop_count = 0
+            # Updates metadata
             best_ovr = epoch_ovr
             best_epoch = epoch
+            best_model_wts = copy.deepcopy(model.state_dict())
+            best_optimizer_wts = copy.deepcopy(optimizer.state_dict())
+            best_scheduler_wts = \
+                copy.deepcopy(scheduler.state_dict()) if scheduler else None
         else:
             early_stop_count += 1
 
         # Save model state after every epoch if writter is defined
         if is_save_required:
-            best_model_wts = model.state_dict()
-            optimizer_wts = optimizer.state_dict()
-            scheduler_wts = scheduler.state_dict() if scheduler else None
             save_point = {
-                'epoch': epoch,
-                'optimizer_state_dict': optimizer_wts,
-                'scheduler_state_dict': scheduler_wts,
+                'best_epoch': best_epoch,
+                'optimizer_state_dict': best_optimizer_wts,
+                'scheduler_state_dict': best_scheduler_wts,
                 'model_state_dict': best_model_wts,
                 'stats': stats,
-                'best_epoch': best_epoch
+                'epochs': epoch
             }
             writter(save_point)
 
