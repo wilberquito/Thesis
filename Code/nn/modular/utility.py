@@ -99,12 +99,12 @@ def plot_curves(results):
              "train_acc": [...],
              "train_auc": [...],
              "val_loss": [...],
-             "val_auc": [...],
-             "val_acc": [...]}
+             "val_ovr": [...],
+             "val_ovr": [...]}
     """
 
-    auc = results["train_auc"]
-    val_auc = results["val_auc"]
+    ovr = results["train_ovr"]
+    val_ovr = results["val_ovr"]
 
     loss = results["train_loss"]
     val_loss = results["val_loss"]
@@ -116,8 +116,16 @@ def plot_curves(results):
 
     plt.figure(figsize=(21, 7))
 
-    # Plot loss
+    # Plot auc
     plt.subplot(1, 3, 1)
+    plt.plot(epochs, ovr, label="train_ovr")
+    plt.plot(epochs, val_ovr, label="val_ovr")
+    plt.title("OvR")
+    plt.xlabel("Epochs")
+    plt.legend()
+
+    # Plot loss
+    plt.subplot(1, 3, 2)
     plt.plot(epochs, loss, label="train_loss")
     plt.plot(epochs, val_loss, label="val_loss")
     plt.title("Loss")
@@ -125,18 +133,10 @@ def plot_curves(results):
     plt.legend()
 
     # Plot accuracy
-    plt.subplot(1, 3, 2)
+    plt.subplot(1, 3, 3)
     plt.plot(epochs, accuracy, label="train_accuracy")
     plt.plot(epochs, val_accuracy, label="val_accuracy")
     plt.title("Accuracy")
-    plt.xlabel("Epochs")
-    plt.legend()
-
-    # Plot auc
-    plt.subplot(1, 3, 3)
-    plt.plot(epochs, auc, label="train_auc")
-    plt.plot(epochs, val_auc, label="val_auc")
-    plt.title("Area Under Curve")
     plt.xlabel("Epochs")
     plt.legend()
 

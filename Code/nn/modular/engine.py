@@ -15,6 +15,7 @@ import time
 import torch.nn as nn
 import copy
 from sklearn.metrics import roc_auc_score
+import numpy as np
 
 StopEvaluator = NewType("StopEvaluator",
                         Callable[[torch.Tensor, torch.Tensor], torch.Tensor])
@@ -37,15 +38,15 @@ def train_model(model: nn.Module,
     since = time.time()
 
     best_model_wts = copy.deepcopy(model.state_dict())
-    best_auc = 0
+    best_ovr = 0
 
     stats = {
         "train_loss": [],
         "train_acc": [],
         "val_loss": [],
         "val_acc": [],
-        "train_auc": [],
-        "val_auc": []
+        "train_ovr": [],
+        "val_ovr": []
     }
 
     # Writter mechanism agnositc to train method
@@ -106,19 +107,17 @@ def train_model(model: nn.Module,
 
             epoch_loss = running_loss / datasets['size'][phase]
             epoch_acc = running_corrects / datasets['size'][phase]
-            PROBS, LABELS = torch.cat(PROBS).numpy(), torch.cat(LABELS).numpy()
-            epoch_auc = roc_auc_score((LABELS == mel_idx).astype(float),
-                                      PROBS[:, mel_idx])
+            epoch_ovr = compute_ovr(mel_idx, LABELS, PROBS)
 
             cphase = phase.capitalize()
-            print(f'{cphase} Auc: {epoch_auc:.4f} \t|\t' +
+            print(f'{cphase} OvR: {epoch_ovr:.4f} \t|\t' +
                   f'{cphase} Loss: {epoch_loss:.4f} \t|\t' +
                   f'{cphase} Acc: {epoch_acc:.4f}')
 
             # Update results dictionary
-            stats[f"{phase}_loss"].append(round(epoch_loss, 4))
+            stats[f"{phase}_ovr"].append(round(epoch_ovr, 4))
             stats[f"{phase}_acc"].append(round(epoch_acc, 4))
-            stats[f"{phase}_auc"].append(round(epoch_auc, 4))
+            stats[f"{phase}_loss"].append(round(epoch_loss, 4))
 
             # Scheduler step
             if phase == 'train' and scheduler:
@@ -127,12 +126,12 @@ def train_model(model: nn.Module,
             # Valid phase
             if phase == 'val':
                 # Check if network has learned
-                network_learned = epoch_auc > best_auc
+                network_learned = epoch_ovr > best_ovr
 
         # Save model if required after every epoch
         if network_learned:
             early_stop_count = 0
-            best_auc = epoch_auc
+            best_ovr = epoch_ovr
 
             if is_save_required:
                 best_model_wts = model.state_dict()
@@ -157,7 +156,7 @@ def train_model(model: nn.Module,
     time_elapsed = time.time() - since
     print(f'\nTraining complete in \
         {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
-    print(f'Best Val AUC: {best_auc:4f}')
+    print(f'Best Val OvR: {best_ovr:4f}')
 
     # Load best model weights
     model.load_state_dict(best_model_wts)
@@ -195,3 +194,26 @@ def tta_transform(img: torch.Tensor, n: int):
         return img.flip(3)
     elif n % 4 == 3:
         return img.flip(2).flip(3)
+
+
+def compute_ovr(the_one: int, y_true: list, y_score: list):
+    """This functions expectes the one element to
+    be compared with the others and two list of tensors.
+    The first list is the true value and the other represent
+    the prediction made by the model.
+    """
+
+    y_true = torch.cat(y_true).numpy()
+    y_score = torch.cat(y_score).numpy()
+
+    # Adjust the shape of y_true if necessary
+    if len(y_true.shape) > 1:
+        y_true = np.argmax(y_true, axis=1)
+
+    # Adjust the shape of y_score if necessary
+    if len(y_score.shape) > 1:
+        y_score = y_score[:, the_one]
+
+    matches = (y_true == the_one).astype(float)
+    ovr = roc_auc_score(matches, y_score, multi_class="ovr")
+    return ovr
