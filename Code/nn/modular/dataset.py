@@ -1,3 +1,10 @@
+"""
+This module defines:
+    - Melanoma dataset
+    - A way of creating the train and test df
+    - Transformations to be applied to the images of datasets
+    - A function to split stratified in train and test sets
+"""
 import pandas as pd
 from torch.utils.data import Dataset
 import os
@@ -197,11 +204,13 @@ def get_transforms(image_size: int,
 def train_validate_split(df: pd.DataFrame,
                          random_state: int = 42,
                          validate_size: int = 0.25):
-    """Split dataframe into random train and validate dataframe"""
+    """Split dataframe into random train and validate dataframe,
+    it uses stratify thecnique because of the unbalanced dataset"""
 
     X_train, X_val = train_test_split(df,
                                       random_state=random_state,
-                                      train_size=(1-validate_size))
+                                      train_size=(1-validate_size),
+                                      stratify=df['target'])
     X_train = pd.DataFrame(X_train)
     X_train.columns = df.columns
     X_val = pd.DataFrame(X_val)
