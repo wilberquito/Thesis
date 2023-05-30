@@ -16,6 +16,7 @@ import torch.nn as nn
 import copy
 from sklearn.metrics import roc_auc_score
 import numpy as np
+import modular.predictions as m_modular
 
 StopEvaluator = NewType("StopEvaluator",
                         Callable[[torch.Tensor, torch.Tensor], torch.Tensor])
@@ -89,7 +90,7 @@ def train_model(model: nn.Module,
                 # Track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     if phase == 'val' and val_augmentation_required:
-                        outputs = tta_validation(model, inputs, val_times)
+                        outputs = m_modular.tta(model, inputs, val_times)
                     else:
                         outputs = model(inputs)
 
@@ -164,49 +165,14 @@ def train_model(model: nn.Module,
             break
 
     time_elapsed = time.time() - since
-    print(f'\nTraining complete in \
-        {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
-    print(f'Best Epoch: \
-        {best_epoch}')
-    print(f'Best Val OvR: \
-        {best_ovr:4f}')
+    formated_time = f'{time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s'
+    print(f'\nTraining completed after: {formated_time}')
+    print(f'Best epoch: {best_epoch}')
+    print(f'Best val OvR: {best_ovr:.4f}')
 
     # Load best model weights
     model.load_state_dict(best_model_wts)
     return model, stats
-
-
-@torch.inference_mode()
-def tta_validation(model: torch.nn, inputs: torch.Tensor, val_times: int):
-    """Applies time test transformation to a set of tensor images
-    an returns the logits"""
-
-    logits = []
-    for n in range(val_times):
-        augmented_img = tta_transform(inputs, n)
-        augmented_img = torch.unsqueeze(augmented_img, 0)
-        outputs = model(tta_transform(inputs, n))
-        logits.append(outputs)
-
-    stacked_logits = torch.stack(logits)
-    stacked_logits = torch.mean(stacked_logits, dim=0)
-    return stacked_logits
-
-
-def tta_transform(img: torch.Tensor, n: int):
-    """Given a tensor it applies dummy transformation
-    on de n value"""
-
-    if n >= 4:
-        img = img.transpose(2, 3)
-    if n % 4 == 0:
-        return img
-    elif n % 4 == 1:
-        return img.flip(2)
-    elif n % 4 == 2:
-        return img.flip(3)
-    elif n % 4 == 3:
-        return img.flip(2).flip(3)
 
 
 def compute_ovr(the_one: int, y_true: list, y_score: list):

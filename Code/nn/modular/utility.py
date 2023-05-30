@@ -16,7 +16,8 @@ import torchvision
 from torchmetrics import ConfusionMatrix
 import mlxtend.plotting as plotting
 
-import modular.checkpoint as checkpoint
+import modular.checkpoint as m_checkpoint
+import modular.predictions as m_preditions
 from sklearn.metrics import RocCurveDisplay
 from sklearn.preprocessing import LabelBinarizer
 
@@ -53,21 +54,55 @@ def print_train_time(start, end, device=None):
     return total_time
 
 
+def plot_learning_rate_scheduler(optimizer: torch.optim.Optimizer,
+                                 scheduler: torch.optim.lr_scheduler.LRScheduler,
+                                 learning_rate: int,
+                                 epochs: int):
+
+    # Get learning rates as each training step
+    learning_rates = []
+
+    for i in range(epochs):
+        optimizer.step()
+        learning_rates.append(optimizer.param_groups[0]["lr"])
+        scheduler.step()
+
+    # Visualize learinig rate scheduler
+    fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+    ax.plot(range(1, epochs + 1),
+            learning_rates,
+            marker='o',
+            color='black')
+    ax.set_xlim([1, epochs + 1])
+    ax.set_ylim([0, learning_rate + 0.0001])
+    ax.set_xlabel('Steps')
+    ax.set_ylabel('Learning Rate')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.show()
+
+
 @torch.inference_mode()
 def plot_ovr_multiclass_roc(model: torch.nn.Module,
                             class_id: int,
                             val_dataloader: torch.utils.data.DataLoader,
                             device: torch.device,
+                            val_times: int = 1,
                             title="One vs Rest"):
     y_preds = []
     y_labels = []
+
     model.eval()
+
+    tta_required = val_times > 1
 
     for inputs, labels in val_dataloader:
         # Send data and targets to target device
         inputs, labels = inputs.to(device), labels.to(device)
-        # Do the forward pass
-        y_logit = model(inputs)
+        if tta_required:
+            y_logit = m_preditions.tta(model, inputs, val_times)
+        else:
+            y_logit = model(inputs)
         # Turn predictions from logits to labels
         y_pred = torch.softmax(y_logit, dim=1)
         # Put predictions on CPU for evaluation
@@ -101,17 +136,22 @@ def plot_confusion_matrix(model: torch.nn.Module,
                           val_dataloader: torch.utils.data.DataLoader,
                           class_names: list,
                           device: torch.device,
-                          show_normed: bool = False):
+                          show_normed: bool = False,
+                          val_times: int = 1):
 
     y_preds = []
     y_labels = []
+    tta_required = val_times > 1
+
     model.eval()
 
     for inputs, labels in val_dataloader:
         # Send data and targets to target device
         inputs, labels = inputs.to(device), labels.to(device)
-        # Do the forward pass
-        y_logit = model(inputs)
+        if tta_required:
+            y_logit = m_preditions.tta(model, inputs, val_times)
+        else:
+            y_logit = model(inputs)
         # Turn predictions from logits to labels
         y_pred = torch.softmax(y_logit, dim=1).argmax(dim=1)
         # Put predictions on CPU for evaluation
@@ -157,7 +197,7 @@ def plot_curves(results):
     accuracy = results["train_acc"]
     val_accuracy = results["val_acc"]
 
-    epochs = range(len(results["train_loss"]))
+    epochs = range(1, len(results["train_loss"]) + 1)
 
     plt.figure(figsize=(21, 7))
 
@@ -341,8 +381,8 @@ def model_writter(model_name: str):
 
     def writter(point: Dict):
         # Save checkpoint
-        checkpoint.save_checkpoint(point,
-                                   model_name + '.pth.tar')
+        m_checkpoint.save_checkpoint(point,
+                                     model_name + '.pth.tar')
 
         # Logging the trainning
         log_filename = model_name + '.csv'
