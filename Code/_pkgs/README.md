@@ -26,5 +26,5 @@ pip list
 or
 
 ```python
-pip list
+/home/wilberquito/.conda/envs/melanoma_api/bin/pip list
 ```
