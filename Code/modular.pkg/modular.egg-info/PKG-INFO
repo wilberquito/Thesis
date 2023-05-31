@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: modular
+Version: 1.0
+Summary: Source code used for trainning melanoma models
+Author: wilberquito
+Author-email: wbq.software@gmail.com
+
+# Modular source code (wilberquito)
+
+My source code to train models
+
+```python
+pip install .
+```

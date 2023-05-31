@@ -1,0 +1,14 @@
+README.md
+setup.py
+modular/__init__.py
+modular/checkpoint.py
+modular/dataset.py
+modular/engine.py
+modular/models.py
+modular/predictions.py
+modular/utility.py
+modular.egg-info/PKG-INFO
+modular.egg-info/SOURCES.txt
+modular.egg-info/dependency_links.txt
+modular.egg-info/requires.txt
+modular.egg-info/top_level.txt
