@@ -13,12 +13,15 @@ from fastapi import (BackgroundTasks,
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_versioning import VersionedFastAPI, version
 
-from modular.utility import (is_uploaded_image_sanitized, mk_temporal_task,
-                             read_yaml, save_file_to_disk)
-from modular.vision import (get_supported_models, is_model_supported,
-                            mk_prediction)
+from api.utility import (is_uploaded_image_sanitized,
+                         mk_temporal_task,
+                         read_yaml,
+                         save_file_to_disk)
+from api.vision import (get_supported_models,
+                        is_model_supported,
+                        mk_prediction)
 
-env = read_yaml(Path('../env.yml'))
+env = read_yaml(Path('env.yml'))
 KEY_PROBS = 'PROBABILITIES_SAVE_AS'
 KEY_CLASS = 'CLASSIFICATION_SAVE_AS'
 
