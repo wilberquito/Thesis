@@ -8,7 +8,7 @@ def main():
     logging.basicConfig(filename='myapp.log',
                         level=logging.INFO,
                         datefmt='%m/%d/%Y %I:%M:%S %p')
-    uvicorn.run("api:app",
+    uvicorn.run("api:melanoma_api",
                 host="0.0.0.0",
                 port=8081,
                 reload=True)

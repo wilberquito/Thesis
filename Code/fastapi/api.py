@@ -9,7 +9,6 @@ from fastapi import (BackgroundTasks,
                      File,
                      HTTPException,
                      Request,
-                     Response,
                      UploadFile)
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_versioning import VersionedFastAPI, version
@@ -19,16 +18,17 @@ from modular.utility import (is_uploaded_image_sanitized, mk_temporal_task,
 from modular.vision import (get_supported_models, is_model_supported,
                             mk_prediction)
 
-conf = read_yaml(Path('./api.conf.yml'))
+env = read_yaml(Path('../env.yml'))
 KEY_PROBS = 'PROBABILITIES_SAVE_AS'
 KEY_CLASS = 'CLASSIFICATION_SAVE_AS'
 
-app = FastAPI(title="SIIM-ISIC Melanoma Classification")
+app = FastAPI(title="SIIM-ISIC Melanoma Pytorch service")
 
 
 @app.get("/")
 def home(_: Request):
-    return fastapi.responses.RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
+    return fastapi.responses. \
+        RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 
 @app.get("/public_models")
@@ -51,12 +51,12 @@ async def from_task(task_id: str):
     Consult a task resulting predictions
     '''
 
-    task_path: Path = Path(conf['TEMPORAL_TASKS_PATH']) / Path(task_id)
+    task_path: Path = Path(env['TEMPORAL_TASKS_PATH']) / Path(task_id)
 
     __sanitize_path(path=task_path,
                     detail=f'Task - {task_id} - not found')
 
-    class_filename, probs_filename = (conf[KEY_CLASS], conf[KEY_PROBS])
+    class_filename, probs_filename = (env[KEY_CLASS], env[KEY_PROBS])
     class_path = task_path / Path(class_filename)
     probs_path = task_path / Path(probs_filename)
 
@@ -86,7 +86,7 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
     __sanitize_file(file)
 
     # New temporal task path
-    task_path: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
+    task_path: Path = mk_temporal_task(parent_path=env['TEMPORAL_TASKS_PATH'])
     task_id: str = task_path.parts[-1]
 
     # Save image inside the task folder
@@ -94,8 +94,7 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
                       file=file,
                       save_as=str(file.filename))
 
-
-    save_as = (conf[KEY_CLASS], conf[KEY_PROBS])
+    save_as = (env[KEY_CLASS], env[KEY_PROBS])
     # Save and make the prediction into the task directory
     await mk_prediction(model_id=model_id,
                         task_path=task_path,
@@ -129,7 +128,7 @@ async def predict_bulk(bg_tasks: BackgroundTasks,
     __sanitize_model(model_id)
 
     # Creates a new task
-    task_path: Path = mk_temporal_task(parent_path=conf['TEMPORAL_TASKS_PATH'])
+    task_path: Path = mk_temporal_task(parent_path=env['TEMPORAL_TASKS_PATH'])
     task_id: str = task_path.parts[-1]
 
     # Sanitize each image and save inside the task
@@ -143,7 +142,7 @@ async def predict_bulk(bg_tasks: BackgroundTasks,
                           file=file,
                           save_as=str(file.filename))
 
-    save_as = (conf[KEY_CLASS], conf[KEY_PROBS])
+    save_as = (env[KEY_CLASS], env[KEY_PROBS])
     bg_tasks.add_task(mk_prediction,
                       model_id=model_id,
                       task_path=task_path,
@@ -160,6 +159,7 @@ def __sanitize_model(model_id: str):
         raise HTTPException(status_code=400,
                             detail=f'Pytorch model - {model_id} - not found')
 
+
 def __sanitize_file(file):
     """
     Check if the file is jpeg or png content type, if not throws and exception
@@ -174,9 +174,10 @@ def __sanitize_path(path: Path, detail: str):
         return HTTPException(status_code=500,
                              detail=detail)
 
+
 app = VersionedFastAPI(app, default_api_version=(1, 0))
 
-origins = conf['ALLOW_ORIGINS']
+origins = env['ALLOW_ORIGINS']
 
 app.add_middleware(
     CORSMiddleware,
