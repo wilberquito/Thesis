@@ -11,7 +11,7 @@ import vicorobot.utility as vu
 from api.dataset import TaskDataset, get_csv
 from api.utility import read_yaml
 
-conf = read_yaml('./api.conf.yml')
+env = read_yaml('./env.yml')
 
 
 def __load_wilberquito_model(net_type: str,
@@ -155,7 +155,7 @@ def get_model_metadata(model_id: str) -> dict:
     if not is_model_supported(model_id):
         raise Exception(f'Pytorch model - {model_id} - does not exist')
 
-    return conf['PYTORCH_MODELS'][model_id]
+    return env['PYTORCH_MODELS'][model_id]
 
 
 def is_model_supported(model_id: str) -> bool:
@@ -166,4 +166,4 @@ def get_supported_models() -> List[str]:
     """
     Returns the name of the supported model
     """
-    return list(conf['PYTORCH_MODELS'].keys())
+    return list(env['PYTORCH_MODELS'].keys())
