@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader
 import vicorobot.dataset as vd
 import vicorobot.utility as vu
 
-from modular.dataset import TaskDataset, get_csv
-from modular.utility import read_yaml
+from api.dataset import TaskDataset, get_csv
+from api.utility import read_yaml
 
 conf = read_yaml('./api.conf.yml')
 
