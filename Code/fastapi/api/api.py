@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Annotated, cast, Dict
 
-import fastapi
 import pandas as pd
 import starlette.status as status
 from fastapi import (BackgroundTasks,
@@ -10,8 +9,8 @@ from fastapi import (BackgroundTasks,
                      HTTPException,
                      Request,
                      UploadFile)
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_versioning import VersionedFastAPI, version
 
 from api.utility import (is_uploaded_image_sanitized,
                          mk_temporal_task,
@@ -31,12 +30,11 @@ app = FastAPI(title="SIIM-ISIC Melanoma Pytorch service")
 # TODO: redicting is not working
 @app.get("/")
 def home(request: Request):
-    return fastapi.responses. \
-        RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
+    print('hello')
+    return RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 
 @app.get("/public_models")
-@version(1, 0)
 async def public_models():
     """
     Description
@@ -49,7 +47,6 @@ async def public_models():
 
 
 @app.get("/from_task/{task_id}")
-@version(1, 0)
 async def from_task(task_id: str):
     '''
     Consult a task resulting predictions
@@ -82,7 +79,6 @@ async def from_task(task_id: str):
 
 
 @app.post("/predict")
-@version(1, 0)
 async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'): # Check if the Pytorch model is available
     __sanitize_model(model_id)
 
@@ -110,7 +106,6 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
 
 
 @app.post("/predict_bulk")
-@version(1, 0)
 async def predict_bulk(bg_tasks: BackgroundTasks,
                        files: Annotated[list[UploadFile], File(description="Multiple image files as UploadFile")],
                        model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
@@ -178,8 +173,6 @@ def __sanitize_path(path: Path, detail: str):
         return HTTPException(status_code=500,
                              detail=detail)
 
-
-app = VersionedFastAPI(app, default_api_version=(1, 0))
 
 origins = env['ALLOW_ORIGINS']
 
