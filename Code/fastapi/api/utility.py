@@ -126,7 +126,7 @@ def get_model_class(origin, net_type):
     if origin == 'vicorobot':
         return __mapping_net_arch_from_vicorobot(net_type)
     if origin == 'wilberquito':
-        return __mapping_net_arch_from_vicorobot(net_type)
+        return __mapping_net_arch_from_wilberquito(net_type)
 
 
 def __mapping_net_arch_from_vicorobot(net_type):
