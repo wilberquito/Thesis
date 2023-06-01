@@ -27,7 +27,6 @@ KEY_CLASS = 'CLASSIFICATION_SAVE_AS'
 app = FastAPI(title="SIIM-ISIC Melanoma Pytorch service")
 
 
-# TODO: redicting is not working
 @app.get("/")
 def home(request: Request):
     print('hello')
