@@ -119,7 +119,7 @@ def read_yaml(file_path: Path):
         return yaml.safe_load(f)
 
 
-def get_model_class(origin, net_type):
+def get_model_class(origin: str, net_type: str):
     """Returns the mapping of the instance of class
     depending on the origin and the net type"""
 
@@ -129,7 +129,7 @@ def get_model_class(origin, net_type):
         return __mapping_net_arch_from_wilberquito(net_type)
 
 
-def __mapping_net_arch_from_vicorobot(net_type):
+def __mapping_net_arch_from_vicorobot(net_type: str):
     if net_type == 'resnest101':
         ModelClass = vm.Resnest_Melanoma
     elif net_type == 'seresnext101':
@@ -141,7 +141,7 @@ def __mapping_net_arch_from_vicorobot(net_type):
     return ModelClass
 
 
-def __mapping_net_arch_from_wilberquito(net_type):
+def __mapping_net_arch_from_wilberquito(net_type: str):
     if net_type == 'resnet18':
         ModelClass = mm.ResNet18_Melanoma
     else:
