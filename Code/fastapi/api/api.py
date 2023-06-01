@@ -20,7 +20,7 @@ from api.vision import (get_supported_models,
                         is_model_supported,
                         mk_prediction)
 
-env = read_yaml(Path('env.yml'))
+env = read_yaml('./conf.yml')
 KEY_PROBS = 'PROBABILITIES_SAVE_AS'
 KEY_CLASS = 'CLASSIFICATION_SAVE_AS'
 

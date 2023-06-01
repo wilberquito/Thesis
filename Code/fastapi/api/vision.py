@@ -11,7 +11,7 @@ import modular.dataset as md
 from api.dataset import TaskDataset, get_csv
 from api.utility import read_yaml, get_model_class
 
-env = read_yaml('./env.yml')
+env = read_yaml('./conf.yml')
 
 
 def load_net(model_id: str, device: str) -> Tuple[torch.nn.Module, Dict]:
