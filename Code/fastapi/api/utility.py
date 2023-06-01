@@ -1,16 +1,17 @@
 import os
 import shutil
 import uuid
-from collections.abc import Iterable, Iterator, Sized
 from pathlib import Path
 from typing import List, Union
 
 import numpy as np
 import torch
 import yaml
-from fastapi import (BackgroundTasks, FastAPI, File, HTTPException, Request,
-                     UploadFile)
+from fastapi import (File, UploadFile)
 from PIL import Image
+
+import vicorobot.models as vm
+import modular.models as mm
 
 
 def save_file_to_disk(parent_dir: Path,
@@ -108,7 +109,7 @@ def path_to_tensor(img_path: Path, transform=None) -> torch.Tensor:
     img = img.transpose(2, 0, 1)
 
     # Convert PIL img to Pytorch tensor
-    tensor =  torch.Tensor(img)
+    tensor = torch.Tensor(img)
 
     return tensor
 
@@ -116,3 +117,33 @@ def path_to_tensor(img_path: Path, transform=None) -> torch.Tensor:
 def read_yaml(file_path: Path):
     with open(file_path, 'r') as f:
         return yaml.safe_load(f)
+
+
+def get_model_class(origin, net_type):
+    """Returns the mapping of the instance of class
+    depending on the origin and the net type"""
+
+    if origin == 'vicorobot':
+        return __mapping_net_arch_from_vicorobot(net_type)
+    if origin == 'wilberquito':
+        return __mapping_net_arch_from_vicorobot(net_type)
+
+
+def __mapping_net_arch_from_vicorobot(net_type):
+    if net_type == 'resnest101':
+        ModelClass = vm.Resnest_Melanoma
+    elif net_type == 'seresnext101':
+        ModelClass = vm.Seresnext_Melanoma
+    elif net_type == 'efficientnet_b3':
+        ModelClass = vm.Effnet_Melanoma
+    else:
+        raise NotImplementedError()
+    return ModelClass
+
+
+def __mapping_net_arch_from_wilberquito(net_type):
+    if net_type == 'resnet18':
+        ModelClass = mm.ResNet18_Melanoma
+    else:
+        raise NotImplementedError()
+    return ModelClass
