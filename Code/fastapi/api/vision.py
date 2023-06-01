@@ -6,7 +6,7 @@ import torch
 from torch.utils.data import DataLoader
 
 import vicorobot.dataset as vd
-
+import modular.dataset as md
 
 from api.dataset import TaskDataset, get_csv
 from api.utility import read_yaml, get_model_class
@@ -93,9 +93,13 @@ def __load_vicorobot_model(class_nn: torch.nn.Module,
 def __load_transforms(model_id: str):
 
     meta = get_model_metadata(model_id)
+    img_size = meta['img_size']
+    origin = meta['origin']
 
-    if 'vicorobot' in model_id:
+    if 'vicorobot' == origin:
         return vd.get_transforms(image_size=meta['img_size'])
+    elif 'wilberquito' == origin:
+        return md.get_transforms(image_size=img_size)
     else:
         raise NotImplementedError()
 
