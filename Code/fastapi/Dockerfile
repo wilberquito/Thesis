@@ -13,11 +13,13 @@ RUN conda env create -f environment.yml
 # Activate the conda environment
 RUN echo "source activate melanoma_api" > ~/.bashrc
 
-# Copy the package files to the container
-COPY vicorobot.pkg /vicorobot.pkg
+# Copy the packages into the container
+COPY _pkgs /_pkgs
 
 # Activate the conda environment and install the package within the environment
-RUN /bin/bash -c "source activate melanoma_api && cd /vicorobot.pkg/ && pip install ."
+RUN /bin/bash -c "source activate melanoma_api && \
+                  cd /_pkgs/vicorobot.pkg/ && pip install . \
+                  cd /_pkgs/modular.pkg/ && pip install ."
 
 # Set the working directory to /app
 WORKDIR /app

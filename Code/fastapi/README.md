@@ -28,3 +28,12 @@ sudo podman run -d      \
         -p 8081:8081    \
         <image-name>
 ```
+
+## The packages
+
+As all this packages were used to train models
+and its main funcionality is not in the api
+I take them out in the root of the soruce code into
+the `_pkgs` folder. Some of the code of this
+packages are used in the inference part, so I need
+to add them into the image and install them via `pip`.
