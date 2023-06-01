@@ -6,70 +6,32 @@ import torch
 from torch.utils.data import DataLoader
 
 import vicorobot.dataset as vd
-import vicorobot.utility as vu
+
 
 from api.dataset import TaskDataset, get_csv
-from api.utility import read_yaml
+from api.utility import read_yaml, get_model_class
 
 env = read_yaml('./env.yml')
 
 
-def __load_wilberquito_model(net_type: str,
-                             out_dim: int,
-                             pth_path: str,
-                             device: str) -> torch.nn.Module:
-
-    raise Exception("Load wilberquito models not implemented yet")
-
-
-def __load_vicorobot_model(net_type: str,
-                           out_dim: int,
-                           pth_path: str,
-                           device: str) -> torch.nn.Module:
-
-    nn = vu.get_model_class(net_type=net_type)
-
-    pth_file: Path = Path(pth_path)
-
-    if not pth_file.exists():
-        raise Exception(f"Vicorobot model - {str(pth_file)} - not found")
-
-    model = nn(enet_type=net_type,
-               n_meta_features=0,
-               n_meta_dim=[],
-               out_dim=out_dim)
-
-    model = model.to(device)
-
-    try:
-        model.load_state_dict(torch.load(pth_file,
-                                         map_location=device),
-                              strict=True)
-    except Exception as e:
-        state_dict = torch.load(pth_file,
-                                map_location=device)
-
-        state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
-        model.load_state_dict(state_dict, strict=True)
-
-    return model
-
-
-def __load_net(model_id: str, device: str) -> Tuple[torch.nn.Module, Dict]:
+def load_net(model_id: str, device: str) -> Tuple[torch.nn.Module, Dict]:
 
     meta = get_model_metadata(model_id)
+    origin = meta['origin']
     net_type = meta['net_type']
     out_dim = meta['out_dim']
     pth_path = meta['pth_path']
     mapping = meta['mapping']
+    class_name = get_model_class(origin, net_type)
 
-    if 'vicorobot' in model_id:
-        model = __load_vicorobot_model(net_type=net_type,
+    if origin == 'vicorobot':
+        model = __load_vicorobot_model(class_nn=class_name,
+                                       net_type=net_type,
                                        out_dim=out_dim,
                                        pth_path=pth_path,
                                        device=device)
-    elif 'wilberquito' in model_id:
-        model = __load_wilberquito_model(net_type=net_type,
+    elif origin == 'wilberquito':
+        model = __load_wilberquito_model(class_nn=class_name,
                                          out_dim=out_dim,
                                          pth_path=pth_path,
                                          device=device)
@@ -77,6 +39,55 @@ def __load_net(model_id: str, device: str) -> Tuple[torch.nn.Module, Dict]:
         raise NotImplementedError()
 
     return model, mapping
+
+
+def __load_wilberquito_model(class_nn: torch.nn.Module,
+                             out_dim: int,
+                             pth_path: str,
+                             device: str) -> torch.nn.Module:
+
+    pytorch_model_path = Path(pth_path)
+    if not pytorch_model_path.exists():
+        exc_msg = f"Vicorobot model - {str(pytorch_model_path)} - not found"
+        raise Exception(exc_msg)
+
+    instance_nn = class_nn(out_dim)
+    checkpoint = torch.load(pytorch_model_path, map_location=device)
+    model_state_dict = checkpoint['model_state_dict']
+    instance_nn.load_state_dict(model_state_dict, strict=True)
+    return instance_nn
+
+
+def __load_vicorobot_model(class_nn: torch.nn.Module,
+                           net_type: str,
+                           out_dim: int,
+                           pth_path: str,
+                           device: str) -> torch.nn.Module:
+
+    pth_file = Path(pth_path)
+
+    if not pth_file.exists():
+        raise Exception(f"Vicorobot model - {str(pth_file)} - not found")
+
+    instance_nn = class_nn(enet_type=net_type,
+                           n_meta_features=0,
+                           n_meta_dim=[],
+                           out_dim=out_dim)
+
+    instance_nn = instance_nn.to(device)
+
+    try:
+        instance_nn. \
+            load_state_dict(torch.load(pth_file, map_location=device),
+                            strict=True)
+    except Exception as e:
+        state_dict = torch.load(pth_file,
+                                map_location=device)
+
+        state_dict = {k[7:] if k.startswith('module.') else k: state_dict[k] for k in state_dict.keys()}
+        instance_nn.load_state_dict(state_dict, strict=True)
+
+    return instance_nn
 
 
 def __load_transforms(model_id: str):
@@ -100,7 +111,7 @@ async def mk_prediction(model_id: str,
     _, val_transforms = __load_transforms(model_id=model_id)
 
     # Loads the pytorch model
-    nn, mapping = __load_net(model_id=model_id, device=device)
+    nn, mapping = load_net(model_id=model_id, device=device)
 
     # Create the csv to work with
     csv = get_csv(task_path)
@@ -122,7 +133,7 @@ async def mk_prediction(model_id: str,
 
     nn.eval()
     with torch.inference_mode():
-         for X in task_dataloader:
+        for X in task_dataloader:
             X = X.to(device)
             logits = nn(X)
             probs = torch.softmax(logits, dim=1)
