@@ -18,3 +18,6 @@ because github don't allow me to work freely with git lfs
 and models and configuration from (gitlab). The script creates
 the images, runs the dockercompose file to create the containers using
 the the configurations from the .env file
+- The containers uses volumes for update models from outsides
+and avoid you the create again a new container to do that
+it also let you modify the conf files from outside
