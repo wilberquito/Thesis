@@ -1,25 +1,44 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import axios from 'axios';
   import type {
     UploadedImage,
     UploadedImageMetadata,
     PredResponse,
+    PublicModels,
     DialogData} from "$lib/types";
-  import Displayer from "./Displayer.svelte";
+  import GridDisplayer from "./GridDisplayer.svelte";
+  import ModelsList from "./ModelsList.svelte";
   import LoaderLine from "./LoaderLine.svelte";
   import Dialog from "./Dialog.svelte";
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
   import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
   let interactiveText = "Predict";
-  let uploadedImages: UploadedImage[] = [];
   let runningPrediction = false;
   let toggledInteractiveButton = -1;
   let dialogData: DialogData | undefined = undefined;
 
+  let uploadedImages: UploadedImage[] = [];
+  let availableModels: string[] = [];
+  let selectedModel: string = PUBLIC_DEFAULT_MODEL
+
   $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
   $: disabledChangeModel = toggledInteractiveButton % 2 === 0;
+
+
+  // Loads availables models from api
+  onMount(async () => {
+    try {
+      const url = PUBLIC_URL_SERVICE + "/public_models"
+      const resp  = await axios.get<PublicModels>(url)
+      availableModels = resp.data.models
+    } catch(error)  {
+      console.log(error)
+      console.log(`Applicaction could not load models from api`)
+    }
+  });
 
   async function handleFiles(event: any) {
     // Treat uploaded images
@@ -122,7 +141,7 @@
       if the post was correct. Then it recover the prediction by taskId
     */
       const formData = new FormData();
-      const modelId = PUBLIC_DEFAULT_MODEL
+      const modelId = selectedModel
       const url =
         images.length == 1
           ? PUBLIC_URL_SERVICE + "/predict"
@@ -214,7 +233,7 @@
       url,
       prediction,
       target,
-      model: PUBLIC_DEFAULT_MODEL
+      model: selectedModel
     }
 
     dialogData = {... data}
@@ -286,16 +305,18 @@
         </span>
       </button>
 
+          <ModelsList models={availableModels}/>
+
       </div>
 
     </form>
 
     {#if uploadedImages.length >= 1}
       <div class="displayer-wrapper">
-        <Displayer images={uploadedImages}
-                   letClose={!disabledUploadButton}
-                   closeHandler={onImageClose}
-                   expandHandler={onDialogOpen}/>
+        <GridDisplayer images={uploadedImages}
+                       letClose={!disabledUploadButton}
+                       closeHandler={onImageClose}
+                       expandHandler={onDialogOpen}/>
       </div>
     {/if}
   </div>

@@ -39,3 +39,9 @@ export type UploadedImageMetadata = {
   target: number,
   probs: {[key:string]: number}
 }
+
+// type response from public models
+
+export type PublicModels = {
+  models: string[]
+}
