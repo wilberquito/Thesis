@@ -156,8 +156,8 @@
       const taskId = resp.data['task_uuid']
       await fromTaskId(taskId, onPredictionSuccess)
     } catch (error) {
-      runningPrediction = false;
       console.error(error);
+      onPredictionFailure();
     }
   }
 
@@ -180,7 +180,7 @@
         when the prediction succeded
     */
     runningPrediction = false;
-    interactiveText = "Prediction failed, reset"
+    interactiveText = "Ups! the server seems down, try it again"
   }
 
   function onDialogOpen(i: number) {
@@ -223,6 +223,10 @@
     dialogData = undefined;
   }
 
+  function openSelectModelSection() {
+    console.log('select model section openened')
+  }
+
 </script>
 
 {#if runningPrediction}
@@ -255,15 +259,21 @@
         />
       </label>
       <br />
-      <label class="upload-btn btn"
-             class:disabled-btn={disabledInteractiveButton}>
-        <p>{interactiveText}</p>
-        <input
-          type="submit"
-          class="upload"
-          disabled={uploadedImages.length < 1}
-        />
-      </label>
+
+      <div class="line-wrapper">
+        <label class="upload-btn btn"
+               class:disabled-btn={disabledInteractiveButton}>
+          <p>{interactiveText}</p>
+          <input
+            type="submit"
+            class="upload"
+            disabled={uploadedImages.length < 1}
+          />
+        </label>
+          <button class="button-change-model"
+                  type="button"
+                  on:click={openSelectModelSection}> </button>
+      </div>
     </form>
 
     {#if uploadedImages.length >= 1}
@@ -334,8 +344,6 @@
   }
 
   .upload-btn {
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
     width: calc(100% - 12px);
     padding: 1rem 6px !important;
     background-color: #1779ba;
@@ -396,6 +404,16 @@
   .loader-position {
     width: 100%;
     position: absolute;
+  }
+
+  .line-wrapper {
+    display: flex;
+    margin: 0.5rem 0;
+    gap: 3px;
+  }
+
+  .button-change-model {
+    width: max(6vw, 10rem);
   }
 
 </style>

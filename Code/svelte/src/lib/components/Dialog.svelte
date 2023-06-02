@@ -20,44 +20,65 @@
           </div>
       </div>
       <div class="dialog-content-main upper-case">
-        <div class="img-container">
+        <div class="left-main-content">
           <img src={dialogData.url} alt="whatever" />
         </div>
-          <div style="width: 0.5rem"></div>
-        <div class="dialog-content-info">
-          <div class="entry-header">
-            <p>Class</p>
-          </div>
-          <div>
-            <p>melanoma</p>
-          </div>
-          <div class="entry-header">
-            <p>Model name</p>
-          </div>
-          <div>
-            <p>vicorobot...</p>
-          </div>
-          <div class="entry-header">
-            <p>Base model</p>
-          </div>
-          <div>
-            <p>Information.... ...</p>
-          </div>
-          <div class="entry-header">
-            <p>Shape</p>
-          </div>
-          <div>
-            <p>60px, 60px</p>
-          </div>
-          <div class="entry-header">
-            <p>Size</p>
-          </div>
-          <div>
-            <p>60192929</p>
-          </div>
+        <div class="right-main-content">
 
-            <div class="radar-container">
-          <RadarChart inputs={dialogData.probs}></RadarChart>
+          <div class="scrollable-info">
+
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+            <div class="model-info">
+              <div class="header"></div>
+              <div class="body"></div>
+            </div>
+
+          </div>
+          <div class="radar-container">
+            <RadarChart inputs={dialogData.probs}></RadarChart>
           </div>
         </div>
       </div>
@@ -67,23 +88,19 @@
 
 <style>
 
+
   .radar-container {
     position: relative;
-    flex: auto;
+    flex: 3;
     background: transparent !important;
     display: flex;
     align-items: center !important;
     justify-content: center !important;
   }
 
-  .radar-container > * {
-    position: absolute;
-  }
-
   .dialog-banner {
     height: 2rem;
     display: flex;
-    padding-bottom: 0.5rem;
     align-items: center;
     justify-content: center;
   }
@@ -98,47 +115,19 @@
     position: absolute;
     top: 0;
     left: 0;
-    padding: 1rem;
-    height: calc(100% - 2rem);
-    width: calc(100% - 2rem);
+    padding: 0.5rem;
+    height: calc(100% - 1rem);
+    width: calc(100% - 1rem);
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
   }
 
   .dialog-content-main {
     display: flex;
-    width: 100%;
-    height: 100%;
-  }
-
-  .dialog-content-info {
-    flex: 3;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .dialog-content-info p {
-    margin: 0;
-    padding: 0;
-  }
-
-  .dialog-content-info > div {
-    padding-left: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: left;
-  }
-
-  .dialog-content-info > div:nth-child(even) {
-    background: #e4e4e4;
-    height: 2rem;
-  }
-
-  .dialog-content-info > div:nth-child(odd) {
-    height: 2rem;
-    background: #1779ba;
-    color: white;
+    flex: 1;
+    gap: 0.25rem;
+    position: relative;
   }
 
   .dialog {
@@ -147,28 +136,17 @@
     display: flex;
     flex-direction: column;
     z-index: 1000;
-    height: 85vh;
-    width: 90vw;
-    transform: scale(1);
+    height: 40rem;
+    width: 60rem;
     position: relative;
     background: #eee;
     border: 1px solid #ccc;
   }
 
-  /* Bigger than Phones(laptop / desktop) */
-  @media only screen and (min-width: 1200px) {
-
-    .dialog {
-      height: 52rem;
-      width: 80rem;
-    }
-
-  }
-
   .dialog-mask {
     z-index: 999;
     pointer-events: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.8);
     position: fixed;
     top: 0;
     left: 0;
@@ -205,23 +183,52 @@
     text-transform: uppercase;
   }
 
-  .img-container {
-    padding: 0 !important;
-    width: unset !important;
-    height: unset !important;
-    flex: 4;
+  .left-main-content {
     position: relative;
-    padding: 2px;
-    background-color: transparent;
+    flex: 3;
     border-radius: 2px;
-    position: relative;
   }
 
-  .img-container img {
+  .left-main-content img {
     position: absolute;
     object-fit: cover;
     width: 100%;
     height: 100%;
   }
 
+  .right-main-content {
+    position: relative;
+    flex: 2;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scrollable-info {
+    height: 13rem;
+    overflow: auto;
+    position: relative;
+  }
+
+  .scrollable-info .model-info:not(:last-child) {
+    margin-bottom: 3px;
+  }
+
+  .model-info {
+    width: 100%;
+    min-height: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .model-info .header {
+    height: 1.25rem;
+    width: 100%;
+    background: red;
+  }
+
+  .model-info .body {
+    flex: 1;
+    background: blue;
+  }
 </style>

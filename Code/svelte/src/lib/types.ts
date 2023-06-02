@@ -1,5 +1,11 @@
 export type Prediction  = 'Cancer' | 'NotCancer'
 
+
+export type ModelInformation = {
+  field: string,
+  value: string
+}
+
 export type DialogData = {
   url: string,
   name: string,
@@ -8,7 +14,8 @@ export type DialogData = {
   prediction: string,
   target: number,
   model: string,
-  probs: {[key:string]: number}
+  probs: {[key:string]: number},
+  info: ModelInformation[]
 }
 
 export type PredResponse = {
