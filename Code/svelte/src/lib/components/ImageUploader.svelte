@@ -19,6 +19,8 @@
 
   $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
+  $: disabledChangeNetwork = disabledInteractiveButton || disabledUploadButton;
+
 
   async function handleFiles(event: any) {
     // Treat uploaded images
@@ -247,19 +249,6 @@
       on:submit|preventDefault={() => mayPostImageOrReset(uploadedImages)}
       class="file-input-wrapper"
     >
-      <label class="btn select-images"
-             class:disabled-btn={disabledUploadButton}>
-        <p>Select Your Images+</p>
-        <input
-          type="file"
-          class="upload selectable file-input-buttom"
-          multiple
-          on:change={handleFiles}
-          disabled={disabledUploadButton}
-        />
-      </label>
-      <br />
-
       <div class="line-wrapper">
         <label class="upload-btn btn"
                class:disabled-btn={disabledInteractiveButton}>
@@ -270,10 +259,42 @@
             disabled={uploadedImages.length < 1}
           />
         </label>
-          <button class="button-change-model"
-                  type="button"
-                  on:click={openSelectModelSection}> </button>
       </div>
+
+      <div class="line-wrapper">
+
+      <label class="tool-selection select-images"
+             class:disabled-btn={disabledUploadButton}>
+        <span class="material-icons">
+        image
+                    </span>
+        <input
+          type="file"
+          class="upload selectable file-input-buttom"
+          multiple
+          on:change={handleFiles}
+          disabled={disabledUploadButton}
+        />
+      </label>
+
+      <!-- <button class="tool-selection" -->
+      <!--         type="button" -->
+      <!--         on:click={openSelectModelSection}> -->
+      <!--   <span class="material-icons"> -->
+      <!--   image -->
+      <!--   </span> -->
+      <!-- </button> -->
+
+      <button class="tool-selection"
+              type="button"
+              on:click={openSelectModelSection}>
+        <span class="material-icons">
+        hub
+        </span>
+      </button>
+
+      </div>
+
     </form>
 
     {#if uploadedImages.length >= 1}
@@ -289,12 +310,6 @@
     </div>
 
 <style>
-
-  .select-images {
-    background-color: #eee;
-    border: 1px solid #b3b3b3;
-
-  }
 
   .disabled-btn {
     opacity: 0.7;
@@ -356,12 +371,7 @@
 
 
   input[type="file"] {
-    position: absolute;
-    z-index: -1;
-    top: 10px;
-    left: 8px;
-    font-size: 17px;
-    color: #b8b8b8;
+    display: none;
   }
 
   .file-input-wrapper {
@@ -408,12 +418,26 @@
 
   .line-wrapper {
     display: flex;
-    margin: 0.5rem 0;
-    gap: 3px;
+    margin-bottom: 0.5rem;
+    height: 4rem;
+    gap: 0.25rem;
   }
 
-  .button-change-model {
-    width: max(6vw, 10rem);
+  button {
+    all: unset;
+  }
+
+  .tool-selection {
+    border: 1px solid #b3b3b3;
+    background-color: #eee;
+    width: 5rem;
+    height: 100%;
+    color: #1779ba;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
   }
 
 </style>
