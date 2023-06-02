@@ -18,6 +18,7 @@
   let runningPrediction = false;
   let toggledInteractiveButton = -1;
   let dialogData: DialogData | undefined = undefined;
+  let toggledShowModels = false;
 
   let uploadedImages: UploadedImage[] = [];
   let availableModels: string[] = [];
@@ -26,7 +27,6 @@
   $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
   $: disabledChangeModel = toggledInteractiveButton % 2 === 0;
-
 
   // Loads availables models from api
   onMount(async () => {
@@ -168,6 +168,7 @@
 
     try {
       runningPrediction = true;
+      toggledShowModels = false;
       const resp = await axios.post(url,
                                     formData, {
                                       params: params,
@@ -243,7 +244,8 @@
     dialogData = undefined;
   }
 
-  function openSelectModelSection() {
+  function toggleSelectionModel() {
+    toggledShowModels = !toggledShowModels;
     console.log('select model section openened')
   }
 
@@ -299,13 +301,15 @@
               type="button"
               disabled={disabledChangeModel}
               class:disabled-btn={disabledUploadButton}
-              on:click={openSelectModelSection}>
+              on:click={toggleSelectionModel}>
         <span class="material-icons">
         hub
         </span>
       </button>
 
+        {#if toggledShowModels }
           <ModelsList models={availableModels}/>
+        {/if}
 
       </div>
 
