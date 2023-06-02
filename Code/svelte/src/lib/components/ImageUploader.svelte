@@ -19,8 +19,7 @@
 
   $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
-  $: disabledChangeNetwork = disabledInteractiveButton || disabledUploadButton;
-
+  $: disabledChangeModel = toggledInteractiveButton % 2 === 0;
 
   async function handleFiles(event: any) {
     // Treat uploaded images
@@ -277,16 +276,10 @@
         />
       </label>
 
-      <!-- <button class="tool-selection" -->
-      <!--         type="button" -->
-      <!--         on:click={openSelectModelSection}> -->
-      <!--   <span class="material-icons"> -->
-      <!--   image -->
-      <!--   </span> -->
-      <!-- </button> -->
-
       <button class="tool-selection"
               type="button"
+              disabled={disabledChangeModel}
+              class:disabled-btn={disabledUploadButton}
               on:click={openSelectModelSection}>
         <span class="material-icons">
         hub

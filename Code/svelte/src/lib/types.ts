@@ -1,6 +1,5 @@
 export type Prediction  = 'Cancer' | 'NotCancer'
 
-
 export type ModelInformation = {
   field: string,
   value: string
