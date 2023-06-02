@@ -2,6 +2,7 @@
 
 - Made 2 python (trainbble code) packages (vicorobot, modular)
 - Made the bridge between the packages and the api
+- Notebook of data exploration
 - Glasary or index of trainned resnet18
 - Train different kinds of resnet18 with (show them the notebooks):
  - Different scheduler
