@@ -1,10 +1,16 @@
 <script lang="ts">
-  import type { UploadedImage } from "$lib/types";
+  import type { UploadedImage, SortType } from "$lib/types";
 
   export let images: UploadedImage[] = [];
   export let letClose: boolean = false;
   export let closeHandler: (n: number) => void = (_) => {}
   export let expandHandler: (n: number) => void = (_) => {}
+  export let sortType: SortType = 'None';
+
+  // wait for changes of sortype
+  $: {
+    console.log(sortType)
+  }
 
 </script>
 

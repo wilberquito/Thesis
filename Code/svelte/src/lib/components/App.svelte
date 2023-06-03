@@ -6,7 +6,8 @@
     UploadedImageMetadata,
     PredResponse,
     PublicModels,
-    DialogData} from "$lib/types";
+    DialogData,
+    SortType} from "$lib/types";
   import GridDisplayer from "./GridDisplayer.svelte";
   import ModelsList from "./ModelsList.svelte";
   import LoaderLine from "./LoaderLine.svelte";
@@ -19,6 +20,7 @@
   let toggledInteractiveButton = -1;
   let dialogData: DialogData | undefined = undefined;
   let toggledShowModels = false;
+  let sortType: SortType = 'None';
 
   let uploadedImages: UploadedImage[] = [];
   let availableModels: string[] = [];
@@ -28,6 +30,7 @@
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
   $: disabledChangeModel = toggledInteractiveButton % 2 === 0;
   $: disabledModelList = toggledInteractiveButton % 2 === 0;
+  $: sortableByImportance = toggledInteractiveButton % 2 === 0;
 
   // Loads availables models from api
   onMount(async () => {
@@ -262,6 +265,32 @@
     selectedModel = model;
   }
 
+  function sortGrid() {
+
+    if (sortableByImportance) {
+      if (sortType === 'None') {
+        sortType = 'ByImportanceAsc';
+      } else if (sortType === 'ByImportanceAsc') {
+        sortType = 'ByImportanceDesc';
+      } else if (sortType === 'ByImportanceDesc') {
+        sortType = 'ByImportanceAsc';
+      } else {
+        sortType = 'ByImportanceAsc';
+      }
+    } else {
+      if (sortType === 'None') {
+        sortType = 'ByNameAsc';
+      } else if (sortType === 'ByNameAsc') {
+        sortType = 'ByNameDesc';
+      } else if (sortType === 'ByNameDesc') {
+        sortType = 'ByNameAsc';
+      } else {
+        sortType = 'ByNameAsc';
+      }
+    }
+
+  }
+
 </script>
 
 
@@ -311,28 +340,44 @@
         />
       </label>
 
-      <button class="tool-selection"
-              type="button"
-              disabled={disabledChangeModel}
-              class:disabled-btn={disabledUploadButton}
-              on:click={toggleSelectionModel}>
-        <span class="material-icons">
-        hub
-        </span>
-      </button>
+      {#if sortableByImportance }
+        <button class="tool-selection"
+                type="button"
+                on:click={sortGrid}>
+          <span class="material-icons">
+          low_priority
+          </span>
+        </button>
+      {:else}
+        <button class="tool-selection"
+                type="button"
+                on:click={sortGrid}>
+          <span class="material-icons">
+          sort_by_alpha
+          </span>
+        </button>
+      {/if}
+        <button class="tool-selection"
+                type="button"
+                disabled={disabledChangeModel}
+                class:disabled-btn={disabledUploadButton}
+                on:click={toggleSelectionModel}>
+          <span class="material-icons">
+          hub
+          </span>
+        </button>
+      {#if toggledShowModels }
 
-        {#if toggledShowModels }
+        <div class="model-list-wrapper"
+          class:disabled-btn={disabledModelList}>
+          <ModelsList
+            models={availableModels}
+            selectedModel={selectedModel}
+            onModelSelected={onModelSelected}
+          />
+        </div>
 
-          <div class="model-list-wrapper"
-            class:disabled-btn={disabledModelList}>
-            <ModelsList
-              models={availableModels}
-              selectedModel={selectedModel}
-              onModelSelected={onModelSelected}
-            />
-          </div>
-
-        {/if}
+      {/if}
 
       </div>
 
@@ -343,7 +388,8 @@
         <GridDisplayer images={uploadedImages}
                        letClose={!disabledUploadButton}
                        closeHandler={onImageClose}
-                       expandHandler={onDialogOpen}/>
+                       expandHandler={onDialogOpen}
+                       sortType={sortType}/>
       </div>
     {/if}
   </div>
@@ -479,7 +525,7 @@
   .tool-selection {
     border: 1px solid #b3b3b3;
     background-color: #eee;
-    width: 5rem;
+    width: 4.5rem;
     height: 100%;
     color: #1779ba;
     cursor: pointer;

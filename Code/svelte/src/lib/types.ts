@@ -45,3 +45,9 @@ export type UploadedImageMetadata = {
 export type PublicModels = {
   models: string[]
 }
+
+export type SortType =  'ByImportanceAsc'
+                      | 'ByImportanceDesc'
+                      | 'ByNameAsc'
+                      | 'ByNameDesc'
+                      | 'None';
