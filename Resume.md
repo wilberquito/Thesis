@@ -22,3 +22,6 @@ the the configurations from the .env file
 - The containers uses volumes for update models from outsides
 and avoid you the create again a new container to do that
 it also let you modify the conf files from outside
+- Style app
+- Select multiple models from the app, handle the state of the interactuables buttons and scrolls
+- Sort images by importance or name depending on the state
