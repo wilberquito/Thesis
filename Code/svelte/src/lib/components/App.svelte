@@ -27,13 +27,24 @@
   $: disabledInteractiveButton = uploadedImages.length <= 0 || runningPrediction;
   $: disabledUploadButton = toggledInteractiveButton % 2 === 0;
   $: disabledChangeModel = toggledInteractiveButton % 2 === 0;
+  $: disabledModelList = toggledInteractiveButton % 2 === 0;
 
   // Loads availables models from api
   onMount(async () => {
     try {
       const url = PUBLIC_URL_SERVICE + "/public_models"
       const resp  = await axios.get<PublicModels>(url)
-      availableModels = resp.data.models
+      availableModels = (resp.data.models) || [];
+
+      const okDefaultModel = availableModels.includes(selectedModel);
+      if (!okDefaultModel) {
+        if (availableModels.length > 0) {
+          availableModels.sort();
+          selectedModel = availableModels[0];
+        } else {
+          console.error(`The default ${PUBLIC_DEFAULT_MODEL} is not in the available models`) }
+      }
+
     } catch(error)  {
       console.log(error)
       console.log(`Applicaction could not load models from api`)
@@ -141,7 +152,7 @@
       if the post was correct. Then it recover the prediction by taskId
     */
       const formData = new FormData();
-      const modelId = selectedModel
+      const modelId = selectedModel.trim();
       const url =
         images.length == 1
           ? PUBLIC_URL_SERVICE + "/predict"
@@ -168,7 +179,6 @@
 
     try {
       runningPrediction = true;
-      toggledShowModels = false;
       const resp = await axios.post(url,
                                     formData, {
                                       params: params,
@@ -246,10 +256,14 @@
 
   function toggleSelectionModel() {
     toggledShowModels = !toggledShowModels;
-    console.log('select model section openened')
+  }
+
+  function onModelSelected(model: string) {
+    selectedModel = model;
   }
 
 </script>
+
 
 {#if runningPrediction}
 <div class="loader-position">
@@ -308,7 +322,16 @@
       </button>
 
         {#if toggledShowModels }
-          <ModelsList models={availableModels}/>
+
+          <div class="model-list-wrapper"
+            class:disabled-btn={disabledModelList}>
+            <ModelsList
+              models={availableModels}
+              selectedModel={selectedModel}
+              onModelSelected={onModelSelected}
+            />
+          </div>
+
         {/if}
 
       </div>
@@ -328,6 +351,14 @@
     </div>
 
 <style>
+
+  .model-list-wrapper {
+    flex: 1;
+  }
+
+  .model-list-wrapper.disabled-btn :global(.model-item) {
+    pointer-events: none;
+  }
 
   .disabled-btn {
     opacity: 0.7;
