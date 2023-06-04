@@ -3,20 +3,56 @@
 
   export let images: UploadedImage[] = [];
   export let letClose: boolean = false;
-  export let closeHandler: (n: number) => void = (_) => {}
-  export let expandHandler: (n: number) => void = (_) => {}
+  export let closeHandler: (name: string) => void = (_) => {}
+  export let expandHandler: (name: string) => void = (_) => {}
   export let sortType: SortType = 'None';
 
-  // wait for changes of sortype
-  $: {
-    console.log(sortType)
+  let shallowImages = [...images];
+
+  function sortByNameAsc(fst: UploadedImage, snd: UploadedImage) {
+    if (fst.name < snd.name) return -1;
+    if (fst.name > snd.name) return 1;
+    return 0;
   }
+
+  function sortByNameDesc(fst: UploadedImage, snd: UploadedImage) {
+    return -1 * sortByNameAsc(fst, snd);
+  }
+
+  function sortByImportanceAsc(fst: UploadedImage, snd: UploadedImage) {
+    if (fst.meta?.pred === 'Cancer' && snd.meta?.pred === 'NotCancer') return -1;
+    if (snd.meta?.pred === 'Cancer' && fst.meta?.pred === 'NotCancer') return 1;
+    return 0;
+  }
+
+  function sortByImportanceDesc(fst: UploadedImage, snd: UploadedImage) {
+    return -1 * sortByImportanceAsc(fst, snd);
+  }
+
+  // Wait for changes of sortype
+  $: {
+    shallowImages = [...images]
+    if (sortType === 'NameAsc') {
+      shallowImages.sort(sortByNameAsc);
+    }
+    else if (sortType === 'NameDesc') {
+      shallowImages.sort(sortByNameDesc);
+    }
+    else if (sortType === 'ImportanceAsc') {
+        shallowImages.sort(sortByImportanceAsc);
+    }
+    else if (sortType === 'ImportanceDesc') {
+        shallowImages.sort(sortByImportanceDesc);
+    }
+    shallowImages = [...shallowImages];
+  }
+
 
 </script>
 
 <div class="container">
   <div class="img-grid">
-    {#each images as img, i}
+    {#each shallowImages as img, i}
       <div id={img.name}
            class="img-container"
            class:cancer={img?.meta?.pred === 'Cancer'}
@@ -25,7 +61,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         {#if letClose}
           <div class="interactive-btn-img"
-               on:click={() => closeHandler(i)}>
+               on:click={() => closeHandler(img.name)}>
             <span class="material-icons">
             close
             </span>
@@ -34,7 +70,7 @@
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         {#if img.meta}
           <div class="interactive-btn-img"
-               on:click={() => expandHandler(i)}>
+               on:click={() => expandHandler(img.name)}>
             <span class="material-icons">
             fullscreen
             </span>

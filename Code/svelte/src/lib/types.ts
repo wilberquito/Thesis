@@ -46,8 +46,8 @@ export type PublicModels = {
   models: string[]
 }
 
-export type SortType =  'ByImportanceAsc'
-                      | 'ByImportanceDesc'
-                      | 'ByNameAsc'
-                      | 'ByNameDesc'
+export type SortType =  'ImportanceAsc'
+                      | 'ImportanceDesc'
+                      | 'NameAsc'
+                      | 'NameDesc'
                       | 'None';

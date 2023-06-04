@@ -32,6 +32,7 @@
   $: disabledChangeModel = toggledInteractiveButton % 2 === 0;
   $: disabledModelList = toggledInteractiveButton % 2 === 0;
   $: sortableByImportance = toggledInteractiveButton % 2 === 0;
+  $: disableSortable = uploadedImages.length <= 0 || runningPrediction;
 
   // Loads availables models from api
   onMount(async () => {
@@ -100,10 +101,6 @@
       img.src = url;
       uploadedImages = [uploadedImage, ...uploadedImages];
     }
-
-
-    // Once all images are loaded, it sort the array by image name
-    uploadedImages = uploadedImages.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
   async function fromTaskId(taskId: string,
@@ -215,10 +212,29 @@
     }
   }
 
-  function onImageClose(i: number) {
-    uploadedImages = uploadedImages
-      .slice(0, i)
-      .concat(uploadedImages.slice(i + 1, uploadedImages.length));
+  function onImageClose(imgName: string) {
+
+    const img = uploadedImages.find(e => e.name === imgName);
+    if (img) {
+      const notification = {
+        lifetime: 2,
+        mode: 'warn',
+        message: `${img.name} - dropped`
+      }
+      const idx = uploadedImages.findIndex(e => e.name === imgName);
+      addNotification(notification);
+      uploadedImages = uploadedImages
+        .slice(0, idx)
+        .concat(uploadedImages.slice(idx + 1, uploadedImages.length));
+    }
+    else {
+      const notification = {
+        lifetime: 2,
+        mode: 'warn',
+        message: `${imgName} - not pressent in the grid`
+      }
+      addNotification(notification);
+    }
   }
 
   function onPredictionSuccess() {
@@ -242,45 +258,52 @@
     addNotification(notification);
   }
 
-  function onDialogOpen(i: number) {
-    /** Expects the index of the uploaded images opened
+  function onDialogOpen(imgName: string) {
+    /** Expects the uid of the uploaded images opened
         to create the dialog data and show the image
     */
-    const img = uploadedImages[i];
-    const meta = img.meta;
+    const img = uploadedImages.find(e => e.name === imgName);
+    if (img) {
+      const meta = img.meta;
+      if (!meta) {
+        const imgName = img.name;
+        const notification = {
+          mode: 'warn',
+          message: `The image - ${imgName} - metadata is not found`
+        }
+        addNotification(notification);
+        return;
+      }
+      const {
+        name,
+        url,
+        height,
+        width } = img;
+      const {
+        prediction,
+        target,
+        probs } = meta;
 
-    if (!meta) {
-      const imgName = img.name;
+      const data: DialogData = {
+        probs,
+        name,
+        height,
+        width,
+        url,
+        prediction,
+        target,
+        model: selectedModel
+      }
+      dialogData = {... data}
+    }
+    else {
       const notification = {
+        lifetime: 2,
         mode: 'warn',
-        message: `The image - ${imgName} - metadata is not found`
+        message: `${imgName} - not pressent in the grid`
       }
       addNotification(notification);
-      return;
     }
-
-    const {
-      name,
-      url,
-      height,
-      width } = img;
-    const {
-      prediction,
-      target,
-      probs } = meta;
-
-    const data: DialogData = {
-      probs,
-      name,
-      height,
-      width,
-      url,
-      prediction,
-      target,
-      model: selectedModel
-    }
-
-    dialogData = {... data}
   }
 
   function onDialogClose() {
@@ -299,26 +322,32 @@
 
     if (sortableByImportance) {
       if (sortType === 'None') {
-        sortType = 'ByImportanceAsc';
-      } else if (sortType === 'ByImportanceAsc') {
-        sortType = 'ByImportanceDesc';
-      } else if (sortType === 'ByImportanceDesc') {
-        sortType = 'ByImportanceAsc';
+        sortType = 'ImportanceAsc';
+      } else if (sortType === 'ImportanceAsc') {
+        sortType = 'ImportanceDesc';
+      } else if (sortType === 'ImportanceDesc') {
+        sortType = 'ImportanceAsc';
       } else {
-        sortType = 'ByImportanceAsc';
+        sortType = 'ImportanceAsc';
       }
     } else {
       if (sortType === 'None') {
-        sortType = 'ByNameAsc';
-      } else if (sortType === 'ByNameAsc') {
-        sortType = 'ByNameDesc';
-      } else if (sortType === 'ByNameDesc') {
-        sortType = 'ByNameAsc';
+        sortType = 'NameAsc';
+      } else if (sortType === 'NameAsc') {
+        sortType = 'NameDesc';
+      } else if (sortType === 'NameDesc') {
+        sortType = 'NameAsc';
       } else {
-        sortType = 'ByNameAsc';
+        sortType = 'NameAsc';
       }
     }
 
+    const notification = {
+      lifetime: 2,
+      mode: 'info',
+      message: `Grid sorted by ${sortType}`
+    }
+    addNotification(notification);
   }
 
 </script>
@@ -375,6 +404,8 @@
       {#if sortableByImportance }
         <button class="tool-selection"
                 type="button"
+                disabled={disableSortable}
+                class:disabled-btn={disableSortable}
                 on:click={sortGrid}>
           <span class="material-icons">
           low_priority
@@ -383,6 +414,8 @@
       {:else}
         <button class="tool-selection"
                 type="button"
+                disabled={disableSortable}
+                class:disabled-btn={disableSortable}
                 on:click={sortGrid}>
           <span class="material-icons">
           sort_by_alpha
