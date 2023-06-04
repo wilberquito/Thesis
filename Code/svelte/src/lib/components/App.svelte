@@ -205,6 +205,12 @@
                                       params: params,
                                       headers: headers
                                     })
+      const notification = {
+        lifetime: 5,
+        mode: 'success',
+        message: `Inference model: \n${modelId}`
+      }
+      addNotification(notification);
       const taskId = resp.data['task_uuid']
       await fromTaskId(taskId, onPredictionSuccess)
     } catch (error) {
@@ -315,6 +321,7 @@
   }
 
   function onModelSelected(model: string) {
+    toggleSelectionModel();
     selectedModel = model;
   }
 
