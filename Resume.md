@@ -25,3 +25,4 @@ it also let you modify the conf files from outside
 - Style app
 - Select multiple models from the app, handle the state of the interactuables buttons and scrolls
 - Sort images by importance or name depending on the state
+- Notification system (ui)
