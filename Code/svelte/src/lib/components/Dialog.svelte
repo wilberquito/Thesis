@@ -144,7 +144,7 @@
   }
 
   .dialog-mask {
-    z-index: 999;
+    z-index: 999999;
     pointer-events: auto;
     background-color: rgba(0,0,0,0.8);
     position: fixed;
