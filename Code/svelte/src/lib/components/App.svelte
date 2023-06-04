@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import axios from 'axios';
+  import {Notifications, acts} from '@tadashi/svelte-notification';
   import type {
     UploadedImage,
     UploadedImageMetadata,
@@ -39,20 +40,36 @@
       const resp  = await axios.get<PublicModels>(url)
       availableModels = (resp.data.models) || [];
 
+      if (availableModels.length <= 0) {
+        const notification = {
+          mode: 'danger',
+          message: 'None model available to infer'
+        }
+        addNotification(notification);
+        return;
+      }
+      availableModels.sort();
       const okDefaultModel = availableModels.includes(selectedModel);
       if (!okDefaultModel) {
-        if (availableModels.length > 0) {
-          availableModels.sort();
-          selectedModel = availableModels[0];
-        } else {
-          console.error(`The default ${PUBLIC_DEFAULT_MODEL} is not in the available models`) }
+        const notification = {
+          mode: 'warn',
+          message: 'Default model does not appear in the set of available models'
+        }
+        addNotification(notification);
       }
-
     } catch(error)  {
-      console.log(error)
-      console.log(`Applicaction could not load models from api`)
+      const notification = {
+        mode: 'danger',
+        message: 'Error stablishing connection to the API'
+      }
+      addNotification(notification);
     }
   });
+
+  // Adds a notification
+  function addNotification(notification: any) {
+      acts.add(notification)
+  }
 
   async function handleFiles(event: any) {
     // Treat uploaded images
@@ -177,7 +194,11 @@
         for (const img of images) formData.append("files", img.blob, img.name);
       }
       else {
-        console.warn("The prediction request was canceled because none image found to send")
+        const notification = {
+          mode: 'warn',
+          message: 'None image uploaded. Infer request canceled'
+        }
+        addNotification(notification);
       }
 
     try {
@@ -190,7 +211,6 @@
       const taskId = resp.data['task_uuid']
       await fromTaskId(taskId, onPredictionSuccess)
     } catch (error) {
-      console.error(error);
       onPredictionFailure();
     }
   }
@@ -214,7 +234,12 @@
         when the prediction succeded
     */
     runningPrediction = false;
-    interactiveText = "Ups! the server seems down, try it again"
+    interactiveText = 'Reset';
+    const notification = {
+      mode: 'danger',
+      message: `Bulk of images could not be sended correctly to the API`
+    }
+    addNotification(notification);
   }
 
   function onDialogOpen(i: number) {
@@ -225,7 +250,12 @@
     const meta = img.meta;
 
     if (!meta) {
-      console.error('Image metadata is not found')
+      const imgName = img.name;
+      const notification = {
+        mode: 'warn',
+        message: `The image - ${imgName} - metadata is not found`
+      }
+      addNotification(notification);
       return;
     }
 
@@ -293,6 +323,8 @@
 
 </script>
 
+
+<Notifications />
 
 {#if runningPrediction}
 <div class="loader-position">
