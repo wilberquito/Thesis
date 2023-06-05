@@ -5,4 +5,5 @@ body{
   height: 100vh;
   position: relative;
   overflow: none;
+  font-family: Sarala, Arima, cursive;
 }

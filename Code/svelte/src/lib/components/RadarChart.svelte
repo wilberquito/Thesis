@@ -9,6 +9,7 @@
   Chart.defaults.backgroundColor = '#9BD0F5';
   Chart.defaults.borderColor = '#1779ba';
   Chart.defaults.color = '#000';
+  Chart.defaults.font.family = "'Sarala', 'Arima'";
 
   function initChart() {
     const labels = (Object.keys(inputs) as string[]).map(str => str.toUpperCase())
