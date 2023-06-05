@@ -21,8 +21,6 @@ from api.vision import (get_supported_models,
                         mk_prediction)
 
 env = read_yaml('./conf.yml')
-KEY_PROBS = 'PROBABILITIES_SAVE_AS'
-KEY_CLASS = 'CLASSIFICATION_SAVE_AS'
 
 app = FastAPI(title="SIIM-ISIC Melanoma Pytorch service")
 
@@ -56,9 +54,13 @@ async def from_task(task_id: str):
     __sanitize_path(path=task_path,
                     detail=f'Task - {task_id} - not found')
 
-    class_filename, probs_filename = (env[KEY_CLASS], env[KEY_PROBS])
-    class_path = task_path / Path(class_filename)
-    probs_path = task_path / Path(probs_filename)
+    classification_filename = env['CLASSIFICATION_SAVE_AS']
+    probabilities_filename = env['PROBABILITIES_SAVE_AS']
+    about_model_filename = env['ABOUT_MODEL_SAVE_AS']
+
+    class_path = task_path / Path(classification_filename)
+    probs_path = task_path / Path(probabilities_filename)
+    about_model_path = task_path / Path(about_model_filename)
 
     for filepath in [class_path, probs_path]:
         __sanitize_path(path=filepath,
@@ -66,6 +68,7 @@ async def from_task(task_id: str):
 
     class_csv = cast(pd.DataFrame, pd.read_csv(class_path))
     probs_csv = cast(pd.DataFrame, pd.read_csv(probs_path))
+    about_model_dict = pd.read_csv(about_model_path).to_dict('records')[0]
 
     response = class_csv.to_dict('records')
     for resp in response:
@@ -73,6 +76,7 @@ async def from_task(task_id: str):
         probs = cast(pd.DataFrame, probs_csv[probs_csv['name'] == name])
         probs = probs.drop('name', axis=1)
         resp['probs'] = cast(Dict, probs.to_dict('records')[0])
+        resp['model'] = about_model_dict
 
     return response
 
@@ -93,11 +97,9 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
                       file=file,
                       save_as=str(file.filename))
 
-    save_as = (env[KEY_CLASS], env[KEY_PROBS])
     # Save and make the prediction into the task directory
     await mk_prediction(model_id=model_id,
-                        task_path=task_path,
-                        save_as=save_as)
+                        task_path=task_path)
 
     return {
         'task_uuid': task_id
@@ -140,11 +142,9 @@ async def predict_bulk(bg_tasks: BackgroundTasks,
                           file=file,
                           save_as=str(file.filename))
 
-    save_as = (env[KEY_CLASS], env[KEY_PROBS])
     bg_tasks.add_task(mk_prediction,
                       model_id=model_id,
-                      task_path=task_path,
-                      save_as=save_as)
+                      task_path=task_path)
 
     return {
         "task_uuid": task_id,

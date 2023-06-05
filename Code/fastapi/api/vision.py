@@ -105,8 +105,7 @@ def __load_transforms(model_id: str):
 
 
 async def mk_prediction(model_id: str,
-                        task_path: Path,
-                        save_as: Tuple[str, str]=('classification.csv', 'probabilities.csv')) -> None:
+                        task_path: Path) -> None:
 
     # Agnostic code
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -159,13 +158,31 @@ async def mk_prediction(model_id: str,
     probabilities_csv['name'] = names
     probabilities_csv[classes] = probabilities
 
-    # Saves the classification and the probabilities into 2 separed files
-    class_filename, prob_filename = save_as
-    predictions_csv.to_csv(task_path / Path(class_filename), index=False)
-    probabilities_csv.to_csv(task_path / Path(prob_filename), index=False)
+    about_model_data = about_model(model_id)
+    about_model_csv = pd.DataFrame(columns=about_model_data.keys())
+    about_model_csv.loc[len(about_model_csv.index)] = about_model_data.values()
+
+    # Saves metada about the predictions and model used in the predictions
+    classification_filename = env['CLASSIFICATION_SAVE_AS']
+    probabilities_filename = env['PROBABILITIES_SAVE_AS']
+    about_model_filename = env['ABOUT_MODEL_SAVE_AS']
+
+    predictions_csv.to_csv(task_path / Path(classification_filename), index=False)
+    probabilities_csv.to_csv(task_path / Path(probabilities_filename), index=False)
+    about_model_csv.to_csv(task_path / Path(about_model_filename), index=False)
+
+
+def about_model(model_id: str) -> dict:
+    """Returns especific information about the model"""
+    metadata = get_model_metadata(model_id)
+    keywords = ['origin', 'net_type', 'img_size', 'out_dim']
+    about = {k: v for k, v in metadata.items() if k in keywords}
+    print(about)
+    return about
 
 
 def get_model_metadata(model_id: str) -> dict:
+    """Returns hole information about the model"""
 
     if not is_model_supported(model_id):
         raise Exception(f'Pytorch model - {model_id} - does not exist')
