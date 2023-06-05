@@ -103,12 +103,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
   }
 
   .dialog-banner p {
     align-items: left;
     padding: 0;
     margin: 0;
+    position: relative;
   }
 
   .dialog-content {
@@ -162,7 +164,7 @@
   .interactive-btn-img {
     width: 21px;
     height: 21px;
-    right: 1rem;
+    right: 0;
     z-index: 1;
     border-radius: 50%;
     line-height: 24px;
