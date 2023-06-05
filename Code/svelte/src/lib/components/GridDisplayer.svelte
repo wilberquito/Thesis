@@ -94,7 +94,7 @@
   }
 
   .not-cancer {
-    background-color: #1779bad6 !important;
+    background-color: #5ba0ce !important;
   }
 
   .img-container {
