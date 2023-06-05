@@ -321,7 +321,6 @@
   }
 
   function onModelSelected(model: string) {
-    toggleSelectionModel();
     selectedModel = model;
   }
 
@@ -474,6 +473,7 @@
 
   .model-list-wrapper {
     flex: 1;
+    font-size: 0.8rem;
   }
 
   .model-list-wrapper.disabled-btn :global(.model-item) {
