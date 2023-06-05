@@ -438,9 +438,9 @@
           hub
           </span>
         </button>
-      {#if toggledShowModels }
 
         <div class="model-list-wrapper"
+          class:hide-model-list={!toggledShowModels}
           class:disabled-btn={disabledModelList}>
           <ModelsList
             models={availableModels}
@@ -448,8 +448,6 @@
             onModelSelected={onModelSelected}
           />
         </div>
-
-      {/if}
 
       </div>
 
@@ -469,6 +467,10 @@
     </div>
 
 <style>
+
+  .hide-model-list {
+    display: none;
+  }
 
   .model-list-wrapper {
     flex: 1;

@@ -46,7 +46,7 @@
   }
 
   .model-selected {
-    background:  #1779ba !important;
+    background:  #5ba0ce !important;
     color: white;
   }
 
