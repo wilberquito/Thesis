@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Annotated, cast, Dict
+from typing import Annotated, cast
 
 import pandas as pd
 import starlette.status as status
@@ -70,13 +70,27 @@ async def from_task(task_id: str):
     probs_csv = cast(pd.DataFrame, pd.read_csv(probs_path))
     about_model_dict = pd.read_csv(about_model_path).to_dict('records')[0]
 
-    response = class_csv.to_dict('records')
-    for resp in response:
-        name = resp['name']
-        probs = cast(pd.DataFrame, probs_csv[probs_csv['name'] == name])
-        probs = probs.drop('name', axis=1)
-        resp['probs'] = cast(Dict, probs.to_dict('records')[0])
-        resp['model'] = about_model_dict
+    classification_records = class_csv.to_dict('records')
+    response = []
+
+    for record in classification_records:
+        record_name = record['name']
+        probabilities = probs_csv[probs_csv['name'] == record_name]
+        probabilities = probabilities.drop('name', axis=1)
+
+        probabilities_dict = probabilities.to_dict('records')[0]
+
+        resp = {
+            'name': record_name,
+            'probabilities': probabilities_dict,
+            'metadata': about_model_dict,
+            'prediction': {
+                'target': record['target'],
+                'label': record['label'],
+                'prediction': record['prediction']
+            }
+        }
+        response.append(resp)
 
     return response
 

@@ -19,6 +19,7 @@ PYTORCH_MODELS:
       pth_path: /home/wilberquito/repos/open.thesis/models/resnet18_v0.pth.tar
       img_size: 256
       out_dim: 8
+      target: 6
       mapping:
         0: AK
         1: BCC
@@ -35,6 +36,7 @@ PYTORCH_MODELS:
       pth_path: /home/wilberquito/repos/open.thesis/models/vicorobot.8c_b3_768_512_18ep_best_20_fold0.pth
       img_size: 320
       out_dim: 8
+      target: 6
       mapping:
         0: AK
         1: BCC
@@ -51,6 +53,7 @@ PYTORCH_MODELS:
       pth_path: /home/wilberquito/repos/open.thesis/models/vicorobot.8c_b3_768_512_18ep_best_fold0.pth
       img_size: 320
       out_dim: 8
+      target: 6
       mapping:
         0: AK
         1: BCC
@@ -67,6 +70,7 @@ PYTORCH_MODELS:
       pth_path: /home/wilberquito/repos/open.thesis/models/vicorobot.8c_b3_768_512_18ep_final_fold0.pth
       img_size: 320
       out_dim: 8
+      target: 6
       mapping:
         0: AK
         1: BCC

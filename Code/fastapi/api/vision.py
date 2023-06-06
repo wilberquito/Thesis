@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
@@ -141,17 +142,23 @@ async def mk_prediction(model_id: str,
             logits = nn(X)
             probs = torch.softmax(logits, dim=1)
             label = torch.argmax(probs, dim=1)
+
+            # Saving the labels and probabilities
             labels = torch.cat((labels, label))
             probabilities = torch.cat((probabilities, probs))
 
     labels = labels.to('cpu').numpy()
     probabilities = probabilities.to('cpu').numpy()
+    targets = np.full(len(labels),
+                      target_model(model_id))
+    targets = targets == labels
 
     predictions_csv = pd.DataFrame({
         'name': names,
-        'target': labels
+        'label': labels,
+        'target': targets
     })
-    predictions_csv['prediction'] = predictions_csv['target'].map(mapping)
+    predictions_csv['prediction'] = predictions_csv['label'].map(mapping)
 
     classes = list(mapping.values())
     probabilities_csv = pd.DataFrame()
@@ -167,9 +174,16 @@ async def mk_prediction(model_id: str,
     probabilities_filename = env['PROBABILITIES_SAVE_AS']
     about_model_filename = env['ABOUT_MODEL_SAVE_AS']
 
-    predictions_csv.to_csv(task_path / Path(classification_filename), index=False)
-    probabilities_csv.to_csv(task_path / Path(probabilities_filename), index=False)
+    predictions_csv.to_csv(task_path / Path(classification_filename),
+                           index=False)
+    probabilities_csv.to_csv(task_path / Path(probabilities_filename),
+                             index=False)
     about_model_csv.to_csv(task_path / Path(about_model_filename), index=False)
+
+
+def target_model(model_id: str) -> int:
+    metadata = get_model_metadata(model_id)
+    return metadata['target']
 
 
 def about_model(model_id: str) -> dict:
@@ -177,7 +191,6 @@ def about_model(model_id: str) -> dict:
     metadata = get_model_metadata(model_id)
     keywords = ['origin', 'net_type', 'img_size', 'out_dim']
     about = {k: v for k, v in metadata.items() if k in keywords}
-    print(about)
     return about
 
 

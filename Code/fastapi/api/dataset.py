@@ -36,7 +36,7 @@ class TaskDataset(torch.utils.data.Dataset):
         image = image.transpose(2, 0, 1)
 
         # Convert PIL image to Pytorch tensor
-        tensor =  torch.tensor(image).float()
+        tensor = torch.tensor(image).float()
 
         return tensor
 

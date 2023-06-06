@@ -16,7 +16,7 @@ import modular.models as mm
 
 def save_file_to_disk(parent_dir: Path,
                       file: UploadFile = File(...),
-                      save_as: str ="default") -> Path:
+                      save_as: str = "default") -> Path:
     """
     Save a file into a directory that may exist or not.
     Once the directory is saved return it's content
