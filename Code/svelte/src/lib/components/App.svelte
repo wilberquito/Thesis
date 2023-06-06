@@ -256,11 +256,14 @@
     const img = uploadedImages.find(e => e.name === imgName);
 
     if (img?.inferenceResponse) {
-      let metadata: {[key: string]: any} = {...img.inferenceResponse};
+      let metadata: {[key: string]: any} = {...img.inferenceResponse.metadata};
       const { height, width } = img;
-      metadata = { ...metadata, height, width };
+      metadata['height'] = height;
+      metadata['width'] = width;
       const { target, prediction, label }  = img.inferenceResponse.prediction;
-      metadata = { ...metadata, prediction, target, label };
+      metadata['prediction'] = prediction;
+      metadata['target'] = target;
+      metadata['label'] = label;
       const probabilities = img.inferenceResponse.probabilities;
       const { name, url } = img;
 
@@ -271,6 +274,8 @@
         probabilities: probabilities
       }
       dialogData = { ... data };
+
+      console.log(dialogData);
     } else {
       const notification = {
         mode: 'warn',

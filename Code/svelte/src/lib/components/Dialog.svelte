@@ -4,6 +4,13 @@
 
   export let onClose: () => void = () => {}
   export let dialogData: DialogData;
+
+  let metadata = [];
+
+  $: {
+    metadata = Object.entries(dialogData.metadata);
+  }
+
 </script>
 
 <div class="dialog-mask">
@@ -24,61 +31,22 @@
           <img src={dialogData.url} alt="whatever" />
         </div>
         <div class="right-main-content">
-
           <div class="scrollable-info">
 
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
-            <div class="model-info">
-              <div class="header"></div>
-              <div class="body"></div>
-            </div>
+            {#each metadata as data}
+              <div class="model-info">
+                <div class="header">
+                  <p>{data[0]}</p>
+                </div>
+                <div class="body">
+                  <p>{data[1]}</p>
+                </div>
+              </div>
+            {/each}
 
           </div>
           <div class="radar-container">
-            <RadarChart inputs={dialogData.probs}></RadarChart>
+            <RadarChart inputs={dialogData.probabilities}></RadarChart>
           </div>
         </div>
       </div>
@@ -217,20 +185,34 @@
 
   .model-info {
     width: 100%;
-    min-height: 4rem;
+    min-height: 2rem;
     display: flex;
     flex-direction: column;
+    text-align: right;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
   }
 
   .model-info .header {
-    height: 1.25rem;
-    width: 100%;
-    background: red;
+    color: white;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    background: #5ba0ce;
+    padding: 0 0.1rem;
   }
 
   .model-info .body {
     flex: 1;
-    background: blue;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 0 0.1rem;
   }
 
 </style>
