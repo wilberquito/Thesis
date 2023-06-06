@@ -190,12 +190,6 @@
                                       params: params,
                                       headers: headers
                                     })
-      const notification = {
-        lifetime: 5,
-        mode: 'success',
-        message: `Inference model: \n${modelId}`
-      }
-      addNotification(notification);
       const taskId = resp.data['task_uuid']
       await fromTaskId(taskId, onPredictionSuccess)
     } catch (error) {
@@ -301,23 +295,23 @@
 
     if (sortableByImportance) {
       if (sortType === 'None') {
-        sortType = 'ImportanceAsc';
+        sortType = 'ImportanceDesc';
       } else if (sortType === 'ImportanceAsc') {
         sortType = 'ImportanceDesc';
       } else if (sortType === 'ImportanceDesc') {
         sortType = 'ImportanceAsc';
       } else {
-        sortType = 'ImportanceAsc';
+        sortType = 'ImportanceDesc';
       }
     } else {
       if (sortType === 'None') {
-        sortType = 'NameAsc';
+        sortType = 'NameDesc';
       } else if (sortType === 'NameAsc') {
         sortType = 'NameDesc';
       } else if (sortType === 'NameDesc') {
         sortType = 'NameAsc';
       } else {
-        sortType = 'NameAsc';
+        sortType = 'NameDesc';
       }
     }
 

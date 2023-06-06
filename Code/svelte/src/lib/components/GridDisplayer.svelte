@@ -101,7 +101,7 @@
 
   .img-container {
     position: relative;
-    padding: 2px;
+    padding: 3px;
     background-color: transparent;
     border-radius: 2px;
   }
