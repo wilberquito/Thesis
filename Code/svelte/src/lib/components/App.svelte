@@ -4,8 +4,7 @@
   import {Notifications, acts} from '@tadashi/svelte-notification';
   import type {
     UploadedImage,
-    UploadedImageMetadata,
-    PredResponse,
+    InferenceResponse,
     PublicModels,
     DialogData,
     SortType} from "$lib/types";
@@ -14,7 +13,6 @@
   import LoaderLine from "./LoaderLine.svelte";
   import Dialog from "./Dialog.svelte";
   import { PUBLIC_URL_SERVICE, PUBLIC_DEFAULT_MODEL } from "$env/static/public";
-  import { PUBLIC_MELANOMA_TARGET } from "$env/static/public";
 
   let interactiveText = "Predict";
   let runningPrediction = false;
@@ -117,30 +115,16 @@
     const url = PUBLIC_URL_SERVICE + "/from_task" + `/${taskId}`
 
     try {
-      const resp  = await axios.get<PredResponse[]>(url)
-      const predictions: PredResponse[] = resp.data
+      const request = await axios.get<InferenceResponse[]>(url)
+      const responseData = request.data;
 
       if (onSuccess) onSuccess();
 
-      for (const pred of predictions) {
-
-        const i = uploadedImages.findIndex(e => e.name === pred.name)
-        if (i >= 0) {
-          const meta: UploadedImageMetadata = {
-            prediction: pred.prediction,
-            pred: pred.target === Number(PUBLIC_MELANOMA_TARGET) ? "Cancer" : "NotCancer",
-            target: pred.target,
-            probs: pred.probs
-          }
-          const inMemoryImg = uploadedImages[i];
-          const img = {
-            ... inMemoryImg,
-            meta
-          }
-          uploadedImages = uploadedImages
-            .slice(0, i)
-            .concat(img)
-            .concat(uploadedImages.slice(i + 1, uploadedImages.length));
+      for (const response of responseData) {
+        const img = uploadedImages.find(e => e.name === response.name)
+        if (img) {
+          img.inferenceResponse = response;
+          uploadedImages = [...uploadedImages];
         }
         else {
           console.warn("Trying to update an element that does not exist")
@@ -160,6 +144,7 @@
     else {
       uploadedImages = [];
       interactiveText = "Predict";
+      sortType = 'None';
     }
   }
 
@@ -269,44 +254,27 @@
         to create the dialog data and show the image
     */
     const img = uploadedImages.find(e => e.name === imgName);
-    if (img) {
-      const meta = img.meta;
-      if (!meta) {
-        const imgName = img.name;
-        const notification = {
-          mode: 'warn',
-          message: `The image - ${imgName} - metadata is not found`
-        }
-        addNotification(notification);
-        return;
-      }
-      const {
-        name,
-        url,
-        height,
-        width } = img;
-      const {
-        prediction,
-        target,
-        probs } = meta;
+
+    if (img?.inferenceResponse) {
+      let metadata: {[key: string]: any} = {...img.inferenceResponse};
+      const { height, width } = img;
+      metadata = { ...metadata, height, width };
+      const { target, prediction, label }  = img.inferenceResponse.prediction;
+      metadata = { ...metadata, prediction, target, label };
+      const probabilities = img.inferenceResponse.probabilities;
+      const { name, url } = img;
 
       const data: DialogData = {
-        probs,
-        name,
-        height,
-        width,
-        url,
-        prediction,
-        target,
-        model: selectedModel
+        name: name,
+        url: url,
+        metadata: metadata,
+        probabilities: probabilities
       }
-      dialogData = {... data}
-    }
-    else {
+      dialogData = { ... data };
+    } else {
       const notification = {
-        lifetime: 2,
         mode: 'warn',
-        message: `${imgName} - not pressent in the grid`
+        message: `The image - ${imgName} - metadata is not found`
       }
       addNotification(notification);
     }

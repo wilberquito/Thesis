@@ -20,8 +20,10 @@
   }
 
   function sortByImportanceAsc(fst: UploadedImage, snd: UploadedImage) {
-    if (fst.meta?.pred === 'Cancer' && snd.meta?.pred === 'NotCancer') return -1;
-    if (snd.meta?.pred === 'Cancer' && fst.meta?.pred === 'NotCancer') return 1;
+    const pred1 = fst?.inferenceResponse?.prediction?.target
+    const pred2 = snd?.inferenceResponse?.prediction?.target
+    if (pred1 && !pred2) return 1;
+    if (pred2 && !pred1) return -1;
     return 0;
   }
 
@@ -52,11 +54,11 @@
 
 <div class="container">
   <div class="img-grid">
-    {#each shallowImages as img, i}
+    {#each shallowImages as img}
       <div id={img.name}
            class="img-container"
-           class:cancer={img?.meta?.pred === 'Cancer'}
-           class:not-cancer={img?.meta?.pred === 'NotCancer'}>
+           class:melanoma={img.inferenceResponse && img?.inferenceResponse?.prediction?.target}
+           class:not-melanoma={img.inferenceResponse && !img?.inferenceResponse?.prediction?.target}>
         <img src={img.url} alt="whatever" />
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         {#if letClose}
@@ -68,7 +70,7 @@
           </div>
         {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        {#if img.meta}
+        {#if img.inferenceResponse}
           <div class="interactive-btn-img"
                on:click={() => expandHandler(img.name)}>
             <span class="material-icons">
@@ -89,11 +91,11 @@
     padding: 0.75rem;
   }
 
-  .cancer {
+  .melanoma {
     background-color: rgba(255, 99, 132) !important;
   }
 
-  .not-cancer {
+  .not-melanoma {
     background-color: #5ba0ce !important;
   }
 

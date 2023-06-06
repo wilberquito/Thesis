@@ -1,27 +1,8 @@
-export type Prediction  = 'Cancer' | 'NotCancer'
-
-export type ModelInformation = {
-  field: string,
-  value: string
-}
-
 export type DialogData = {
+  name: string,
   url: string,
-  name: string,
-  height?: number,
-  width?: number,
-  prediction: string,
-  target: number,
-  model: string,
-  probs: {[key:string]: number},
-  info: ModelInformation[]
-}
-
-export type PredResponse = {
-  name: string,
-  prediction: string,
-  target: number,
-  probs: {[key:string]: number}
+  probabilities: {[key: string]: number},
+  metadata: {[key: string]: any},
 }
 
 export type UploadedImage = {
@@ -30,17 +11,21 @@ export type UploadedImage = {
   url: string,
   height?: number,
   width?: number,
-  meta?: UploadedImageMetadata;
+  inferenceResponse?: InferenceResponse;
 }
 
-export type UploadedImageMetadata = {
-  pred: Prediction,
-  prediction: string,
-  target: number,
-  probs: {[key:string]: number}
+export type InferenceResponse = {
+  name: string,
+  probabilities: {[key: string]: number},
+  metadata: {[key: string]: any},
+  prediction: Prediction
 }
 
-// type response from public models
+export type Prediction = {
+  target: boolean,
+  label: number,
+  prediction: string
+}
 
 export type PublicModels = {
   models: string[]

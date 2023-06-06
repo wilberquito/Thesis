@@ -88,7 +88,6 @@
 
 <style>
 
-
   .radar-container {
     position: relative;
     flex: 3;
@@ -233,4 +232,5 @@
     flex: 1;
     background: blue;
   }
+
 </style>
