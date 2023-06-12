@@ -32,7 +32,7 @@ class ResNet18_Dropout_Melanoma(nn.Module):
     complex fully connected layer to avoid overfitting"""
 
     def __init__(self, out_features: int):
-        super(ResNet18_Melanoma, self).__init__()
+        super(ResNet18_Dropout_Melanoma, self).__init__()
 
         self.net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
         in_features = self.net.fc.in_features
