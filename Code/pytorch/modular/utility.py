@@ -9,6 +9,7 @@ import numpy as np
 import torch
 import pandas as pd
 
+import wandb
 
 import matplotlib.pyplot as plt
 from typing import List, Dict
@@ -388,5 +389,15 @@ def model_writter(model_name: str):
         log_filename = model_name + '.csv'
         stats = point['stats']
         pd.DataFrame(stats).to_csv(log_filename)
+
+        # wANDb send
+        wandb.log({
+            "train_acc": stats["train_acc"][-1],
+            "train_loss": stats["train_loss"][-1],
+            "train_ovr": stats["train_ovr"][-1],
+            "val_acc": stats["val_acc"][-1],
+            "val_loss": stats["val_loss"][-1],
+            "val_ovr": stats["val_ovr"][-1],
+        })
 
     return writter
