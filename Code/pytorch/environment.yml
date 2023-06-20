@@ -9,9 +9,9 @@ dependencies:
     - wandb
     - pandas
     - numpy
-    - torch==1.11.0
-    - torchvision==0.12.0
-    - torchmetrics==0.11.4
+    - torch
+    - torchvision
+    - torchmetrics
     - jupyterlab
     - seaborn
     - mlxtend
