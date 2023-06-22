@@ -77,9 +77,10 @@ def train_model(model: nn.Module,
             running_loss = 0.0
             running_corrects = 0
 
+            EPOCH_LABELS = []
+            EPOCH_PROBS = []
             # Iterate over data (batches).
             for inputs, labels in dataloaders[phase]:
-                PROBS, LABELS = [], []
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -98,8 +99,8 @@ def train_model(model: nn.Module,
                     _, preds = torch.max(outputs, 1)
                     loss = criterion(outputs, labels)
 
-                    PROBS.append(probs.detach().cpu())
-                    LABELS.append(labels.detach().cpu())
+                    EPOCH_LABELS.append(labels.detach().cpu())
+                    EPOCH_PROBS.append(probs.detach().cpu())
 
                     # backward + optimize only if in training phase
                     if phase == 'train':
@@ -112,7 +113,7 @@ def train_model(model: nn.Module,
 
             epoch_loss = running_loss / datasets['size'][phase]
             epoch_acc = running_corrects / datasets['size'][phase]
-            epoch_ovr = compute_ovr(mel_idx, LABELS, PROBS)
+            epoch_ovr = compute_ovr(mel_idx, EPOCH_LABELS, EPOCH_PROBS)
 
             cphase = phase.capitalize()
             print(f'{cphase} OvR: {epoch_ovr:.4f} \t|\t' +
