@@ -1,12 +1,15 @@
 """
-Utility functions to make predictions.
+Utility functions make predictions
+using the well known test time agumentation thecnique.
 """
 
 import torch
 
 
 @torch.inference_mode()
-def tta(model: torch.nn, inputs: torch.Tensor, val_times: int):
+def test_time_augmentation(model: torch.nn,
+                           inputs: torch.Tensor,
+                           val_times: int):
     """Applies time test time agumentation to a set of tensor images
     an returns the logits"""
 
@@ -14,9 +17,9 @@ def tta(model: torch.nn, inputs: torch.Tensor, val_times: int):
 
     logits = []
     for n in range(val_times):
-        augmented_img = tta_transform(inputs, n)
+        augmented_img = test_time_transform(inputs, n)
         augmented_img = torch.unsqueeze(augmented_img, 0)
-        outputs = model(tta_transform(inputs, n))
+        outputs = model(test_time_transform(inputs, n))
         logits.append(outputs)
 
     stacked_logits = torch.stack(logits)
@@ -24,7 +27,7 @@ def tta(model: torch.nn, inputs: torch.Tensor, val_times: int):
     return stacked_logits
 
 
-def tta_transform(img: torch.Tensor, n: int):
+def test_time_transform(img: torch.Tensor, n: int):
     """Given a tensor it applies dummy transformation
     on de n value"""
 

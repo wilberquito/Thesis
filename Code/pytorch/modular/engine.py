@@ -16,7 +16,7 @@ import torch.nn as nn
 import copy
 from sklearn.metrics import roc_auc_score
 import numpy as np
-import modular.predictions as m_modular
+import modular.test as test
 
 StopEvaluator = NewType("StopEvaluator",
                         Callable[[torch.Tensor, torch.Tensor], torch.Tensor])
@@ -91,7 +91,9 @@ def train_model(model: nn.Module,
                 # Track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     if phase == 'val' and val_augmentation_required:
-                        outputs = m_modular.tta(model, inputs, val_times)
+                        outputs = test.test_time_agumentation(model,
+                                                              inputs,
+                                                              val_times)
                     else:
                         outputs = model(inputs)
 
