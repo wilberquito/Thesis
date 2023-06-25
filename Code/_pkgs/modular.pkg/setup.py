@@ -19,6 +19,7 @@ setup(
         'opencv_python',
         'albumentations==0.4.6',
         'scikit-learn',
-        'mlxtend'
+        'mlxtend',
+        'wandb'
        ]
 )
