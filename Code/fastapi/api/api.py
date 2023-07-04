@@ -36,19 +36,96 @@ async def public_models():
     """
     Description
     ----------
-    returns the name of the available models to make prediction of skin cancers
+    Returns the name of the available models
     """
     return {
         "models": get_supported_models()
     }
 
 
+@app.post("/predict")
+async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'): # Check if the Pytorch model is available
+    """
+    Description
+    ----------
+    The function receives a file (expected img with jpeg format)
+    then it creates the task that is being returned
+    and async does the prediction.
+    """
+    # Sanitize model and img
+    __sanitize_model(model_id)
+    __sanitize_file(file)
+
+    # New temporal task path
+    task_path: Path = mk_temporal_task(parent_path=env['TEMPORAL_TASKS_PATH'])
+    task_id: str = task_path.parts[-1]
+
+    # Save image inside the task folder
+    save_file_to_disk(parent_dir=task_path,
+                      file=file,
+                      save_as=str(file.filename))
+
+    # Save and make the prediction into the task directory
+    await mk_prediction(model_id=model_id,
+                        task_path=task_path)
+
+    return {
+        'task_uuid': task_id
+    }
+
+
+@app.post("/predict_bulk")
+async def predict_bulk(bg_tasks: BackgroundTasks,
+                       files: Annotated[list[UploadFile], File(description="Multiple image files as UploadFile")],
+                       model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
+    """
+    Description
+    ----------
+    Recives a jar of images and then it creates a task
+    for this predict that is returned to consult the result
+    of the predictions of each img.
+
+    Returns
+    -------
+    task_id: str
+        - folder where the images where saved
+    num_files: int
+        - number of images saved
+    """
+
+    # Check if the Pytorch model is available
+    __sanitize_model(model_id)
+
+    # Creates a new task
+    task_path: Path = mk_temporal_task(parent_path=env['TEMPORAL_TASKS_PATH'])
+    task_id: str = task_path.parts[-1]
+
+    # Sanitize each image and save inside the task
+    for file in files:
+        # Check the state of the file
+        __sanitize_file(file)
+        # Save image inside the task folder
+        save_file_to_disk(parent_dir=task_path,
+                          file=file,
+                          save_as=str(file.filename))
+
+    bg_tasks.add_task(mk_prediction,
+                      model_id=model_id,
+                      task_path=task_path)
+
+    return {
+        "task_uuid": task_id,
+        "num_images": len(files)
+    }
+
+
 @app.get("/from_task/{task_id}")
 async def from_task(task_id: str):
-    '''
-    Consult a task resulting predictions
-    '''
-
+    """
+    Description
+    ----------
+    Consults the predictions from a task
+    """
     task_path: Path = Path(env['TEMPORAL_TASKS_PATH']) / Path(task_id)
 
     __sanitize_path(path=task_path,
@@ -66,8 +143,8 @@ async def from_task(task_id: str):
         __sanitize_path(path=filepath,
                         detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
 
-    class_csv = cast(pd.DataFrame, pd.read_csv(class_path))
-    probs_csv = cast(pd.DataFrame, pd.read_csv(probs_path))
+    class_csv = pd.read_csv(class_path)
+    probs_csv = pd.read_csv(probs_path)
     about_model_dict = pd.read_csv(about_model_path).to_dict('records')[0]
 
     classification_records = class_csv.to_dict('records')
@@ -94,76 +171,6 @@ async def from_task(task_id: str):
 
     return response
 
-
-@app.post("/predict")
-async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'): # Check if the Pytorch model is available
-    __sanitize_model(model_id)
-
-    # Is the uploaded file and image?
-    __sanitize_file(file)
-
-    # New temporal task path
-    task_path: Path = mk_temporal_task(parent_path=env['TEMPORAL_TASKS_PATH'])
-    task_id: str = task_path.parts[-1]
-
-    # Save image inside the task folder
-    save_file_to_disk(parent_dir=task_path,
-                      file=file,
-                      save_as=str(file.filename))
-
-    # Save and make the prediction into the task directory
-    await mk_prediction(model_id=model_id,
-                        task_path=task_path)
-
-    return {
-        'task_uuid': task_id
-    }
-
-
-@app.post("/predict_bulk")
-async def predict_bulk(bg_tasks: BackgroundTasks,
-                       files: Annotated[list[UploadFile], File(description="Multiple image files as UploadFile")],
-                       model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
-
-    '''
-    Function that saves into a unique folder the jar of images from the request.
-    So you can consume these images, the uuid of the folder is returned
-
-    Returns
-    -------
-    task_id: str
-        folder where the images where saved
-
-    num_files: int
-        number of images saved
-    '''
-
-    # Check if the Pytorch model is available
-    __sanitize_model(model_id)
-
-    # Creates a new task
-    task_path: Path = mk_temporal_task(parent_path=env['TEMPORAL_TASKS_PATH'])
-    task_id: str = task_path.parts[-1]
-
-    # Sanitize each image and save inside the task
-    for file in files:
-
-        # Check the state of the file
-        __sanitize_file(file)
-
-        # Save image inside the task folder
-        save_file_to_disk(parent_dir=task_path,
-                          file=file,
-                          save_as=str(file.filename))
-
-    bg_tasks.add_task(mk_prediction,
-                      model_id=model_id,
-                      task_path=task_path)
-
-    return {
-        "task_uuid": task_id,
-        "num_images": len(files)
-    }
 
 
 def __sanitize_model(model_id: str):
