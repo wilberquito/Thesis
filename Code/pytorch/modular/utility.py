@@ -18,7 +18,7 @@ from torchmetrics import ConfusionMatrix
 import mlxtend.plotting as plotting
 
 import modular.checkpoint as m_checkpoint
-import modular.predictions as m_preditions
+import modular.test as m_test
 from sklearn.metrics import RocCurveDisplay
 from sklearn.preprocessing import LabelBinarizer
 
@@ -101,7 +101,7 @@ def plot_ovr_multiclass_roc(model: torch.nn.Module,
         # Send data and targets to target device
         inputs, labels = inputs.to(device), labels.to(device)
         if tta_required:
-            y_logit = m_preditions.tta(model, inputs, val_times)
+            y_logit = m_test.test_time_augmentation(model, inputs, val_times)
         else:
             y_logit = model(inputs)
         # Turn predictions from logits to labels
@@ -150,7 +150,7 @@ def plot_confusion_matrix(model: torch.nn.Module,
         # Send data and targets to target device
         inputs, labels = inputs.to(device), labels.to(device)
         if tta_required:
-            y_logit = m_preditions.tta(model, inputs, val_times)
+            y_logit = m_test.test_time_augmentation(model, inputs, val_times)
         else:
             y_logit = model(inputs)
         # Turn predictions from logits to labels
