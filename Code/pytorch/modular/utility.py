@@ -21,6 +21,7 @@ import modular.checkpoint as m_checkpoint
 import modular.test as m_test
 from sklearn.metrics import RocCurveDisplay
 from sklearn.preprocessing import LabelBinarizer
+from torch.utils.data import Dataset, DataLoader
 
 
 # Calculate accuracy (a classification metric)
@@ -332,48 +333,25 @@ def set_seed(seed=42):
     torch.backends.cudnn.deterministic = True
 
 
-def display_random_images(dataset: torch.utils.data.dataset.Dataset,
-                          n: int = 10,
-                          display_label: bool = True,
-                          display_shape: bool = True,
-                          seed: int = None):
-    """Display random images from a dataset collection"""
+def display_random_images(dataset: Dataset,
+                          grid_size: int = 16):
+    """Display a samples of images from the dataset"""
 
-    # 2. Adjust display if n too high
-    if n > 10:
-        display_shape = False
-        print("""For display purposes, n shouldn't
-        be larger than 10, setting to 10 and removing shape display.""")
+    dataloader = DataLoader(dataset=dataset, batch_size=grid_size, shuffle=False)
+    data = iter(dataloader)
+    images, labels = next(data)
+    show_img(torchvision.utils.make_grid(images))
 
-    # 3. Set random seed
-    if seed:
-        random.seed(seed)
 
-    # 4. Get random sample indexes
-    random_samples_idx = random.sample(range(len(dataset)), k=n)
-
-    # 5. Setup plot
-    plt.figure(figsize=(16, 8))
-
-    # 6. Loop through samples and display random samples
-    for i, targ_sample in enumerate(random_samples_idx):
-        targ_image, targ_label = dataset[targ_sample][0], dataset[targ_sample][1]
-
-        # 7. Adjust image tensor shape for plotting:
-        # [color_channels, height, width] -> [height, width, color_channels]
-        targ_image = targ_image.cpu().numpy()
-        targ_image_adjust = targ_image.transpose(1, 2, 0)
-        targ_image_adjust = targ_image_adjust / 255
-
-        # Plot adjusted samples
-        plt.subplot(n // 10 + 1, n if n <= 10 else n // 2, i+1)
-        plt.imshow(targ_image_adjust)
-        plt.axis("off")
-        if display_label:
-            title = dataset.idx_to_class[targ_label]
-        if display_shape:
-            title = title + f"\nshape: {targ_image_adjust.shape}"
-        plt.title(title)
+def show_img(img, figsize=(20, 16)):
+    """Display an image from a torch.tensor.
+    The tensor must have the following format (C,H,W)
+    """
+    plt.figure(figsize=figsize)
+    img = img * 0.5 + 0.5
+    npimg = np.clip(img.numpy(), 0., 1.)
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
 
 
 def model_writter(model_name: str):
