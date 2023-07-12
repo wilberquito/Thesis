@@ -28,8 +28,9 @@ class ResNet18_Melanoma(nn.Module):
 
 
 class ResNet18_Dropout_Melanoma(nn.Module):
-    """This model is based on ResNet18 but uses a more
-    complex fully connected layer to avoid overfitting"""
+    """This model is based on ResNet18 but uses the
+    average of the result of a list of dropout layers
+    to avoid overfitting"""
 
     def __init__(self, out_features: int):
         super(ResNet18_Dropout_Melanoma, self).__init__()
