@@ -356,7 +356,9 @@ def show_img(img, figsize=(20, 16)):
 
 def model_writter(model_name: str):
     """Saves the pythorch trainned model and generates
-    a log file in csv format"""
+    a log file in csv format with the current trainning
+    and validation phases. It finally send the last log
+    to wand service."""
 
     def writter(point: Dict):
         # Save checkpoint
@@ -368,7 +370,7 @@ def model_writter(model_name: str):
         stats = point['stats']
         pd.DataFrame(stats).to_csv(log_filename)
 
-        # wANDb send
+        # wand logging
         wandb.log({
             "train_acc": stats["train_acc"][-1],
             "train_loss": stats["train_loss"][-1],
