@@ -18,9 +18,6 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 import modular.test as test
 
-StopEvaluator = NewType("StopEvaluator",
-                        Callable[[torch.Tensor, torch.Tensor], torch.Tensor])
-
 Writter = NewType("Writter", Callable[[Dict], None])
 
 
