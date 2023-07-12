@@ -10,8 +10,8 @@ import torch
 def test_time_augmentation(model: torch.nn,
                            inputs: torch.Tensor,
                            val_times: int):
-    """Applies time test time agumentation to a set of tensor images
-    an returns the logits"""
+    """Applies time test time agumentation to a
+    set of tensor images an returns the logits"""
 
     model.eval()
 
