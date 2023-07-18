@@ -1,11 +1,24 @@
 \chapter{State of the Art}
 \label{cap:estat}
 
-Melanoma, a type of cancer that arises from melanin-producing cells, can be found in various parts of the body such as the skin, eyes, nerve centers, and meninges. Early diagnosis is crucial for improving the chances of curing melanoma, even though it has the highest increasing incidence rate among all skin cancer types. According to a study, timely identification of early-stage skin cancer resulted in a significant 90\% reduction in mortality rates. For instance, patients diagnosed with stage I melanoma have a 10-year overall survival probability ranging from 94\% to 98\%, while those in stage IV have a much lower estimated 10-year overall survival rate of just 10\% to 15\%. \\
+Melanoma, a type of cancer that arises from melanin-producing cells,
+can be found in various parts of the body such as the skin, eyes, nerve centers, and meninges. Early diagnosis is crucial for improving the chances of curing melanoma, even though it has the highest increasing incidence rate among all skin cancer types.
+According to a study \cite{TimelyMelanomaDetection}, timely identification of early-stage skin cancer resulted in a significant 90\%
+reduction in mortality rates. For instance, patients diagnosed with stage I melanoma have a 10-year overall survival
+probability ranging from 94\% to 98\%, while those in stage IV have a much lower estimated 10-year
+overall survival rate of just 10\% to 15\%. \\
 
-Dermoscopy is a non-surgical method used to examine the underlying layers of the skin. While it can yield good results, it requires extensive training and experience in dermatology. However, it may not provide a definitive diagnosis for melanoma, especially in its early stages. Consequently, there is a need for an automated diagnostic tool. \\
+Dermoscopy is a non-surgical method used to examine the underlying layers of the skin.
+While it can yield good results, it requires extensive training and experience in dermatology.
+However, it may not provide a definitive diagnosis for melanoma, especially in its early stages.
+Consequently, there is a need for an automated diagnostic tool. \\
 
-In a study the classification of lesions was compared between expert opinions and artificial neural networks. The computer program demonstrated a sensitivity of 95\% and a specificity of 88\%, while dermatologists reported similar scores of 95\% sensitivity and 90\% specificity. These findings indicate the potential utilization of automated systems in the field of cancer detection \cite{EpidemiologySkinCancer}. \\
+In a study \cite{EpidemiologySkinCancer} the melanoma task classification was compared between expert
+opinions and artificial neural networks.
+The computer program demonstrated had an area under the receiver
+operating characteristic curve of 0.87, which was higher than the dermatologists (0.74), the program also
+had a higher sensitivity in classification of 85\% against the 76\% by the dermatologists.
+These findings indicate the potential utilization of automated systems in the field of cancer detection. \\
 
 For cancer prediction, a mostly supervised learning approach is employed that makes use of algorithms for classification based on conditional decisions or probabilities. The most common algorithms or methodologies include decision trees, convolutional neural networks (CNN), support vector machine (SVM), and k-nearest neighbors (KNN). One of the most powerful systems are CNNs (Convolutional Neural Networks), despite the fact that their use may involve a loss of explainability, which is a major concern in healthcare systems. \\
 
@@ -41,12 +54,3 @@ These inspirations and adaptations from the related work have greatly influenced
 CNN explainer is a web page created through a collaborative research effort between Georgia Tech and Oregon State\cite{CNNExplainer}. It leverages TensorFlow.js, a deep learning library that utilizes GPU acceleration within the web browser, to load pretrained models for visualization. The entire interactive system is implemented in JavaScript, utilizing Svelte as a framework and D3.js for visualizations. With CNN Explainer, users can upload images and obtain predictions for those images across ten different classes. \\
 
 While CNN Explainer primarily aims to serve educational purposes, my project's UI focuses on providing dermoscopy images predictions and information about the models used and their outputs. The inspiration for incorporating an interactive UI for end users stemmed from CNN Explainer. Consequently, I utilized the same web framework to develop the UI for my project.
-
-
-
-
-
-
-
-
-
