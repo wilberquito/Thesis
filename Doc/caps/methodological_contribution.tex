@@ -14,7 +14,7 @@ For training the models, we utilized 8 classes selected from the original set, a
 
 \begin{itemize}
     \item melanoma
-    \item nevus 
+    \item nevus
     \item BCC (Basal Cell Carcinoma)
     \item BKL (Benign lesions of the keratosis)
     \item AK (Actinic Keratosis)
@@ -57,7 +57,7 @@ def train_validate_split(df: pd.DataFrame,
     return X_train, X_val
 \end{Verbatim}
 
-Creating the train, validation and test dataset was as easy as follow, 
+Creating the train, validation and test dataset was as easy as follow,
 
 \begin{Verbatim}[fontsize=\small]
 train_df, validate_df = m_dataset.train_validate_split(df,
@@ -66,7 +66,7 @@ train_df, validate_df = m_dataset.train_validate_split(df,
 
 validate_df, test_df = m_dataset.train_validate_split(validate_df,
                                                       random_state=42,
-                                                      validate_size=0.5)    
+                                                      validate_size=0.5)
 \end{Verbatim}
 
 Please note that the training dataset comprises 80\% of the filtered dataset, which corresponds to a total of 25,012 samples. In contrast, both the validation and test datasets are composed of 10\% of the filtered dataset, amounting to 3,126 samples each.
@@ -76,7 +76,7 @@ Please note that the training dataset comprises 80\% of the filtered dataset, wh
 As it was explained in \textit{Chapter \ref{cap:prelim}}, data augmentation is a technique that
 creates more data by applying multiple transformations on an image. The  main goal of data augmentation is to increase the volume, quality and diversity of training data. \\
 
-For the thesis, the python package {\tt albumentations} was use for this goal, the package support a big variety of transformations.
+For the thesis, the python package {\tt albumentations} was used for this goal, the package support a big variety of transformations.
 
 \newpage
 
@@ -175,7 +175,7 @@ Is mapped into an augmented train dataset (\textit{Figure \ref{fig:aug-sample-of
 
 We utilized the pre-trained weights of the {\tt ResNet-18} as the base model for transfer learning. As described in \textit{Chapter \ref{cap:prelim}}, this model achieves an accuracy of approximately 69.76\% on the {\tt ImageNet} dataset, which may not be as high as some other models. However, due to its relatively small number of trainable parameters (11.7 million), we decided to select this model over other available options. \\
 
-In ResNet architecture (Figure \ref{fig:resnet-18-arch}), each layer of the network contains a residual block (BasicBlock). 
+In ResNet architecture (Figure \ref{fig:resnet-18-arch}), each layer of the network contains a residual block (BasicBlock).
 
 \begin{figure}[H]
 \begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
@@ -188,7 +188,7 @@ In ResNet architecture (Figure \ref{fig:resnet-18-arch}), each layer of the netw
 
 A residual block
 consists of multiple convolutional layers followed by batch normalization and
-activation functions (\textit{Figure \ref{fig:resnet-18-residual-block}}). 
+activation functions (\textit{Figure \ref{fig:resnet-18-residual-block}}).
 
 \begin{figure}[H]
 %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
@@ -219,7 +219,7 @@ There are many ways to use {\tt ResNet-18} as base transfer learning models. We 
 \begin{Verbatim}[fontsize=\small]
 from torchvision.models import (resnet18,
                                 ResNet18_Weights)
-net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)    
+net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
 \end{Verbatim}
 
 \section{Proposed Models}
@@ -294,7 +294,7 @@ class ResNet18_Dropout_Melanoma(nn.Module):
         return out
 \end{Verbatim}
 
-We provide the resume architecture of {\tt ResNet18\_Dropout\_Melanoma} model in \textit{Figure \ref{fig:resnet-18-dropout-melanoma-arch}}. The {\tt recursive} label in the provided image means that the layers have been "forwarded" multiple times instead of constructed multiple times. 
+We provide the resume architecture of {\tt ResNet18\_Dropout\_Melanoma} model in \textit{Figure \ref{fig:resnet-18-dropout-melanoma-arch}}. The {\tt recursive} label in the provided image means that the layers have been "forwarded" multiple times instead of constructed multiple times.
 
 \newpage
 
@@ -423,9 +423,9 @@ def test_time_transform(img: torch.Tensor, n: int):
 
 \newpage
 
-\section{Training Models} 
+\section{Training Models}
 
-We could train eight models with different training approaches in various machine environments. All of these models are based on transfer learning using the \texttt{ResNet-18} architecture and fine-tuning this architecture. \\
+We trained eight models with different training approaches in various machine environments. All of these models are based on transfer learning using the \texttt{ResNet-18} architecture and fine-tuning this architecture. \\
 
 The training information, including the training environment and hyperparameters, for each model is provided in Table \ref{table:trained-models-information}. To facilitate understanding, we have also included a name mapping in Table \ref{table:mapping-names} for easy reference.
 
@@ -494,8 +494,6 @@ Training Time & 1h 45m & 1h 22m & 1h 43m & 1h 38m & 1d 7h 30m & 1d 7h 4m & 1d 7h
 {\label{fig:cad-infrastructure-training-system}}
 \end{figure}
 
-\textit{Figure \ref{fig:cad-infrastructure-training-system}} illustrates the pipeline used for training and deploying models. The pipeline consists of four stages. \\
-
 The first stage involves cleaning and splitting the initial dataset into smaller datasets. This step ensures that the data is organized and ready for further processing. \\
 
 The second stage focuses on training and validating the models using the training and validation datasets. During this stage, the system reads images and applies data augmentation techniques to train images and Test Time Augmentation (TTA) to validation images. These techniques enhance the model's performance by introducing variations in the data and improving its generalization ability. \\
@@ -505,8 +503,3 @@ The third stage involves analyzing the training results obtained from different 
 The last stage revolves around exposing the trained models through an API's container image. This container image allows for easy deployment and integration of the models into other systems or applications, providing a convenient way to utilize the trained models for various tasks. \\
 
 Overall, the pipeline depicted in \textit{Figure \ref{fig:cad-infrastructure-training-system}} showcases a systematic approach to training models, evaluating their performance, and making them available for consumption through an API infrastructure.
-
-
-
-    
-
