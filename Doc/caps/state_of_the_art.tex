@@ -39,13 +39,16 @@ The project is an ensemble of convolutional neural network (CNN) models. These m
 
 The submission that won achieved an AUC (Area Under the Curve)\footnote{AUC is a metric that quantifies the overall quality of a binary classification model by measuring the area under its ROC curve. It provides a single value that summarizes the model's ability to discriminate between positive and negative instances.} score of 0.9600 on cross-validation and 0.9490 on the private leaderboard. \\
 
-From their work, I adopted various deep learning techniques. For instance, I learned about evaluating models on unbalanced multi-class data-sets like the ISIC dataset. To properly assess the training process, they utilized the AUC with one-vs-rest (OvR) metric. This project as well uses this metric to to evaluate the performance of the models. \\
+From their work, we adopted various deep learning techniques. For instance, we applied the same way they evaluate models given
+an unbalanced multi-class data-sets like as the ISIC dataset is.
+To properly assess the training process, they utilized the AUC with one-vs-rest (OvR) metric. This project as well uses this metric to evaluate the performance of the models. \\
 
 Additionally, this thesis incorporated an early-stop mechanism into the training process. This mechanism prevents over-fitting by monitoring the model's performance on a validation set and stopping the training if the performance starts to worsen or stagnate. This was not mentioned in the related work, but I recognized its importance and included it in my implementation. \\
 
 Another aspect the current thesis borrowed from this work is the approach to cleaning and mapping data-sets from different years. They trained their models with different output sizes, but the process of mapping and joining the data-sets into a single data-set was similar to my approach, where I consistently mapped the data into eight different classes. \\
 
-The pipeline of data augmentation that is implemented in the work is also reused. As they do, this thessis use Albumentations\cite{Albumentations} library instead of the native alternative transforms data agumentation from Pytorch. \\
+The pipeline of data augmentation that is implemented in the work is also reused. Equivalent to them,
+this thesis uses {\tt albumentations}\cite{Albumentations} library instead of the native alternative transforms data agumentation from Pytorch. \\
 
 These inspirations and adaptations from the related work have greatly influenced the development and organization of this deep learning project.
 
