@@ -14,7 +14,8 @@ after World War II, and the name itself was coined in 1956 attributed by John Mc
 
 After successfully decrypting Enigma\footnote{Enigma was a rotor machine designed to encrypt and decrypt messages.}, in World War II, the mathematician Alan Turing posed a groundbreaking question that had a profound impact on society: "Can machines think?" \cite{CanMachineThink}. In this seminal work, Turing not only outlined the process of developing intelligent machines but also presented a method for assessing their intelligence. Even today, the Turing Test remains a widely recognized benchmark for evaluating the intelligence of artificial systems. According to this test, if a human cannot distinguish, through a text-based conversation, whether they are interacting with a human or a machine, the artificial system can be considered to possess intelligence. \\
 
-The term "AI" is exciting but, the definition of this term is blurry \cite{AIModernApprouch}. Historically there are two approaches to \textit{AI} have been followed, each by different people
+The term "AI" is exciting but, the definition of this term is blurry \cite{AIModernApprouch}.
+Historically there are two approaches to \textit{AI} that have been followed, each by different people
 with different methods. The human-centered approach and the rationalist approach. The incorporation of a human-centered approach into the field must incorporate empirical scientific methods, which entail making observations and formulating hypotheses about human behavior. On the other hand, a rationalist approach combines the disciplines of mathematics and engineering. These different perspectives have both faced criticism and received praises. \\
 
 From that juncture until the turn of the century, the field of \textit{AI} encountered fluctuations, witnessing periods of remarkable accomplishments interspersed with the infamous \textit{AI} winters. Currently \textit{AI} is a hot topic of discussion, evident from the increasing searches and online mentions. While \textit{AI} has been around for more than 65 years, the recent exponential trend can be attributed to the availability of cost-efficient storage, transfer, and computation capabilities for massive amounts of data. This newfound capacity was previously unimaginable and has contributed to the current \textit{AI} boom. \\
@@ -92,7 +93,7 @@ There are three subcategories of machine learning \cite{MITML}. These subcategor
 
 \vspace{0.5cm}
 \textbf{Supervised Learning} \\
-    
+
 Machine learning models are trained with labeled data sets, which allow the models to learn and grow more accurate over time. For example, an algorithm would be trained with pictures of dogs and other things, all labeled by humans, and the machine would learn ways to identify pictures of dogs on its own. Supervised machine learning is the most common type used today. \\
 
 \vspace{0.5cm}
@@ -150,7 +151,7 @@ Deep neural networks are part of the deep learning algorithms within the realm o
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{imatges/preliminaries/deep-learning-familiy.png}
-\caption[Deep Learning Family]{\textit{Deep Learning Family. Illustration by WIKIPEDIA}}
+\caption[Deep Learning Family]{\textit{Deep Learning Family. Illustration by towardsdatascience}}
 {\label{fig:deep-learning-family}}
 \end{figure}
 
@@ -167,13 +168,13 @@ The process of feature extraction in deep neural networks allows the network to 
 {\label{fig:deep-nn}}
 \end{figure}
 
-The minimum unit in a layer is known as neuron or perceptron. 
-The perceptron, is the oldest simple neural network, created by Frank Rosenblatt in 1958. 
-Every node within the network possesses an associated value, which is computed based on the incoming nodes and edges, 
-as depicted in \textit{Figure \ref{fig:perceptron}}. The computation takes place in the following manner: the products 
-of  inputs and their respective weights are summed with a bias, and this sum is subsequently passed through the node's activation function. 
-The activation function serves the purpose of compressing the resulting value within the range of 0 to 1 and introduces non-linearity, 
-allowing the model to learn complex relationships in the data. The resulting value determines the 
+The minimum unit in a layer is known as neuron or perceptron.
+The perceptron, is the oldest simple neural network, created by Frank Rosenblatt in 1958.
+Every node within the network possesses an associated value, which is computed based on the incoming nodes and edges,
+as depicted in \textit{Figure \ref{fig:perceptron}}. The computation takes place in the following manner: the products
+of  inputs and their respective weights are summed with a bias, and this sum is subsequently passed through the node's activation function.
+The activation function serves the purpose of compressing the resulting value within the range of 0 to 1 and introduces non-linearity,
+allowing the model to learn complex relationships in the data. The resulting value determines the
 degree to which the signal should propagate through the network, ultimately influencing the final outcome.
 
 \begin{figure}[H]
@@ -249,7 +250,7 @@ Convolutional operations in neural networks are linear, meaning they capture lin
 There are many types of non-linearity functions applied after the convolutional layers, the most popular are: \\
 
 \begin{itemize}
-    
+
 \item \textbf{Sigmoid}
 
 The sigmoid function takes a real-valued number and “squashes” it into a range between 0 and 1.
@@ -271,7 +272,7 @@ Mathematically, the sigmoid function is expressed as:
 
 \item \textbf{ReLU}
 
-The Rectified Linear Unit (ReLU) is maybe the most popular activation functions in the last few years. The function is just simply threshold at zero. 
+The Rectified Linear Unit (ReLU) is maybe the most popular activation functions in the last few years. The function is just simply threshold at zero.
 
 \centering
 \begin{tikzpicture}
@@ -321,7 +322,10 @@ Different machine learning tasks and algorithms may use different loss functions
     \item Cross-entropy Loss
 \end{itemize}
 
-For the thesis, the loss function used to train the models is Cross-entropy Loss as this a multiclass problem. Please, don't confuse the optimizer algorithm with the metric used to evaluate how good are the models. To evaluate how good are the models I used the ROC AUC with one-vs-rest strategy, explained in \textit{Section \ref{sec:metrics}}. \\
+For this thesis, the loss function used to train the models is
+{\tt Cross-entropy Loss} as this is a multiclass problem. Don't confuse the optimizer
+algorithm with the metric used to evaluate how good models are.
+We used the ROC AUC with one-vs-rest strategy to evaluate the models performance, explained in \textit{Section \ref{sec:metrics}}. \\
 
 Cross-entropy loss, also known as log loss, is a widely used loss function in machine learning, particularly in classification tasks. It measures the dissimilarity between predicted class probabilities and true class labels. \\
 
@@ -342,7 +346,7 @@ In multi-class classification, the cross-entropy loss is calculated using the tr
 \subsection{Metrics}
 {\label{sec:metrics}}
 
-There are a considerable amount of different metrics that can be computed for a model prediction but I'll present the essential metrics used in the thesis. \\
+There are a considerable amounts of different metrics that can be computed for a model prediction but I'll present the essential metrics used in the thesis. \\
 
 \vspace{0.5cm}
 \textbf{Confusion Matrix} \\
@@ -379,7 +383,7 @@ In a logical sense, when we add up the elements on the main diagonal of the conf
 \vspace{0.5cm}
 \textbf{Accuracy} \\
 
-\noindent Accuracy is a commonly employed and straightforward performance metric in classification tasks. It calculates the ratio of correct predictions to the total number of predictions made on a dataset, thus determining the likelihood of correctly classifying an input. Accuracy is especially valuable when working with a balanced dataset, where the number of instances in each class is roughly equivalent. However, in the case of the previously mentioned thesis dataset, which is not balanced, the use of accuracy serves primarily to monitor model training performance rather than being the main evaluation metric. 
+\noindent Accuracy is a commonly employed and straightforward performance metric in classification tasks. It calculates the ratio of correct predictions to the total number of predictions made on a dataset, thus determining the likelihood of correctly classifying an input. Accuracy is especially valuable when working with a balanced dataset, where the number of instances in each class is roughly equivalent. However, in the case of the previously mentioned thesis dataset, which is not balanced, the use of accuracy serves primarily to monitor model training performance rather than being the main evaluation metric.
 
 \[Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\]
 
@@ -443,7 +447,7 @@ The magnitude and direction of the weight update is computed by taking a step in
 Finally, the weight are updated after each epoch with the following expression:
 
 \[
-w = w + \Delta w 
+w = w + \Delta w
 \]
 
 
@@ -458,7 +462,7 @@ In Gradient Descent optimization, we compute the cost gradient based on the comp
 
 \newpage
 
-The next lines are a high level pseudo-implementation of the Gradient Descent algorithm: 
+The next lines are a high level pseudo-implementation of the Gradient Descent algorithm:
 
 \begin{itemize}[label=\(\circ\)]
   \item for each epoch:
@@ -495,7 +499,7 @@ The next lines are a high level pseudo-implementation of the Stochastic Gradient
               \begin{itemize}[label=$\circ$, topsep=5pt]
                 \item for each weight \(j\):
                     \begin{itemize}[label=$\circ$, topsep=10pt]
-                        \item \(w_j = w_{j-1} + \Delta w_j\), where \(\Delta w_j = \eta (target^{(i)} - output^{(i)})x_{j}^{(i)}\) 
+                        \item \(w_j = w_{j-1} + \Delta w_j\), where \(\Delta w_j = \eta (target^{(i)} - output^{(i)})x_{j}^{(i)}\)
                     \end{itemize}
             \end{itemize}
         \end{itemize}
@@ -562,7 +566,7 @@ There are lot of strategies to combat over-fitting, in this section there is pre
 \vspace{0.5cm}
 \textbf{Early Stopping} \\
 
-Early Stopping involves monitoring the model's performance on a validation dataset during training. If the performance stops improving or starts deteriorating, the training process is stopped early. By doing this, early stopping helps find the optimal balance between model complexity and generalization, ensuring the model doesn't become overly specialized to the training data and do not performs well on unseen data. \\
+Early Stopping involves monitoring the model's performance on a validation dataset during training. If the performance stops improving or starts deteriorating, the training process is stopped early. By doing this, early stopping helps find the optimal balance between model complexity and generalization, ensuring the model doesn't become overly specialized to the training data and does not performs well on unseen data. \\
 
 \begin{figure}[H]
 \centering
@@ -582,18 +586,18 @@ There are various approaches in learning rate scheduling, bellow you'll find the
 
 \begin{itemize}
     \item \textbf{Learning Rate Decay}
-    
-    This learning rate scheduling works gradually reducing the learning rate over time or in response to certain conditions. A smaller learning rate allows the model to fine-tune its parameters more cautiously, preventing it from aggressively fitting to noisy or irrelevant patterns in the training data. This smoother adjustment helps the model converge to a better generalize solution, reducing the risk of over-fitting. 
-        
+
+    This learning rate scheduling works gradually reducing the learning rate over time or in response to certain conditions. A smaller learning rate allows the model to fine-tune its parameters more cautiously, preventing it from aggressively fitting to noisy or irrelevant patterns in the training data. This smoother adjustment helps the model converge to a better generalize solution, reducing the risk of over-fitting.
+
     \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{imatges/preliminaries/learning-rate-decay.png}
     \caption[Learning Rate Decay]{\textit{Learning Rate Decay. In this graphic it's represented how the learning rate hyperparameter decrease over the epochs. Illustration by Author}}
     {\label{fig:learning-rate-decay}}
-    \end{figure} 
-    
+    \end{figure}
+
     \item \textbf{Cycling Learning}
-    
+
     Cyclic learning rate scheduling is popular for faster convergence and improved generalization. By cycling the learning rate, models explore diverse loss landscape regions, escaping local minima for better optima. Variations like triangular and cosine annealing alternate or smoothly transition between lower and upper bounds. This approach adds variation and exploration to optimization, enhancing model performance and convergence.
     \begin{figure}[H]
     \centering
@@ -638,7 +642,7 @@ This subset was employed to apply trained models to new, unseen examples and eva
 \vspace{0.5cm}
 \textbf{Test Set} \\
 
-Comprising non-observed data examples, this set is used to assess the performance of the chosen model. It helps determine if further optimization is required and which techniques should be applied next. Alternatively, it aids in deciding whether to select an alternative model. 
+Comprising non-observed data examples, this set is used to assess the performance of the chosen model. It helps determine if further optimization is required and which techniques should be applied next. Alternatively, it aids in deciding whether to select an alternative model.
 
 
 \begin{figure}[H]
@@ -673,7 +677,7 @@ Test-time augmentation (TTA) is used during the testing or inference phase of a 
 {\label{fig:tta}}
 \end{figure}
 
-\newpage 
+\newpage
 
 \subsection{ResNet}
 
@@ -732,7 +736,7 @@ that surround the creation of the CAD system, such as microservices architecture
 
 A microservices architecture is a software design approach that structures an application as a collection of small, independent services, each running in its own process and communicating with each other through lightweight mechanisms. This architecture promotes scalability, modularity, and flexibility. \\
 
-The present thesis consists of two services: an API and a UI. These services are built using different frameworks and programming languages. 
+The present thesis consists of two services: an API and a UI. These services are built using different frameworks and programming languages.
 
 
 \subsection{Inference API}
@@ -765,8 +769,8 @@ This end-point captures an image and a model identifier creating a unique task a
 
 \begin{Verbatim}[fontsize=\small]
 @app.post("/predict")
-async def predict(file: UploadFile = File(...), 
-                    model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'): 
+async def predict(file: UploadFile = File(...),
+                    model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
     """
     Description
     ----------
@@ -775,7 +779,7 @@ async def predict(file: UploadFile = File(...),
     and async does the prediction.
     """
     ...
-\end{Verbatim}          
+\end{Verbatim}
 
 \vspace{0.5cm}
 \textbf{Predict a Jar of Images} \\
@@ -837,7 +841,8 @@ The concept of handling long-running tasks in the background is often implemente
 
 When an HTTP task is required, it comes with the identifier of the model that will be used to infer the image or a jar of images. This model is searched for in a volume configuration file located in the API. The configuration file must contain the entry for the model identifier and also include the path to the binary trained model. The trained model is deserialized and used at runtime through the PyTorch API. \\
 
-Once the path of the model in the operating system is obtained is as easy as load the searilized model throw the Pytorch API as follow:
+Once the path of the model in the operating system is obtained it is as easy as load the searilized model
+using the PyTorch API as follow:
 
 \begin{Verbatim}[fontsize=\small]
 instance_nn = class_nn(out_dim)
@@ -869,5 +874,3 @@ To distribute the containerized API and UI services easily to professionals, the
 
 
 By following this approach, professionals can easily distribute the containerized services by running the provided shell script.
-
-
