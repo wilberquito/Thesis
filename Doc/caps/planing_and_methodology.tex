@@ -7,7 +7,7 @@ Before initiating any project, it is of utmost importance to conduct a comprehen
 
 This project requires a careful balancing act, as it involves dedicating efforts to both the research and practical implementation aspects. The development of robust software and infrastructure is crucial to support the successful integration of the deep learning models and ensure their efficient deployment and maintenance. This integration can be intricate and demanding, as it requires a deep understanding of both the ML algorithms and the software engineering principles. \\
 
-In light of these additional dimensions, the study not only aims to evaluate the feasibility of utilizing deep learning techniques but also strives to address the complexities inherent in developing a well-rounded solution. Furthermore, the evaluation will consider the available data and resources to assess the potential of achieving satisfactory results. 
+In light of these additional dimensions, the study not only aims to evaluate the feasibility of utilizing deep learning techniques but also strives to address the complexities inherent in developing a well-rounded solution. Furthermore, the evaluation will consider the available data and resources to assess the potential of achieving satisfactory results.
 
 \section{Technical Study}
 
@@ -49,18 +49,15 @@ The hardware and software used in the project are listed in the \textit{Table \r
 
 \begin{table}[H]
 \centering
-\begin{tabular}{| l | c | c | c |}
-\hline
-\multicolumn{1}{|c|}{Component} & \multicolumn{1}{c|}{Units} & \multicolumn{1}{c|}{Unit Price} & \multicolumn{1}{c|}{Cost} \\
-\hline
-Computer & 1 & \$800 & \$800 \\
-\hline
-Software (Pytorch, Svelte, FastAPI, etc) & 1 & \$0 & \$0 \\
-\hline
-Tesla T4, 16GB (GPU)* & 1 & \$2000 & \$2000 \\
-\hline
-Nvidia A100, 80GB (GPU)* & 1 & \$15000 & \$15000 \\
-\hline
+\begin{tabular}{lccc}
+	 \toprule
+    \textbf{Component} & \textbf{Units} & \textbf{Unit Price} & \textbf{Cost} \\
+		\midrule
+    Computer & 1 & \$800 & \$800 \\
+    Software (Pytorch, Svelte, FastAPI, etc) & 1 & \$0 & \$0 \\
+    Tesla T4, 16GB (GPU)* & 1 & \$2000 & \$2000 \\
+    Nvidia A100, 80GB (GPU)* & 1 & \$15000 & \$15000 \\
+		\bottomrule
 \end{tabular}
 \caption[The Cost of Components.]{\textit{The Cost of Components. Components marked with (*) were not paid for out of my own pocket; instead, they were borrowed from VICOROB or Google Services.}}
 {\label{table:equipment_cost}}
@@ -75,19 +72,19 @@ Below, the roles required to achieve the thesis are presented along with their e
 
 \begin{itemize}
     \item \textbf{Data Scientist} \\
-    
+
 Data scientists focus on managing and analyzing data throughout the project. They acquire relevant datasets, preprocess the data, develop deep learning models, train and evaluate models, and deploy them in production environments (some cases). \\
 
 The average hourly wage for a Data Scientist in United States is \textbf{\$36} \cite{SalaryDataScientist}. \\
 
 \item \textbf{Research Scientist} \\
-    
+
 Research scientists focus on the exploration and innovation aspects of deep learning projects. Their roles typically include, literature review: Research scientists survey existing literature, stay updated with the latest advancements in deep learning, and identify relevant research papers or techniques that can be applied to the project. Innovation and Experimentation: They contribute to the development of novel deep learning architectures, techniques, or algorithms to address specific project challenges or improve model performance. \\
 
 The average hourly wage for a Computer Research Scientist in United States is \textbf{\$121.163} \cite{SalaryResearchScientist}. \\
 
 \item \textbf{Data Engineer} \\
-    
+
 Data engineers are typically in charge of creating the user interface (UI) components of the application that interact with the deep learning models. But the most important tasks handled by this profile would be data pre-processing, API development, and model integration. They would build the necessary APIs to communicate with the deep learning models. \\
 
 The average hourly wage for a Data Engineer in United States is \textbf{\$48} \cite{SalaryDataEnginner}. \\
@@ -98,34 +95,24 @@ The average hourly wage for a Data Engineer in United States is \textbf{\$48} \c
 
 \begin{table}[H]
 \centering
-\begin{tabular}{| l | c | c | c | c |}
-\hline
-\multicolumn{1}{|c|}{\textbf{Task}} & \multicolumn{1}{c|}{\textbf{Profile}} & \multicolumn{1}{c|}{\textbf{Time}} & \multicolumn{1}{c|}{\textbf{Cost}} \\
-\hline
-Definition and boundaries of the project & Research Scientist & 50h & \$6,081.5\\
-\hline
-Data collecting & Data Engineer & 10h & \$480\\
-\hline
-Data preprocessing & Data Engineer & 10h & \$480 \\
-\hline
-Data analysis and visualization & Data Scientist & 30h & \$1,080\\
-\hline
-Model development & Research Scientist & 60h & \$7,297.8 \\
-\hline
-Model training & Data Scientist & 80h & \$2,880 \\
-\hline
-Model optimization & Data Scientist & 120h & \$4,320 \\
-\hline
-Models reports & Data Scientist & 20h & \$720 \\
-\hline
-CAD infrastructure & Data Engineer & 220h & \$10,560 \\
-\hline
-Infrastructure deployment & Data Engineer & 20h & \$960 \\
-\hline
-Documentation & Research Scientist & 100h & \$12,163 \\
-\hline
-\textbf{Total} &    &  \textbf{720h} & \$47,022.3 \\
-\hline
+\begin{tabular}{lcccc}
+	 \toprule
+\textbf{Task} & \textbf{Profile} & \textbf{Time} & \textbf{Cost} \\
+		\midrule
+    Definition and boundaries of the project & Research Scientist & 50h & \$6,081.5\\
+    Data collecting & Data Engineer & 10h & \$480\\
+    Data preprocessing & Data Engineer & 10h & \$480 \\
+    Data analysis and visualization & Data Scientist & 30h & \$1,080\\
+    Model development & Research Scientist & 60h & \$7,297.8 \\
+    Model training & Data Scientist & 80h & \$2,880 \\
+    Model optimization & Data Scientist & 120h & \$4,320 \\
+    Models reports & Data Scientist & 20h & \$720 \\
+    CAD infrastructure & Data Engineer & 220h & \$10,560 \\
+    Infrastructure deployment & Data Engineer & 20h & \$960 \\
+    Documentation & Research Scientist & 100h & \$12,163 \\
+		\midrule
+    \textbf{Total} &    &  \textbf{720h} & \textbf{\$47,022.3} \\
+    \bottomrule
 \end{tabular}
 \caption[Human Resources Estimated Cost.]{\textit{Human Resources Estimated Cost.}}
 {\label{table:human_resources_cost}}
@@ -155,12 +142,12 @@ The project methodology employed in this endeavor follows a continuous process t
             \item Choosing or resuming a develop task (API, UI or Virtualization).
             \item Developing process.
                 \begin{itemize}
-                    \item Developing interruption because model is already trained or because early stopped. Go to point 11. 
+                    \item Developing interruption because model is already trained or because early stopped. Go to point 11.
                      \item If there are remaining tasks, choose a new develop task.
                 \end{itemize}
         \end{itemize}
 
-    
+
     \item Evaluating whether the results meet the expectations.
 
         \begin{itemize}
@@ -175,10 +162,10 @@ The project methodology employed in this endeavor follows a continuous process t
     \item Deploy the CAD system infrastructure.
 
     \item Write down the report.
-    
+
 \end{enumerate}
 
-\textit{Figure \ref{fig:flux_development}} Illustrates the previous process by making use of a diagram. 
+\textit{Figure \ref{fig:flux_development}} Illustrates the previous process by making use of a diagram.
 
 \newpage
 
@@ -299,9 +286,9 @@ Writing the report & 120h & \cellcolor{orange!50} \\
 %\begin{scriptsize}
 \label{tab:340W}
 \begin{tabular}{| c | c | c | c |c | c | c |c | c | c |c | c | c |c | }
-\hline 
+\hline
 tasks/weeks & 0 & 3 & 6 & 9 & 12 & 15 & 18 & 21 & 24 & 27 & 30 \\
-\hline 
+\hline
 T1  & \cellcolor{red!50} &   &   &   &   &   &   &   &   &   &     \\
 \hline
 T2  &   & \cellcolor{lime!50}  &  &  &   &   &   &    &  &  &   \\
@@ -322,5 +309,3 @@ T8  &   &  &  &  &  & \cellcolor{orange!50}  &  &   &   & \cellcolor{orange!50} 
 \caption[Estimated Timeline.] {\textit{Estimated Timeline. All tasks has been scheduled in a timeline that starts from the first week to last the week. The time window is three weeks.}}
 %\end{scriptsize}
 \end{table}
-
-

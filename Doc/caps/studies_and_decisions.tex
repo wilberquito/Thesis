@@ -7,11 +7,11 @@ This chapter is dedicated to exploring the essential tools required for the proj
 
 This section explores the necessary requirements for detecting melanoma. It is important to distinguish between the final system and the work involved in its development. Constructing and training a Convolutional Neural Network (CNN) requires substantial computational power, sophisticated libraries, and often a significant amount of time. However, once the model has been trained and saved, it can be readily used. Typically, the response time inferring is within seconds. Yet the inference time of the models is few we also need to take into account the time wasted in the HTTP request and the time wasted in showing the results. \\
 
-The requirements can be classified into two categories: 
+The requirements can be classified into two categories:
 
 \begin{itemize}
     \item \textbf{Functional requirements}
-    
+
     Functional requirements pertain to the capabilities that the product must possess to fulfill specific user needs.
 
     \item \textbf{Non-functional requirements}
@@ -64,29 +64,25 @@ The hardware used for the thesis encompassed a range of machines. The primary de
 		Disk & 225GB \\
 		\bottomrule
 	\end{tabular}
-	\caption{Development machine metrics. (Note: This machine was only used for programming and searching thesis information.)}
+  \caption[Development Machine Metrics.]{\textit{Development Machine Metrics. (Note: This machine was only used for programming and searching thesis information.)}}
 	\label{table:dev-machine}
 \end{table}
 
 
 \begin{table}[H]
-\centering
-\begin{tabular}{|c|c|}
-  \hline
-  \multicolumn{2}{|c|}{Google machine} \\
-  \hline
-  OS & Ubuntu 20.04.6 LTS \\
-  \hline
-  CPU & Intel Xeon \\
-  \hline
-  GPU & Tesla T4, 16GB \\
-  \hline
-  RAM & 12GB \\
-  \hline
-  Disk & 125GB \\
-  \hline
+	\centering
+	\begin{tabular}{cc}
+			\toprule
+			  \multicolumn{2}{c}{\textbf{Google Machine}} \\
+			  \midrule
+			  OS & Ubuntu 20.04.6 LTS \\
+			  CPU & Intel Xeon \\
+			  GPU & Tesla T4, 16GB \\
+			  RAM & 12GB \\
+			  Disk & 125GB \\
+			  \bottomrule
 \end{tabular}
-\caption[Google machine metrics.]{\textit{Google machine metrics. Please note that this machine was used to train models that take a few hours to accomplish the training.}}
+\caption[Google Machine Metrics.]{\textit{Google Machine Metrics. Please note that this machine was used to train models that take a few hours to accomplish the training.}}
 {\label{table:google-machine}}
 \end{table}
 
@@ -94,22 +90,18 @@ The hardware used for the thesis encompassed a range of machines. The primary de
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|}
-  \hline
-  \multicolumn{2}{|c|}{VICOROB machine} \\
-  \hline
-  OS & Ubuntu 20.04.2 LTS \\
-  \hline
-  CPU & Intel(R) Xeon(R) Silver \\
-  \hline
-  GPU & A100, 80GB\\
-  \hline
-  RAM & 396GB \\
-  \hline
-  Disk & 6.3T \\
-  \hline
+\begin{tabular}{cc}
+	 \toprule
+		\multicolumn{2}{c}{\textbf{VICOROB Machine}} \\
+		\midrule
+		OS & Ubuntu 20.04.2 LTS \\
+		CPU & Intel(R) Xeon(R) Silver \\
+		GPU & A100, 80GB\\
+		RAM & 396GB \\
+		Disk & 6.3T \\
+		\bottomrule
 \end{tabular}
-\caption[VICOROB machine metrics.]{\textit{VICOROB machine metrics. This machine was used to train models that required high computational resources because of data augmentation.}}
+\caption[VICOROB Machine Metrics.]{\textit{VICOROB Machine Metrics. This machine was used to train models that required high computational resources because of data augmentation.}}
 {\label{table:vicorobot-machine}}
 \end{table}
 
@@ -117,14 +109,14 @@ The hardware used for the thesis encompassed a range of machines. The primary de
 
 In order to establish and operate the CAD infrastructure, it was crucial to establish separate environments for creating the services and training the models, ensuring that all the required packages were included. The detailed instructions for setting up these distinct environments can be found in \textit{Appendix \ref{appendix:appendix_a}}. Additionally, \textit{Appendix \ref{appendix:appendix_b}} provides a guide on deploying and activating the services within the CAD infrastructure. \\
 
-The following pages will outline and provide detailed descriptions of each tool utilized throughout the thesis. These tools played a crucial role in various aspects, including the training process, creation of services such as user interface (UI) and application programming interface (API), deployment of these services with trained models, management of the source code, and comprehensive documentation. Each tool's significance and contribution to the thesis will be thoroughly explained, shedding light on their specific functionalities and importance in the research project.  
+The following pages will outline and provide detailed descriptions of each tool utilized throughout the thesis. These tools played a crucial role in various aspects, including the training process, creation of services such as user interface (UI) and application programming interface (API), deployment of these services with trained models, management of the source code, and comprehensive documentation. Each tool's significance and contribution to the thesis will be thoroughly explained, shedding light on their specific functionalities and importance in the research project.
 
 \newpage
 
 \vspace{0.5cm}
 \textbf{Python 3.9} \\
 
-Python (\textit{Figure \ref{fig:python-logo}}) is a high-level, interpreted programming language known for its simplicity and readability. It was created by Guido van Rossum and released in 1991. Its design philosophy emphasizes code readability with the use of significant indentation. \\ 
+Python (\textit{Figure \ref{fig:python-logo}}) is a high-level, interpreted programming language known for its simplicity and readability. It was created by Guido van Rossum and released in 1991. Its design philosophy emphasizes code readability with the use of significant indentation. \\
 
 Python is an ideal choice for machine learning and AI-based projects due to several advantages. These include its simplicity and consistency, access to excellent libraries and frameworks specifically designed for AI and ML, flexibility, platform independence, and a large and supportive community.
 
@@ -197,7 +189,7 @@ PyTorch offers a high-level API called torchvision, which simplifies common comp
 
 OpenCV (Open Source Computer Vision Library), is a popular open-source computer vision and image processing library. It provides a wide range of functions and algorithms for tasks such as image and video processing, object detection and tracking, feature extraction, and more. \\
 
-OpenCV (\textit{Figure \ref{fig:opencv-logo}}) allows developers to read, write, and manipulate images and videos efficiently. The library offers various image processing functions, including filtering, resizing, color conversion, and geometric transformations. 
+OpenCV (\textit{Figure \ref{fig:opencv-logo}}) allows developers to read, write, and manipulate images and videos efficiently. The library offers various image processing functions, including filtering, resizing, color conversion, and geometric transformations.
 
 \begin{figure}[H]
 \centering
@@ -263,7 +255,7 @@ Matplotlib (\textit{Figure \ref{fig:matplotlib-logo}}) is a widely-used Python l
 \vspace{0.5cm}
 \textbf{Seaborn} \\
 
-Seaborn (\textit{Figure \ref{fig:seaborn-logo}}) is a Python data visualization library built on top of Matplotlib. It provides a high-level interface for creating attractive and informative statistical graphics. Seaborn simplifies the process of generating complex visualizations by offering a range of built-in functions for creating appealing plots, such as scatter plots, histograms, bar plots, and heatmaps. Seaborn is widely used for exploratory data analysis and presentation of statistical insights. 
+Seaborn (\textit{Figure \ref{fig:seaborn-logo}}) is a Python data visualization library built on top of Matplotlib. It provides a high-level interface for creating attractive and informative statistical graphics. Seaborn simplifies the process of generating complex visualizations by offering a range of built-in functions for creating appealing plots, such as scatter plots, histograms, bar plots, and heatmaps. Seaborn is widely used for exploratory data analysis and presentation of statistical insights.
 
 \begin{figure}[H]
 \centering
@@ -287,7 +279,7 @@ Weights \& Biases (\textit{Figure \ref{fig:wandb-logo}}) is a machine learning e
 \vspace{0.5cm}
 \textbf{FastAPI} \\
 
-FastAPI (\textit{Figure \ref{fig:fastapi-logo}}) is a modern, high-performance web framework for building APIs with Python. It emphasizes simplicity, speed, and type annotations to create efficient and scalable web applications. FastAPI leverages Python's type hints for automatic request and response validation, enabling faster development and reducing the chances of introducing bugs. It provides asynchronous capabilities using Python's asyncio framework, allowing for high-concurrency and efficient handling of multiple requests. With its intuitive API declaration syntax and automatic generation of interactive documentation, FastAPI simplifies the process of building robust and well-documented APIs. 
+FastAPI (\textit{Figure \ref{fig:fastapi-logo}}) is a modern, high-performance web framework for building APIs with Python. It emphasizes simplicity, speed, and type annotations to create efficient and scalable web applications. FastAPI leverages Python's type hints for automatic request and response validation, enabling faster development and reducing the chances of introducing bugs. It provides asynchronous capabilities using Python's asyncio framework, allowing for high-concurrency and efficient handling of multiple requests. With its intuitive API declaration syntax and automatic generation of interactive documentation, FastAPI simplifies the process of building robust and well-documented APIs.
 
 \begin{figure}[H]
 \centering
@@ -301,7 +293,7 @@ FastAPI (\textit{Figure \ref{fig:fastapi-logo}}) is a modern, high-performance w
 \vspace{0.5cm}
 \textbf{JS} \\
 
-JavaScript (\textit{Figure \ref{fig:js-logo}}) is a versatile programming language primarily used for client-side web development. It enables dynamic and interactive functionality on websites, allowing for real-time manipulation of HTML elements, handling user events, and modifying web page content. 
+JavaScript (\textit{Figure \ref{fig:js-logo}}) is a versatile programming language primarily used for client-side web development. It enables dynamic and interactive functionality on websites, allowing for real-time manipulation of HTML elements, handling user events, and modifying web page content.
 
 \begin{figure}[H]
 \centering
@@ -317,7 +309,7 @@ JavaScript (\textit{Figure \ref{fig:js-logo}}) is a versatile programming langua
 \vspace{0.5cm}
 \textbf{SvelteKit} \\
 
-SvelteKit (\textit{Figure \ref{fig:sveltekit-logo}}) is a high-performance JavaScript framework for building web applications. It uses a compiler-based approach, resulting in optimized applications with minimal overhead. It provides built-in routing, supports Server-Side Rendering (SSR) and Static Site Generation (SSG), and promotes component reusability. SvelteKit offers a developer-friendly environment, integrates well with APIs, and generates small bundles for faster loading times. 
+SvelteKit (\textit{Figure \ref{fig:sveltekit-logo}}) is a high-performance JavaScript framework for building web applications. It uses a compiler-based approach, resulting in optimized applications with minimal overhead. It provides built-in routing, supports Server-Side Rendering (SSR) and Static Site Generation (SSG), and promotes component reusability. SvelteKit offers a developer-friendly environment, integrates well with APIs, and generates small bundles for faster loading times.
 
 \begin{figure}[H]
 \centering
@@ -362,7 +354,7 @@ One key advantage of Podman is its rootless mode, which allows users to run cont
 \vspace{0.5cm}
 \textbf{Git} \\
 
-Git (\textit{Figure \ref{fig:git-logo}}) is a distributed version control system used for tracking changes in software projects. It enables collaboration, allows for branching and merging, handles large projects efficiently, and provides robust backup options. 
+Git (\textit{Figure \ref{fig:git-logo}}) is a distributed version control system used for tracking changes in software projects. It enables collaboration, allows for branching and merging, handles large projects efficiently, and provides robust backup options.
 
 \begin{figure}[H]
 \centering
@@ -409,5 +401,3 @@ LaTeX (\textit{Figure \ref{fig:latex-logo}}) is a typesetting system used for cr
 \caption[LaTeX Logo]{\textit{LaTeX Logo. Illustration by LaTeX}}
 {\label{fig:latex-logo}}
 \end{figure}
-
-
