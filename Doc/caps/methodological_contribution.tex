@@ -69,7 +69,7 @@ validate_df, test_df = m_dataset.train_validate_split(validate_df,
                                                       validate_size=0.5)
 \end{Verbatim}
 
-Please note that the training dataset comprises 80\% of the filtered dataset, which corresponds to a total of 25,012 samples. In contrast, both the validation and test datasets are composed of 10\% of the filtered dataset, amounting to 3,126 samples each.
+Note that the training dataset comprises 80\% of the filtered dataset, which corresponds to a total of 25,012 samples. In contrast, both the validation and test datasets are composed of 10\% of the filtered dataset, amounting to 3,126 samples each.
 
 \section{Data Augmentation}
 
@@ -314,7 +314,7 @@ out_features = len(mapping)
 model = m_models.ResNet18_Dropout_Melanoma(out_features)
 \end{Verbatim}
 
-Please note that the variable {\tt out\_features} should be defined before doing any instance.
+Note that the variable {\tt out\_features} should be defined before doing any instance.
 
 \section{Train-Validate Loop}
 
