@@ -182,6 +182,7 @@ def compute_ovr(target: int, y_true: list, y_probs: list):
     the prediction made by the model.
     """
 
+    # To numpy array
     y_true = torch.cat(y_true).numpy()
     y_probs = torch.cat(y_probs).numpy()
 
@@ -193,6 +194,6 @@ def compute_ovr(target: int, y_true: list, y_probs: list):
     if len(y_probs.shape) > 1:
         y_probs = y_probs[:, target]
 
-    matches = (y_true == target).astype(float)
+    matches = (y_true == target).astype(int)
     ovr = roc_auc_score(matches, y_probs, multi_class="ovr")
     return ovr
