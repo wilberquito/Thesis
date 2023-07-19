@@ -85,24 +85,24 @@ def plot_learning_rate_scheduler(optimizer: torch.optim.Optimizer,
 
 
 @torch.inference_mode()
-def plot_ovr_multiclass_roc(model: torch.nn.Module,
-                            class_id: int,
-                            val_dataloader: torch.utils.data.DataLoader,
-                            device: torch.device,
-                            val_times: int = 1,
-                            title="One vs Rest"):
-    y_preds = []
-    y_labels = []
+def forward(model: torch.nn.Module,
+            dataloader: torch.utils.data.DataLoader,
+            device: torch.device,
+            tta_times: int):
+    """Makes the prediction for all samples in the
+    dataloader and returns a tuple of (predicted_labels, true_labels)
+    """
 
     model.eval()
+    y_preds = []
+    y_labels = []
+    tta_required = tta_times > 1
 
-    tta_required = val_times > 1
-
-    for inputs, labels in val_dataloader:
+    for inputs, labels in dataloader:
         # Send data and targets to target device
         inputs, labels = inputs.to(device), labels.to(device)
         if tta_required:
-            y_logit = m_test.test_time_augmentation(model, inputs, val_times)
+            y_logit = m_test.test_time_augmentation(model, inputs, tta_times)
         else:
             y_logit = model(inputs)
         # Turn predictions from logits to labels
@@ -116,9 +116,27 @@ def plot_ovr_multiclass_roc(model: torch.nn.Module,
     y_preds = torch.cat(y_preds).numpy()
     y_labels = torch.cat(y_labels).numpy()
 
+    return y_preds, y_labels
+
+
+def plot_ovr_multiclass_roc(model: torch.nn.Module,
+                            class_id: int,
+                            val_dataloader: torch.utils.data.DataLoader,
+                            device: torch.device,
+                            val_times: int = 1,
+                            title="One vs Rest"):
+
+    y_preds, y_labels = forward(model,
+                                val_dataloader,
+                                device,
+                                val_times)
+
+    # Each class to a binary array
     label_binarizer = LabelBinarizer()
     y_onehot_test = label_binarizer.fit_transform(y_labels)
 
+    # Takes all prediction using the binarized classes and
+    # check if it matches with the actual true labels
     RocCurveDisplay.from_predictions(
         y_onehot_test[:, class_id],
         y_preds[:, class_id],
@@ -133,41 +151,23 @@ def plot_ovr_multiclass_roc(model: torch.nn.Module,
     plt.show()
 
 
-@torch.inference_mode()
 def plot_confusion_matrix(model: torch.nn.Module,
-                          val_dataloader: torch.utils.data.DataLoader,
+                          dataloader: torch.utils.data.DataLoader,
                           class_names: list,
                           device: torch.device,
                           show_normed: bool = False,
-                          val_times: int = 1):
+                          tta_times: int = 1):
 
-    y_preds = []
-    y_labels = []
-    tta_required = val_times > 1
-
-    model.eval()
-
-    for inputs, labels in val_dataloader:
-        # Send data and targets to target device
-        inputs, labels = inputs.to(device), labels.to(device)
-        if tta_required:
-            y_logit = m_test.test_time_augmentation(model, inputs, val_times)
-        else:
-            y_logit = model(inputs)
-        # Turn predictions from logits to labels
-        y_pred = torch.softmax(y_logit, dim=1).argmax(dim=1)
-        # Put predictions on CPU for evaluation
-        y_preds.append(y_pred.cpu())
-        # Put the labels on CPU for evaluation
-        y_labels.append(labels.cpu())
-
-    # Concatenate list of predictions into a tensor
-    y_pred_tensor = torch.cat(y_preds)
-    y_labels_tensor = torch.cat(y_labels)
+    y_preds, y_labels = forward(model,
+                                dataloader,
+                                device,
+                                tta_times)
+    y_preds = torch.from_numpy(y_preds)
+    y_labels = torch.from_numpy(y_labels)
 
     confmat = ConfusionMatrix(num_classes=len(class_names), task='multiclass')
-    confmat_tensor = confmat(preds=y_pred_tensor,
-                             target=y_labels_tensor)
+    confmat_tensor = confmat(preds=y_preds,
+                             target=y_labels)
 
     fig, ax = plotting.plot_confusion_matrix(
         conf_mat=confmat_tensor.numpy(),
@@ -381,3 +381,51 @@ def model_writter(model_name: str):
         })
 
     return writter
+
+
+def metrics(model: torch.nn.Module,
+            dataloader: torch.utils.data.DataLoader,
+            device: torch.device,
+            target: int,
+            tta_times: int,
+            as_frame: bool = False):
+    """Given a model and a dataloader it performs the compute
+    of the main metrics to report in the thesis"""
+
+    import numpy as np
+    import pandas as pd
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import roc_auc_score
+    from sklearn.metrics import recall_score
+
+    y_preds, y_true = forward(model,
+                              dataloader,
+                              device,
+                              tta_times)
+
+    y_pred = np.argmax(y_preds, axis=1)
+
+    # Compute the AUC
+    matches_target = y_true == target
+    matches_target = matches_target.astype(int)
+    y_pred_prob = y_preds[:, target]
+    auc = roc_auc_score(matches_target,
+                        y_pred_prob,
+                        multi_class="ovr",
+                        average='micro')
+
+    # Compute the sensibility for the target class
+    recall = recall_score(y_true, y_pred, average=None)[target]
+
+    # Compute the global accuracy
+    global_accuracy = accuracy_score(y_true, y_pred)
+
+    metrics = dict()
+    metrics['auc'] = [auc]
+    metrics['recall'] = [recall]
+    metrics['accuray'] = [global_accuracy]
+
+    if as_frame:
+        return pd.DataFrame(metrics)
+
+    return metrics
