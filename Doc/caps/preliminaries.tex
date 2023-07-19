@@ -346,7 +346,8 @@ In multi-class classification, the cross-entropy loss is calculated using the tr
 \subsection{Metrics}
 {\label{sec:metrics}}
 
-There are a considerable amounts of different metrics that can be computed for a model prediction but I'll present the essential metrics used in the thesis. \\
+There are various metrics commonly used to assess the quality of a model's predictions.
+In this section, we present a selection of metrics that we find relevant for evaluating our models.
 
 \vspace{0.5cm}
 \textbf{Confusion Matrix} \\
@@ -378,7 +379,10 @@ This indicates a scenario where the model incorrectly predicts the negative clas
 
 \end{itemize}
 
-In a logical sense, when we add up the elements on the main diagonal of the confusion matrix, we obtain the total number of correct predictions. Conversely, summing the elements on the antidiagonal provides us with the total number of incorrect predictions. Utilizing these values, we can compute additional metrics such as accuracy, precision, recall, specificity, and F1 score. \\
+In a logical sense, when we add up the elements on the main diagonal of the confusion matrix,
+we obtain the total number of correct predictions.
+Conversely, summing the elements on the antidiagonal provides us with the total number of incorrect predictions.
+Utilizing these values, we can compute additional metrics such as accuracy, precision, recall, specificity, and F1 score. \\
 
 \vspace{0.5cm}
 \textbf{Accuracy} \\
@@ -390,7 +394,9 @@ In a logical sense, when we add up the elements on the main diagonal of the conf
 \vspace{0.5cm}
 \textbf{TPR} \\
 
-TPR stands for True Positive Rate, and it is also known as sensitivity or recall. It measures the proportion of actual positive cases that are correctly identified as positive by a classification model or test.
+TPR stands for True Positive Rate, and it is also known as sensitivity or recall.
+It measures the proportion of actual positive cases that are correctly identified as positive
+by a classification model or test.
 
 \[
 \text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}
@@ -721,7 +727,9 @@ ResNet-50 & 76.15\% & 25.6M \\
 ResNet-34 & 73.30\% & 21.8M \\
 ResNet-18 & 69.76\% & 11.7M \\ \bottomrule
 \end{tabular}
-\caption[Accuracy Achieved on ImageNet and Trainable Parameters of Each ResNet.]{\textit{Accuracy Achieved on ImageNet and Trainable Parameters of Each ResNet. Each image in the ImageNet dataset is associated with 1 of 1,000 classes.}}
+\caption[Accuracy Achieved on ImageNet and Trainable Parameters of Each ResNet.]
+ {\textit{Accuracy Achieved on ImageNet and Trainable Parameters of Each ResNet.
+  Each image in the ImageNet dataset is associated with 1 of 1,000 classes. Table by paperswithcode}}
 {\label{table:resnet}}
 \end{table}
 
