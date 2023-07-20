@@ -1,0 +1,63 @@
+\chapter{State of the Art}
+\label{cap:estat}
+
+Melanoma, a type of cancer that arises from melanin-producing cells,
+can be found in various parts of the body such as the skin, eyes, nerve centers, and meninges. Early diagnosis is crucial for improving the chances of curing melanoma, even though it has the highest increasing incidence rate among all skin cancer types.
+According to a study \cite{TimelyMelanomaDetection}, timely identification of early-stage skin cancer resulted in a significant 90\%
+reduction in mortality rates. For instance, patients diagnosed with stage I melanoma have a 10-year overall survival
+probability ranging from 94\% to 98\%, while those in stage IV have a much lower estimated 10-year
+overall survival rate of just 10\% to 15\%. \\
+
+Dermoscopy is a non-surgical method used to examine the underlying layers of the skin.
+While it can yield good results, it requires extensive training and experience in dermatology.
+However, it may not provide a definitive diagnosis for melanoma, especially in its early stages.
+Consequently, there is a need for an automated diagnostic tool. \\
+
+In a study \cite{EpidemiologySkinCancer} the melanoma task classification was compared between expert
+opinions and artificial neural networks.
+The computer program demonstrated had an area under the receiver
+operating characteristic curve of 0.87, which was higher than the dermatologists (0.74), the program also
+had a higher sensitivity in classification of 85\% against the 76\% by the dermatologists.
+These findings indicate the potential utilization of automated systems in the field of cancer detection. \\
+
+For cancer prediction, a mostly supervised learning approach is employed that makes use of algorithms for classification based on conditional decisions or probabilities. The most common algorithms or methodologies include decision trees, convolutional neural networks (CNN), support vector machine (SVM), and k-nearest neighbors (KNN). One of the most powerful systems are CNNs (Convolutional Neural Networks), despite the fact that their use may involve a loss of explainability, which is a major concern in healthcare systems. \\
+
+Although this project goes beyond the mere creation of highly accurate models for classifying melanoma, we have taken into
+consideration and reviewed related works that have influenced and guided our own path.
+
+\section{Identifying Melanoma Images Using EfficientNet Ensemble}
+
+This is the winning approach to the SIIM-ISIC Melanoma Classification Challenge \cite{ISICKaggle}. The team not only let the competition source code available on GitHub \cite{WinningISICGithub} but they also wrote a paper explaining in detail their investigation \cite{WinningISIC}. \\
+
+The project is an ensemble of convolutional neural network (CNN) models. These models utilize different backbones and input sizes, primarily focusing on image data, although some also incorporate image-level and patient-level metadata. The success of the project can be attributed to several factors:
+
+\begin{itemize}
+    \item Implementation of a stable validation scheme.
+    \item Effective selection of the model target.
+    \item Thoughtful optimization of the pipeline.
+    \item Utilization of ensemble learning with highly diverse models.
+\end{itemize}
+
+The submission that won achieved an AUC (Area Under the Curve)\footnote{AUC is a metric that quantifies the overall quality of a binary classification model by measuring the area under its ROC curve. It provides a single value that summarizes the model's ability to discriminate between positive and negative instances.} score of 0.9600 on cross-validation and 0.9490 on the private leaderboard. \\
+
+From their work, we adopted various deep learning techniques. For instance, we applied the same way they evaluate models given
+an unbalanced multi-class data-sets like as the ISIC dataset is.
+To properly assess the training process, they utilized the AUC with one-vs-rest (OvR) metric. This project as well uses this metric to evaluate the performance of the models. \\
+
+Additionally, this thesis incorporated an early-stop mechanism into the training process. This mechanism prevents over-fitting by monitoring the model's performance on a validation set and stopping the training if the performance starts to worsen or stagnate.
+This was not mentioned in the related work, but we recognized its importance and included it in our solution. \\
+
+Another aspect the current thesis borrowed from this work is the approach to cleaning and mapping data-sets from different years. They trained their models with different output sizes, but the process of mapping and joining the data-sets into a single data-set was similar to my approach,
+where we consistently mapped the data into eight different classes. \\
+
+The pipeline of data augmentation that is implemented in the work is also reused. Equivalent to them,
+this thesis uses {\tt albumentations}\cite{Albumentations} library instead of the native alternative transforms data agumentation from PyTorch. \\
+
+These inspirations and adaptations from the related work has greatly influenced the development and organization of this deep learning project.
+
+\section{CNN Explainer}
+
+CNN explainer is a web page created through a collaborative research effort between Georgia Tech and Oregon State\cite{CNNExplainer}. It leverages TensorFlow.js, a deep learning library that utilizes GPU acceleration within the web browser, to load pretrained models for visualization. The entire interactive system is implemented in JavaScript, utilizing Svelte as a framework and D3.js for visualizations. With CNN Explainer, users can upload images and obtain predictions for those images across ten different classes. \\
+
+While CNN Explainer primarily aims to serve educational purposes, my project's UI focuses on providing dermoscopy images predictions and information about the models used and their outputs. The inspiration for incorporating an interactive UI for end users stemmed from CNN Explainer.
+Consequently, we utilized the same web framework to develop the UI of the CAD infrastructure of this thesis.
