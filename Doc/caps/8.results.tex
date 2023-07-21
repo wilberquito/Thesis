@@ -17,16 +17,42 @@ we saved the metrics of interest for each dataset (train, validate, test).
 The training information of each training approach is given in \textit{Table \ref{table:trained-models-information}}.
 On the other hand, \textit{Table \ref{table:resume-metrics}} provides a summary of the metrics acquired for each model in the different datasets. \\
 
-The accuracy metric in \textit{Table \ref{table:resume-metrics}} represents how well
-the model performs in an unbalanced multiclass classification problem with 8 different labels.
-Meanwhile, AUC and recall specifically indicate how well the model is performing
-in classifying melanoma from the other classes. \\
+The accuracy metric in \textit{Table \ref{table:resume-metrics}} represents
+the overall performance of the model in the multiclass classification problem with 8 different labels.
+However, given the class imbalance, accuracy may not be the most suitable metric to assess the model's performance in this situation.
+Instead, metrics like AUC (Area Under the Curve) and recall should be considered,
+as they specifically indicate how well the model is performing in classifying melanoma from the other classes. \\
 
+The metrics with a gray background in \textit{Table \ref{table:resume-metrics}}
+are from models that incorporated additional regularization techniques, such as dropout or data augmentation.
+These models were trained for 40 epochs,
+as regularization tends to slow down the minimization of the objective function compared to the other models that were trained for only 20 epochs. \\
 
-The metrics that have a gray background in \textit{Table \ref{table:resume-metrics}} are from models that had extra regularization techniques,
-such as dropout or data augmentation. Additionally, it is important to
-mention that validation and test metrics were obtained using the Test-Time Augmentation technique,
-which, as explained in previous chapters, behaves as an ensemble.
+\newpage
+
+It is important to mention that the metrics obtained for all models,
+both on the validation and test sets, were generated using the Test-Time Augmentation technique.
+As explained in previous chapters, this technique functions as an ensemble, contributing to improved performance during inference. \\
+
+Models that used a scheduler during the training stage are denoted with a symbol next to their names.
+For reference, the mapping between the scheduler used and the corresponding symbol is provided in \textit{Table \ref{table:scheduler-mapping}}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cc}
+		\toprule
+		\multicolumn{2}{c}{\textbf{Scheduler Mapping}} \\
+		\midrule
+		$\star$     & Step Learning Rate \\
+		$\ast$      & Cosine Annealing Learning Rate \\
+	  $\bullet$   & Cosine Annealing Warm Restarts \\
+		\bottomrule
+	\end{tabular}
+  \caption[Scheduler Mapping]
+  {\textit{Scheduler Mapping.
+  Table by Author}}
+	\label{table:scheduler-mapping}
+\end{table}
 
 \newpage
 
@@ -48,10 +74,52 @@ M3 $\bullet$ & 0.811 & 0.767 & 0.764 & 0.935 & 0.896 & 0.886 & 0.663 & 0.605 & 0
 \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.742 & \cellcolor{gray!50}0.732 &  \cellcolor{gray!50}0.723 & \cellcolor{gray!50}0.877 & \cellcolor{gray!50}0.869 & \cellcolor{gray!50}0.849 & \cellcolor{gray!50}0.470 & \cellcolor{gray!50}0.458 & \cellcolor{gray!50}0.432 \\
 \bottomrule
 \end{tabular}
-\caption[Training Information For Each Model.]
-  {\textit{Training Information For Each Model. Empty spaces represent non-use of that feature.
-  Table by Author}}
+\caption[Model Metrics in Datasets]
+  {\textit{Model Metrics in Datasets. Table by Author}}
 {\label{table:resume-metrics}}
 \end{table}
 
 \end{landscape}
+
+
+\section{Training}
+
+In this section, we analyze the performance of the models throughout the training process.
+Most of the graphcis seen in this section were generated using W\&B (Weight And Biasses).\\
+
+\subsection{Models without Regularization}
+We begin by examining the performance of models that were trained without any
+regularization techniques but had a limited number of training epochs. These models include
+\textit{M0, M1, M2,} and \textit{M3}.
+The training of these models was based on the architecture of {\tt ResNet18\_Melanoma} (see \textit{Figure \ref{fig:resnet-18-melanoma-arch}}). \\
+
+During the training process,
+each model was exposed to the training dataset, and the model's weights were updated iteratively over several epochs.
+As these models lack regularization, they were more prone to overfitting, especially when the number of training epochs was limited.
+
+\vspace{0.5cm}
+\textbf{Training model M0}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/ResNet18V0AUC.png}
+\caption[M0, AUC Metric]{\textit{M0, AUC Metric. Illustration by Author}}
+{\label{fig:flux_development}}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/ResNet18V0Loss.png}
+\caption[Activity Diagram Describing the Methodology.]{\textit{Activity Diagram Describing the Workflow Methodology: Notice that the right workflow is executed every time models are trained and returns to the model evaluation once the models have been trained to analyze results. Illustration by Author}}
+{\label{fig:flux_development}}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/ResNet18V0Acc.png}
+\caption[Activity Diagram Describing the Methodology.]{\textit{Activity Diagram Describing the Workflow Methodology: Notice that the right workflow is executed every time models are trained and returns to the model evaluation once the models have been trained to analyze results. Illustration by Author}}
+{\label{fig:flux_development}}
+\end{figure}

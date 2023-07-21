@@ -23,7 +23,7 @@ For training the models, we utilized 8 classes selected from the original set, a
     \item DF (Dermatofibroma)
 \end{itemize}
 
-The filtered dataset consists of 31,265 different image samples with an unbalanced distribution across all classes (see Figure \ref{fig:hole-dataset-distribution}).
+The filtered dataset consists of 31,265 different image samples with an unbalanced distribution across all classes (see \textit{Figure \ref{fig:hole-dataset-distribution}}).
 
 \begin{figure}[H]
 \centering
@@ -251,7 +251,7 @@ class ResNet18_Melanoma(nn.Module):
         return x
 \end{Verbatim}
 
-As you can see above, we utilize the weights of the trained {\tt ResNet-18} and save the trained model into an instance of the {\tt ResNet18\_Melanoma} class. Then, we retrieve the instance of the {\tt ResNet-18} and modify its fully connected layer by assigning it to an Identity layer, which doesn't perform any operations. Finally, we instantiate a new fully connected layer with the expected output size. In this case, the expected output size is 8, representing the number of classes. See (\textit{Figure \ref{fig:resnet-18-melanoma-arch}}).
+As you can see above, we utilize the weights of the trained {\tt ResNet-18} and save the trained model into an instance of the {\tt ResNet18\_Melanoma} class. Then, we retrieve the instance of the {\tt ResNet-18} and modify its fully connected layer by assigning it to an Identity layer, which doesn't perform any operations. Finally, we instantiate a new fully connected layer with the expected output size. In this case, the expected output size is 8, representing the number of classes. See \textit{Figure \ref{fig:resnet-18-melanoma-arch}}.
 
 \begin{figure}[H]
 \centering
@@ -435,7 +435,9 @@ The training information, including the training environment and hyperparameters
 \centering
 \begin{tabular}{cc}
     \toprule
-\textbf{Name} & \textbf{Mapping} \\  \midrule
+
+		\multicolumn{2}{c}{\textbf{Mapping of Names}} \\
+    \midrule
 ResNet18\_V0 & M0 \\
 ResNet18\_V1 & M1 \\
 ResNet18\_V2 & M2 \\
