@@ -593,27 +593,57 @@ There are various approaches in learning rate scheduling, bellow you'll find the
 \begin{itemize}
     \item \textbf{Learning Rate Decay}
 
-    This learning rate scheduling works gradually reducing the learning rate over time or in response to certain conditions. A smaller learning rate allows the model to fine-tune its parameters more cautiously, preventing it from aggressively fitting to noisy or irrelevant patterns in the training data. This smoother adjustment helps the model converge to a better generalize solution, reducing the risk of over-fitting.
+    This learning rate scheduling works gradually reducing
+    the learning rate over time or in response to certain conditions. \\
+
+    A smaller learning rate allows the model to fine-tune its parameters more cautiously,
+    preventing it from aggressively fitting to noisy or irrelevant patterns in the training data.
+    A smoother or an agresive adjustment helps the model converge to a better generalize solution,
+    reducing the risk of over-fitting. \\
+
+    There are varius scheduler policies that we can follow to make the learning rate decay over
+    the epochs. For instance, in \textit{Figure \ref{fig:learning-rate-decay-cosine-annealing}} follows the \textit{Cosine Annealing Learning Rate} scheduler, yet
+    \textit{Figure \ref{fig:learning-rate-decay-step}} follows the \textit{Step Learning Rate} scheduler.
 
     \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{imatges/preliminaries/learning-rate-decay.png}
-    \caption[Learning Rate Decay]{\textit{Learning Rate Decay. In this graphic it's represented how the learning rate hyperparameter decrease over the epochs. Illustration by Author}}
-    {\label{fig:learning-rate-decay}}
+    \includegraphics[width=0.6\textwidth]{imatges/preliminaries/cosinus-scheduler.png}
+    \caption[Cosine Annealing Learning Rate Scheduler]{\textit{Cosine Annealing Learning Rate Scheduler. A learning rate decay scheduler with smoother behavior.
+      Illustration by Author}}
+    {\label{fig:learning-rate-decay-cosine-annealing}}
     \end{figure}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imatges/preliminaries/step-scheduler.png}
+    \caption[Step Learning Rate Scheduler]{\textit{Step Learning Rate Scheduler. A learning rate decay scheduler with
+      and agresive behavior. Illustration by Author}}
+    {\label{fig:learning-rate-decay-step}}
+    \end{figure}
+
+    \newpage
 
     \item \textbf{Cycling Learning}
 
-    Cyclic learning rate scheduling is popular for faster convergence and improved generalization. By cycling the learning rate, models explore diverse loss landscape regions, escaping local minima for better optima. Variations like triangular and cosine annealing alternate or smoothly transition between lower and upper bounds. This approach adds variation and exploration to optimization, enhancing model performance and convergence.
+    Cyclic learning rate scheduling is popular for
+    faster convergence and improved generalization.
+    By cycling the learning rate, models explore diverse loss landscape regions, escaping local minima for better optima.
+    Variations like triangular and cosine annealing alternate or smoothly transition
+    between lower and upper bounds. This approach adds variation and exploration to optimization, enhancing model performance and convergence. \\
+
+    As well as in learning rate decay, there are various scheduler with it's own policy. \textit{Figure \ref{fig:cycling-rate-decay}} is
+    a representation of a \textit{Cosine Annealing Warm Restart} scheduler.
     \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{imatges/preliminaries/cosinus-learning-rate-scheduler.png}
-    \caption[Cosinus Cycling Learning]{\textit{Cosinus Cycling Learning. The graphic show how the learning rate varies following the cosinus functions over the epochs. Illustration by Author}}
+    \includegraphics[width=0.6\textwidth]{imatges/preliminaries/CosineAnnealingWarmRestarts-scheduler.png}
+    \caption[Cosine Annealing Warm Restart]{\textit{Cosine Annealing Warm Restart. A cosinus cycling learning scheduler.
+   Illustration by Author}}
     {\label{fig:cycling-rate-decay}}
     \end{figure}
 \end{itemize}
 
-\vspace{0.5cm}
+\newpage
+
 \textbf{Dropout} \\
 
 Dropout is a regularization method \cite{DropoutPaper}. The idea behind dropout is to prevent overfitting and improve generalization in neural networks by randomly "dropping out" or deactivating a fraction of the neurons during each training iteration. \\
