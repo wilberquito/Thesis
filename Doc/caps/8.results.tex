@@ -85,41 +85,121 @@ M3 $\bullet$ & 0.811 & 0.767 & 0.764 & 0.935 & 0.896 & 0.886 & 0.663 & 0.605 & 0
 \section{Training}
 
 In this section, we analyze the performance of the models throughout the training process.
-Most of the graphcis seen in this section were generated using W\&B (Weight And Biasses).\\
+Most of the graphics seen in this section were generated using W\&B (Weight \& Biasses).\\
 
-\subsection{Models without Regularization}
-We begin by examining the performance of models that were trained without any
-regularization techniques but had a limited number of training epochs. These models include
-\textit{M0, M1, M2,} and \textit{M3}.
-The training of these models was based on the architecture of {\tt ResNet18\_Melanoma} (see \textit{Figure \ref{fig:resnet-18-melanoma-arch}}). \\
 
-During the training process,
-each model was exposed to the training dataset, and the model's weights were updated iteratively over several epochs.
-As these models lack regularization, they were more prone to overfitting, especially when the number of training epochs was limited.
+Every pair of models in the set \(S\), \(S=\{\{M0, M4\}, \{M2, M5\}, \{M3, M6\}, \{M4, M8\}\}\),
+shares the same scheduler if they were used in the training phase.
+However, each pair differs in batch size, the number of epochs, and regularization techniques. \\
 
-\vspace{0.5cm}
-\textbf{Training model M0}
+We are presenting this comparison to show how regularization affects the training process. Notice that models that suffer of over-fitting were trained by less epochs than models
+that implemented regularization techniques.
+
+\subsection{M0 against M4}
 
 \begin{figure}[H]
 \centering
-    \includegraphics[width=\textwidth]{imatges/results/ResNet18V0AUC.png}
-\caption[M0, AUC Metric]{\textit{M0, AUC Metric. Illustration by Author}}
-{\label{fig:flux_development}}
+    \includegraphics[width=\textwidth]{imatges/results/AUCM0M4.png}
+\caption[M0 vs. M4, AUC Train and Validation Curves]{\textit{M0 vs. M4, AUC Train and Validation Curves. Illustration by Author}}
+{\label{fig:aucm0m4}}
 \end{figure}
 
 \newpage
 
 \begin{figure}[H]
 \centering
-    \includegraphics[width=\textwidth]{imatges/results/ResNet18V0Loss.png}
-\caption[Activity Diagram Describing the Methodology.]{\textit{Activity Diagram Describing the Workflow Methodology: Notice that the right workflow is executed every time models are trained and returns to the model evaluation once the models have been trained to analyze results. Illustration by Author}}
-{\label{fig:flux_development}}
+    \includegraphics[width=\textwidth]{imatges/results/LossM0M4.png}
+\caption[M0 vs. M4, Loss Train and Validation Curves]{\textit{M0 vs. M4, Loss Train and Validation Curves. Illustration by Author}}
+{\label{fig:lossm0m4}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AccM0M4.png}
+\caption[M0 vs. M4, Acc Train and Validation Curves]{\textit{M0 vs. M4, Acc Train and Validation Curves. Illustration by Author}}
+{\label{fig:accm0m4}}
+\end{figure}
+
+\newpage
+
+
+\subsection{M1 against M5}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AUCM1M5.png}
+\caption[M1 vs. M5, AUC Train and Validation Curves]{\textit{M1 vs. M5, AUC Train and Validation Curves. Illustration by Author}}
+{\label{fig:aucm0m4}}
 \end{figure}
 
 
 \begin{figure}[H]
 \centering
-    \includegraphics[width=\textwidth]{imatges/results/ResNet18V0Acc.png}
-\caption[Activity Diagram Describing the Methodology.]{\textit{Activity Diagram Describing the Workflow Methodology: Notice that the right workflow is executed every time models are trained and returns to the model evaluation once the models have been trained to analyze results. Illustration by Author}}
-{\label{fig:flux_development}}
+    \includegraphics[width=\textwidth]{imatges/results/LossM1M5.png}
+\caption[M1 vs. M5, Loss Train and Validation Curves]{\textit{M1 vs. M5, Loss Train and Validation Curves. Illustration by Author}}
+{\label{fig:lossm0m4}}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AccM1M5.png}
+\caption[M1 vs. M5, Acc Train and Validation Curves]{\textit{M1 vs. M5, Acc Train and Validation Curves. Illustration by Author}}
+{\label{fig:accm0m4}}
+\end{figure}
+
+
+\subsection{M2 against M6}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AUCM2M6.png}
+\caption[M2 vs. M6, AUC Train and Validation Curves]{\textit{M2 vs. M6, AUC Train and Validation Curves. Illustration by Author}}
+{\label{fig:aucm0m4}}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/LossM2M6.png}
+\caption[M2 vs. M6, Loss Train and Validation Curves]{\textit{M2 vs. M6, Loss Train and Validation Curves. Illustration by Author}}
+{\label{fig:lossm0m4}}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AccM2M6.png}
+\caption[M2 vs. M6, Acc Train and Validation Curves]{\textit{M2 vs. M6, Acc Train and Validation Curves. Illustration by Author}}
+{\label{fig:accm0m4}}
+\end{figure}
+
+\newpage
+
+\subsection{M3 against M7}
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AUCM3M7.png}
+\caption[M3 vs. M7, AUC Train and Validation Curves]{\textit{M3 vs. M7, AUC Train and Validation Curves. Illustration by Author}}
+{\label{fig:aucm0m4}}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/LossM3M7.png}
+\caption[M3 vs. M7, Loss Train and Validation Curves]{\textit{M3 vs. M7, Loss Train and Validation Curves. Illustration by Author}}
+{\label{fig:lossm0m4}}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/AccM3M7.png}
+\caption[M3 vs. M7, Acc Train and Validation Curves]{\textit{M3 vs. M7, Acc Train and Validation Curves. Illustration by Author}}
+{\label{fig:accm0m4}}
 \end{figure}
