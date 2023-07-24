@@ -1,5 +1,5 @@
 # Use an official Anaconda runtime as a parent image
-FROM continuumio/anaconda3:latest
+FROM docker.io/continuumio/anaconda3:latest
 
 # Libraries inside docker
 RUN apt-get update && apt-get install -y libgl1-mesa-glx

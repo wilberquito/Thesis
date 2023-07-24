@@ -1,5 +1,5 @@
 # Use Node.js 18.15.0 LTS as the base image
-FROM node:18.15.0
+FROM docker.io/library/node:18.15.0
 
 # Create and set the working directory for the app
 WORKDIR /app
