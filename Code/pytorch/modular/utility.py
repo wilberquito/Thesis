@@ -119,6 +119,73 @@ def forward(model: torch.nn.Module,
     return y_preds, y_labels
 
 
+def roc_curve_comparation(classifiers,
+                          class_id: int,
+                          dataloader: torch.utils.data.DataLoader,
+                          device: torch.device,
+                          val_times: int = 4):
+
+    from sklearn.metrics import roc_curve, roc_auc_score
+
+    # Define a result table as a DataFrame
+    result_table = pd.DataFrame(columns=['classifier', 'fpr', 'tpr', 'auc'])
+
+    # Train the models and record the results
+    for name, cls in classifiers:
+
+        y_pred, y_true = forward(cls,
+                                 dataloader,
+                                 device,
+                                 val_times)
+
+        # Each class to a binary array
+        label_binarizer = LabelBinarizer()
+        y_onehot_true = label_binarizer.fit_transform(y_true)
+
+        y_true = y_onehot_true[:, class_id]
+        y_pred = y_pred[:, class_id]
+
+        fpr, tpr, _ = roc_curve(y_true, y_pred)
+
+        auc = roc_auc_score(y_true, y_pred,
+                            multi_class="ovr",
+                            average='micro')
+
+        metrics = dict()
+        metrics['classifier'] = name
+        metrics['fpr'] = fpr
+        metrics['tpr'] = tpr
+        metrics['auc'] = auc
+
+        result_table = result_table.append(metrics, ignore_index=True)
+
+    # Set name of the classifiers as index labels
+    result_table.set_index('classifier', inplace=True)
+
+    # Sort samples by auc value
+    result_table = result_table.sort_values(by=['auc'], ascending=False)
+
+    fig = plt.figure(figsize=(8, 6))
+
+    for i in result_table.index:
+        plt.plot(result_table.loc[i]['fpr'],
+                 result_table.loc[i]['tpr'],
+                 label="{}, AUC={:.3f}".format(i, result_table.loc[i]['auc']))
+
+    plt.plot([0, 1], [0, 1], color='orange', linestyle='--')
+
+    plt.xticks(np.arange(0.0, 1.1, step=0.1))
+    plt.xlabel("False Positive Rate", fontsize=15)
+
+    plt.yticks(np.arange(0.0, 1.1, step=0.1))
+    plt.ylabel("True Positive Rate", fontsize=15)
+
+    plt.title('ROC Curve Analysis', fontweight='bold', fontsize=15)
+    plt.legend(prop={'size': 13}, loc='lower right')
+
+    plt.show()
+
+
 def plot_ovr_multiclass_roc(model: torch.nn.Module,
                             class_id: int,
                             val_dataloader: torch.utils.data.DataLoader,
