@@ -19,3 +19,41 @@ The tools you will need for the installation are these:
   \item docker-compose
   \item CURL
 \end{itemize}
+
+To install the project you need to be super-user.
+Using the a Linux SO command line, you do:
+
+\begin{Verbatim}[fontsize=\small]
+sudo su
+\end{Verbatim}
+
+Once you are in super-user, you need to downlaod
+and execute the bash script that we provide in this master thesis, this script is in
+charge of downlaoding the thesis source code and thesis
+assets (trained models and configurations), this script is also
+in charge of creating the services images and wake up the
+the corresponding containers from the images. \\
+
+If you are using Docker as main container tool:
+
+\begin{Verbatim}[fontsize=\small]
+$ curl https://gitlab.com/wilberquito/open.thesis/-/raw/main/Make.sh | bash
+\end{Verbatim}
+
+If you use Podman as main container tool:
+
+\begin{Verbatim}[fontsize=\small]
+$ alias docker=podman && \
+  curl https://gitlab.com/wilberquito/open.thesis/-/raw/main/Make.sh | bash
+\end{Verbatim}
+
+\newpage
+
+To verify that the services were wake up, you can consult it using the following
+command instruction:
+
+\\
+
+\begin{Verbatim}[fontsize=\small]
+$ docker ps
+\end{Verbatim}
