@@ -23,7 +23,7 @@ on `efficientnet` architecture.
 To install any of this packages
 you just need to run a command line, as they
 provide the `setup.py` script which contains the
-external python depencies that uses these packages.
+external python depencies that these packages use.
 
 For instance:
 
