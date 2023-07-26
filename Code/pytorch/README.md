@@ -1,34 +1,11 @@
-# NN package Melanoma classifier
+# Thesis development
 
-In this file I'll explain to myself which are the instructions to make this run.
+In this folder you'll find the notebooks used
+to explore the data, models, training sessions of the different
+AI approaches to train the models as well as the results
+and metrics of the models in the different datasets.
 
-## Set up
+To work with this notebooks you need to install apart from
+external packages:
 
-To create environment from `environment.yml`
-
-```sh
-$ conda create --file=environment.yml
-```
-
-To update the environment:
-
-```sh
-$ conda env update -n <env-name> --file environment.yml
-```
-
-To remove the environment:
-
-```sh
-$ conda env remove -n <env-name>
-```
-
-## The data
-
-You need to provide the data as given by the `downloader.sh`, but you need to drop images
-and entries of each csv of classes like:
-
-- Unknown
-- cafe-au-lait macule
-- atypical melanocytic proliferation
-
-To make it possible, I created the `etl.py` file that makes the work for you.
+- modular
