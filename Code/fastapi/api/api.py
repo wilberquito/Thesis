@@ -1,41 +1,42 @@
 from pathlib import Path
-from typing import Annotated, cast
+from typing import Annotated
 
 import pandas as pd
 import starlette.status as status
-from fastapi import (BackgroundTasks,
-                     FastAPI,
-                     File,
-                     HTTPException,
-                     Request,
-                     UploadFile)
+from fastapi import (
+    BackgroundTasks,
+    FastAPI,
+    File,
+    HTTPException,
+    Request,
+    UploadFile)
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.utility import (is_uploaded_image_sanitized,
-                         mk_temporal_task,
-                         read_yaml,
-                         save_file_to_disk)
-from api.vision import (get_supported_models,
-                        is_model_supported,
-                        mk_prediction)
+from api.utility import (
+    is_uploaded_image_sanitized,
+    mk_temporal_task,
+    read_yaml,
+    save_file_to_disk)
+from api.vision import (
+    get_supported_models,
+    is_model_supported,
+    mk_prediction)
 
 env = read_yaml('./conf.yml')
 
-app = FastAPI(title="SIIM-ISIC Melanoma Pytorch service")
+app = FastAPI(title="Melanoma Classifier API Service")
 
 
 @app.get("/")
 def home(request: Request):
-    print('hello')
+    """Redirects to docs url"""
     return RedirectResponse('/docs', status_code=status.HTTP_302_FOUND)
 
 
 @app.get("/public_models")
 async def public_models():
     """
-    Description
-    ----------
     Returns the name of the available models
     """
     return {
@@ -44,10 +45,8 @@ async def public_models():
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'): # Check if the Pytorch model is available
+async def predict(file: UploadFile = File(...), model_id='M1'):
     """
-    Description
-    ----------
     The function receives a file (expected img with jpeg format)
     then it creates the task that is being returned
     and async does the prediction.
@@ -77,20 +76,11 @@ async def predict(file: UploadFile = File(...), model_id='vicorobot.8c_b3_768_51
 @app.post("/predict_bulk")
 async def predict_bulk(bg_tasks: BackgroundTasks,
                        files: Annotated[list[UploadFile], File(description="Multiple image files as UploadFile")],
-                       model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
+                       model_id='M1'):
     """
-    Description
-    ----------
     Recives a jar of images and then it creates a task
     for this predict that is returned to consult the result
     of the predictions of each img.
-
-    Returns
-    -------
-    task_id: str
-        - folder where the images where saved
-    num_files: int
-        - number of images saved
     """
 
     # Check if the Pytorch model is available
@@ -122,8 +112,6 @@ async def predict_bulk(bg_tasks: BackgroundTasks,
 @app.get("/from_task/{task_id}")
 async def from_task(task_id: str):
     """
-    Description
-    ----------
     Consults the predictions from a task
     """
     task_path: Path = Path(env['TEMPORAL_TASKS_PATH']) / Path(task_id)
@@ -140,8 +128,9 @@ async def from_task(task_id: str):
     about_model_path = task_path / Path(about_model_filename)
 
     for filepath in [class_path, probs_path]:
+        error_msg = f'Task - {task_id} - does exists but the prediction is not yet ready.'
         __sanitize_path(path=filepath,
-                        detail=f'Task - {task_id} - does exists but the prediction is not yet ready. Try it latter')
+                        detail=error_msg)
 
     class_csv = pd.read_csv(class_path)
     probs_csv = pd.read_csv(probs_path)
@@ -172,7 +161,6 @@ async def from_task(task_id: str):
     return response
 
 
-
 def __sanitize_model(model_id: str):
     if not is_model_supported(model_id):
         raise HTTPException(status_code=400,
@@ -183,12 +171,13 @@ def __sanitize_file(file):
     """
     Check if the file is jpeg or png content type, if not throws and exception
     """
+
     if not is_uploaded_image_sanitized(file):
-        raise HTTPException(status_code=400, detail='Content type - %s - not supported' % (file.content_type))
+        error_msg = f'Content type - {file.content_type} - not supported'
+        raise HTTPException(status_code=400, detail=error_msg)
 
 
 def __sanitize_path(path: Path, detail: str):
-
     if not path.exists():
         return HTTPException(status_code=500,
                              detail=detail)
