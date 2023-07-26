@@ -1,5 +1,3 @@
-# Vicorobot model
-
 ## Vicorobot (VICOROB) package
 
 This package was provided by VICOROB lab of the University of Girona.
