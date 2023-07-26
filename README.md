@@ -22,7 +22,7 @@ Here is the list of tools needed for the installation:
 - Git
 - Docker or Podman
 - docker-compose
-- CURL
+- cURL
 
 Before proceeding, please make sure you have all the required tools listed above.
 Next, you'll need to become a superuser, and you can do that with the following command:
