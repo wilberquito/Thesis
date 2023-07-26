@@ -38,7 +38,7 @@ Unbalanced datasets present a significant challenge in machine learning problems
 
 To address the issue of unbalanced distribution, we created a function that made use of the {\tt stratify} parameter in the scikit-learn's {\tt train\_test\_split} function, which is designed for such scenarios. By default, this parameter is set to the labeled prediction, ensuring that the resulting train, validate and test datasets maintain a proportional representation of the different classes in the data.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 def train_validate_split(df: pd.DataFrame,
                          random_state: int = 42,
                          validate_size: int = 0.25):
@@ -59,7 +59,7 @@ def train_validate_split(df: pd.DataFrame,
 
 Creating the train, validation and test dataset was as easy as follow,
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 train_df, validate_df = m_dataset.train_validate_split(df,
                                                        random_state=42,
                                                        validate_size=0.2)
@@ -117,7 +117,7 @@ Randomly change brightness and contrast of the input image.
 
 As a result of applying the following data augmentation pipeline,
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
     transforms_train = A.Compose([
         A.Transpose(p=0.5),
         A.VerticalFlip(p=0.5),
@@ -218,7 +218,7 @@ derlying mapping.
 
 There are many ways to use {\tt ResNet-18} as base transfer learning models. We made use of the PyTorch API to accomplish it.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 from torchvision.models import (resnet18,
                                 ResNet18_Weights)
 net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
@@ -231,7 +231,7 @@ between 1000 classes. But our goal is to classify between 8 different classes. \
 
 The very first approach to solve this issue was to encapsulate the ResNet into a {\tt Module} class, which is a class that can be trained in the PyTorch framework.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 class ResNet18_Melanoma(nn.Module):
 
     def __init__(self, out_features: int):
@@ -265,7 +265,7 @@ During the model training process, the {\tt forward} function is triggered with 
 
 In the evaluation and analyse stage of the different training approaches of the {\tt ResNet18\_Melanoma} we observed significant over-fitting. To address this issue, we propose the {\tt ResNet18\_Dropout\_Melanoma} model, which follows the same behavior as the previous model but includes a regularization layer that utilizes the average of 5 dropout layers after the transfer learning process. This regularization layer helps to mitigate the over-fitting problem found in the previous model.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 class ResNet18_Dropout_Melanoma(nn.Module):
     """This model is based on ResNet18 but uses the
     average of the result of a list of dropout layers
@@ -296,9 +296,8 @@ class ResNet18_Dropout_Melanoma(nn.Module):
         return out
 \end{Verbatim}
 
-We provide the resume architecture of {\tt ResNet18\_Dropout\_Melanoma} model in \textit{Figure \ref{fig:resnet-18-dropout-melanoma-arch}}. The {\tt recursive} label in the provided image means that the layers have been "forwarded" multiple times instead of constructed multiple times.
-
-\newpage
+We provide the resume architecture of {\tt ResNet18\_Dropout\_Melanoma} model in \textit{Figure \ref{fig:resnet-18-dropout-melanoma-arch}}.
+The {\tt recursive} label in the provided image means that the layers have been "forwarded" multiple times instead of constructed multiple times.
 
 \begin{figure}[H]
 \centering
@@ -309,7 +308,7 @@ We provide the resume architecture of {\tt ResNet18\_Dropout\_Melanoma} model in
 
 You can instantiate any of these models with the necessary {\tt out\_features} by following the code snippet below:
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 out_features = len(mapping)
 model = m_models.ResNet18_Dropout_Melanoma(out_features)
 \end{Verbatim}
@@ -318,7 +317,7 @@ Note that the variable {\tt out\_features} should be defined before doing any in
 
 \section{Train-Validate Loop}
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 def train_model(model: nn.Module,
                 mel_idx: int,
                 about_data: Dict,
@@ -350,7 +349,7 @@ PyTorch does not provide built-in wrappers to automatically save model performan
 
 To address this issue, we have implemented a function that can save the model weights after each epoch and maintain a history of metrics from both the training and validation phases. Additionally, we log the training process by sending the latest state of the metrics using the Weight and Biases MLOPS service. This allows us to track and analyze the training progress effectively
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 def model_writter(model_name: str):
     """Saves the pythorch trainned model and generates
     a log file in csv format with the current trainning
@@ -384,7 +383,7 @@ def model_writter(model_name: str):
 
 Test-time augmentation (TTA), as explained in Chapter \ref{cap:prelim}, is an ensemble mechanism. TTA is not only useful for inferring the test set but also for inferring the validation set. Since the validation set does not undergo any data augmentation during the prediction phase, we apply multiple dummy transformations and average the predictions to obtain the final prediction. This technique helps improve the robustness and reliability of the model's predictions on unseen data.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 @torch.inference_mode()
 def test_time_augmentation(model: torch.nn,
                            inputs: torch.Tensor,
@@ -422,8 +421,6 @@ def test_time_transform(img: torch.Tensor, n: int):
     elif n % 4 == 3:
         return img.flip(2).flip(3)
 \end{Verbatim}
-
-\newpage
 
 \section{Training Models}
 

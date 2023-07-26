@@ -191,7 +191,7 @@ A convolutional neural network (CNN) is a specific type of neural network that i
 
 One of the key innovations of CNNs is their ability to automatically learn a large number of filters in parallel. These filters are learned during the training process and are specifically tailored to solve a particular predictive modeling problem, such as image classification. By learning these filters, CNNs become adept at extracting relevant features and patterns from visual data without the need for manual feature engineering. \\
 
-CNNs are designed to learn spatial hierarchies of features through a process called backpropagation. During training, the network adapts its internal parameters, or weights, by iteratively propagating the error backwards from the output to the input layers. This allows the network to gradually adjust its weights in a way that minimizes the difference between its predicted outputs and the true outputs. \\
+CNNs are designed to learn spatial hierarchies of features through a process called back-propagation. During training, the network adapts its internal parameters, or weights, by iteratively propagating the error backwards from the output to the input layers. This allows the network to gradually adjust its weights in a way that minimizes the difference between its predicted outputs and the true outputs. \\
 
 One key distinction of CNNs compared to regular neural networks is their use of parameter sharing. In a CNN, all neurons within a particular feature map share the same weights. This sharing of weights significantly reduces the number of parameters in the network, making it more computationally efficient. By sharing weights, the network can detect the same patterns or features regardless of their spatial position in the input data. This property, known as translation invariance, enables CNNs to recognize objects or patterns regardless of their location within an image.\\
 
@@ -788,7 +788,7 @@ The main end-points that the present thesis API service exposes are explained be
 
 This end-point returns the list of the available models configured in the configuration file of the API.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 @app.get("/public_models")
 async def public_models():
     """
@@ -799,13 +799,14 @@ async def public_models():
     ...
 \end{Verbatim}
 
+\newpage
 
 \vspace{0.5cm}
 \textbf{Predict a Single Image} \\
 
 This end-point captures an image and a model identifier creating a unique task and makes the prediction just in time.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 @app.post("/predict")
 async def predict(file: UploadFile = File(...),
                     model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
@@ -824,7 +825,7 @@ async def predict(file: UploadFile = File(...),
 
 This endpoint behaves similarly to the previous endpoint, with the key difference being that it supports predicting a set of images instead of just one. Additionally, the predictions of the images are made in a separate thread, preventing the system from getting stuck due to the time it would take to predict a large number of images.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 @app.post("/predict_bulk")
 async def predict_bulk(bg_tasks: BackgroundTasks,
                        files,
@@ -847,11 +848,11 @@ async def predict_bulk(bg_tasks: BackgroundTasks,
 \end{Verbatim}
 
 \vspace{0.5cm}
-\textbf{Consult the Predictions} \\
+\textbf{Consulting the Predictions} \\
 
 When an inference is made, users need a way to access the results of the requested prediction. To handle this, the inference process stores the predictions and metadata of the models in CSV files within the task directory. These CSV files are then retrieved and combined to generate a response for the client.
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 @app.get("/from_task/{task_id}")
 async def from_task(task_id: str):
     """
@@ -861,8 +862,6 @@ async def from_task(task_id: str):
     """
     ...
 \end{Verbatim}
-
-\newpage
 
 \vspace{0.5cm}
 \textbf{Exposing the Models} \\
@@ -882,7 +881,7 @@ When an HTTP task is required, it comes with the identifier of the model that wi
 Once the path of the model in the operating system is obtained it is as easy as load the searilized model
 using the PyTorch API as follow:
 
-\begin{Verbatim}[fontsize=\small]
+\begin{Verbatim}[fontsize=\scriptsize]
 instance_nn = class_nn(out_dim)
 checkpoint = torch.load(pytorch_model_path, map_location=device)
 model_state_dict = checkpoint['model_state_dict']
@@ -902,13 +901,13 @@ Virtualization frameworks, such as Docker and Podman, provide tools and services
 To distribute the containerized API and UI services easily to professionals, there are several solutions available. In this thesis, I propose the creation of a shell script that performs the following steps:
 
 \begin{itemize}
-\item Creates a directory in the system's home directory to download the source code and artifacts.
-\item Clones the source code repository from GitHub.
-\item Moves the encapsulated Python packages into the API source code.
-\item Builds the API image.
-\item Builds the UI image.
-\item Clones the artifacts from GitLab.
-\item Activates the services using a Docker Compose file, which starts the containers with their configurations based on the previously built images.\end{itemize}
-
+  \item Creates a directory in the system's home directory to download the source code and artifacts.
+  \item Clones the source code repository from GitHub.
+  \item Moves the encapsulated Python packages into the API source code.
+  \item Builds the API image.
+  \item Builds the UI image.
+  \item Clones the artifacts from GitLab.
+  \item Activates the services using a Docker Compose file, which starts the containers with their configurations based on the previously built images.
+\end{itemize}
 
 By following this approach, professionals can easily distribute the containerized services by running the provided shell script.
