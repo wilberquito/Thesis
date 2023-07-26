@@ -18,9 +18,10 @@ from torchmetrics import ConfusionMatrix
 import mlxtend.plotting as plotting
 
 import modular.checkpoint as m_checkpoint
-import modular.predictions as m_preditions
+import modular.test as m_test
 from sklearn.metrics import RocCurveDisplay
 from sklearn.preprocessing import LabelBinarizer
+from torch.utils.data import Dataset, DataLoader
 
 
 # Calculate accuracy (a classification metric)
@@ -84,24 +85,24 @@ def plot_learning_rate_scheduler(optimizer: torch.optim.Optimizer,
 
 
 @torch.inference_mode()
-def plot_ovr_multiclass_roc(model: torch.nn.Module,
-                            class_id: int,
-                            val_dataloader: torch.utils.data.DataLoader,
-                            device: torch.device,
-                            val_times: int = 1,
-                            title="One vs Rest"):
-    y_preds = []
-    y_labels = []
+def forward(model: torch.nn.Module,
+            dataloader: torch.utils.data.DataLoader,
+            device: torch.device,
+            tta_times: int):
+    """Makes the prediction for all samples in the
+    dataloader and returns a tuple of (predicted_labels, true_labels)
+    """
 
     model.eval()
+    y_preds = []
+    y_labels = []
+    tta_required = tta_times > 1
 
-    tta_required = val_times > 1
-
-    for inputs, labels in val_dataloader:
+    for inputs, labels in dataloader:
         # Send data and targets to target device
         inputs, labels = inputs.to(device), labels.to(device)
         if tta_required:
-            y_logit = m_preditions.tta(model, inputs, val_times)
+            y_logit = m_test.test_time_augmentation(model, inputs, tta_times)
         else:
             y_logit = model(inputs)
         # Turn predictions from logits to labels
@@ -115,9 +116,94 @@ def plot_ovr_multiclass_roc(model: torch.nn.Module,
     y_preds = torch.cat(y_preds).numpy()
     y_labels = torch.cat(y_labels).numpy()
 
+    return y_preds, y_labels
+
+
+def roc_curve_comparation(classifiers,
+                          class_id: int,
+                          dataloader: torch.utils.data.DataLoader,
+                          device: torch.device,
+                          val_times: int = 4):
+
+    from sklearn.metrics import roc_curve, roc_auc_score
+
+    # Define a result table as a DataFrame
+    result_table = pd.DataFrame(columns=['classifier', 'fpr', 'tpr', 'auc'])
+
+    # Train the models and record the results
+    for name, cls in classifiers:
+
+        y_pred, y_true = forward(cls,
+                                 dataloader,
+                                 device,
+                                 val_times)
+
+        # Each class to a binary array
+        label_binarizer = LabelBinarizer()
+        y_onehot_true = label_binarizer.fit_transform(y_true)
+
+        y_true = y_onehot_true[:, class_id]
+        y_pred = y_pred[:, class_id]
+
+        fpr, tpr, _ = roc_curve(y_true, y_pred)
+
+        auc = roc_auc_score(y_true, y_pred,
+                            multi_class="ovr",
+                            average='micro')
+
+        metrics = dict()
+        metrics['classifier'] = name
+        metrics['fpr'] = fpr
+        metrics['tpr'] = tpr
+        metrics['auc'] = auc
+
+        result_table = result_table.append(metrics, ignore_index=True)
+
+    # Set name of the classifiers as index labels
+    result_table.set_index('classifier', inplace=True)
+
+    # Sort samples by auc value
+    result_table = result_table.sort_values(by=['auc'], ascending=False)
+
+    fig = plt.figure(figsize=(8, 6))
+
+    for i in result_table.index:
+        plt.plot(result_table.loc[i]['fpr'],
+                 result_table.loc[i]['tpr'],
+                 label="{}, AUC={:.3f}".format(i, result_table.loc[i]['auc']))
+
+    plt.plot([0, 1], [0, 1], color='orange', linestyle='--')
+
+    plt.xticks(np.arange(0.0, 1.1, step=0.1))
+    plt.xlabel("False Positive Rate", fontsize=15)
+
+    plt.yticks(np.arange(0.0, 1.1, step=0.1))
+    plt.ylabel("True Positive Rate", fontsize=15)
+
+    plt.title('ROC Curve Analysis', fontweight='bold', fontsize=15)
+    plt.legend(prop={'size': 13}, loc='lower right')
+
+    plt.show()
+
+
+def plot_ovr_multiclass_roc(model: torch.nn.Module,
+                            class_id: int,
+                            val_dataloader: torch.utils.data.DataLoader,
+                            device: torch.device,
+                            val_times: int = 1,
+                            title="One vs Rest"):
+
+    y_preds, y_labels = forward(model,
+                                val_dataloader,
+                                device,
+                                val_times)
+
+    # Each class to a binary array
     label_binarizer = LabelBinarizer()
     y_onehot_test = label_binarizer.fit_transform(y_labels)
 
+    # Takes all prediction using the binarized classes and
+    # check if it matches with the actual true labels
     RocCurveDisplay.from_predictions(
         y_onehot_test[:, class_id],
         y_preds[:, class_id],
@@ -132,41 +218,23 @@ def plot_ovr_multiclass_roc(model: torch.nn.Module,
     plt.show()
 
 
-@torch.inference_mode()
 def plot_confusion_matrix(model: torch.nn.Module,
-                          val_dataloader: torch.utils.data.DataLoader,
+                          dataloader: torch.utils.data.DataLoader,
                           class_names: list,
                           device: torch.device,
                           show_normed: bool = False,
-                          val_times: int = 1):
+                          tta_times: int = 1):
 
-    y_preds = []
-    y_labels = []
-    tta_required = val_times > 1
-
-    model.eval()
-
-    for inputs, labels in val_dataloader:
-        # Send data and targets to target device
-        inputs, labels = inputs.to(device), labels.to(device)
-        if tta_required:
-            y_logit = m_preditions.tta(model, inputs, val_times)
-        else:
-            y_logit = model(inputs)
-        # Turn predictions from logits to labels
-        y_pred = torch.softmax(y_logit, dim=1).argmax(dim=1)
-        # Put predictions on CPU for evaluation
-        y_preds.append(y_pred.cpu())
-        # Put the labels on CPU for evaluation
-        y_labels.append(labels.cpu())
-
-    # Concatenate list of predictions into a tensor
-    y_pred_tensor = torch.cat(y_preds)
-    y_labels_tensor = torch.cat(y_labels)
+    y_preds, y_labels = forward(model,
+                                dataloader,
+                                device,
+                                tta_times)
+    y_preds = torch.from_numpy(y_preds)
+    y_labels = torch.from_numpy(y_labels)
 
     confmat = ConfusionMatrix(num_classes=len(class_names), task='multiclass')
-    confmat_tensor = confmat(preds=y_pred_tensor,
-                             target=y_labels_tensor)
+    confmat_tensor = confmat(preds=y_preds,
+                             target=y_labels)
 
     fig, ax = plotting.plot_confusion_matrix(
         conf_mat=confmat_tensor.numpy(),
@@ -332,53 +400,32 @@ def set_seed(seed=42):
     torch.backends.cudnn.deterministic = True
 
 
-def display_random_images(dataset: torch.utils.data.dataset.Dataset,
-                          n: int = 10,
-                          display_label: bool = True,
-                          display_shape: bool = True,
-                          seed: int = None):
-    """Display random images from a dataset collection"""
+def display_random_images(dataset: Dataset,
+                          grid_size: int = 16):
+    """Display a samples of images from the dataset"""
 
-    # 2. Adjust display if n too high
-    if n > 10:
-        display_shape = False
-        print("""For display purposes, n shouldn't
-        be larger than 10, setting to 10 and removing shape display.""")
+    dataloader = DataLoader(dataset=dataset, batch_size=grid_size, shuffle=False)
+    data = iter(dataloader)
+    images, labels = next(data)
+    show_img(torchvision.utils.make_grid(images))
 
-    # 3. Set random seed
-    if seed:
-        random.seed(seed)
 
-    # 4. Get random sample indexes
-    random_samples_idx = random.sample(range(len(dataset)), k=n)
-
-    # 5. Setup plot
-    plt.figure(figsize=(16, 8))
-
-    # 6. Loop through samples and display random samples
-    for i, targ_sample in enumerate(random_samples_idx):
-        targ_image, targ_label = dataset[targ_sample][0], dataset[targ_sample][1]
-
-        # 7. Adjust image tensor shape for plotting:
-        # [color_channels, height, width] -> [height, width, color_channels]
-        targ_image = targ_image.cpu().numpy()
-        targ_image_adjust = targ_image.transpose(1, 2, 0)
-        targ_image_adjust = targ_image_adjust / 255
-
-        # Plot adjusted samples
-        plt.subplot(n // 10 + 1, n if n <= 10 else n // 2, i+1)
-        plt.imshow(targ_image_adjust)
-        plt.axis("off")
-        if display_label:
-            title = dataset.idx_to_class[targ_label]
-        if display_shape:
-            title = title + f"\nshape: {targ_image_adjust.shape}"
-        plt.title(title)
+def show_img(img, figsize=(20, 16)):
+    """Display an image from a torch.tensor.
+    The tensor must have the following format (C,H,W)
+    """
+    plt.figure(figsize=figsize)
+    img = img * 0.5 + 0.5
+    npimg = np.clip(img.numpy(), 0., 1.)
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
 
 
 def model_writter(model_name: str):
     """Saves the pythorch trainned model and generates
-    a log file in csv format"""
+    a log file in csv format with the current trainning
+    and validation phases. It finally send the last log
+    to wand service."""
 
     def writter(point: Dict):
         # Save checkpoint
@@ -390,7 +437,7 @@ def model_writter(model_name: str):
         stats = point['stats']
         pd.DataFrame(stats).to_csv(log_filename)
 
-        # wANDb send
+        # wand logging
         wandb.log({
             "train_acc": stats["train_acc"][-1],
             "train_loss": stats["train_loss"][-1],
@@ -401,3 +448,51 @@ def model_writter(model_name: str):
         })
 
     return writter
+
+
+def metrics(model: torch.nn.Module,
+            dataloader: torch.utils.data.DataLoader,
+            device: torch.device,
+            target: int,
+            tta_times: int,
+            as_frame: bool = False):
+    """Given a model and a dataloader it performs the compute
+    of the main metrics to report in the thesis"""
+
+    import numpy as np
+    import pandas as pd
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import roc_auc_score
+    from sklearn.metrics import recall_score
+
+    y_preds, y_true = forward(model,
+                              dataloader,
+                              device,
+                              tta_times)
+
+    y_pred = np.argmax(y_preds, axis=1)
+
+    # Compute the AUC
+    matches_target = y_true == target
+    matches_target = matches_target.astype(int)
+    y_pred_prob = y_preds[:, target]
+    auc = roc_auc_score(matches_target,
+                        y_pred_prob,
+                        multi_class="ovr",
+                        average='micro')
+
+    # Compute the sensibility for the target class
+    recall = recall_score(y_true, y_pred, average=None)[target]
+
+    # Compute the global accuracy
+    global_accuracy = accuracy_score(y_true, y_pred)
+
+    metrics = dict()
+    metrics['auc'] = [auc]
+    metrics['recall'] = [recall]
+    metrics['accuray'] = [global_accuracy]
+
+    if as_frame:
+        return pd.DataFrame(metrics)
+
+    return metrics

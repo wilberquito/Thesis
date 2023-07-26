@@ -1,30 +1,33 @@
 # Packages installation
 
-The installation of all packages should be as easy
-as go inside each folder and execute the following command:
+Here you find the packages used
+to train the models.
 
-```python
-pip install .
-```
+- modular
+- vicorobot
 
-It may hapen that you are using `conda` environments and
-when you use the `pip` command this one is using the **global**
-`pip` program. To solve it, use the correct path of the `pip`
-program of your environment. e.g;
+## Modular package
 
-```python
-/home/wilberquito/.conda/envs/melanoma_api/bin/pip install .
-```
+This package is the result of training the models for the master thesis.
+This package contains the source code to train the models and visualzations.
 
-To make sure the packages are installed list the pip packages.
-For example:
+## Vicorobot (VICOROB) package
 
-```python
-pip list
-```
+This package was provided by VICOROB lab of the University of Girona.
+With this packages they trained the models that they provide to me based
+on `efficientnet` architecture.
 
-or
 
-```python
-/home/wilberquito/.conda/envs/melanoma_api/bin/pip list
+## Installation
+
+To install any of this packages
+you just need to run a command line, as they
+provide the `setup.py` script which contains the
+external python depencies that uses these packages.
+
+For instance:
+
+```bash
+cd modular.pkg \
+    pip install .
 ```

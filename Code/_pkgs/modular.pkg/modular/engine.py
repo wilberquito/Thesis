@@ -18,9 +18,6 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 import modular.test as test
 
-StopEvaluator = NewType("StopEvaluator",
-                        Callable[[torch.Tensor, torch.Tensor], torch.Tensor])
-
 Writter = NewType("Writter", Callable[[Dict], None])
 
 
@@ -178,24 +175,25 @@ def train_model(model: nn.Module,
     return model, stats
 
 
-def compute_ovr(the_one: int, y_true: list, y_score: list):
+def compute_ovr(target: int, y_true: list, y_probs: list):
     """This functions expectes the one element to
     be compared with the others and two list of tensors.
     The first list is the true value and the other represent
     the prediction made by the model.
     """
 
+    # To numpy array
     y_true = torch.cat(y_true).numpy()
-    y_score = torch.cat(y_score).numpy()
+    y_probs = torch.cat(y_probs).numpy()
 
     # Adjust the shape of y_true if necessary
     if len(y_true.shape) > 1:
         y_true = np.argmax(y_true, axis=1)
 
-    # Adjust the shape of y_score if necessary
-    if len(y_score.shape) > 1:
-        y_score = y_score[:, the_one]
+    # Adjust the shape of y_probs if necessary
+    if len(y_probs.shape) > 1:
+        y_probs = y_probs[:, target]
 
-    matches = (y_true == the_one).astype(float)
-    ovr = roc_auc_score(matches, y_score, multi_class="ovr")
+    matches = (y_true == target).astype(int)
+    ovr = roc_auc_score(matches, y_probs, multi_class="ovr")
     return ovr

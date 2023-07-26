@@ -10,8 +10,8 @@ import torch
 def test_time_augmentation(model: torch.nn,
                            inputs: torch.Tensor,
                            val_times: int):
-    """Applies time test time agumentation to a set of tensor images
-    an returns the logits"""
+    """Applies time test time agumentation to a
+    set of tensor images an returns the logits"""
 
     model.eval()
 
@@ -24,15 +24,16 @@ def test_time_augmentation(model: torch.nn,
 
     stacked_logits = torch.stack(logits)
     stacked_logits = torch.mean(stacked_logits, dim=0)
+
     return stacked_logits
 
 
 def test_time_transform(img: torch.Tensor, n: int):
-    """Given a tensor it applies dummy transformation
-    on de n value"""
+    """Given a tensor it applies dummy
+    transformation on de n value"""
 
     if n >= 4:
-        img = img.transpose(2, 3)
+        return img.transpose(2, 3)
     if n % 4 == 0:
         return img
     elif n % 4 == 1:
