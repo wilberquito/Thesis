@@ -1,8 +1,0 @@
-pandas
-numpy
-torch
-torchvision
-opencv_python
-albumentations==0.4.6
-scikit-learn
-mlxtend
