@@ -34,7 +34,7 @@ $ sudo su
 If you opt for Docker, execute the following command to initiate the installation process:
 
 ```bash
-$ curl https://gitlab.com/wilberquito/melanoma.thesis/-/raw/main/MAKE.sh | bash
+$ curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh | bash
 ```
 
 If you prefer Podman,
@@ -47,7 +47,7 @@ $ sudo dnf install -y podman-docker
 Afterward, you can utilize the MAKE.sh script to build the architecture:
 
 ```bash
-$ curl https://gitlab.com/wilberquito/melanoma.thesis/-/raw/main/MAKE.sh | bash
+$ curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh | bash
 ```
 
 To confirm that the CAD infrastructure services are operational,
