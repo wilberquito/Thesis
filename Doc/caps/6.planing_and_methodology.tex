@@ -16,8 +16,7 @@ a dynamic element that evolves and gains strength through continuous investigati
 While it is impossible to guarantee the achievement of all objectives, the way we see it,
 there are three fundamental pillars that must be addressed in advance. \\
 
-\vspace{0.5cm}
-\textbf{Defining the Use Case} \\
+\subsection{Defining the Use Case}
 
 \textit{A perfect use case outlines a project that is precisely defined, quantifiable, attainable, and possesses clearly identified users and value.} \\
 
@@ -26,15 +25,13 @@ and secure additional funding. Yet, this thesis aims to ensure the successful im
 infrastructure specifically designed for classifying melanoma,
 with the intention of deploying it in real-world scenarios we needed to look further than just the pure research. \\
 
-\vspace{0.5cm}
-\textbf{Equipment and Technical Knowledge} \\
+\subsection{Equipment and Technical Knowledge}
 
 Equipment and technical knowledge are interdependent and collectively contribute to the success of a machine learning project. \\
 
 In a deep learning project, both the availability of suitable equipment and technical knowledge are essential. The correct equipment, including high performance computing resources and data collection devices, facilitates efficient data handling, prepossessing, model training, and deployment. Simultaneously, technical knowledge plays a vital role in effectively leveraging the available equipment. Understanding diverse machine learning algorithms and methodologies assists in selecting the most appropriate approaches for the problem at hand. Additionally, it is crucial to acknowledge the knowledge required to create other services that accompany the project. \\
 
-\vspace{0.5cm}
-\textbf{Importance of the Dataset} \\
+\subsection{Importance of the Dataset}
 
 The success of a project like this one depends not only on the quantity but also on the quality of the data. Data is essential for any deep learning model to learn effectively. Therefore, it is vital to invest time in
 acquiring an optimal image data-set that possesses sufficient data volume, annotation, truth, and reusability. \\
@@ -43,8 +40,9 @@ For computer-based image recognition and analysis, high-quality data is necessar
 
 \section{Economical Study}
 
-\vspace{0.5cm}
-\textbf{Equipment Cost} \\
+In this section we give you and over-view of the material and human cost to develop the thesis.
+
+\subsection{Equipment Cost}
 
 Equipment cost pertains to the expenditure incurred on hardware and software licenses necessary for the project. \\
 
@@ -69,33 +67,37 @@ The hardware and software used in the project are listed in the \textit{Table \r
 {\label{table:equipment_cost}}
 \end{table}
 
-\vspace{0.5cm}
-\textbf{Human Resources} \\
+\subsection{Human Resources}
 
-In this section, a hypothetical scenario is presented, illustrating multiple work profiles contributing to the project and the associated costs for each service. However, it is important to note that in reality, all tasks were performed by a single individual. \\
+In this section, a hypothetical scenario is presented, illustrating multiple work profiles contributing to the project and the associated costs for each service.
+However, it is important to note that in reality, all tasks were performed by a single individual. \\
 
-Below, the roles required to achieve the thesis are presented along with their explanations. \\
+For the thesis we would need this roles: \\
 
 \begin{itemize}
-    \item \textbf{Data Scientist} \\
+    \item \textbf{Data Scientist}
 
 Data scientists focus on managing and analyzing data throughout the project. They acquire relevant datasets, preprocess the data, develop deep learning models, train and evaluate models, and deploy them in production environments (some cases). \\
 
 The average hourly wage for a Data Scientist in United States is \textbf{\$36} \cite{SalaryDataScientist}. \\
 
-\item \textbf{Research Scientist} \\
+\item \textbf{Research Scientist}
 
 Research scientists focus on the exploration and innovation aspects of deep learning projects. Their roles typically include, literature review: Research scientists survey existing literature, stay updated with the latest advancements in deep learning, and identify relevant research papers or techniques that can be applied to the project. Innovation and Experimentation: They contribute to the development of novel deep learning architectures, techniques, or algorithms to address specific project challenges or improve model performance. \\
 
 The average hourly wage for a Computer Research Scientist in United States is \textbf{\$121.163} \cite{SalaryResearchScientist}. \\
 
-\item \textbf{Data Engineer} \\
+\item \textbf{Data Engineer}
 
 Data engineers are typically in charge of creating the user interface (UI) components of the application that interact with the deep learning models. But the most important tasks handled by this profile would be data pre-processing, API development, and model integration. They would build the necessary APIs to communicate with the deep learning models. \\
 
 The average hourly wage for a Data Engineer in United States is \textbf{\$48} \cite{SalaryDataEnginner}. \\
 
 \end{itemize}
+
+The general tasks that each profile should accomplish and the expected time to being develop as well
+as the cost of this hours,
+is given in \textit{Table \ref{table:human_resources_cost}}.
 
 \newpage
 
@@ -125,7 +127,6 @@ The average hourly wage for a Data Engineer in United States is \textbf{\$48} \c
 {\label{table:human_resources_cost}}
 \end{table}
 
-The tasks, along with the assigned profile and estimated cost, are presented in \textit{Table \ref{table:human_resources_cost}}. \\
 
 \section{Methodology}
 
@@ -202,45 +203,45 @@ an approximate scheduler table to visually depict the allocation of days for the
 
 \subsection{Tasks}
 
-The task presented here are general, each of this task can be divided in other multiples tasks. \\
+The task presented here are general, each of this task can be divided in other multiples tasks.
 
-\vspace{0.5cm}
-\textbf{Defining the Boundaries of the Project} \\
+\begin{itemize}
+  \item{\textbf{Defining the Boundaries of the Project}}
 
-Before commencing the actual work, we spent several days engaging in discussions to determine the specific problem we aimed to solve, assess the available data-set, and determine the most suitable technologies to effectively address the problem. This involved researching available melanoma competitions and selecting a technology stack for the project in agreement with the advisors. \\
+Before commencing the actual work,
+we spent several days engaging in discussions to determine the specific problem we aimed to solve,
+assess the available data-set, and determine the most suitable technologies to effectively address the problem.
+This involved researching available melanoma competitions and selecting a technology stack for the project in agreement with the advisors.
 
-\vspace{0.5cm}
-\textbf{Setting Up the Environment} \\
+\item{\textbf{Setting Up the Environment}}
 
 The next weeks was mostly devoted to install and make simple test with the frameworks selected
 in the previous step. It resulted in setting up the machine with a suitable environment
-before the development and experimental phase. It should be noted that all other tasks were developed with my personal computer except the training process that was develop using Google Collab service and VICOROB machines. \\
+before the development and experimental phase.
+It should be noted that all other tasks were developed with my personal computer except the training process that was develop using Google Collab service and VICOROB machines.
 
-\newpage
-
-\vspace{0.5cm}
-\textbf{Study of the Dataset} \\
+\item{\textbf{Study of the Dataset}}
 
 After setting up the environment, we delved into working with the selected database and carefully
 we examined the distribution of the data-set. It became evident that we were dealing
-with a multiclass unbalanced data-set, with certain classes being significantly underrepresented compared to others. \\
+with a multi-class unbalanced data-set, with certain classes being significantly underrepresented compared to others. \\
 
 Furthermore, we soon realized that due to the substantial size of the data-set and the machine learning techniques we wanted to apply,
 it was not feasible to train the model using any of the devices we had at disposal.
-The computational requirements exceeded the capabilities of our available resources. \\
+The computational requirements exceeded the capabilities of our available resources.
 
-\vspace{0.5cm}
-\textbf{Searching of Existing Literature} \\
+\item{\textbf{Searching of Existing Literature}}
 
-Prior to initiating the actual work, a dedicated few weeks were allocated to conducting an extensive literature review. This crucial step provided valuable insights and a deeper understanding of the proposed research. It involved thoroughly reading academic papers and previous theses that focused on melanoma detection utilizing convolutional neural networks (CNN) or shared a similar research focus. \\
+Prior to initiating the actual work, a dedicated few weeks were allocated to conducting an extensive literature review.
+This crucial step provided valuable insights and a deeper understanding of the proposed research.
+It involved thoroughly reading academic papers and previous theses that focused on melanoma detection utilizing convolutional neural networks (CNN) or shared a similar research focus.
 
-\vspace{0.5cm}
-\textbf{Acquiring Working Knowledge} \\
+\item{\textbf{Acquiring Working Knowledge}}
 
 Once we had a base knowledge of the problem,
 we started to follow tutorials for each technology that was evolved in the project. \\
 
-Below is a list of the primary sources we utilized to acquire knowledge about various technologies. \\
+Below is a list of the primary sources we utilized to acquire knowledge about various technologies.
 
 \begin{itemize}
     \item PyTorch: \cite{LearnPyTorch} In this course they teach you the foundations of machine learning and deep learning with PyTorch. The course is video based.
@@ -252,18 +253,19 @@ Below is a list of the primary sources we utilized to acquire knowledge about va
     \item Virtualization: To work with virtualization. We made use of two container based tools. Docker \cite{LearnDocker} and Podman \cite{LearnPodman} are the tools used to create the images and container of this project.
 \end{itemize}
 
-\vspace{0.5cm}
-\textbf{Modeling and Development} \\
+\item{\textbf{Modeling and Development}}
 
 The development process is comprised of various smaller tasks, as depicted in the development
 flow diagram \textit{Figure \ref{fig:flux_development}}.
 During the modeling stage, numerous models were trained using the available data and resources at the time.
 Additionally, during idle periods of model training,
 we focused on other aspects of the project.
-This involved creating a user interface (UI) specifically designed for professionals to interact with, as well as developing an API that is independent of the UI. The API facilitates image loading and inference using the selected model. Furthermore, extensive testing was conducted to deploy these services and configure individual volumes for optimal performance. \\
+This involved creating a user interface (UI) specifically designed for professionals to interact with,
+as well as developing an API that is independent of the UI.
+The API facilitates image loading and inference using the selected model.
+Furthermore, extensive testing was conducted to deploy these services and configure individual volumes for optimal performance.
 
-\vspace{0.5cm}
-\textbf{Deployment} \\
+\item{\textbf{Deployment}}
 
 After developing the CAD infrastructure and uploading the source code to a private GitHub repository, and training the models,
 we proceeded to upload the configurations and trained models to a public
@@ -275,13 +277,15 @@ The final step of the deployment process involved creating a shell script.
 This script is responsible for downloading the source code from GitHub,
 as well as retrieving the trained models and configurations from GitLab.
 It then utilizes the configuration files specific to each service to create the necessary
-images and instantiate the containers accordingly. \\
+images and instantiate the containers accordingly.
 
-\vspace{0.5cm}
-\textbf{Writing the Report} \\
+\item{\textbf{Writing the Report}}
 
 While certain chapters were written throughout the process, the last month proved to be crucial for completing the final chapters, expand the chapters already written and incorporating any recommended changes suggested by the advisors.
 
+\end{itemize}
+
+\newpage
 
 \subsection{Timeline}
 

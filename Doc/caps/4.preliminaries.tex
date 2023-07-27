@@ -1,13 +1,10 @@
 \chapter{Preliminaries}
 \label{cap:prelim}
 
-The objective of this chapter is to provide a comprehensive overview that defines the scope of the thesis. It covers essential theoretical concepts necessary to comprehend the experiments presented in subsequent chapters, delves into the technical knowledge required to understand the functioning of the CAD infrastructure, and explores the study of the dataset used for conducting the thesis.
+The objective of this chapter is to provide a comprehensive overview that defines the scope of the thesis.
+It covers essential theoretical and technical concepts necessary to comprehend the experiments presented in subsequent chapters.
 
-\section{Theoretical Background}
-
-This section provides an introduction to the theoretical foundations of training deep learning models. We will cover essential concepts such as neural networks, activation functions, loss functions, gradient descent. Understanding these concepts is crucial for comprehending the inner workings of deep learning algorithms and to know if the trained thesis models are performing correctly.
-
-\subsection{Artificial Intelligence}
+\section{Artificial Intelligence}
 
 \textit{AI} is one of the newest fields in science and engineering. Work started in earnest soon
 after World War II, and the name itself was coined in 1956 attributed by John McCarthy of MIT. \\
@@ -19,8 +16,6 @@ Historically there are two approaches to \textit{AI} that have been followed, ea
 with different methods. The human-centered approach and the rationalist approach. The incorporation of a human-centered approach into the field must incorporate empirical scientific methods, which entail making observations and formulating hypotheses about human behavior. On the other hand, a rationalist approach combines the disciplines of mathematics and engineering. These different perspectives have both faced criticism and received praises. \\
 
 From that juncture until the turn of the century, the field of \textit{AI} encountered fluctuations, witnessing periods of remarkable accomplishments interspersed with the infamous \textit{AI} winters. Currently \textit{AI} is a hot topic of discussion, evident from the increasing searches and online mentions. While \textit{AI} has been around for more than 65 years, the recent exponential trend can be attributed to the availability of cost-efficient storage, transfer, and computation capabilities for massive amounts of data. This newfound capacity was previously unimaginable and has contributed to the current \textit{AI} boom. \\
-
-\newpage
 
 \textit{AI} has expanded into numerous distinct fields, showcasing its extensive range of applications, techniques, and interdisciplinary nature. The diversity of branches in the field of artificial intelligence is represented in \textit{Figure \ref{fig:ai_branches}}, which depicts several current \textit{AI} fields. However, it is important to note that the figure can be further expanded to include additional fields, such as Speech Processing and Expert Systems, among others.
 
@@ -83,7 +78,7 @@ From that juncture until the turn of the century, the field of \textit{AI} encou
 
 \newpage
 
-\subsection{Machine Learning}
+\section{Machine Learning}
 
 Machine learning is a branch of artificial intelligence (\textit{AI}) and computer science which focuses on the use of data and algorithms to imitate the way that humans learn, gradually improving its accuracy \cite{IBMMachineLearning}. The term \textit{AI} was defined by the pioneer Arthur Samuel as “the field of study that gives computers the ability to learn without explicitly being programmed.” \\
 
@@ -135,14 +130,14 @@ Reinforcement learning occupies a position between supervised and unsupervised l
 \end{figure}
 
 
-\subsection{Deep Learning}
+\section{Deep Learning}
 
 Deep learning, is a subset of machine learning algorithms, is primarily associated with supervised learning techniques. This algorithms derive conclusions by analyzing data with a given logical structure. In contrast to traditional machine learning algorithms, deep learning algorithms operate at a higher level of abstraction. They possess the ability to perform the laborious process of feature extraction. Each algorithm applies a nonlinear transformation to its input and uses the acquired knowledge to generate a statistical model as the output. This iterative process continues until the output reaches an acceptable level of accuracy. The term "deep" refers to the number of layers the data must pass through during these iterations. \\
 
 Deep learning has been successfully applied to various problems, ranging from self-driving cars to speech recognition. In this particular project, deep learning is employed to classify whether a given dermoscopy image is a melanoma or not. To achieve this, it has been necessary to understand how convolutional neural networks work, address certain issues that affect the precision of these models, explain the key metrics primarily used to measure the accuracy of these models.
 
 
-\subsection{Deep Neural Networks}
+\section{Deep Neural Networks}
 
 Deep neural networks are part of the deep learning algorithms within the realm of machine learning, which, as mentioned earlier, falls under the umbrella of artificial intelligence. \textit{Figure \ref{fig:deep-learning-family}} is an illustration of the deep learning family. \\
 
@@ -174,8 +169,6 @@ The activation function serves the purpose of compressing the resulting value wi
 allowing the model to learn complex relationships in the data. The resulting value determines the
 degree to which the signal should propagate through the network, ultimately influencing the final outcome.
 
-\newpage
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{imatges/preliminaries/perceptron.png}
@@ -184,7 +177,7 @@ degree to which the signal should propagate through the network, ultimately infl
 \end{figure}
 
 
-\subsection{Convolutional Neural Networks}
+\section{Convolutional Neural Networks}
 
 A convolutional neural network (CNN) is a specific type of neural network that is particularly well-suited for analyzing visual imagery. It draws inspiration from the organization of the animal visual cortex, which is responsible for visual processing in living organisms. \\
 
@@ -196,12 +189,11 @@ One key distinction of CNNs compared to regular neural networks is their use of 
 
 Furthermore, CNNs have a three-dimensional arrangement of neurons: width, height, and depth. The width and height dimensions correspond to the spatial dimensions of the input data, such as the width and height of an image. The depth dimension refers to the number of channels or feature maps in each layer, where each channel represents a different aspect or feature of the input. \\
 
-To build CNN architectures, there are four main types of layers used, and they are listed bellow. \\
+To build CNN architectures, there are four main types of layers.
 
-\begin{itemize}
-  \item \textbf{Convolutional Layers}
+\subsection{Convolutional Layers}
 
-    A convolutional layer (\textit{Figure \ref{fig:convolutional-layer}}) is responsible for detecting and extracting features from the input data. It consists of a set of learnable filters, also known as kernels or feature detectors. Each filter is a small matrix of weights that slides or convolves across the input data to perform a dot product operation at each spatial location.  \\
+A convolutional layer (\textit{Figure \ref{fig:convolutional-layer}}) is responsible for detecting and extracting features from the input data. It consists of a set of learnable filters, also known as kernels or feature detectors. Each filter is a small matrix of weights that slides or convolves across the input data to perform a dot product operation at each spatial location.  \\
 
 The filter slides or convolves across the input data with a defined stride, which specifies the amount of shift between each position.
 At each spatial location, a dot product is computed between the filter and the overlapping region of the input.
@@ -219,7 +211,7 @@ The result of each dot product operation is a single value, forming a pixel in t
 \end{figure}
 
 
-    \item \textbf{Pooling Layers}
+\subsection{Pooling Layers}
 
 A pooling layer (\textit{Figure \ref{fig:pooling-layer}}) performs a summarizing of nearby outputs in the network, effectively replacing certain locations with a condensed representation. This reduces the spatial dimensionality of the output, leading to decreased computational requirements and weight parameters. The pooling operation is applied independently to each slice of the representation. \\
 
@@ -234,13 +226,13 @@ Various pooling functions exist, including averaging the values within a rectang
 {\label{fig:pooling-layer}}
 \end{figure}
 
-\item \textbf{Fully Connected Layers}
+\subsection{Fully Connected Layers}
 
 Neurons in this layer have full connectivity with all neurons in the preceding and succeeding layer. This is why it can be computed as usual by a matrix multiplication followed by a bias effect. The topology in the fully connected portion of a CNN depends on various factors, including the complexity of the task, the nature of the data, and the capacity of the model. There is no fixed rule for determining the exact number of neurons or layers, and it often requires experimentation and tuning. \\
 
 The fully connected layer helps to map the representation between the input and the output. See \textit{Figure \ref{fig:deep-nn}} to a visual representation of a fully connected layer. \\
 
-\item \textbf{Non-linearity Layers}
+\subsection{Non-linearity Layers}
 
 Convolutional operations in neural networks are linear, meaning they capture linear patterns in the data. However, many objects in images exhibit non-linear characteristics that cannot be effectively detected using linear operations alone. To address this limitation, non-linearity layers, such as activation functions, are typically applied immediately after the convolutional layer. These non-linearity layers introduce non-linear transformations to the activation maps, enabling the network to learn and detect complex, non-linear patterns in the data. \\
 
@@ -306,8 +298,7 @@ Mathematically, the tanh function is expressed as:
 
 \end{itemize}
 
-\end{itemize}
-\subsection{Loss Function}
+\section{Loss Function}
 
 A loss function, also known as a cost function or an objective function, is a measure used in machine learning and optimization algorithms to quantify how well a model performs on a given task. It represents the discrepancy between the predicted outputs of a model and the true values or labels associated with the training data. \\
 
@@ -339,14 +330,13 @@ In multi-class classification, the cross-entropy loss is calculated using the tr
     \item \(p_i\) represents the predicted probability for class \(i\).
 \end{itemize}
 
-\subsection{Metrics}
+\section{Metrics}
 {\label{sec:metrics}}
 
 There are various metrics commonly used to assess the quality of a model's predictions.
 In this section, we present a selection of metrics that we find relevant for evaluating our models.
 
-\begin{itemize}
-  \item \textbf{Confusion Matrix}
+\subsection{Confusion Matrix}
 
 A confusion matrix (\textit{Figure \ref{fig:confusion-matrix}}) is a square matrix with dimensions {\tt NxN},
 where {\tt N} represents the total number of classes being predicted.
@@ -383,15 +373,15 @@ This indicates a scenario where the model incorrectly predicts the negative clas
 In a logical sense, when we add up the elements on the main diagonal of the confusion matrix,
 we obtain the total number of correct predictions.
 Conversely, summing the elements on the antidiagonal provides us with the total number of incorrect predictions.
-Utilizing these values, we can compute additional metrics such as accuracy, precision, recall, specificity, and F1 score. \\
+Utilizing these values, we can compute additional metrics such as accuracy, precision, recall, specificity, and F1 score.
 
-\item \textbf{Accuracy}
+\subsection{Accuracy}
 
 Accuracy is a commonly employed and straightforward performance metric in classification tasks. It calculates the ratio of correct predictions to the total number of predictions made on a dataset, thus determining the likelihood of correctly classifying an input. Accuracy is especially valuable when working with a balanced dataset, where the number of instances in each class is roughly equivalent. However, in the case of the previously mentioned thesis dataset, which is not balanced, the use of accuracy serves primarily to monitor model training performance rather than being the main evaluation metric.
 
 \[Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\]
 
-\item \textbf{TPR}
+\subsection{TPR}
 
 TPR stands for True Positive Rate, and it is also known as sensitivity or recall.
 It measures the proportion of actual positive cases that are correctly identified as positive
@@ -409,7 +399,7 @@ FPR stands for False Positive Rate, and it measures the proportion of actual neg
 \text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}
 \]
 
-\item \textbf{AUC-ROC Curve with One-vs-Rest Strategy}
+\subsection{AUC-ROC Curve with One-vs-Rest Strategy}
 
 The ROC Curve, when computed with the one-vs-rest (OvR) strategy for multiclass classification, provides insights into how well the model can differentiate a class from the rest of the classes. It is a probabilistic curve that plots the true positive rate (TPR) against the false positive rate (FPR). By treating the target class as the positive class and the remaining classes as the negative class in separate binary classification tasks (\textit{Figure \ref{fig:auc-roc}}). \\
 
@@ -425,19 +415,17 @@ model at distinguishing between the positive and negative classes.
 {\label{fig:auc-roc}}
 \end{figure}
 
-\end{itemize}
 
-
-\subsection{Optimizer}
+\section{Optimizer}
 
 An optimizer is an algorithm that finds the value of the parameters (weights) that minimize the error when mapping inputs to outputs. These optimization algorithms widely affect the accuracy and speed training of the deep learning models. \\
 
 While training a deep learning models, the optimizer modifies the weights of the model in each epoch to minimize the loss function. \\
 
-The are a considerable amount of different optimizer algorithms out there with their pros and cons. In this section I present the family of optimizers based on Gradient Descent optimization. This family of optimizer algorithms were used for the thesis. \\
+The are a considerable amount of different optimizer algorithms out there with their pros and cons.
+In this section I present the family of optimizers based on Gradient Descent optimization. This family of optimizer algorithms were used for the thesis. \\
 
-\begin{itemize}
-  \item \textbf{Gradient Descent}
+\subsection{Gradient Descent}
 
 Using the Gradient Decent optimization algorithm, the weights are updated incrementally after each epoch (pass over the training dataset). \\
 
@@ -488,7 +476,7 @@ The \textit{Figure \ref{fig:optimization}} shows how the Gradient Descent optimi
 
 \newpage
 
-  \item \textbf{Stochastic Gradient Descent}
+\subsection{Stochastic Gradient Descent}
 
 Stochastic Gradient Descent work similar to the Gradient Descent but the weight updates are not accumulated as we’ve seen above for Gradient Descent. Instead, the weights are updated after each training sample. Due to its stochastic nature, the path towards the global cost minimum is not “direct” as in Gradient Descent, but may go “zig-zag”if we are visuallizing the cost surface in a 2D space, see \textit{Figure \ref{fig:sgdvsgd}}. However, it has been shown that Stochastic Gradient Descent almost surely converges to the global cost minimum if the cost function is convex. \\
 
@@ -520,9 +508,9 @@ A high level pseudo-implementation of the Stochastic Gradient Descent algorithm:
 
 \newpage
 
-\subsection{Forward Propagation and Backward Propagation}
+\section{Forward and Backward Propagation}
 
-Forward and backpropagation are fundamental processes in training neural networks and optimizing their parameters. They play a crucial role in enabling the network to learn from data and improve its performance over time. \\
+Forward and back-propagation are fundamental processes in training neural networks and optimizing their parameters. They play a crucial role in enabling the network to learn from data and improve its performance over time. \\
 
 Resuming the forward-propagation and back-propagation (\textit{Figure \ref{fig:forward-and-back-propagation}}), in order to find the direction of the steepest descent (minimising the overall loss function), we need to calculate gradients of the loss function with respect to weights and bias. After that, we’ll be able to update weights and bias using negative gradients multiplied by the learning rate.
 
@@ -534,23 +522,20 @@ Resuming the forward-propagation and back-propagation (\textit{Figure \ref{fig:f
 \end{figure}
 
 
-\begin{itemize}
-
-\item \textbf{Forward Propagation}
+\subsection{Forward Propagation}
 
 Forward propagation refers to the process of computing the output of a neural network given an input or a batch of inputs. During forward propagation, the input data flows through the network's layers in a sequential manner, from the input layer to the output layer. Each layer performs a series of computations, typically involving linear transformations (such as matrix multiplications) followed by activation functions. \\
 
 As the data flows forward through the network, intermediate outputs, also known as activations or feature maps, are computed at each layer. These activations are then passed on as inputs to the subsequent layers until the final output is produced. The forward propagation process essentially calculates the predicted output of the network for a given input.
 
-\item \textbf{Backward Propagation}
+\subsection{Backward Propagation}
 
 Backward propagation, short for backward propagation of errors, is the process of computing the gradients of the network's parameters with respect to a loss function. These gradients indicate the sensitivity of the network's output to changes in its parameters and are used to update the parameters during the training process. \\
 
 The backward propagation algorithm starts from the final output of the network and propagates the error gradients backward through the network's layers. It computes the gradients layer by layer using the chain rule of calculus. The gradients quantify how each parameter contributed to the overall error of the network and provide information on how to adjust the parameters to reduce the error.
 
-\end{itemize}
 
-\subsection{Under-fitting vs Over-fitting}
+\section{Under-fitting vs Over-fitting}
 
 Under-fitting is a prevalent challenge in machine learning, occurring when the model fails to establish a meaningful relationship between the input and target variable. Insufficiently capturing the features of the data results in increased errors in both the training and unseen data samples. \\
 
@@ -563,12 +548,11 @@ Over-fitting is also a prevalent challenge in machine learning but it is really 
 {\label{fig:underfitting-overfitting-goodfitting}}
 \end{figure}
 
-\subsection{Strategies to Combat Over-fitting}
+\section{Strategies to Combat Over-fitting}
 
 There are lot of strategies to combat over-fitting, in this section there is presented only those used in the project. \\
 
-\begin{itemize}
-  \item \textbf{Early Stopping}
+\subsection{Early Stopping}
 
 Early Stopping involves monitoring the model's performance on a validation dataset during training. If the performance stops improving or starts deteriorating, the training process is stopped early. By doing this, early stopping helps find the optimal balance between model complexity and generalization, ensuring the model doesn't become overly specialized to the training data and does not performs well on unseen data. \\
 
@@ -579,13 +563,11 @@ Early Stopping involves monitoring the model's performance on a validation datas
 {\label{fig:early-stop}}
 \end{figure}
 
-\item \textbf{Learning Rate Scheduling}
+\subsection{Learning Rate Scheduling}
 
 The learning rate is a hyper-parameter in machine learning that determines the step size at which a model's parameters are updated during the optimization process. In most optimization algorithms, such as gradient descent, the learning rate controls how quickly or slowly the model learns from the training data. \\
 
 There are various approaches in learning rate scheduling, bellow you'll find the scheduling used in the thesis.
-
-
 
 \begin{itemize}
     \item \textbf{Learning Rate Decay}
@@ -641,7 +623,7 @@ There are various approaches in learning rate scheduling, bellow you'll find the
 
 \newpage
 
-\item \textbf{Dropout}
+\subsection{Dropout}
 
 Dropout is a regularization method \cite{DropoutPaper}. The idea behind dropout is to prevent overfitting and improve generalization in neural networks by randomly "dropping out" or deactivating a fraction of the neurons during each training iteration. \\
 
@@ -656,9 +638,7 @@ Crossed units have been dropped. Illustration by Srivastava}}
 {\label{fig:dropout}}
 \end{figure}
 
-\end{itemize}
-
-\subsection{Train, Validation and Test Sets}
+\section{Train, Validation and Test Sets}
 
 The primary method employed to validate the models involves dividing the original dataset into three subsets using the Holdout set scheme, see \textit{Figure \ref{fig:holdout-test-scheme}}. The percentages applied to divide to the ISIC dataset used for training is 80\%, for validation 10\% and for testing 10\%. \\
 
@@ -692,7 +672,7 @@ Comprising non-observed data examples, this set is used to assess the performanc
 
 \newpage
 
-\subsection{Data Augmentation}
+\section{Data Augmentation}
 
 Data augmentation encompasses various techniques utilized to expand the dataset by introducing modifications, thereby increasing the number of examples. Its purpose is not only to enlarge the dataset but also to enhance its diversity. By acting as a regularizer, data augmentation aids in mitigating overfitting during machine learning model training.
 
@@ -704,7 +684,7 @@ Data augmentation encompasses various techniques utilized to expand the dataset 
 \end{figure}
 
 
-\subsection{Test-Time Augmentation}
+\section{Test-Time Augmentation}
 
 Test-time augmentation (TTA) is used during the testing or inference phase of a machine learning model. TTA generates multiple augmented versions of test samples to obtain diverse predictions. By obtaining predictions from these augmented samples and combining them, TTA mimics the behavior of an ensemble of models.
 
@@ -717,7 +697,7 @@ Test-time augmentation (TTA) is used during the testing or inference phase of a 
 
 \newpage
 
-\subsection{ResNet}
+\section{ResNet}
 
 ResNet, short for "Residual Network," is a deep convolutional neural network (CNN) architecture that was introduced in 2015 by researchers from Microsoft Research \cite{ResNetPaper}. It revolutionized the field of deep learning by addressing the challenge of training very deep neural networks. \\
 
@@ -765,28 +745,21 @@ ResNet-18 & 69.76\% & 11.7M \\ \bottomrule
 {\label{table:resnet}}
 \end{table}
 
-\newpage
-
-\section{Technical Background}
-
-This section provides an introduction to the technical concepts
-that surround the creation of the CAD system, such as micro-services architecture, model exposing, code packaging, containerization, platform deployment.
-
-\subsection{Micro-services Architecture}
+\section{Micro-services Architecture}
 
 A micro-services architecture is a software design approach that structures an application as a collection of small, independent services, each running in its own process and communicating with each other through lightweight mechanisms. This architecture promotes scalability, modularity, and flexibility. \\
 
 The present thesis consists of two services: an API and a UI. These services are built using different frameworks and programming languages.
 
 
-\subsection{Inference API}
+\section{Inference API}
 
 The inference API service focuses on handling the back-end logic and data processing.
 It exposes a well-defined API that allows user to interact with the trained models. \\
 
 The end-points that the present thesis API service support are explained in \textit{Section \ref{cap:result}}.
 
-\subsection{Containerization}
+\section{Containerization}
 
 Containerization is a technology that allows applications and their dependencies to be packaged into isolated, lightweight containers. These containers provide an encapsulated runtime environment, ensuring that the application runs consistently across different systems. \\
 
@@ -794,7 +767,7 @@ Containers are created from container images, which are self-contained packages 
 
 Frameworks such as Docker and Podman, provide tools and services to build, manage, and run containers. These frameworks utilize underlying virtualization technologies to create and manage isolated environments. These environments, called containers, offer resource isolation and ensure that applications run consistently across different computing environments.
 
-\subsection{Platform Deployment}
+\section{Platform Deployment}
 
 To distribute the containerized API and UI services easily to professionals, there are several solutions available. In this thesis, I propose the creation of a shell script that performs the following steps:
 
