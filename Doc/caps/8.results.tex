@@ -238,11 +238,11 @@ or even superior performance compared to the non-regularized models if they unde
 The API service provides various endpoints accessible through the following URL:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-http://<hosted-url>/docs
+http://<api>/docs
 \end{Verbatim}
 
 By opening this URL in a web browser, you can visualize the supported endpoints of the API
-(refer to \textit{Figure \ref{fig:api-endpoints}}). This convenient visualization is made possible by using fastAPI,
+( \textit{Figure \ref{fig:api-endpoints}}). This convenient visualization is made possible by using fastAPI,
 the framework chosen for building the API, which operates on the OpenAPI scheme.
 
 \begin{figure}[H]
@@ -266,7 +266,7 @@ The supported model are configured in the configuration file of the API. \\
 You can consult the exposed models by requesting:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-http://<hosted-url>/public_models
+http://<api>/public_models
 \end{Verbatim}
 
 The response of the API's JSON response should be something similar to this:
@@ -300,7 +300,7 @@ along with the specified model name for performing the inference. \\
 For example, a valid request to this endpoint might look like:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-POST http://<hosted-url>/predict?model_id=M1
+POST http://<api>/predict?model_id=M1
 \end{Verbatim}
 
 The API will respond with a JSON object containing a unique task identifier:
@@ -324,7 +324,7 @@ the model you wish to use for image inference and a list of images attached to t
 For example, you can use this endpoint as follows:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-http://<hosted-url>/predict_bulk?model_id=M1
+http://<api>/predict_bulk?model_id=M1
 \end{Verbatim}
 
 The API will respond with a JSON object containing a unique task identifier
@@ -347,7 +347,7 @@ sended to the API. \\
 You can consult a task prediction as follow:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-http://<hosted-url>/from_task/77d5e834-60a1-49b6-a71a-b3472dc21ce5
+http://<api>/from_task/77d5e834-60a1-49b6-a71a-b3472dc21ce5
 \end{Verbatim}
 
 A potential JSON response from the API regarding the task prediction inquiry could be:
@@ -407,29 +407,116 @@ A potential JSON response from the API regarding the task prediction inquiry cou
 
 \section{UI Service}
 
+The UI service plays a crucial role in the CAD infrastructure as it serves as the interface for interacting with health professionals. In this section, we highlight some of the most interesting features provided by this service.
 
-\section{Micro-services comunication}
+Upon accessing the UI service through your web browser, you will immediately notice a single-page web application with several interactive buttons, as depicted in \textit{Figure \ref{fig:ui-tools}}.
 
-The concept of handling long-running tasks in the background is often implemented to improve the responsiveness and scalability of the system.
-This approach allows the client to initiate a task and receive a unique identifier,
-which can later be used to query or retrieve the results of that task (\textit{Figure \ref{fig:backgrond-task}}). \\
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/ui-tools.png}
+\caption[Main Interactive buttons of the UI Service]{\textit{Main Interactive buttons of the UI Service. Illustration by Author}}
+{\label{fig:ui-tools}}
+\end{figure}
+
+The numbered buttons in \textit{Figure \ref{fig:ui-tools}} serve the following main functionalities:
+
+\begin{itemize}
+  \item 1. This button serves a dual purpose based on the UI's current state. Firstly, it allows users to initiate a prediction request when they have selected the desired images. Secondly, it serves to reset the UI for the next request, clearing any previously loaded images.
+  \item 2. This button enables users to load images directly from their device.
+  \item 3. Designed to sort the loaded images in the UI, this button operates differently depending on whether the inference has been performed. If the inference has not been executed, it sorts the images by name. However, if the inference results have been obtained from the API, the button sorts the images by importance, prioritizing melanoma classifications followed by others.
+  \item 4. This button displays a list of models exposed by the API. Users can select one of these models to serve as the primary model for the inference in the prediction request.
+\end{itemize}
+
+
+The first thing we would like to do is to load the desired images to make the prediction.
+But we can notice that in the state of no having image loaded some of this buttoms are disabled.
+When no image is loaded the prediction and the sort buttom are disabled. \\
+
+To load the desired dermostocopy images we click the buttom that allows us load images and select
+the images from our device (\textit{\ref{fig:selecting-imgs}}).
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/selecting-images.png}
+\caption[Loading Dermostocopy Images From Device]{\textit{Loading Dermostocopy Images From Device. Illustration by Author}}
+{\label{fig:selecting-imgs}}
+\end{figure}
+
+After selecting the images, they will be shown in a scrollable section within the UI service (\textit{Figure \ref{fig:loaded-images}}),
+at this point you can unload any image clicking to the cross in the top-right corner of each image.
+You will also notice that the sorting button is now available,
+along with the prediction button. Before making any predictions, there is an option to change the model for inference. By clicking on the "Select Model" button,
+a scrollable section will appear next to the working button tools (\textit{Figure \ref{fig:selecting-model}}).
+This allows us to easily switch between different models for the prediction process.
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/selecting-model.png}
+\caption[Selecting Exposed Models by the API]{\textit{Selecting Exposed Models by the API. Illustration by Author}}
+  {\label{fig:selecting-model}}
+\end{figure}
 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{imatges/preliminaries/BackgroundTask.drawio.png}
-\caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism. Notice that in this way we avoid to congest the API thread. Illustration by Author}}
-{\label{fig:backgrond-task}}
+\begin{adjustbox}{width=\textwidth, trim={0cm 3.5cm 0cm 0cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/loaded-images.png}
+\end{adjustbox}
+\caption[Dermostocopy Images Loaded in the UI]{\textit{Dermostocopy Images Loaded in the UI. Illustration by Author}}
+{\label{fig:loaded-images}}
 \end{figure}
 
-When an HTTP task is required, it comes with the identifier of the model that will be used to infer the image or a jar of images. This model is searched for in a volume configuration file located in the API. The configuration file must contain the entry for the model identifier and also include the path to the binary trained model. The trained model is deserialized and used at runtime through the PyTorch API. \\
+Once we have loaded the images and selected the desired model for prediction,
+we are ready to make the request to the API for inference using the chosen model. When the API responds,
+the UI will display the images classified as melanoma with a
+red background and the images classified as other classes with a blue background (\textit{Figure \ref{fig:after-prediction}}).
+This visual distinction helps to easily identify the different classifications provided by the inference process.
 
-Once the path of the model in the operating system is obtained it is as easy as load the searilized model
-using the PyTorch API as follow:
+\begin{figure}[H]
+\centering
+\begin{adjustbox}{width=\textwidth, trim={0cm 3.55cm 0cm 0cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/after-prediction.png}
+\end{adjustbox}
+\caption[UI State After Prediction Response]{\textit{UI State After Prediction Response. Illustration by Author}}
+{\label{fig:after-prediction}}
+\end{figure}
 
-\begin{Verbatim}[fontsize=\scriptsize]
-instance_nn = class_nn(out_dim)
-checkpoint = torch.load(pytorch_model_path, map_location=device)
-model_state_dict = checkpoint['model_state_dict']
-instance_nn.load_state_dict(model_state_dict, strict=True)
-\end{Verbatim}
+In this state, all images in the top-right corner feature a button with a square symbol.
+When you click on any of these buttons, a pop-up window appears, providing additional information about the prediction for that specific image.
+The pop-up displays the image itself,
+meta-data regarding the model used for the prediction,
+the predictions made, and the probability of the dermoscopy image belonging to each possible class. \\
+
+For instance, let's inquire about more information on the only image classified as melanoma in \textit{Figure \ref{fig:after-prediction}}.
+Clicking on the corresponding button will trigger a pop-up, as depicted in \textit{Figure \ref{fig:extra-inf-popup}},
+showcasing the relevant details for that particular prediction.
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=\textwidth]{imatges/results/extra-inf-popup.png}
+\caption[Pop-up Information For Dermostocopy Prediction]{\textit{Pop-up Information For Dermostocopy Prediction. Illustration by Author}}
+{\label{fig:extra-inf-popup}}
+\end{figure}
+
+\newpage
+
+\section{Communication Between Microservices}
+
+The communication between the API and UI service is facilitated by the HTTP protocol,
+which enables responsiveness and scalability within our infrastructure. To handle long-running tasks in the background effectively,
+we have implemented a solution that ensures the system remains highly responsive. \\
+
+Our approach involves allowing clients to initiate tasks and receive a unique identifier for each initiated task. When a client initiates a task,
+the API microservice allocates a separate thread to run the task in the background.
+The API then returns a unique task identifier that represents this background task (\textit{Figure \ref{fig:backgrond-task}}). \\
+
+With this unique task identifier, clients can later query the results of the asynchronous task.
+By adopting this method, we avoid congesting the API thread, ensuring smooth and efficient handling of multiple tasks concurrently.
+This mechanism contributes to the overall responsiveness and scalability of our infrastructure.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{imatges/preliminaries/BackgroundTask.drawio.png}
+\caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism.  Illustration by Author}}
+{\label{fig:backgrond-task}}
+\end{figure}
