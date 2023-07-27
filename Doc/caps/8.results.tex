@@ -227,6 +227,158 @@ or even superior performance compared to the non-regularized models if they unde
 \begin{figure}[H]
 \centering
     \includegraphics[width=\textwidth]{imatges/results/rocaucanalysis-all.png}
-\caption[ROC-AUC Result in Test Dataset]{\textit{ROC-AUC Result in Test Dataset. Illustration by Author}}
+\caption[ROC-AUC Results in Test Dataset]{\textit{ROC-AUC Results in Test Dataset. Illustration by Author}}
 {\label{fig:rocaucanalysis-all}}
 \end{figure}
+
+\newpage
+
+\section{API Service}
+
+The API service provides various endpoints accessible through the following URL:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<hosted-url>/docs
+\end{Verbatim}
+
+By opening this URL in a web browser, you can visualize the supported endpoints of the API
+(refer to \textit{Figure \ref{fig:api-endpoints}}). This convenient visualization is made possible by using fastAPI,
+the framework chosen for building the API, which operates on the OpenAPI scheme.
+
+\begin{figure}[H]
+\centering
+\begin{adjustbox}{width=\textwidth, trim={0.2cm 0cm 0.1cm 0cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/api-endpoints.png}
+\end{adjustbox}
+\caption[API Service End-Points]{\textit{API Service End-Points. Illustration by Author}}
+{\label{fig:api-endpoints}}
+\end{figure}
+
+Below, we present an explanation of the functionality of each use case and it's end-point along with a brief code summary.
+However, for a comprehensive understanding of the implementation, we highly recommend referring to the source code attached to the thesis.
+The complete implementation can be found in the GitHub repository: \url{https://github.com/wilberquito/melanoma.thesis}.
+
+\subsection{Consulting The Available Models}
+
+We provided a mechanism to consult the available models that currently the API exposes.
+The supported model are configured in the configuration file of the API. \\
+
+You can consult the exposed models by requesting:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<hosted-url>/public_models
+\end{Verbatim}
+
+The response of the API's JSON response should be something similar to this:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+{
+  "models": [
+    "M0",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "vicorobot.8c_b3_768_512_18ep_best_20_fold0",
+    "vicorobot.8c_b3_768_512_18ep_best_fold0",
+    "vicorobot.8c_b3_768_512_18ep_final_fold0"
+  ]
+}
+\end{Verbatim}
+
+\subsection{Predict Image}
+
+Clearly we needed an end-point to make the inference of an image. If we wanted
+that API makes a prediction, we need the image and the model exposed that
+we want to use to make the prediction.
+
+This end-point captures an image and a model identifier creating a unique task and makes the prediction just in time.
+
+\begin{Verbatim}[fontsize=\scriptsize]
+@app.post("/predict")
+async def predict(file: UploadFile = File(...),
+                    model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
+    """
+    Description
+    ----------
+    The function receives a file (expected img with jpeg format)
+    then it creates the task that is being returned
+    and async does the prediction.
+    """
+    ...
+\end{Verbatim}
+
+\vspace{0.5cm}
+\textbf{Predict a Jar of Images} \\
+
+This endpoint behaves similarly to the previous endpoint, with the key difference being that it supports predicting a set of images instead of just one. Additionally, the predictions of the images are made in a separate thread, preventing the system from getting stuck due to the time it would take to predict a large number of images.
+
+\begin{Verbatim}[fontsize=\scriptsize]
+@app.post("/predict_bulk")
+async def predict_bulk(bg_tasks: BackgroundTasks,
+                       files,
+                       model_id='vicorobot.8c_b3_768_512_18ep_best_fold0'):
+    """
+    Description
+    ----------
+    Recives a jar of images and then it creates a task
+    for this predict that is returned to consult the result
+    of the predictions of each img.
+
+    Returns
+    -------
+    task_id: str
+        - folder where the images where saved
+    num_files: int
+        - number of images saved
+    """
+    ...
+\end{Verbatim}
+
+\vspace{0.5cm}
+\textbf{Consulting the Predictions} \\
+
+When an inference is made, users need a way to access the results of the requested prediction. To handle this, the inference process stores the predictions and metadata of the models in CSV files within the task directory. These CSV files are then retrieved and combined to generate a response for the client.
+
+\begin{Verbatim}[fontsize=\scriptsize]
+@app.get("/from_task/{task_id}")
+async def from_task(task_id: str):
+    """
+    Description
+    ----------
+    Consults the predictions from a task
+    """
+    ...
+\end{Verbatim}
+
+\vspace{0.5cm}
+\textbf{Exposing the Models} \\
+
+The concept of handling long-running tasks in the background is often implemented to improve the responsiveness and scalability of the system. This approach allows the client to initiate a task and receive a unique identifier, which can later be used to query or retrieve the results of that task (\textit{Figure \ref{fig:backgrond-task}}). \\
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{imatges/preliminaries/BackgroundTask.drawio.png}
+\caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism. Notice that in this way we avoid to congest the API thread. Illustration by Author}}
+{\label{fig:backgrond-task}}
+\end{figure}
+
+When an HTTP task is required, it comes with the identifier of the model that will be used to infer the image or a jar of images. This model is searched for in a volume configuration file located in the API. The configuration file must contain the entry for the model identifier and also include the path to the binary trained model. The trained model is deserialized and used at runtime through the PyTorch API. \\
+
+Once the path of the model in the operating system is obtained it is as easy as load the searilized model
+using the PyTorch API as follow:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+instance_nn = class_nn(out_dim)
+checkpoint = torch.load(pytorch_model_path, map_location=device)
+model_state_dict = checkpoint['model_state_dict']
+instance_nn.load_state_dict(model_state_dict, strict=True)
+\end{Verbatim}
+
+
+
+\section{The UI Service}
