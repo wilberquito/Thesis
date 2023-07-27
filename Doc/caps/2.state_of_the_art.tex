@@ -44,9 +44,6 @@ From their work, we adopted various deep learning techniques. For instance, we a
 an unbalanced multi-class data-sets like as the ISIC dataset is.
 To properly assess the training process, they utilized the AUC with one-vs-rest (OvR) metric. This project as well uses this metric to evaluate the performance of the models. \\
 
-Additionally, this thesis incorporated an early-stop mechanism into the training process. This mechanism prevents over-fitting by monitoring the model's performance on a validation set and stopping the training if the performance starts to worsen or stagnate.
-This was not mentioned in the related work, but we recognized its importance and included it in our solution. \\
-
 Another aspect the current thesis borrowed from this work is the approach to cleaning and mapping data-sets from different years. They trained their models with different output sizes, but the process of mapping and joining the data-sets into a single data-set was similar to my approach,
 where we consistently mapped the data into eight different classes. \\
 
@@ -59,5 +56,6 @@ These inspirations and adaptations from the related work has greatly influenced 
 
 CNN explainer is a web page created through a collaborative research effort between Georgia Tech and Oregon State\cite{CNNExplainer}. It leverages TensorFlow.js, a deep learning library that utilizes GPU acceleration within the web browser, to load pretrained models for visualization. The entire interactive system is implemented in JavaScript, utilizing Svelte as a framework and D3.js for visualizations. With CNN Explainer, users can upload images and obtain predictions for those images across ten different classes. \\
 
-While CNN Explainer primarily aims to serve educational purposes, my project's UI focuses on providing dermoscopy images predictions and information about the models used and their outputs. The inspiration for incorporating an interactive UI for end users stemmed from CNN Explainer.
-Consequently, we utilized the same web framework to develop the UI of the CAD infrastructure of this thesis.
+While CNN Explainer primarily aims to serve educational purposes,
+the UI of this thessis, focuses on providing dermoscopy images predictions and information about the models used and their outputs. The inspiration for incorporating an interactive UI for end users stemmed from CNN Explainer.
+Consequently, we utilized the same web framework to develop the UI.

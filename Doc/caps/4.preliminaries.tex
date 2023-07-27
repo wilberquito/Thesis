@@ -89,24 +89,22 @@ Machine learning is a branch of artificial intelligence (\textit{AI}) and comput
 
 The central idea of machine learning is the existence of a mathematical relationship between any combination of input and output data. Rather than manually programming knowledge into computers, machine learning endeavors to automatically learn significant relationships and patterns by observing examples. \\
 
-There are three subcategories of machine learning \cite{MITML}. These subcategories are listed bellow. \\
+There are three subcategories (\textit{Figure \ref{fig:ml_branches}}) of machine learning \cite{MITML}. These subcategories are listed bellow. \\
 
-\vspace{0.5cm}
-\textbf{Supervised Learning} \\
+\begin{itemize}
+\item \textbf{Supervised Learning}
 
 Machine learning models are trained with labeled data sets, which allow the models to learn and grow more accurate over time. For example, an algorithm would be trained with pictures of dogs and other things, all labeled by humans, and the machine would learn ways to identify pictures of dogs on its own. Supervised machine learning is the most common type used today. \\
 
-\vspace{0.5cm}
-\textbf{Unsupervised Learning} \\
+\item \textbf{Unsupervised Learning}
 
 Unsupervised learning involves using a training set that comprises unlabeled inputs, meaning inputs that do not have any assigned desired output. The primary objective of this learning approach is to uncover concealed patterns or data clusters without relying on human intervention. \\
 
-\vspace{0.5cm}
-\textbf{Reinforcement Learning} \\
+\item \textbf{Reinforcement Learning}
 
 Reinforcement learning occupies a position between supervised and unsupervised learning. In a certain sense, there is some form of supervision, but it does not involve explicitly specifying a desired output for every input in the data. Instead, a reinforcement learning algorithm receives feedback from the environment only after selecting an output, known as an action, based on a given input or observation. The feedback indicates the extent to which the action fulfills the learner's goals. \\
 
-\textit{Figure \ref{fig:ml_branches}} is graphical representation of the subcategories of machine learning.
+\end{itemize}
 
 \begin{figure}[H]
 \centering
@@ -168,14 +166,15 @@ The process of feature extraction in deep neural networks allows the network to 
 {\label{fig:deep-nn}}
 \end{figure}
 
-The minimum unit in a layer is known as neuron or perceptron.
+The minimum unit in a layer is known as neuron or perceptron (\textit{Figure \ref{fig:perceptron}}).
 The perceptron, is the oldest simple neural network, created by Frank Rosenblatt in 1958.
-Every node within the network possesses an associated value, which is computed based on the incoming nodes and edges,
-as depicted in \textit{Figure \ref{fig:perceptron}}. The computation takes place in the following manner: the products
+Every node within the network possesses an associated value, which is computed based on the incoming nodes and edges. The computation takes place in the following manner: the products
 of  inputs and their respective weights are summed with a bias, and this sum is subsequently passed through the node's activation function.
 The activation function serves the purpose of compressing the resulting value within the range of 0 to 1 and introduces non-linearity,
 allowing the model to learn complex relationships in the data. The resulting value determines the
 degree to which the signal should propagate through the network, ultimately influencing the final outcome.
+
+\newpage
 
 \begin{figure}[H]
 \centering
@@ -199,12 +198,10 @@ Furthermore, CNNs have a three-dimensional arrangement of neurons: width, height
 
 To build CNN architectures, there are four main types of layers used, and they are listed bellow. \\
 
-\newpage
+\begin{itemize}
+  \item \textbf{Convolutional Layers}
 
-\vspace{0.5cm}
-\textbf{Convolutional Layers} \\
-
-A convolutional layer is responsible for detecting and extracting features from the input data. It consists of a set of learnable filters, also known as kernels or feature detectors. Each filter is a small matrix of weights that slides or convolves across the input data to perform a dot product operation at each spatial location.  \\
+    A convolutional layer (\textit{Figure \ref{fig:convolutional-layer}}) is responsible for detecting and extracting features from the input data. It consists of a set of learnable filters, also known as kernels or feature detectors. Each filter is a small matrix of weights that slides or convolves across the input data to perform a dot product operation at each spatial location.  \\
 
 The filter slides or convolves across the input data with a defined stride, which specifies the amount of shift between each position.
 At each spatial location, a dot product is computed between the filter and the overlapping region of the input.
@@ -212,38 +209,38 @@ The dot product involves element-wise multiplication of the filter values with t
 
 The result of each dot product operation is a single value, forming a pixel in the output feature map. Additionally, an activation function is applied element-wise to introduce non-linearity into the network. \\
 
+\newpage
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{imatges/preliminaries/convolutional-layer.png}
 \caption[Convolutional Operation on Input Image]{\textit{Convolutional Operation on Input Image. Illustration by towardsdatascience}}
-{\label{fig:convoluional-layer}}
+{\label{fig:convolutional-layer}}
 \end{figure}
 
-\newpage
 
-\vspace{0.5cm}
-\textbf{Pooling Layers} \\
+    \item \textbf{Pooling Layers}
 
-Pooling layers performs a summarizing of nearby outputs in the network, effectively replacing certain locations with a condensed representation. This reduces the spatial dimensionality of the output, leading to decreased computational requirements and weight parameters. The pooling operation is applied independently to each slice of the representation. \\
+A pooling layer (\textit{Figure \ref{fig:pooling-layer}}) performs a summarizing of nearby outputs in the network, effectively replacing certain locations with a condensed representation. This reduces the spatial dimensionality of the output, leading to decreased computational requirements and weight parameters. The pooling operation is applied independently to each slice of the representation. \\
 
 Various pooling functions exist, including averaging the values within a rectangular neighborhood, computing the L2 norm of the neighborhood, or using a weighted average based on distance. However, the most widely used method is max pooling, which selects the maximum output value from the neighborhood.
+
+\newpage
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{imatges/preliminaries/polling-layer.png}
-\caption[Polling Operation on Input Image]{\textit{Polling Operation on Input Image. Illustration by towardsdatascience}}
-{\label{fig:polling-layer}}
+\caption[Max Polling Operation on Input Image]{\textit{Max Polling Operation on Input Image. Illustration by towardsdatascience}}
+{\label{fig:pooling-layer}}
 \end{figure}
 
-\vspace{0.5cm}
-\textbf{Fully Connected Layers} \\
+\item \textbf{Fully Connected Layers}
 
 Neurons in this layer have full connectivity with all neurons in the preceding and succeeding layer. This is why it can be computed as usual by a matrix multiplication followed by a bias effect. The topology in the fully connected portion of a CNN depends on various factors, including the complexity of the task, the nature of the data, and the capacity of the model. There is no fixed rule for determining the exact number of neurons or layers, and it often requires experimentation and tuning. \\
 
 The fully connected layer helps to map the representation between the input and the output. See \textit{Figure \ref{fig:deep-nn}} to a visual representation of a fully connected layer. \\
 
-\vspace{0.5cm}
-\textbf{Non-linearity Layers} \\
+\item \textbf{Non-linearity Layers}
 
 Convolutional operations in neural networks are linear, meaning they capture linear patterns in the data. However, many objects in images exhibit non-linear characteristics that cannot be effectively detected using linear operations alone. To address this limitation, non-linearity layers, such as activation functions, are typically applied immediately after the convolutional layer. These non-linearity layers introduce non-linear transformations to the activation maps, enabling the network to learn and detect complex, non-linear patterns in the data. \\
 
@@ -309,6 +306,7 @@ Mathematically, the tanh function is expressed as:
 
 \end{itemize}
 
+\end{itemize}
 \subsection{Loss Function}
 
 A loss function, also known as a cost function or an objective function, is a measure used in machine learning and optimization algorithms to quantify how well a model performs on a given task. It represents the discrepancy between the predicted outputs of a model and the true values or labels associated with the training data. \\
@@ -341,27 +339,21 @@ In multi-class classification, the cross-entropy loss is calculated using the tr
     \item \(p_i\) represents the predicted probability for class \(i\).
 \end{itemize}
 
-\newpage
-
 \subsection{Metrics}
 {\label{sec:metrics}}
 
 There are various metrics commonly used to assess the quality of a model's predictions.
 In this section, we present a selection of metrics that we find relevant for evaluating our models.
 
-\vspace{0.5cm}
-\textbf{Confusion Matrix} \\
+\begin{itemize}
+  \item \textbf{Confusion Matrix}
 
-\noindent A confusion matrix is a square matrix with dimensions {\tt NxN}, where {\tt N} represents the total number of classes being predicted. It provides a visual representation of the errors or confusion made by a classification model during its predictions. The matrix, illustrated as \textit{Figure \ref{fig:confusion-matrix}}, is structured with columns and rows representing the predicted and actual classes, respectively.
+A confusion matrix (\textit{Figure \ref{fig:confusion-matrix}}) is a square matrix with dimensions {\tt NxN},
+where {\tt N} represents the total number of classes being predicted.
+It provides a visual representation of the errors or confusion made by a classification
+model during its predictions. \\
 
-\begin{figure}[H]
-\begin{adjustbox}{trim={0pt 0.5cm 0pt 1cm}, clip}
-\centering
-\includegraphics[width=0.9\textwidth]{imatges/preliminaries/confusion-matrix.png}
-\end{adjustbox}
-\caption[Confusion Matrix Multi-Class]{\textit{Confusion Matrix Multi-Class. Illustration by WIKIPEDIA}}
-{\label{fig:confusion-matrix}}
-\end{figure}
+From confusion matrix we can obtain other metrics such as:
 
 \begin{itemize}
 \item \textbf{True Positive (TP)}
@@ -379,20 +371,27 @@ This indicates a scenario where the model incorrectly predicts the negative clas
 
 \end{itemize}
 
+\begin{figure}[H]
+\begin{adjustbox}{trim={0pt 0.5cm 0pt 1cm}, clip}
+\centering
+\includegraphics[width=0.9\textwidth]{imatges/preliminaries/confusion-matrix.png}
+\end{adjustbox}
+\caption[Confusion Matrix Multi-Class]{\textit{Confusion Matrix Multi-Class. Illustration by kaggle}}
+{\label{fig:confusion-matrix}}
+\end{figure}
+
 In a logical sense, when we add up the elements on the main diagonal of the confusion matrix,
 we obtain the total number of correct predictions.
 Conversely, summing the elements on the antidiagonal provides us with the total number of incorrect predictions.
 Utilizing these values, we can compute additional metrics such as accuracy, precision, recall, specificity, and F1 score. \\
 
-\vspace{0.5cm}
-\textbf{Accuracy} \\
+\item \textbf{Accuracy}
 
-\noindent Accuracy is a commonly employed and straightforward performance metric in classification tasks. It calculates the ratio of correct predictions to the total number of predictions made on a dataset, thus determining the likelihood of correctly classifying an input. Accuracy is especially valuable when working with a balanced dataset, where the number of instances in each class is roughly equivalent. However, in the case of the previously mentioned thesis dataset, which is not balanced, the use of accuracy serves primarily to monitor model training performance rather than being the main evaluation metric.
+Accuracy is a commonly employed and straightforward performance metric in classification tasks. It calculates the ratio of correct predictions to the total number of predictions made on a dataset, thus determining the likelihood of correctly classifying an input. Accuracy is especially valuable when working with a balanced dataset, where the number of instances in each class is roughly equivalent. However, in the case of the previously mentioned thesis dataset, which is not balanced, the use of accuracy serves primarily to monitor model training performance rather than being the main evaluation metric.
 
 \[Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\]
 
-\vspace{0.5cm}
-\textbf{TPR} \\
+\item \textbf{TPR}
 
 TPR stands for True Positive Rate, and it is also known as sensitivity or recall.
 It measures the proportion of actual positive cases that are correctly identified as positive
@@ -402,8 +401,7 @@ by a classification model or test.
 \text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}
 \]
 
-\vspace{0.5cm}
-\textbf{FPR} \\
+\item \textbf{FPR}
 
 FPR stands for False Positive Rate, and it measures the proportion of actual negative cases that are incorrectly identified as positive by a classification model or test.
 
@@ -411,8 +409,7 @@ FPR stands for False Positive Rate, and it measures the proportion of actual neg
 \text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}
 \]
 
-\vspace{0.5cm}
-\textbf{AUC-ROC Curve with One-vs-Rest Strategy} \\
+\item \textbf{AUC-ROC Curve with One-vs-Rest Strategy}
 
 The ROC Curve, when computed with the one-vs-rest (OvR) strategy for multiclass classification, provides insights into how well the model can differentiate a class from the rest of the classes. It is a probabilistic curve that plots the true positive rate (TPR) against the false positive rate (FPR). By treating the target class as the positive class and the remaining classes as the negative class in separate binary classification tasks (\textit{Figure \ref{fig:auc-roc}}). \\
 
@@ -428,6 +425,8 @@ model at distinguishing between the positive and negative classes.
 {\label{fig:auc-roc}}
 \end{figure}
 
+\end{itemize}
+
 
 \subsection{Optimizer}
 
@@ -437,8 +436,8 @@ While training a deep learning models, the optimizer modifies the weights of the
 
 The are a considerable amount of different optimizer algorithms out there with their pros and cons. In this section I present the family of optimizers based on Gradient Descent optimization. This family of optimizer algorithms were used for the thesis. \\
 
-\vspace{0.5cm}
-\textbf{Gradient Descent} \\
+\begin{itemize}
+  \item \textbf{Gradient Descent}
 
 Using the Gradient Decent optimization algorithm, the weights are updated incrementally after each epoch (pass over the training dataset). \\
 
@@ -466,9 +465,7 @@ w = w + \Delta w
 
 In Gradient Descent optimization, we compute the cost gradient based on the complete training set; hence, we sometimes also call it batch gradient descent. In case of very large datasets, using Gradient Descent can be quite costly since we are only taking a single step for one pass over the training set – thus, the larger the training set, the slower our algorithm updates the weights and the longer it may take until it converges to the global cost minimum. \\
 
-\newpage
-
-The next lines are a high level pseudo-implementation of the Gradient Descent algorithm:
+A high level pseudo-implementation of the Gradient Descent algorithm:
 
 \begin{itemize}[label=\(\circ\)]
   \item for each epoch:
@@ -489,14 +486,13 @@ The \textit{Figure \ref{fig:optimization}} shows how the Gradient Descent optimi
 {\label{fig:optimization}}
 \end{figure}
 
-\vspace{0.5cm}
-\textbf{Stochastic Gradient Descent} \\
+\newpage
+
+  \item \textbf{Stochastic Gradient Descent}
 
 Stochastic Gradient Descent work similar to the Gradient Descent but the weight updates are not accumulated as we’ve seen above for Gradient Descent. Instead, the weights are updated after each training sample. Due to its stochastic nature, the path towards the global cost minimum is not “direct” as in Gradient Descent, but may go “zig-zag”if we are visuallizing the cost surface in a 2D space, see \textit{Figure \ref{fig:sgdvsgd}}. However, it has been shown that Stochastic Gradient Descent almost surely converges to the global cost minimum if the cost function is convex. \\
 
-\newpage
-
-The next lines are a high level pseudo-implementation of the Stochastic Gradient Descent algorithm:
+A high level pseudo-implementation of the Stochastic Gradient Descent algorithm:
 
 \begin{itemize}[label=$\circ$]
     \item for each epoch or until approx. cost minimum is reached:
@@ -516,9 +512,13 @@ The next lines are a high level pseudo-implementation of the Stochastic Gradient
 \begin{adjustbox}{trim=0cm 0cm 0cm 1cm, clip}
 \includegraphics[width=0.9\textwidth]{imatges/preliminaries/sgdvsgd.jpeg}
 \end{adjustbox}
-    \caption[Gradient Descent vs Stochastic Gradient Descent]{\textit{Gradient Descent vs Stochastic Gradient Descent. It illustrates the optimization process of both algorithms. Illustration by superannotate}}
+    \caption[Gradient Descent vs Stochastic Gradient Descent]{\textit{Gradient Descent vs Stochastic Gradient Descent. Illustration by superannotate}}
 {\label{fig:sgdvsgd}}
 \end{figure}
+
+\end{itemize}
+
+\newpage
 
 \subsection{Forward Propagation and Backward Propagation}
 
@@ -533,22 +533,22 @@ Resuming the forward-propagation and back-propagation (\textit{Figure \ref{fig:f
 {\label{fig:forward-and-back-propagation}}
 \end{figure}
 
-\vspace{0.5cm}
-\textbf{Forward Propagation} \\
+
+\begin{itemize}
+
+\item \textbf{Forward Propagation}
 
 Forward propagation refers to the process of computing the output of a neural network given an input or a batch of inputs. During forward propagation, the input data flows through the network's layers in a sequential manner, from the input layer to the output layer. Each layer performs a series of computations, typically involving linear transformations (such as matrix multiplications) followed by activation functions. \\
 
-As the data flows forward through the network, intermediate outputs, also known as activations or feature maps, are computed at each layer. These activations are then passed on as inputs to the subsequent layers until the final output is produced. The forward propagation process essentially calculates the predicted output of the network for a given input. \\
+As the data flows forward through the network, intermediate outputs, also known as activations or feature maps, are computed at each layer. These activations are then passed on as inputs to the subsequent layers until the final output is produced. The forward propagation process essentially calculates the predicted output of the network for a given input.
 
-\vspace{0.5cm}
-\textbf{Backward Propagation} \\
+\item \textbf{Backward Propagation}
 
 Backward propagation, short for backward propagation of errors, is the process of computing the gradients of the network's parameters with respect to a loss function. These gradients indicate the sensitivity of the network's output to changes in its parameters and are used to update the parameters during the training process. \\
 
-The backward propagation algorithm starts from the final output of the network and propagates the error gradients backward through the network's layers. It computes the gradients layer by layer using the chain rule of calculus. The gradients quantify how each parameter contributed to the overall error of the network and provide information on how to adjust the parameters to reduce the error. \\
+The backward propagation algorithm starts from the final output of the network and propagates the error gradients backward through the network's layers. It computes the gradients layer by layer using the chain rule of calculus. The gradients quantify how each parameter contributed to the overall error of the network and provide information on how to adjust the parameters to reduce the error.
 
-Once the gradients are computed, an optimization algorithm (such as stochastic gradient descent) uses them to update the network's parameters in a way that minimizes the loss function. The process of repeatedly performing forward propagation, computing gradients through back-propagation, and updating the parameters is carried out iteratively until the network converges to a desirable level of performance.
-
+\end{itemize}
 
 \subsection{Under-fitting vs Over-fitting}
 
@@ -556,12 +556,10 @@ Under-fitting is a prevalent challenge in machine learning, occurring when the m
 
 Over-fitting is also a prevalent challenge in machine learning but it is really common in deep learning algorithms. Deep learning models try to fit the training data entirely and ends up memorizing the data patterns and the noise/random fluctuations. These models fail to generalize and perform well in the case of unseen data scenarios, defeating the model's purpose. \\
 
-\textit{Figure \ref{fig:underfitting-overfitting-goodfitting}} illustrates the under-fitting and over-fitting issue against a good fitting in a classifier problem.
-
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{imatges/preliminaries/over-under-base.jpg}
-\caption[Under-fitting vs Over-fitting vs Good Fitting]{\textit{Under-fitting vs Over-fitting vs A Good Fitting. Illustration by towardsdatascience}}
+\includegraphics[width=0.8\textwidth]{imatges/preliminaries/over-under-base.jpg}
+\caption[Fitting Scenarios]{\textit{Fitting Scenarios. Illustration by towardsdatascience}}
 {\label{fig:underfitting-overfitting-goodfitting}}
 \end{figure}
 
@@ -569,8 +567,8 @@ Over-fitting is also a prevalent challenge in machine learning but it is really 
 
 There are lot of strategies to combat over-fitting, in this section there is presented only those used in the project. \\
 
-\vspace{0.5cm}
-\textbf{Early Stopping} \\
+\begin{itemize}
+  \item \textbf{Early Stopping}
 
 Early Stopping involves monitoring the model's performance on a validation dataset during training. If the performance stops improving or starts deteriorating, the training process is stopped early. By doing this, early stopping helps find the optimal balance between model complexity and generalization, ensuring the model doesn't become overly specialized to the training data and does not performs well on unseen data. \\
 
@@ -581,14 +579,13 @@ Early Stopping involves monitoring the model's performance on a validation datas
 {\label{fig:early-stop}}
 \end{figure}
 
-\vspace{0.5cm}
-\textbf{Learning Rate Scheduling} \\
+\item \textbf{Learning Rate Scheduling}
 
 The learning rate is a hyper-parameter in machine learning that determines the step size at which a model's parameters are updated during the optimization process. In most optimization algorithms, such as gradient descent, the learning rate controls how quickly or slowly the model learns from the training data. \\
 
 There are various approaches in learning rate scheduling, bellow you'll find the scheduling used in the thesis.
 
-\newpage
+
 
 \begin{itemize}
     \item \textbf{Learning Rate Decay}
@@ -644,7 +641,7 @@ There are various approaches in learning rate scheduling, bellow you'll find the
 
 \newpage
 
-\textbf{Dropout} \\
+\item \textbf{Dropout}
 
 Dropout is a regularization method \cite{DropoutPaper}. The idea behind dropout is to prevent overfitting and improve generalization in neural networks by randomly "dropping out" or deactivating a fraction of the neurons during each training iteration. \\
 
@@ -659,34 +656,39 @@ Crossed units have been dropped. Illustration by Srivastava}}
 {\label{fig:dropout}}
 \end{figure}
 
+\end{itemize}
+
 \subsection{Train, Validation and Test Sets}
 
 The primary method employed to validate the models involves dividing the original dataset into three subsets using the Holdout set scheme, see \textit{Figure \ref{fig:holdout-test-scheme}}. The percentages applied to divide to the ISIC dataset used for training is 80\%, for validation 10\% and for testing 10\%. \\
 
-Bellow there are the explanation of each dataset and the propose of all of them. \\
+Bellow there are the explanation of each dataset and the propose of all of them.
 
-\vspace{0.5cm}
-\textbf{Training Set} \\
+\begin{itemize}
 
-This subset is utilized during the training phase of the model. \\
+  \item \textbf{Training Set}
 
-\vspace{0.5cm}
-\textbf{Validation Set} \\
+This subset is utilized during the training phase of the model.
 
-This subset was employed to apply trained models to new, unseen examples and evaluate the model's performance. It also aids in selecting the model that best matches the validation set by minimizing the classifier One vs Rest metric in predictions. \\
+\item \textbf{Validation Set}
 
-\vspace{0.5cm}
-\textbf{Test Set} \\
+This subset was employed to apply trained models to new, unseen examples and evaluate the model's performance. It also aids in selecting the model that best matches the validation set by minimizing the classifier One vs Rest metric in predictions.
+
+\item \textbf{Test Set}
 
 Comprising non-observed data examples, this set is used to assess the performance of the chosen model. It helps determine if further optimization is required and which techniques should be applied next. Alternatively, it aids in deciding whether to select an alternative model.
 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{imatges/preliminaries/train-test-validation-sets.png}
+\begin{adjustbox}{width=0.8\textwidth, trim={0cm 0.5cm 0cm 0.5cm}, clip}
+\includegraphics[\textwidth]{imatges/preliminaries/train-test-validation-sets.png}
+\end{adjustbox}
 \caption[Holdout Test Scheme]{\textit{Holdout Test Scheme. Illustration by Qualcomm}}
 {\label{fig:holdout-test-scheme}}
 \end{figure}
+
+\end{itemize}
 
 \newpage
 
@@ -697,7 +699,7 @@ Data augmentation encompasses various techniques utilized to expand the dataset 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{imatges/preliminaries/augmentation.jpg}
-\caption[Data Augmentation]{\textit{Data Augmentation. The example show the result of applying some transformation to an image. Illustration by Albumentations}}
+\caption[Data Augmentation]{\textit{Data Augmentation. Illustration by Albumentations}}
 {\label{fig:augmentation}}
 \end{figure}
 
@@ -782,7 +784,7 @@ The present thesis consists of two services: an API and a UI. These services are
 The inference API service focuses on handling the back-end logic and data processing.
 It exposes a well-defined API that allows user to interact with the trained models. \\
 
-The end-points that the present thesis API service support are explained in \textit{Section \ref{cap:results}}.
+The end-points that the present thesis API service support are explained in \textit{Section \ref{cap:result}}.
 
 \subsection{Containerization}
 
@@ -790,7 +792,7 @@ Containerization is a technology that allows applications and their dependencies
 
 Containers are created from container images, which are self-contained packages containing the application's code, dependencies, libraries, and configurations. Images serve as the blueprint for creating containers. They can be shared, versioned, and easily deployed on various platforms. \\
 
-Virtualization frameworks, such as Docker and Podman, provide tools and services to build, manage, and run containers. These frameworks utilize underlying virtualization technologies to create and manage isolated environments. These environments, called containers, offer resource isolation and ensure that applications run consistently across different computing environments.
+Frameworks such as Docker and Podman, provide tools and services to build, manage, and run containers. These frameworks utilize underlying virtualization technologies to create and manage isolated environments. These environments, called containers, offer resource isolation and ensure that applications run consistently across different computing environments.
 
 \subsection{Platform Deployment}
 
