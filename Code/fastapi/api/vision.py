@@ -53,9 +53,11 @@ def __load_wilberquito_model(class_nn: torch.nn.Module,
         raise Exception(exc_msg)
 
     instance_nn = class_nn(out_dim)
+    instance_nn = instance_nn.to(device)
     checkpoint = torch.load(pytorch_model_path, map_location=device)
     model_state_dict = checkpoint['model_state_dict']
-    instance_nn.load_state_dict(model_state_dict, strict=True)
+    instance_nn.load_state_dict(model_state_dict,
+                                strict=True)
     return instance_nn
 
 
@@ -129,9 +131,9 @@ async def mk_prediction(model_id: str,
                                  shuffle=False)
 
     # Prediction for each image
-    labels = torch.tensor([])
+    labels = torch.tensor([], device=device)
     # Probabilities for all classes
-    probabilities = torch.tensor([])
+    probabilities = torch.tensor([], device=device)
     # Picture names
     names = csv.name
 
