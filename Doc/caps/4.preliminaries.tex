@@ -391,7 +391,7 @@ by a classification model or test.
 \text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}
 \]
 
-\item \textbf{FPR}
+\subsection{FPR}
 
 FPR stands for False Positive Rate, and it measures the proportion of actual negative cases that are incorrectly identified as positive by a classification model or test.
 
@@ -503,8 +503,6 @@ A high level pseudo-implementation of the Stochastic Gradient Descent algorithm:
     \caption[Gradient Descent vs Stochastic Gradient Descent]{\textit{Gradient Descent vs Stochastic Gradient Descent. Illustration by superannotate}}
 {\label{fig:sgdvsgd}}
 \end{figure}
-
-\end{itemize}
 
 \newpage
 
@@ -662,7 +660,7 @@ Comprising non-observed data examples, this set is used to assess the performanc
 \begin{figure}[H]
 \centering
 \begin{adjustbox}{width=0.8\textwidth, trim={0cm 0.5cm 0cm 0.5cm}, clip}
-\includegraphics[\textwidth]{imatges/preliminaries/train-test-validation-sets.png}
+\includegraphics[width=\textwidth]{imatges/preliminaries/train-test-validation-sets.png}
 \end{adjustbox}
 \caption[Holdout Test Scheme]{\textit{Holdout Test Scheme. Illustration by Qualcomm}}
 {\label{fig:holdout-test-scheme}}
@@ -674,7 +672,7 @@ Comprising non-observed data examples, this set is used to assess the performanc
 
 \section{Data Augmentation}
 
-Data augmentation encompasses various techniques utilized to expand the dataset by introducing modifications, thereby increasing the number of examples. Its purpose is not only to enlarge the dataset but also to enhance its diversity. By acting as a regularizer, data augmentation aids in mitigating overfitting during machine learning model training.
+Data augmentation encompasses various techniques utilized to expand the dataset by introducing modifications, thereby increasing the number of examples. Its purpose is not only to enlarge the dataset but also to enhance its diversity. By acting as a regularization, data augmentation aids in mitigating over-fitting during machine learning model training.
 
 \begin{figure}[H]
 \centering
