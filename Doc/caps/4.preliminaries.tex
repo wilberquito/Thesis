@@ -401,17 +401,23 @@ FPR stands for False Positive Rate, and it measures the proportion of actual neg
 
 \subsection{AUC-ROC Curve with One-vs-Rest Strategy}
 
-The ROC Curve, when computed with the one-vs-rest (OvR) strategy for multiclass classification, provides insights into how well the model can differentiate a class from the rest of the classes. It is a probabilistic curve that plots the true positive rate (TPR) against the false positive rate (FPR). By treating the target class as the positive class and the remaining classes as the negative class in separate binary classification tasks (\textit{Figure \ref{fig:auc-roc}}). \\
+The ROC Curve, when computed with the one-vs-rest (OvR) strategy for multiclass classification,
+provides insights into how well the model can differentiate a class from the rest of the classes.
+It is a probabilistic curve that plots the true positive rate (TPR) against the false positive rate (FPR).
+By treating the target class as the positive class and the remaining classes as the negative class
+in separate binary classification tasks (\textit{Figure \ref{fig:auc-roc}}). \\
 
 The area under the curve (AUC) is a value between 0 and 1 that measures
 the ability of a classifier to distinguish between classes. It is used as a summary
 of the ROC curve. The higher the AUC, the better the performance of the
 model at distinguishing between the positive and negative classes.
 
+\newpage
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{imatges/preliminaries/auc.png}
-    \caption[Forward Propagation and Backward Propagation]{\textit{AUC-ROC. Comparison of multiple ROC curves and how much overlap there are between classes. Illustration by Elizabeth Louise Thomas}}
+    \caption[Classification Performance Using AUC-ROC as Metric]{\textit{Classification Performance Using AUC-ROC as Metric. Illustration by Elizabeth Louise Thomas}}
 {\label{fig:auc-roc}}
 \end{figure}
 

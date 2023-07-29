@@ -1,2 +1,37 @@
 \chapter{Conclusions and Future Work}
 \label{cap:concl}
+
+
+The objective of this project was to employ deep learning methods to train multiple models for detecting melanoma in an unbalanced dataset of dermoscopy images.
+Once these models were trained, they were exposed through a microservice architecture.
+The architecture consisted of two microservices: an API that exposed the models and a UI for interacting with the API.
+To achieve this, eight different models were trained, all utilizing transfer learning with the ResNet-18 pre-trained model as the base.
+Some of the proposed models involved modifying only the fully-connected layer of ResNet-18 to classify between eight classes,
+while others utilized more complex fully connected layers with Dropout. \\
+
+For training these eight models,
+various hyperparameters and learning policies using schedulers were experimented with.
+The models can be categorized into two groups: those trained with additional regularization,
+such as data augmentation and dropout layers, and those without such extra regularization.
+The second group of models was trained for only a few epochs, as it was quickly observed that they tended to overfit. \\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lclc}
+    \toprule
+ Model &  Test AUC & \cellcolor{gray!50}Model & \cellcolor{gray!50}Test AUC  \\
+\midrule
+ M0 & 0.892 & \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.858 \\
+ M1 $\star$ & 0.892 & \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.843 \\
+ M2 $\ast$ &  0.885 &  \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.848 \\
+ M3 $\bullet$ & 0.886 & \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.849 \\
+ \midrule
+Mean &  88.875\% & \cellcolor{gray!50}Mean & \cellcolor{gray!50}84.950\%  \\
+SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
+
+\bottomrule
+\end{tabular}
+\caption[Metrics in Test Dataset]
+  {\textit{Metrics in Test Dataset. Table by Author}}
+{\label{table:test-set-resume-metrics}}
+\end{table}
