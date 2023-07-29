@@ -233,6 +233,30 @@ or even superior performance compared to the non-regularized models if they unde
 
 \newpage
 
+
+\section{Microservices Communication}
+
+The communication between the API and UI service is facilitated by the HTTP protocol,
+which enables responsiveness and scalability within our infrastructure. To handle long-running tasks in the background effectively,
+we have implemented a solution that ensures the system remains highly responsive. \\
+
+Our approach involves allowing clients to initiate tasks and receive a unique identifier for each initiated task. When a client initiates a task,
+the API microservice allocates a separate thread to run the task in the background.
+The API then returns a unique task identifier that represents this background task (\textit{Figure \ref{fig:backgrond-task}}). \\
+
+With this unique task identifier, clients can later query the results of the asynchronous task.
+By adopting this method, we avoid congesting the API thread, ensuring smooth and efficient handling of multiple tasks concurrently.
+This mechanism contributes to the overall responsiveness and scalability of our infrastructure.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{imatges/preliminaries/BackgroundTask.drawio.png}
+\caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism.  Illustration by Author}}
+{\label{fig:backgrond-task}}
+\end{figure}
+
+\newpage
+
 \section{API Service}
 
 The API service provides various endpoints accessible through the following URL:
@@ -496,27 +520,4 @@ showcasing the relevant details for that particular prediction.
     \includegraphics[width=\textwidth]{imatges/results/extra-inf-popup.png}
 \caption[Pop-up Information For Dermostocopy Prediction]{\textit{Pop-up Information For Dermostocopy Prediction. Illustration by Author}}
 {\label{fig:extra-inf-popup}}
-\end{figure}
-
-\newpage
-
-\section{Communication Between Microservices}
-
-The communication between the API and UI service is facilitated by the HTTP protocol,
-which enables responsiveness and scalability within our infrastructure. To handle long-running tasks in the background effectively,
-we have implemented a solution that ensures the system remains highly responsive. \\
-
-Our approach involves allowing clients to initiate tasks and receive a unique identifier for each initiated task. When a client initiates a task,
-the API microservice allocates a separate thread to run the task in the background.
-The API then returns a unique task identifier that represents this background task (\textit{Figure \ref{fig:backgrond-task}}). \\
-
-With this unique task identifier, clients can later query the results of the asynchronous task.
-By adopting this method, we avoid congesting the API thread, ensuring smooth and efficient handling of multiple tasks concurrently.
-This mechanism contributes to the overall responsiveness and scalability of our infrastructure.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{imatges/preliminaries/BackgroundTask.drawio.png}
-\caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism.  Illustration by Author}}
-{\label{fig:backgrond-task}}
 \end{figure}
