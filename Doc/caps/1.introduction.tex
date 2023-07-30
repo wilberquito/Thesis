@@ -25,16 +25,17 @@ patterns associated with various skin conditions, including melanoma
 
 \begin{figure}[htb] \centering
   \includegraphics[width=6.5 cm]{imatges/introduction/medical_procedure_dermastocopy.jpeg}
-  \caption[Dermoscopy Procedure]{\textit{During the dermoscopy procedure, the dermatologist places the dermatoscope directly on the skin, making contact with the lesion of interest. Illustration by MD Anderson Cancer Center}}
+  \caption[Dermoscopy Procedure]{\textit{Dermoscopy Procedure. Illustration by MD Anderson Cancer Center}}
   {\label{fig:procedure_dermoscopy}}
 \end{figure}
 
 Worldwide, in 2020 an estimated 324,635 people were diagnosed with melanoma and
 an estimated 57,043 people worldwide died from melanoma the same year
-\cite{CancerStats}. The introduction of sophisticated machinery and techniques
-in dermoscopy procedures \textit{Figure \ref{fig:subset_isic}} seems not enough
-to fight against melanoma, but the developments in artificial intelligence (AI)
-especially in deep learning techniques, have made Computer-Aided Diagnosis
+\cite{CancerStats}. The introduction of sophisticated machinery to take high
+quality dermoscopy images (\textit{Figure \ref{fig:subset_isic}}) and new
+techniques in dermoscopy procedures seems not enough to fight against
+melanoma, but the developments in artificial intelligence (AI) especially in
+deep learning techniques, have made Computer-Aided Diagnosis
 (CAD)\footnote{Computer-Aided Diagnosis (CAD) refers to the use of computer
 algorithms and technologies to assist healthcare professionals in the process
 of medical diagnosis} a promising path towards medical automation.
@@ -55,12 +56,24 @@ of medical diagnosis} a promising path towards medical automation.
   \label{fig:subset_isic}
 \end{figure}
 
-However, there are several limitations that raise doubts about the effectiveness of automated melanoma cancer classifiers and their suitability for integration into the medical system. Firstly, certain methods are constructed based on theoretical models of melanoma appearance, which may restrict their applicability to specific morphologies and fail to capture the wide range of variations seen in real-world scenarios. Secondly, AI systems utilized in these classifiers are trained to address a singular and narrow task. Unlike human dermatologists, these systems lack the ability to consider holistic patient information when formulating a final diagnosis, reflecting the concept of weak AI \cite{WeakAI}. Lastly, numerous methods have been trained and evaluated using high-quality image frames, which may result in instability when applied under real-time visibility conditions where image quality is often compromised. A fundamental part of machine learning is the problem of generalization, that
-is, how to make sure that a trained model performs well on unseen data. If the
-unseen data has different distribution, i.e. a domain shift exists, the problem
-is significantly more difficult even the smallest changes in the statistics as
-compared to the training data can cause a deep neural network to fail
-completely \cite{DomainShift}. \newline
+However, there are several limitations that raise doubts about the
+effectiveness of automated melanoma cancer classifiers and their suitability
+for integration into the medical system. Firstly, certain methods are
+constructed based on theoretical models of melanoma appearance, which may
+restrict their applicability to specific morphologies and fail to capture the
+wide range of variations seen in real-world scenarios. Secondly, AI systems
+utilized in these classifiers are trained to address a singular and narrow
+task. Unlike human dermatologists, these systems lack the ability to consider
+holistic patient information when formulating a final diagnosis, reflecting the
+concept of weak AI \cite{WeakAI}. Lastly, numerous methods have been trained
+and evaluated using high-quality image frames, which may result in instability
+when applied under real-time visibility conditions where image quality is often
+compromised. A fundamental part of machine learning is the problem of
+generalization, that is, how to make sure that a trained model performs well on
+unseen data. If the unseen data has different distribution, i.e. a domain shift
+exists, the problem is significantly more difficult even the smallest changes
+in the statistics as compared to the training data can cause a deep neural
+network to fail completely \cite{DomainShift}. \newline
 
 Addressing these limitations and developing melanoma cancer classifiers that
 encompass a wider range of morphologies, incorporate holistic patient

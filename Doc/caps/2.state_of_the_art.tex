@@ -74,13 +74,13 @@ this metric to evaluate the performance of the models. \newline
 Another aspect the current thesis borrowed from this work is the approach to
 cleaning and mapping data-sets from different years. They trained their models
 with different output sizes, but the process of mapping and joining the
-data-sets into a single data-set was similar to my approach, where we
+data-sets into a single data-set was similar to our approach, where we
 consistently mapped the data into eight different classes. \newline
 
 The pipeline of data augmentation that is implemented in the work is also
 reused. Equivalent to them, this thesis uses {\tt
-albumentations}\cite{Albumentations} library instead of the native alternative
-transforms data agumentation from PyTorch. \newline
+albumentations}\cite{Albumentations} library instead of the native data
+agumentation package provided from PyTorch. \newline
 
 These inspirations and adaptations from the related work has greatly influenced
 the development and organization of this deep learning project.
@@ -96,8 +96,8 @@ framework and D3.js for visualizations. With CNN Explainer, users can upload
 images and obtain predictions for those images across ten different classes.
 \newline
 
-While CNN Explainer primarily aims to serve educational purposes, the UI of
-this thessis, focuses on providing dermoscopy images predictions and
+While CNN Explainer primarily aims to serve educational purposes, the UI of the
+current thessis, focuses on providing dermoscopy images predictions and
 information about the models used and their outputs. The inspiration for
 incorporating an interactive UI for end users stemmed from CNN Explainer.
 Consequently, we utilized the same web framework to develop the UI.

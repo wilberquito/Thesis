@@ -163,7 +163,7 @@ machine learning \cite{MITML}.
 
 \begin{figure}[H]
   \centering
-  \resizebox{0.65\textwidth}{!}{%
+  \resizebox{0.6\textwidth}{!}{%
     \begin{tikzpicture}[mindmap, grow cyclic, every node/.style=concept, concept color=blue!40, text = black,
       level 1/.append style={level distance=4.5cm,sibling angle=120},
       level 2/.append style={level distance=3cm,sibling angle=40},
@@ -226,7 +226,7 @@ illustration of the deep learning family. \newline
   {\label{fig:deep-learning-family}}
 \end{figure}
 
-Deep neural networks, also known as fully connected layers, are modeled after
+Deep neural networks, also known as fully connected layers (\textit{Figure \ref{fig:deep-nn}}), are modeled after
 the human brain. These algorithms achieve their functionality by propagating
 signals from the input layer to the output layer while passing through
 intermediate hidden layers. Each layer consists of neurons responsible for
@@ -254,27 +254,33 @@ recognition of complex patterns and high-level abstractions.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{imatges/preliminaries/deep-neural-network.png}
-  \caption[Deep Neural Network]{\textit{Deep Neural Network. This NN has two hidden layers. Illustration by Introduction to Neural Networks in Deep Learning}}
+  \includegraphics[width=0.8\textwidth]{imatges/preliminaries/deepnn.jpg}
+  \caption[Deep Neural Network] {\textit{Deep Neural Network.
+  Illustration by Medium}}
   {\label{fig:deep-nn}}
 \end{figure}
 
-The minimum unit in a layer is known as neuron or perceptron (\textit{Figure
-\ref{fig:perceptron}}). The perceptron, is the oldest simple neural network,
-created by Frank Rosenblatt in 1958. Every node within the network possesses an
-associated value, which is computed based on the incoming nodes and edges. The
-computation takes place in the following manner: the products of  inputs and
-their respective weights are summed with a bias, and this sum is subsequently
-passed through the node's activation function. The activation function serves
-the purpose of compressing the resulting value within the range of 0 to 1 and
-introduces non-linearity, allowing the model to learn complex relationships in
-the data. The resulting value determines the degree to which the signal should
-propagate through the network, ultimately influencing the final outcome.
+The minimum unit in a layer is known as a perceptron or neuron, which bears a
+resemblance to human neurons (see \textit{Figure \ref{fig:perceptron}}). The
+perceptron, created by Frank Rosenblatt in 1958, is the oldest form of a simple
+neural network. \\
+
+Each perceptron in the network has an associated value that is computed based
+on the incoming nodes and edges. The computation occurs as follows: the
+products of inputs and their respective weights are summed with a bias, and
+this sum then passes through the node's activation function. The purpose of the
+activation function is to compress the resulting value within the range of 0 to
+1, introducing non-linearity and enabling the model to learn complex
+relationships within the data. The resultant value determines the extent to
+which the signal should propagate through the network, thus influencing the
+final outcome.
+
+\newpage
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.75\textwidth]{imatges/preliminaries/perceptron.png}
-  \caption[The Perceptron]{\textit{The Perceptron. Illustration by Introduction to Neural Networks in Deep Learning}}
+  \includegraphics[width=0.85\textwidth]{imatges/preliminaries/perceptron.png}
+  \caption[The Perceptron]{\textit{The Perceptron. Illustration by Medium}}
   {\label{fig:perceptron}}
 \end{figure}
 
@@ -282,16 +288,13 @@ propagate through the network, ultimately influencing the final outcome.
 \section{Convolutional Neural Networks}
 
 A convolutional neural network (CNN) is a specific type of neural network that
-is particularly well-suited for analyzing visual imagery. It draws inspiration
-from the organization of the animal visual cortex, which is responsible for
-visual processing in living organisms. \newline
-
-One of the key innovations of CNNs is their ability to automatically learn a
-large number of filters in parallel. These filters are learned during the
-training process and are specifically tailored to solve a particular predictive
-modeling problem, such as image classification. By learning these filters, CNNs
-become adept at extracting relevant features and patterns from visual data
-without the need for manual feature engineering. \newline
+is particularly well-suited for analyzing images. One of the key innovations of
+CNNs is their ability to automatically learn a large number of filters in
+parallel. These filters are learned during the training process and are
+specifically tailored to solve a particular predictive modeling problem, such
+as image classification. By learning these filters, CNNs become adept at
+extracting relevant features and patterns from visual data without the need for
+manual feature engineering. \newline
 
 CNNs are designed to learn spatial hierarchies of features through a process
 called back-propagation. During training, the network adapts its internal
@@ -309,14 +312,7 @@ their spatial position in the input data. This property, known as translation
 invariance, enables CNNs to recognize objects or patterns regardless of their
 location within an image.\newline
 
-Furthermore, CNNs have a three-dimensional arrangement of neurons: width,
-height, and depth. The width and height dimensions correspond to the spatial
-dimensions of the input data, such as the width and height of an image. The
-depth dimension refers to the number of channels or feature maps in each layer,
-where each channel represents a different aspect or feature of the input.
-\newline
-
-To build CNN architectures, there are four main types of layers.
+To build a CNN, we need four main types of layers:
 
 \subsection{Convolutional Layers}
 
@@ -336,16 +332,17 @@ the results. \newline
 
 The result of each dot product operation is a single value, forming a pixel in
 the output feature map. Additionally, an activation function is applied
-element-wise to introduce non-linearity into the network. \newline
-
-\newpage
+element-wise to introduce non-linearity into the network.
 
 \begin{figure}[H] \centering
-  \includegraphics[width=0.8\textwidth]{imatges/preliminaries/convolutional-layer.png}
-  \caption[Convolutional Operation on Input Image]{\textit{Convolutional
-  Operation on Input Image. Illustration by towardsdatascience}}
+  \begin{adjustbox}{width=0.75\textwidth, trim={0cm 0cm 0cm 0.35cm}, clip}
+  \includegraphics[]{imatges/preliminaries/convolutional-layer.png}
+  \end{adjustbox}
+  \caption[Convolutional Operation on Input]{\textit{Convolutional
+  Operation on Input. Illustration by towardsdatascience}}
 {\label{fig:convolutional-layer}} \end{figure}
 
+\newpage
 
 \subsection{Pooling Layers}
 
@@ -361,12 +358,10 @@ rectangular neighborhood, computing the L2 norm of the neighborhood, or using a
 weighted average based on distance. However, the most widely used method is max
 pooling, which selects the maximum output value from the neighborhood.
 
-\newpage
-
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{imatges/preliminaries/polling-layer.png}
-  \caption[Max Polling Operation on Input Image]{\textit{Max Polling Operation on Input Image. Illustration by towardsdatascience}}
+  \caption[Max Polling Operation on Input]{\textit{Max Polling Operation on Input. Illustration by towardsdatascience}}
   {\label{fig:pooling-layer}}
 \end{figure}
 
@@ -425,6 +420,8 @@ layers, the most popular are: \newline
       The Rectified Linear Unit (ReLU) is maybe the most popular activation
       functions in the last few years. The function is just simply threshold at
       zero.
+
+      \newpage
 
       \centering \begin{tikzpicture} \draw[->] (-5,0) -- (5,0) node[right]
         {$x$}; \draw[->] (0,-0.5) -- (0,5) node[above] {$\text{ReLU}(x)$};
@@ -558,9 +555,7 @@ classification tasks. It calculates the ratio of correct predictions to the
 total number of predictions made on a dataset, thus determining the likelihood
 of correctly classifying an input. Accuracy is especially valuable when working
 with a balanced dataset, where the number of instances in each class is roughly
-equivalent. However, in the case of the previously mentioned thesis dataset,
-which is not balanced, the use of accuracy serves primarily to monitor model
-training performance rather than being the main evaluation metric.
+equivalent.
 
 \[Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\]
 
@@ -590,19 +585,17 @@ class from the rest of the classes. It is a probabilistic curve that plots the
 true positive rate (TPR) against the false positive rate (FPR). By treating the
 target class as the positive class and the remaining classes as the negative
 class in separate binary classification tasks (\textit{Figure
-\ref{fig:auc-roc}}). \newline
+\ref{fig:auc-roc}}).
 
 The area under the curve (AUC) is a value between 0 and 1 that measures the
 ability of a classifier to distinguish between classes. It is used as a summary
 of the ROC curve. The higher the AUC, the better the performance of the model
 at distinguishing between the positive and negative classes.
 
-\newpage
-
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{imatges/preliminaries/auc.png}
-  \caption[Classification Performance Using AUC-ROC as Metric]{\textit{Classification Performance Using AUC-ROC as Metric. Illustration by Elizabeth Louise Thomas}}
+  \includegraphics[width=0.7\textwidth]{imatges/preliminaries/auc.png}
+  \caption[AUC-ROC Performance]{\textit{AUC-ROC Performance. Illustration by Elizabeth Louise Thomas}}
   {\label{fig:auc-roc}}
 \end{figure}
 
@@ -610,25 +603,33 @@ at distinguishing between the positive and negative classes.
 \section{Optimizer}
 
 An optimizer is an algorithm that finds the value of the parameters (weights)
-that minimize the error when mapping inputs to outputs. These optimization
-algorithms widely affect the accuracy and speed training of the deep learning
-models. \newline
-
-While training a deep learning models, the optimizer modifies the weights of
-the model in each epoch to minimize the loss function. \newline
+that minimize the error when mapping inputs to outputs. While training a deep
+learning models, the optimizer modifies the weights of the model in each epoch
+to minimize the loss function. \newline
 
 The are a considerable amount of different optimizer algorithms out there with
-their pros and cons. In this section I present the family of optimizers based
+their pros and cons. In this section we present the family of optimizers based
 on Gradient Descent optimization. This family of optimizer algorithms were used
 for the thesis. \newline
 
 \subsection{Gradient Descent}
 
-Using the Gradient Decent optimization algorithm, the weights are updated
-incrementally after each epoch (pass over the training dataset). \newline
+Using the Gradient Decent (SD) optimization algorithm (\textit{Figure
+\ref{fig:optimization}}), the weights are updated incrementally after each
+epoch. The magnitude and direction of the weight update is computed by taking a
+step in the opposite direction of the cost gradient. \\
 
-The magnitude and direction of the weight update is computed by taking a step
-in the opposite direction of the cost gradient.
+Give the following defintions:
+
+\begin{itemize}
+  \item \(\Delta w\) opposite direction and magnitude of the gradient cost.
+  \item \(\eta\) (eta) denotes the learning rate, which controls the step size of the update.
+  \item  \(\frac{\partial J}{\partial w_i}\) represents the partial derivative of the cost function \(J\) with respect to the weight \(w_i\).
+  \item \(\nabla J(w)\) represents the gradient of the cost function \(J(w)\) with respect to the weights \(w\).
+\end{itemize}
+
+We could compute the weight update after each epoch with the following
+mathematical expression:
 
 \[\nabla J(w) = (\frac{\partial J}{\partial w_1}, \frac{\partial J}{\partial w_2}, \ldots, \frac{\partial J}{\partial w_n})\]
 
@@ -636,29 +637,21 @@ in the opposite direction of the cost gradient.
   \Delta w = -\eta \cdot \nabla J(w)
 \]
 
-Finally, the weight are updated after each epoch with the following expression:
 
 \[
   w = w + \Delta w
 \]
 
 
-\begin{itemize}
-  \item \(\Delta w\) represents the weight update.
-  \item \(\eta\) (eta) denotes the learning rate, which controls the step size of the update.
-  \item  \(\frac{\partial J}{\partial w_i}\) represents the partial derivative of the cost function \(J\) with respect to the weight \(w_i\).
-  \item \(\nabla J(w)\) represents the gradient of the cost function \(J(w)\) with respect to the weights \(w\).
-\end{itemize}
 
 In Gradient Descent optimization, we compute the cost gradient based on the
-complete training set; hence, we sometimes also call it batch gradient descent.
-In case of very large datasets, using Gradient Descent can be quite costly
-since we are only taking a single step for one pass over the training set –
-thus, the larger the training set, the slower our algorithm updates the weights
-and the longer it may take until it converges to the global cost minimum.
-\newline
+complete training set, in case of very large datasets, using Gradient Descent
+can be quite costly since we are only taking a single step for one pass over
+the training set – thus, the larger the training set, the slower our algorithm
+updates the weights and the longer it may take until it converges to the global
+cost minimum. \newline
 
-A high level pseudo-implementation of the Gradient Descent algorithm:
+A high level pseudo-implementation of the Gradient Descent algorithm: \\
 
 \begin{itemize}[label=\(\circ\)]
   \item for each epoch:
@@ -670,14 +663,10 @@ A high level pseudo-implementation of the Gradient Descent algorithm:
     \end{itemize}
 \end{itemize}
 
-The \textit{Figure \ref{fig:optimization}} shows how the Gradient Descent
-optimizer would try to modify the  the weight values that minimizes the cost
-function.
-
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.7\textwidth]{imatges/preliminaries/optimization.png}
-  \caption[Function Optimization]{\textit{Function Optimization. Optimization of a 2D function using Gradient Descent algorithm. Illustration by sebastianraschka}}
+  \includegraphics[width=0.5\textwidth]{imatges/preliminaries/optimization.png}
+  \caption[Optimization Using Gradient Descent]{\textit{Optimization Using Gradient Descent. Illustration by raschka}}
   {\label{fig:optimization}}
 \end{figure}
 
@@ -685,7 +674,7 @@ function.
 
 \subsection{Stochastic Gradient Descent}
 
-Stochastic Gradient Descent work similar to the Gradient Descent but the weight
+Stochastic Gradient Descent (SGD) work similar to the Gradient Descent but the weight
 updates are not accumulated as we’ve seen above for Gradient Descent. Instead,
 the weights are updated after each training sample. Due to its stochastic
 nature, the path towards the global cost minimum is not “direct” as in Gradient
@@ -712,10 +701,8 @@ algorithm:
 
 \begin{figure}[H]
   \centering
-  \begin{adjustbox}{trim=0cm 0cm 0cm 1cm, clip}
-    \includegraphics[width=0.9\textwidth]{imatges/preliminaries/sgdvsgd.jpeg}
-  \end{adjustbox}
-  \caption[Gradient Descent vs Stochastic Gradient Descent]{\textit{Gradient Descent vs Stochastic Gradient Descent. Illustration by superannotate}}
+    \includegraphics[width=0.8\textwidth]{imatges/preliminaries/sgdvsgd.jpeg}
+  \caption[GD vs SGD]{\textit{GD vs SGD. Illustration by superannotate}}
   {\label{fig:sgdvsgd}}
 \end{figure}
 
@@ -737,7 +724,7 @@ the learning rate.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{imatges/preliminaries/front-and-back-prop.png}
-  \caption[Forward Propagation and Backward Propagation]{\textit{Forward Propagation and Backward Propagation. Illustration by baeldung}}
+  \caption[Forward and Backward Propagation]{\textit{Forward and Backward Propagation. Illustration by baeldung}}
   {\label{fig:forward-and-back-propagation}}
 \end{figure}
 
@@ -901,6 +888,8 @@ network to learn redundant representations and prevents co-adaptation.
   {\label{fig:dropout}}
 \end{figure}
 
+\newpage
+
 \subsection{Data Augmentation}
 
 Data augmentation encompasses various techniques utilized to expand the dataset
@@ -938,6 +927,8 @@ for testing 10\%. \newline
     that best matches the validation set by minimizing the classifier One vs
     Rest metric in predictions.
 
+    \newpage
+
   \item \textbf{Test Set}
 
     Comprising non-observed data examples, this set is used to assess the
@@ -957,7 +948,6 @@ for testing 10\%. \newline
 
 \end{itemize}
 
-\newpage
 
 \section{Test-Time Augmentation}
 
