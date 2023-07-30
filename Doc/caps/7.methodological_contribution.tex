@@ -1,13 +1,15 @@
 \chapter{Methodological Contribution} \label{cap:contrib}
 
-This chapter is devoted to analyzing which parts of the project are of deep
-importance, such as the distribution of the data or which hyper-parameters must
-be taken into account for training, and to designing a diagram or solution that
-provides answers to these matters. In this chapter, we also examine the reasons
-behind the selection of the base model for transfer learning and the methods
-used to regularize these trained models.
 
-\section{Data Analysis} \label{sec:data-analysis}
+This chapter focuses on the analysis of critical aspects of the project. These
+include the examination of essential elements such as data distribution,
+machine learning techniques utilized for model training, and the consideration
+of hyper-parameters during the training process. Additionally, we delve into
+the reasons behind the selection of the base model for transfer learning and
+the regularization methods employed. \\
+
+Ultimately, we present a diagram that illustrates the training process of these
+models and their final deployment. \\
 
 As previously mentioned, the data is acquired from the ISIC Archive,
 specifically from the SIIM-ISIC Melanoma Classification competition available
@@ -111,18 +113,18 @@ transformations are represented bellow.
 
 \newpage
 
-\textbf{Horizontal and vertical flips} \\
+\textbf{Horizontal and Vertical Flip} \\
 
 An image flip means reversing the rows or columns of pixels in the case of a vertical or horizontal flip respectively.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.6\textwidth]{imatges/methodological_contribution/horizontal-flip.png}
-  \caption[Horizontal Flip]{\textit{Horizontal flip. \textbf{Left}: original image, \textbf{Right}: augmented image. Illustration by Author}}
+  \caption[Horizontal Flip]{\textit{Horizontal Flip. \textbf{Left}: original image, \textbf{Right}: augmented image. Illustration by Author}}
 \end{figure}
 
 \vspace{0.5cm}
-\textbf{Gaussian blur} \\
+\textbf{Gaussian Blur} \\
 
 Blur the input image using a Gaussian filter with a random kernel size.
 
@@ -134,7 +136,7 @@ Blur the input image using a Gaussian filter with a random kernel size.
 
 \newpage
 
-\textbf{Random brightness contrast} \\
+\textbf{Random Brightness Contrast} \\
 
 Randomly change brightness and contrast of the input image.
 
@@ -566,7 +568,7 @@ reference.
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/Pipeline.drawio.png}
   %\end{adjustbox}
-  \caption[Training And Exposing CAD Infrastructure models]{\textit{Training And Exposing CAD Infrastructure models. Illustration by Author}}
+  \caption[Training And Exposing CAD Infrastructure Models]{\textit{Training And Exposing CAD Infrastructure Models. Illustration by Author}}
   {\label{fig:cad-infrastructure-training-system}}
 \end{figure}
 
