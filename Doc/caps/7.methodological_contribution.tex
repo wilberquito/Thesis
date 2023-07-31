@@ -491,22 +491,15 @@ def test_time_transform(img: torch.Tensor, n: int):
 
 \section{Training Models}
 
-We trained eight models with different training approaches in various machine
-environments. All of these models are based on transfer learning using the
-ResNet-18 architecture and fine-tuning this architecture. \\
-
-The training information, including the training environment and
-hyper-parameters, for each model is provided in \textit{Table
-\ref{table:trained-models-information}}. To facilitate understanding, we have
-also included a name mapping in Table \ref{table:mapping-names} for easy
-reference.
+To facilitate understanding of the training descitions, we include a name
+mapping in \textit{Table \ref{table:mapping-names}}.
 
 \begin{table}[H]
   \centering
   \begin{tabular}{cc}
     \toprule
 
-    \multicolumn{2}{c}{\textbf{Mapping of Names}} \\
+    \multicolumn{2}{c}{\textbf{Name Mapping}} \\
     \midrule
     ResNet18\_V0 & M0 \\
     ResNet18\_V1 & M1 \\
@@ -522,13 +515,22 @@ reference.
     Cosine Annealing Learning Rate & CALR \\
     Step Learning Rate & SLR \\
     Tesla T4, 16GB (GPU) & TT4 \\
-    Nvidia A100, 80GB (GPU) & NA100 \\ \bottomrule
+    Nvidia A100, 80GB (GPU) & NA100 \\
+    \bottomrule
   \end{tabular}
-  \caption[Mapping of Names.]
-  {\textit{Mapping of Names. This table is provided for an easy visualization for next tables.
+  \caption[Name Mapping]
+  {\textit{Name Mapping. Simple visualization for next tables.
   Table by Author}}
   {\label{table:mapping-names}}
 \end{table}
+
+We conducted training for eight models, employing various training approaches,
+all of which relied on transfer learning with ResNet-18 pretrained weights.
+These models utilized the Stochastic Gradient Descent optimizer with a base
+learning rate of 0.001 and employed Cross-entropy loss as their loss function.
+Descition that are not shared regarding the training process, including the
+training environment and hyperparameters can be found in
+\textit{Table \ref{table:trained-models-information}}.
 
 \newpage
 
@@ -540,11 +542,9 @@ reference.
       \toprule
       & \textbf{M0} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{M7} \\
       \midrule
-      Model & R18M & R18M & R18M & R18M & R18DM & R18DM & R18DM & R18DM \\
+      Model Architecture & R18M & R18M & R18M & R18M & R18DM & R18DM & R18DM & R18DM \\
       Epochs & 20 & 20 & 20 & 20 & 40 & 40 & 40 & 40 \\
       Batch Size & 400 & 400 & 400 & 400 & 1024 & 1024 & 1024 & 1024 \\
-      Optimizer & SGD & SGD & SGD & SGD & SGD & SGD & SGD & SGD \\
-      Learning Rate & 0.001 & 0.001 & 0.001 & 0.001 & 0.001 & 0.001 & 0.001 & 0.001 \\
       Scheduler & & SLR & CALR & CAWR &  & SLR & CALR & CAWR  \\
       Data Augmentation & No & No & No & No  & Yes & Yes & Yes & Yes \\
       Dropout Regularization & No & No & No & No  & Yes & Yes & Yes & Yes \\
@@ -557,7 +557,6 @@ reference.
     {\label{table:trained-models-information}}
   \end{table}
 \end{landscape}
-
 
 \newpage
 
