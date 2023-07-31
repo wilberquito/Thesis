@@ -6,10 +6,19 @@ include the examination of essential elements such as data distribution,
 machine learning techniques utilized for model training, and the consideration
 of hyper-parameters during the training process. Additionally, we delve into
 the reasons behind the selection of the base model for transfer learning and
-the regularization methods employed. \\
+the regularization methods employed.
 
 Ultimately, we present a diagram that illustrates the training process of these
-models and their final deployment. \\
+models and their final deployment.
+
+\section{The Data}
+
+In this section, we will elucidate the data source, the data analysis aimed at
+highlighting the data distribution, the methods employed for data
+transformation to facilitate regularization, our approach to dealing with the
+challenge of a multiclass unbalanced data distribution. We finally explain the
+way we create the necessary datasets from this data to effectively conduct our
+work.
 
 As previously mentioned, the data is acquired from the ISIC Archive,
 specifically from the SIIM-ISIC Melanoma Classification competition available
@@ -20,6 +29,8 @@ For the thesis, we opted to use images with a resolution of 512x512 pixels,
 despite the availability of higher resolutions such as 768x768 and 1024x1024.
 The decision to select a lower resolution was purely technical, as higher
 resolution images would require greater computational resources. \\
+
+\subsection{Data Distribution}
 
 For training the models, we utilized 8 classes selected from the original set,
 as the remaining classes were considered residuals. Any samples that were not
@@ -37,18 +48,21 @@ process.
   \item DF (Dermatofibroma)
 \end{itemize}
 
-The filtered dataset consists of 31,265 different image samples with an
-unbalanced distribution across all classes (see \textit{Figure
-\ref{fig:hole-dataset-distribution}}).
+The filtered dataset comprises 31,265 distinct image samples, demonstrating an
+imbalanced distribution across all classes. As evident from \textit{Figure
+\ref{fig:hole-dataset-distribution}}, we encounter the issue of dealing with an
+imbalanced dataset, which poses challenges during the training process. Due to
+the ease of targeting the majority class, models often exhibit a tendency to
+overfit to the more frequent classes.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{imatges/methodological_contribution/hole-dataset-diagnosis.png}
-  \caption[Filtered Dataset Distribution]{\textit{Filtered Dataset Distribution. Having an unbalanced dataset is challenging during training. Models tend to overfit to the more frequent classes since targeting the majority class is easier. Illustration by Author}}
+  \caption[Data Distribution]{\textit{Data Distribution. Illustration by Author}}
   {\label{fig:hole-dataset-distribution}}
 \end{figure}
 
-\section{Stratification}
+\subsection{Stratification}
 
 Unbalanced datasets present a significant challenge in machine learning
 problems. Various methods can be employed to address this issue, including
@@ -100,7 +114,7 @@ corresponds to a total of 25,012 samples. In contrast, both the validation and
 test datasets are composed of 10\% of the filtered dataset, amounting to 3,126
 samples each.
 
-\section{Data Augmentation}
+\subsection{Data Augmentation}
 
 As it was explained in \textit{Chapter \ref{cap:prelim}}, data augmentation is
 a technique that creates more data by applying multiple transformations on an
@@ -204,24 +218,38 @@ Is mapped into an augmented train dataset (\textit{Figure \ref{fig:aug-sample-of
 
 \newpage
 
-\section{ResNet-18}
+\section{Modeling}
 
-We utilized the pre-trained weights of the {\tt ResNet-18} as the base model for transfer learning. As described in \textit{Chapter \ref{cap:prelim}}, this model achieves an accuracy of approximately 69.76\% on the {\tt ImageNet} dataset, which may not be as high as some other models. However, due to its relatively small number of trainable parameters (11.7 million), we decided to select this model over other available options. \\
+In this section, our objective is to elucidate the architecture of the models
+utilized in the thesis, outline the training approaches employed for each
+model, and introduce certain functionalities integrated into the training loop
+to evaluate the models' performance effectively.
 
-In ResNet architecture (Figure \ref{fig:resnet-18-arch}), each layer of the network contains a residual block (BasicBlock).
+\subsection{ResNet-18}
+
+We utilized the pre-trained weights of the ResNet-18 as the base model
+for transfer learning. As described in \textit{Chapter \ref{cap:prelim}}, this
+model achieves an accuracy of approximately 69.76\% on the ImageNet
+dataset, which may not be as high as some other models. However, due to its
+relatively small number of trainable parameters (11.7 million), we decided to
+select this model over other available options. \\
+
+In ResNet architecture (Figure \ref{fig:resnet-18-arch}), each layer of the
+network contains a residual block (BasicBlock).
 
 \begin{figure}[H]
   \begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
     \centering
     \includegraphics[width=\textwidth]{imatges/methodological_contribution/residual-blocks.png}
   \end{adjustbox}
-  \caption[Resume of the ResNet-18 Architecture]{\textit{Resume of the ResNet-18 Architecture. Notice that the default output dimension of ResNet-18 is 1000. Illustration by Author}}
+  \caption[Resume of the ResNet-18 Architecture]{\textit{Resume of the
+  ResNet-18 Architecture. Illustration by Author}}
   {\label{fig:resnet-18-arch}}
 \end{figure}
 
-A residual block
-consists of multiple convolutional layers followed by batch normalization and
-activation functions (\textit{Figure \ref{fig:resnet-18-residual-block}}).
+A residual block consists of multiple convolutional layers followed by batch
+normalization and activation functions (\textit{Figure
+\ref{fig:resnet-18-residual-block}}).
 
 \begin{figure}[H]
   %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
@@ -255,7 +283,7 @@ from torchvision.models import (resnet18,
 net = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
 \end{Verbatim}
 
-\section{Proposed Models}
+\subsection{Proposed Models}
 
 As explained in the section before, the base model is the ResNet-18. This
 model classify between 1000 classes. But our goal is to classify between 8
@@ -286,21 +314,20 @@ class ResNet18_Melanoma(nn.Module):
         return x
 \end{Verbatim}
 
-As you can see above, we utilize the weights of the trained {\tt ResNet-18} and
-save the trained model into an instance of the {\tt ResNet18\_Melanoma} class.
-Then, we retrieve the instance of the ResNet-18 and modify its fully
-connected layer by assigning it to an Identity layer, which doesn't perform any
-operations. Finally, we instantiate a new fully connected layer with the
-expected output size. In this case, the expected output size is 8, representing
-the number of classes. See \textit{Figure \ref{fig:resnet-18-melanoma-arch}}.
+As shown above, we employ the weights of the trained ResNet-18 model and save
+it as an instance of the \texttt{ResNet18\_Melanoma} class (\textit{Figure
+\ref{fig:resnet-18-melanoma-arch}}). Next, we access this instance of ResNet-18
+and modify its fully connected layer by replacing it with an Identity layer,
+which effectively performs no operations. Subsequently, we instantiate a new
+fully connected layer with the desired output size, which in this case is 8,
+representing the number of classes.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/ResNet18_Melanoma.png}
-  \caption[Resume of the ResNet18\_Melanoma Architecture]{\textit{Resume of the ResNet18\_Melanoma Architecture. Notice that the output dimension of ResNet18\_Melanoma is 8. Illustration by Author}}
+  \caption[ResNet18\_Melanoma Architecture]{\textit{ResNet18\_Melanoma Architecture. Illustration by Author}}
   {\label{fig:resnet-18-melanoma-arch}}
 \end{figure}
-
 
 During the model training process, the {\tt forward} function is triggered with
 images represented as a tensor. It first performs transfer learning using the
@@ -346,15 +373,17 @@ class ResNet18_Dropout_Melanoma(nn.Module):
         return out
 \end{Verbatim}
 
-We provide the resume architecture of {\tt ResNet18\_Dropout\_Melanoma} model
-in \textit{Figure \ref{fig:resnet-18-dropout-melanoma-arch}}. The {\tt
-recursive} label in the provided image means that the layers have been
-"forwarded" multiple times instead of constructed multiple times.
+The term "recursive" used in the context of the architecture for
+\texttt{ResNet18\_Dropout\_Melanoma} (\textit{Figure
+\ref{fig:resnet-18-dropout-melanoma-arch}}) indicates that the layers have been
+"forwarded" multiple times instead of being constructed multiple times.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/ResNet18_Dropout_Melanoma.png}
-  \caption[Resume of the ResNet18\_Dropout\_Melanoma Architecture]{\textit{Resume of the ResNet18\_Dropout\_Melanoma Architecture. Notice that the output dimension of ResNet18\_Dropout\_Melanoma is 8. Illustration by Author}}
+  \caption[ResNet18\_Dropout\_Melanoma
+  Architecture]{\textit{ResNet18\_Dropout\_Melanoma Architecture.
+  Illustration by Author}}
   {\label{fig:resnet-18-dropout-melanoma-arch}}
 \end{figure}
 
@@ -369,7 +398,7 @@ model = m_models.ResNet18_Dropout_Melanoma(out_features)
 Note that the variable {\tt out\_features} should be defined before doing any
 instance.
 
-\section{Train-Validate Loop}
+\subsection{Train-Validate Loop}
 
 \begin{Verbatim}[fontsize=\scriptsize]
 def train_model(model: nn.Module,
@@ -397,7 +426,7 @@ Among other features, the train validate loop supports:
   \item Apply test-time augmentation during the validation phase, repeating it a certain number of times using the {\tt val\_times} argument.
 \end{itemize}
 
-\section{Writer Callback}
+\subsection{Writer Callback}
 
 PyTorch does not provide built-in wrappers to automatically save model
 performance during the training and validation phases. However, it is essential
@@ -440,56 +469,10 @@ def model_writter(model_name: str):
     return writter
 \end{Verbatim}
 
-\section{Test-Time Augmentation}
-
-Test-time augmentation (TTA), as explained in Chapter \ref{cap:prelim}, is an
-ensemble mechanism. TTA is not only useful for inferring the test set but also
-for inferring the validation set. Since the validation set does not undergo any
-data augmentation during the prediction phase, we apply multiple dummy
-transformations and average the predictions to obtain the final prediction.
-This technique helps improve the robustness and reliability of the model's
-predictions on unseen data.
-
-\begin{Verbatim}[fontsize=\scriptsize]
-@torch.inference_mode()
-def test_time_augmentation(model: torch.nn,
-                           inputs: torch.Tensor,
-                           val_times: int):
-    """Applies time test time agumentation to a
-    set of tensor images an returns the logits"""
-
-    model.eval()
-
-    logits = []
-    for n in range(val_times):
-        augmented_img = test_time_transform(inputs, n)
-        augmented_img = torch.unsqueeze(augmented_img, 0)
-        outputs = model(test_time_transform(inputs, n))
-        logits.append(outputs)
-
-    stacked_logits = torch.stack(logits)
-    stacked_logits = torch.mean(stacked_logits, dim=0)
-
-    return stacked_logits
+\newpage
 
 
-def test_time_transform(img: torch.Tensor, n: int):
-    """Given a tensor it applies dummy
-    transformation on de n value"""
-
-    if n >= 4:
-        return img.transpose(2, 3)
-    if n % 4 == 0:
-        return img
-    elif n % 4 == 1:
-        return img.flip(2)
-    elif n % 4 == 2:
-        return img.flip(3)
-    elif n % 4 == 3:
-        return img.flip(2).flip(3)
-\end{Verbatim}
-
-\section{Training Models}
+\subsection{Training Models}
 
 To facilitate understanding of the training descitions, we include a name
 mapping in \textit{Table \ref{table:mapping-names}}.
@@ -560,16 +543,88 @@ training environment and hyperparameters can be found in
 
 \newpage
 
+\section{Evaluaton and Testing}
+
+In this section, we will discuss the evaluation and testing mechanisms employed
+to assess the performance of the models during both the training and testing
+phases. In this section we also elaborate on the selection criteria for the
+metric used to gauge the models' performance.
+
+\subsection{The AUC Metric}
+
+In the thesis, the main metric utilized to assess the model's performance is
+the AUC (Area Under the Curve). Although AUC is typically employed for binary
+problems, it is worth noting that the thesis deals with a multiclass dataset,
+and the models are trained using the Cross-entropy Loss function, specifically
+designed for handling multiclass problems. \\
+
+Indeed, the models are trained to address an unbalanced multiclass problem.
+However, during the evaluation phase, instead of employing a metric that
+directly assesses the model's performance in the multiclass context, AUC is
+used. This involves treating labels that are not related to melanoma as the
+negative class and melanoma as the positive class. Consequently, the problem is
+transformed from a multiclass problem to a binary problem, enabling the use of
+AUC as a suitable metric to evaluate the models.
+
+\subsection{Test-Time Augmentation}
+
+Test-time augmentation (TTA) serves as an ensemble mechanism that proves
+beneficial not only for making inferences on the test set but also for
+inferring the validation set. Since the validation set doesn't undergo any data
+augmentation during the prediction phase, we apply multiple dummy
+transformations to it and average the resulting predictions to obtain the final
+prediction. This technique significantly enhances the model's robustness and
+reliability when making predictions on previously unseen data. \\
+
+When applying TTA for prediction, we generate multiple predictions
+by employing various transformations, and then we average these predictions to
+arrive at the final outcome.
+
+\begin{Verbatim}[fontsize=\scriptsize]
+@torch.inference_mode()
+def test_time_augmentation(model: torch.nn,
+                           inputs: torch.Tensor,
+                           val_times: int):
+    """Applies time test time agumentation to a
+    set of tensor images an returns the logits"""
+
+    model.eval()
+
+    logits = []
+    for n in range(val_times):
+        augmented_img = test_time_transform(inputs, n)
+        augmented_img = torch.unsqueeze(augmented_img, 0)
+        outputs = model(test_time_transform(inputs, n))
+        logits.append(outputs)
+
+    stacked_logits = torch.stack(logits)
+    stacked_logits = torch.mean(stacked_logits, dim=0)
+
+    return stacked_logits
+
+
+def test_time_transform(img: torch.Tensor, n: int):
+    """Given a tensor it applies dummy
+    transformation on de n value"""
+
+    if n >= 4:
+        return img.transpose(2, 3)
+    if n % 4 == 0:
+        return img
+    elif n % 4 == 1:
+        return img.flip(2)
+    elif n % 4 == 2:
+        return img.flip(3)
+    elif n % 4 == 3:
+        return img.flip(2).flip(3)
+\end{Verbatim}
+
 \section{Pipeline}
 
-\begin{figure}[H]
-  %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
-  \centering
-  \includegraphics[width=\textwidth]{imatges/methodological_contribution/Pipeline.drawio.png}
-  %\end{adjustbox}
-  \caption[Training And Exposing CAD Infrastructure Models]{\textit{Training And Exposing CAD Infrastructure Models. Illustration by Author}}
-  {\label{fig:cad-infrastructure-training-system}}
-\end{figure}
+In this section, we present the pipeline that was employed (refer to
+\textit{Figure \ref{fig:cad-infrastructure-training-system}}), starting from
+data acquisition, through the training process and evaluation, and finally to
+serving the trained models for inference. \\
 
 The first stage involves cleaning and splitting the initial dataset into
 smaller datasets. This step ensures that the data is organized and ready for
@@ -593,7 +648,12 @@ container image. This container image allows for easy deployment and
 integration of the models into other systems or applications, providing a
 convenient way to utilize the trained models for various tasks. \\
 
-Overall, the pipeline depicted in \textit{Figure
-\ref{fig:cad-infrastructure-training-system}} showcases a systematic approach
-to training models, evaluating their performance, and making them available for
-consumption through an API infrastructure.
+
+\begin{figure}[H]
+  %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
+  \centering
+  \includegraphics[width=\textwidth]{imatges/methodological_contribution/Pipeline.drawio.png}
+  %\end{adjustbox}
+  \caption[CAD Infrastructure Pipeline]{\textit{CAD Infrastructure Pipeline. Illustration by Author}}
+  {\label{fig:cad-infrastructure-training-system}}
+\end{figure}
