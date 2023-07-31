@@ -4,15 +4,15 @@
 The main goal of this thesis was to utilize deep learning techniques to train
 multiple models for detecting melanoma in an imbalanced dataset of dermoscopy
 images. Once the models were trained, they were made accessible through a
-microservice architecture, which consisted of two components: an API exposing
+micro-service architecture, which consisted of two components: an API exposing
 the models and a user interface (UI) for interacting with the API. The training
 process involved developing eight distinct models, all leveraging transfer
 learning with the ResNet-18 pre-trained model as the foundation. Some models
 only modified the fully-connected layer of ResNet-18 to classify among eight
 classes, while others incorporated more intricate fully connected layers with
-Dropout. \newline
+Dropout. \\
 
-During the training of these eight models, various hyperparameters and learning
+During the training of these eight models, various hyper-parameters and learning
 policies were experimented with, including the use of schedulers. The models
 were categorized into two groups: one without any additional regularization and
 another with extra regularization, like data augmentation and dropout layers.
@@ -42,17 +42,17 @@ SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
 The first group of models, which did not have extra regularization,
 demonstrated superior performance with a mean AUC metric of 88.875\% and a
 standard deviation of ±0.377\% on the test set. However, it was evident that
-these models suffered from overfitting during training, as indicated by their
+these models suffered from over-fitting during training, as indicated by their
 performance on the validation set. On the other hand, the second group of
 models, which were trained with additional regularization, achieved lower
 results compared to the first group. Nevertheless, these models did not
-experience overfitting, suggesting the potential for better results with longer
+experience over-fitting, suggesting the potential for better results with longer
 training epochs. The second group of models achieved an average AUC of 84.950\%
-with a standard deviation of ±0.625\%. \newline
+with a standard deviation of ±0.625\%. \\
 
 As for the increase in the standard deviation in the second group of models, we
 attribute it to the effect of using more epochs, making the behavior of the
-schedulers more notable. \newline
+schedulers more notable. \\
 
 While the models were in the training phase, we took the opportunity to develop
 the CAD (Computer-Aided Diagnosis) infrastructure to support the project. For
@@ -60,25 +60,25 @@ the API, we opted for a soft-configuration approach, where the configurations
 are specified through file-based configurations, providing flexibility and ease
 of management. Additionally, we designed a simple and intuitive user interface
 (UI) to streamline the interaction of healthcare professionals with the exposed
-models. \newline
+models. \\
 
 Furthermore, we achieved a significant milestone by successfully implementing a
 mechanism for deploying the models and services using containers. By leveraging
 containers, we ensured that the entire CAD architecture could be easily
 replicated and deployed across different environments. To further simplify the
 setup process, we also developed a shell script capable of downloading the
-necessary images and initiating the container services effectively. \newline
+necessary images and initiating the container services effectively. \\
 
 This approach combined both research and engineering efforts, enabling us to
 make sophisticated knowledge accessible to a wider audience. By integrating
 cutting-edge research and engineering principles, we have created a powerful
 tool for medical professionals, providing them with advanced diagnostic
-capabilities to improve patient care and outcomes. \newline
+capabilities to improve patient care and outcomes. \\
 
 As we assess the current state of the CAD infrastructure, we recognize that
 there are several potential implementations that could enhance its
 capabilities. A fundamental aspect of the CAD infrastructure involves training
-models and conducting comparative evaluations among them. \newline
+models and conducting comparative evaluations among them. \\
 
 One promising approach is to establish a mechanism for iterative model
 training, continuously monitoring and tracking their performance. The models
@@ -87,7 +87,7 @@ available for use. In the user interface (UI), we can provide professionals
 with access to the training results of the models, including instances where
 the selected model may not have performed optimally. By offering this
 additional information, we aim to instill confidence in professionals so they
-don't rely blindly on the models' inferences. \newline
+don't rely blindly on the models' inferences. \\
 
 It's crucial to emphasize this CAD infrastructure is a tool, not a
 replacement for human expertise. The presence of a skilled professional remains

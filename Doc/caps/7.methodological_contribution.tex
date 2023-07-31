@@ -6,7 +6,7 @@ include the examination of essential elements such as data distribution,
 machine learning techniques utilized for model training, and the consideration
 of hyper-parameters during the training process. Additionally, we delve into
 the reasons behind the selection of the base model for transfer learning and
-the regularization methods employed.
+the regularization methods employed. \\
 
 Ultimately, we present a diagram that illustrates the training process of these
 models and their final deployment.
@@ -49,8 +49,8 @@ process.
 \end{itemize}
 
 The filtered dataset comprises 31,265 distinct image samples, demonstrating an
-imbalanced distribution across all classes. As evident from \textit{Figure
-\ref{fig:hole-dataset-distribution}}, we encounter the issue of dealing with an
+imbalanced distribution across all classes. As evident from Figure
+\ref{fig:hole-dataset-distribution}, we encounter the issue of dealing with an
 imbalanced dataset, which poses challenges during the training process. Due to
 the ease of targeting the majority class, models often exhibit a tendency to
 overfit to the more frequent classes.
@@ -116,7 +116,7 @@ samples each.
 
 \subsection{Data Augmentation}
 
-As it was explained in \textit{Chapter \ref{cap:prelim}}, data augmentation is
+As it was explained in Chapter \ref{cap:prelim}, data augmentation is
 a technique that creates more data by applying multiple transformations on an
 image. The  main goal of data augmentation is to increase the volume, quality
 and diversity of training data. \\
@@ -124,8 +124,6 @@ and diversity of training data. \\
 For the thesis, the python package {\tt albumentations} was used for this goal,
 the package support a big variety of transformations, some of these
 transformations are represented bellow.
-
-\newpage
 
 \textbf{Horizontal and Vertical Flip} \\
 
@@ -198,7 +196,7 @@ As a result of applying the following data augmentation pipeline,
     ])
 \end{Verbatim}
 
-The train dataset (\textit{Figure \ref{fig:sample-of-datasets}}),
+The train dataset (Figure \ref{fig:sample-of-datasets}),
 
 \begin{figure}[H]
   \centering
@@ -207,7 +205,7 @@ The train dataset (\textit{Figure \ref{fig:sample-of-datasets}}),
   {\label{fig:sample-of-datasets}}
 \end{figure}
 
-Is mapped into an augmented train dataset (\textit{Figure \ref{fig:aug-sample-of-datasets}}).
+Is mapped into an augmented train dataset (Figure \ref{fig:aug-sample-of-datasets}).
 
 \begin{figure}[H]
   \centering
@@ -228,7 +226,7 @@ to evaluate the models' performance effectively.
 \subsection{ResNet-18}
 
 We utilized the pre-trained weights of the ResNet-18 as the base model
-for transfer learning. As described in \textit{Chapter \ref{cap:prelim}}, this
+for transfer learning. As described in Chapter \ref{cap:prelim}, this
 model achieves an accuracy of approximately 69.76\% on the ImageNet
 dataset, which may not be as high as some other models. However, due to its
 relatively small number of trainable parameters (11.7 million), we decided to
@@ -251,6 +249,8 @@ A residual block consists of multiple convolutional layers followed by batch
 normalization and activation functions (\textit{Figure
 \ref{fig:resnet-18-residual-block}}).
 
+\newpage
+
 \begin{figure}[H]
   %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
   \centering
@@ -261,8 +261,8 @@ normalization and activation functions (\textit{Figure
 \end{figure}
 
 The input to a residual block is added to its output through a skip connection,
-which directly connects the input to the output (\textit{Figure
-\ref{fig:skip-connection}}). This allows the network to learn the residual
+which directly connects the input to the output Figure
+\ref{fig:skip-connection}). This allows the network to learn the residual
 information, or the difference between the input and the desired output, making
 it easier for the network to learn the mapping.
 
@@ -315,8 +315,8 @@ class ResNet18_Melanoma(nn.Module):
 \end{Verbatim}
 
 As shown above, we employ the weights of the trained ResNet-18 model and save
-it as an instance of the \texttt{ResNet18\_Melanoma} class (\textit{Figure
-\ref{fig:resnet-18-melanoma-arch}}). Next, we access this instance of ResNet-18
+it as an instance of the \texttt{ResNet18\_Melanoma} class (Figure
+\ref{fig:resnet-18-melanoma-arch}). Next, we access this instance of ResNet-18
 and modify its fully connected layer by replacing it with an Identity layer,
 which effectively performs no operations. Subsequently, we instantiate a new
 fully connected layer with the desired output size, which in this case is 8,
@@ -374,8 +374,8 @@ class ResNet18_Dropout_Melanoma(nn.Module):
 \end{Verbatim}
 
 The term "recursive" used in the context of the architecture for
-\texttt{ResNet18\_Dropout\_Melanoma} (\textit{Figure
-\ref{fig:resnet-18-dropout-melanoma-arch}}) indicates that the layers have been
+\texttt{ResNet18\_Dropout\_Melanoma} (Figure
+\ref{fig:resnet-18-dropout-melanoma-arch}) indicates that the layers have been
 "forwarded" multiple times instead of being constructed multiple times.
 
 \begin{figure}[H]
@@ -433,11 +433,12 @@ performance during the training and validation phases. However, it is essential
 to have information on how well a model performs after each epoch in order to
 compare different training approaches. \\
 
-To address this issue, we have implemented a function that can save the model
-weights after each epoch and maintain a history of metrics from both the
-training and validation phases. Additionally, we log the training process by
-sending the latest state of the metrics using the Weight and Biases MLOPS
-service. This allows us to track and analyze the training progress effectively
+In order to tackle this concern, we've incorporated a feature that saves the
+model's weights at the end of each epoch. We also keep a record of the metrics
+from both the training and validation stages in a CSV file. Furthermore, we
+monitor the training procedure by sending the most recent metric updates using
+the Weights \& Biases service. This approach enables us to effectively monitor
+and analyze the training progress in real-time.
 
 \begin{Verbatim}[fontsize=\scriptsize]
 def model_writter(model_name: str):
@@ -475,7 +476,7 @@ def model_writter(model_name: str):
 \subsection{Training Models}
 
 To facilitate understanding of the training descitions, we include a name
-mapping in \textit{Table \ref{table:mapping-names}}.
+mapping in Table \ref{table:mapping-names}.
 
 \begin{table}[H]
   \centering
@@ -513,7 +514,7 @@ These models utilized the Stochastic Gradient Descent optimizer with a base
 learning rate of 0.001 and employed Cross-entropy loss as their loss function.
 Descition that are not shared regarding the training process, including the
 training environment and hyperparameters can be found in
-\textit{Table \ref{table:trained-models-information}}.
+Table \ref{table:trained-models-information}.
 
 \newpage
 
@@ -621,10 +622,10 @@ def test_time_transform(img: torch.Tensor, n: int):
 
 \section{Pipeline}
 
-In this section, we present the pipeline that was employed (refer to
-\textit{Figure \ref{fig:cad-infrastructure-training-system}}), starting from
-data acquisition, through the training process and evaluation, and finally to
-serving the trained models for inference. \\
+In this section, we present the pipeline that was employed (Figure
+\ref{fig:cad-infrastructure-training-system}), starting from data acquisition,
+through the training process and evaluation, and finally to serving the trained
+models for inference. \\
 
 The first stage involves cleaning and splitting the initial dataset into
 smaller datasets. This step ensures that the data is organized and ready for

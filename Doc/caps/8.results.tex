@@ -1,8 +1,8 @@
 \chapter{Results} \label{cap:result}
 
 In this chapter, we present the results of the various machine learning
-approaches used to train the models discussed in \textit{Chapter
-\ref{cap:contrib}}. These results are presented using tables and visualizations
+approaches used to train the models discussed in Chapter
+\ref{cap:contrib}. These results are presented using tables and visualizations
 to facilitate understanding the benefits and limitations of each decision. The
 tables and visualizations, provide a concise and comparative summary of the
 performance metrics, such as accuracy, AUC and recall. \\
@@ -15,20 +15,20 @@ around this thesis.
 
 After training each model and inferring the predictions, we saved the metrics
 of interest for each dataset (train, validate, test). The training information
-of each training approach is given in \textit{Table
-\ref{table:trained-models-information}}. On the other hand, \textit{Table
-\ref{table:resume-metrics}} provides a summary of the metrics acquired for each
+of each training approach is given in Table
+\ref{table:trained-models-information}. On the other hand, Table
+\ref{table:resume-metrics} provides a summary of the metrics acquired for each
 model in the different datasets. \\
 
-The accuracy metric in \textit{Table \ref{table:resume-metrics}} represents the
-overall performance of the model in the multiclass classification problem with
-8 different labels. However, as unbalanced multiclass problem, accuracy may not
+The accuracy metric in Table \ref{table:resume-metrics} represents the
+overall performance of the model in the multi-class classification problem with
+8 different labels. However, as unbalanced multi-class problem, accuracy may not
 be the most suitable metric to assess the model's performance in this
 situation. Instead, metrics like AUC (Area Under the Curve) and recall should
 be considered, as they specifically indicate how well the model is performing
 in classifying melanoma from the other classes. \\
 
-The metrics with a gray background in \textit{Table \ref{table:resume-metrics}}
+The metrics with a gray background in Table \ref{table:resume-metrics}
 are from models that incorporated additional regularization techniques, such as
 dropout or data augmentation. These models were trained for 40 epochs since
 regularization tends to slow down the minimization of the objective function
@@ -46,8 +46,8 @@ ensemble, contributing to improved performance during inference. \\
 
 Models that used a scheduler during the training stage are denoted with a
 symbol next to their names. For reference, the mapping between the scheduler
-used and the corresponding symbol is provided in \textit{Table
-\ref{table:scheduler-mapping}}.
+used and the corresponding symbol is provided in Table
+\ref{table:scheduler-mapping}.
 
 \begin{table}[H]
   \centering
@@ -233,7 +233,7 @@ In this section, we assess the performance of the models on the test dataset by
 employing our chosen main evaluation metric, ROC-AUC with One VS Rest (OvR)
 strategy. \\
 
-The \textit{\ref{fig:rocaucanalysis-all}} provides an overview of the
+Figure \ref{fig:rocaucanalysis-all} provides an overview of the
 performance of all the models trained in this thesis. As explained in earlier
 sections, models with superior performance are those without additional
 regularization, whereas models with higher regularization exhibit better
@@ -262,7 +262,7 @@ Our approach involves allowing clients to initiate tasks and receive a unique
 identifier for each initiated task. When a client initiates a task, the API
 micro-service allocates a separate thread to run the task in the background.
 The API then returns a unique task identifier that represents this background
-task (\textit{Figure \ref{fig:backgrond-task}}). \\
+task (Figure \ref{fig:backgrond-task}). \\
 
 With this unique task identifier, clients can later query the results of the
 asynchronous task. By adopting this method, we avoid congesting the API thread,
@@ -288,7 +288,7 @@ http://<api>/docs
 \end{Verbatim}
 
 By opening this URL in a web browser, you can visualize the supported endpoints of the API
-( \textit{Figure \ref{fig:api-endpoints}}). This convenient visualization is made possible by using fastAPI,
+(Figure \ref{fig:api-endpoints}). This convenient visualization is made possible by using fastAPI,
 the framework chosen for building the API, which operates on the OpenAPI scheme.
 
 \begin{figure}[H]
@@ -466,7 +466,7 @@ highlight some of the most interesting features provided by this service.
 
 Upon accessing the UI service through your web browser, you will immediately
 notice a single-page web application with several interactive buttons, as
-depicted in \textit{Figure \ref{fig:ui-tools}}.
+depicted in Figure \ref{fig:ui-tools}.
 
 \begin{figure}[H]
   \centering
@@ -475,7 +475,7 @@ depicted in \textit{Figure \ref{fig:ui-tools}}.
   {\label{fig:ui-tools}}
 \end{figure}
 
-The numbered buttons in \textit{Figure \ref{fig:ui-tools}} serve the following
+The numbered buttons in Figure \ref{fig:ui-tools} serve the following
 main functionalities:
 
 \begin{itemize}
@@ -491,9 +491,9 @@ prediction. But we can notice that in the state of no having image loaded some
 of this buttoms are disabled. When no image is loaded the prediction and the
 sort buttom are disabled. \\
 
-To load the desired dermostocopy images we click the buttom that allows us load
+To load the desired dermostocopy images we click the button that allows us load
 images and select the images from our device
-(\textit{\ref{fig:selecting-imgs}}).
+(Figure \ref{fig:selecting-imgs}).
 
 \begin{figure}[H]
   \centering
@@ -503,13 +503,13 @@ images and select the images from our device
 \end{figure}
 
 After selecting the images, they will be shown in a scrollable section within
-the UI service (\textit{Figure \ref{fig:loaded-images}}), at this point you can
+the UI service (Figure \ref{fig:loaded-images}), at this point you can
 unload any image clicking to the cross in the top-right corner of each image.
 You will also notice that the sorting button is now available, along with the
 prediction button. Before making any predictions, there is an option to change
 the model for inference. By clicking on the "Select Model" button, a scrollable
-section will appear next to the working button tools (\textit{Figure
-\ref{fig:selecting-model}}). This allows us to easily switch between different
+section will appear next to the working button tools (Figure
+\ref{fig:selecting-model}). This allows us to easily switch between different
 models for the prediction process.
 
 \begin{figure}[H]
@@ -532,7 +532,7 @@ models for the prediction process.
 Once we have loaded the images and selected the desired model for prediction,
 we are ready to make the request to the API for inference using the chosen model. When the API responds,
 the UI will display the images classified as melanoma with a
-red background and the images classified as other classes with a blue background (\textit{Figure \ref{fig:after-prediction}}).
+red background and the images classified as other classes with a blue background (Figure \ref{fig:after-prediction}).
 This visual distinction helps to easily identify the different classifications provided by the inference process.
 
 \begin{figure}[H]
@@ -552,9 +552,9 @@ the prediction, the predictions made, and the probability of the dermoscopy
 image belonging to each possible class. \\
 
 For instance, let's inquire about more information on the only image classified
-as melanoma in \textit{Figure \ref{fig:after-prediction}}. Clicking on the
-corresponding button will trigger a pop-up, as depicted in \textit{Figure
-\ref{fig:extra-inf-popup}}, showcasing the relevant details for that particular
+as melanoma in Figure \ref{fig:after-prediction}. Clicking on the
+corresponding button will trigger a pop-up, as depicted in Figure
+\ref{fig:extra-inf-popup}, showcasing the relevant details for that particular
 prediction.
 
 \begin{figure}[H]
