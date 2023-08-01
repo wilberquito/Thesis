@@ -10,10 +10,10 @@ Early and correct diagnosis is key for ensuring patients have the best possible
 prognosis. Melanoma misdiagnosis accounts for more pathology and dermatology
 malpractice claims than any cancer other than breast cancer, as an early
 misdiagnosis can significantly reduce a patient’s chances of survival
-\cite{Melanoma}. \newline
+\cite{Melanoma}. \\
 
-Dermoscopy, also known as dermatoscopy Figure
-\ref{fig:procedure_dermoscopy}, is a noninvasive technique widely utilized for
+Dermoscopy, also known as dermatoscopy (see Figure
+\ref{fig:procedure_dermoscopy}), is a noninvasive technique widely utilized for
 the examination of cutaneous lesions. It involves the use of a handheld
 instrument called a dermatoscope to visualize subsurface skin structures that
 are typically not visible to the naked eye. The dermatoscope illuminates the
@@ -31,14 +31,14 @@ patterns associated with various skin conditions, including melanoma
 
 Worldwide, in 2020 an estimated 324,635 people were diagnosed with melanoma and
 an estimated 57,043 people worldwide died from melanoma the same year
-\cite{CancerStats}. The introduction of sophisticated machinery to take high
-quality dermoscopy images (Figure \ref{fig:subset_isic}) and new
-techniques in dermoscopy procedures seems not enough to fight against
-melanoma, but the developments in artificial intelligence (AI) especially in
-deep learning techniques, have made Computer-Aided Diagnosis
-(CAD)\footnote{Computer-Aided Diagnosis (CAD) refers to the use of computer
-algorithms and technologies to assist healthcare professionals in the process
-of medical diagnosis} a promising path towards medical automation.
+\cite{CancerStats}. The introduction of sophisticated machinery and new
+techniques in dermoscopy procedures (Figure \ref{fig:subset_isic}) seems not
+enough to fight against melanoma, but the developments in artificial
+intelligence (AI) especially in deep learning techniques, have made
+Computer-Aided Diagnosis (CAD)\footnote{Computer-Aided Diagnosis (CAD) refers
+to the use of computer algorithms and technologies to assist healthcare
+professionals in the process of medical diagnosis} a promising path towards
+medical automation.
 
 \begin{figure}[h!] \centering
   \begin{subfigure}{0.3\textwidth}
@@ -67,19 +67,19 @@ task. Unlike human dermatologists, these systems lack the ability to consider
 holistic patient information when formulating a final diagnosis, reflecting the
 concept of weak AI \cite{WeakAI}. Lastly, numerous methods have been trained
 and evaluated using high-quality image frames, which may result in instability
-when applied under real-time visibility conditions where image quality is often
+when applied under real-time conditions where image quality is often
 compromised. A fundamental part of machine learning is the problem of
 generalization, that is, how to make sure that a trained model performs well on
 unseen data. If the unseen data has different distribution, i.e. a domain shift
-exists, the problem is significantly more difficult even the smallest changes
+exists, the problem is significantly more difficult; even the smallest changes
 in the statistics as compared to the training data can cause a deep neural
-network to fail completely \cite{DomainShift}. \newline
+network to fail completely \cite{DomainShift}. \\
 
 Addressing these limitations and developing melanoma cancer classifiers that
 encompass a wider range of morphologies, incorporate holistic patient
 information, consider relevant elements, and demonstrate robustness in
 real-world scenarios are crucial for improving the reliability and
-effectiveness of melanoma detection and diagnosis systems. \newline
+effectiveness of melanoma detection and diagnosis systems. \\
 
 \section{Project Objectives}
 
@@ -90,15 +90,23 @@ computer-assisted image analysis. To this end, the gradual achievements that
 must be accomplished are:
 
 \begin{itemize}
-  \item Gaining a comprehensive understanding of the theory behind deep learning and its practical applications.
-  \item Analyzing images from dermostocopy and understanding its most important features.
-  \item Train deep learning models with different techniques based on tranfer-learning focused on the images of the melanoma ISIC Challenge \cite{IsicChallenge}.
-  \item Developing a CAD infrastructure. The CAD infrastructure contains the
-    already trained models with a simple web UI\footnote{The user interface
-    (UI) is the point of human-computer interaction and communication in a
-    device} an API\footnote{API stands for Application Programming Interface}
-    and finally a mechanism using Docker to create the images of the services
-    making it ease to deploy in any based Linux System.
+  \item Gaining a comprehensive understanding of the theory
+    behind deep learning and its practical applications.
+  \item Analyzing images
+    from dermoscopy and understanding its most important features.
+  \item Train
+    deep learning models with different techniques based on tranfer-learning,
+    exploiting images of the melanoma ISIC \footnote{International Skin Imaging
+    Collaboration, an international effort to improve melanoma diagnosis.}
+    Challenge \cite{IsicChallenge}.
+  \item Developing a CAD \footnote{Computer aided
+    diagnosis uses computers to generate output as an assisting tool for
+    clinician diagnosis.} infrastructure. The CAD infrastructure, should
+    contain the already trained models with a simple web UI\footnote{The user
+    interface (UI) is the point of human-computer interaction and communication
+    in a device.} an API\footnote{API stands for Application Programming
+    Interface.} and finally a mechanism using Docker to create the images of the
+    services making it ease to deploy in any based Linux System.
 \end{itemize}
 
 \section{Personal Motivation}
@@ -106,14 +114,14 @@ must be accomplished are:
 I envisioned this project as a unique fusion of three personal passions.
 Firstly, I was fueled by a deep fascination with human cognition and reasoning.
 Machines, in my eyes, represented a novel paradigm through which I could delve
-further into this captivating realm. \newline
+further into this captivating realm. \\
 
 I am also motivated by the remarkable problem-solving capacity of data.
 Regardless of its structure, data holds immense potential to uncover hidden
 patterns, provide insights, and drive innovation. The ability to extract
 meaningful information from data, regardless of its form, inspires me to
 constantly expand my knowledge and skills in order to contribute to the field
-of data science and make a tangible difference in the world. \newline
+of data science and make a tangible difference in the world. \\
 
 Last but not least, I am driven by the immense power of automation and its
 ability to democratize access to research knowledge. I am amazed by how
@@ -124,12 +132,12 @@ professionals and the public alike.
 
 I, Wilber Eduardo Bermeo Quito, declare that the thesis titled "A Platform for
 Classifying Melanoma" is an original work completed with the support and
-collaboration of Accenture SL and the VICOROB laboratory. \newline
+collaboration of Accenture SL and the VICOROB research group. \\
 
 The content presented in this thesis is the outcome of my independent research
 efforts, guided by the knowledge and expertise acquired through my academic
 studies and the valuable contributions from Accenture S.L and the VICOROB
-laboratory. \newline
+research group. \\
 
 I acknowledge the importance of academic integrity and the consequences of
 plagiarism. Hence, I affirm that all the information, data, results, figures,
@@ -145,7 +153,7 @@ challenging. To address these limitations, recent research collaborations have
 focused on promoting the sharing of patient data through de-identification
 methods. However, it is crucial to thoroughly analyze the obligations related
 to the protection of individuals and their personal data before engaging in
-projects involving medical imaging. \newline
+projects involving medical imaging. \\
 
 When working with medical images, it is the utmost importance to prioritize
 patient privacy rights. In the context of developing a skin lesions database,
@@ -158,39 +166,45 @@ large and continually expanding open-source archive of skin images.
 
 \section{Related Work}
 
-Melanoma Computer-Aided Diagnosis (CAD) classifiers have been a subject of extensive research and development in recent years,
-also there has been a lot of work in platforms capable of explaining the way
-these models infer. Bellow is mentioned remarkable related work to the subject.
-\newline
+Melanoma Computer-Aided Diagnosis (CAD) classifiers have been a subject of
+extensive research and development in recent years, also there has been a lot
+of work in platforms capable of explaining the way these models infer. Relevant
+related work is described below. \\
 
 \vspace{0.5cm}
-\textbf{Identifying Melanoma Images using EfficientNet Ensemble: Winning Solution to the SIIM-ISIC Melanoma Classification Challenge} \newline
+\textbf{Identifying Melanoma Images using EfficientNet Ensemble: Winning
+Solution to the SIIM-ISIC Melanoma Classification Challenge, 2020} \\
 
-Winning solution to the SIIM-ISIC Melanoma Classification Challenge. It is an
-ensemble of convolutions of neural network (CNN) models with different
-backbones and input sizes \cite{WinningISIC}.  \newline
+The SIIM-ISIC Melanoma Classification Challenge was conquered by an ensemble of
+convolutional neural networks (CNN). The winning solution involved training 16
+EfficientNets, along with a ResNext101 and a ResNet101. To create this ensemble
+of models, various strategies were employed, including utilizing patients'
+metadata in addition to dermoscopy images, training models with different input
+image sizes, and even training the models for varying numbers of epochs
+\cite{WinningISIC}.
 
 \vspace{0.5cm} \textbf{Dermatologist-level classification of skin cancer with
-deep neural networks} \newline
+deep neural networks} \\
 
 This study demonstrated the use of a deep learning algorithm to classify skin
 lesions, including melanoma, with accuracy comparable to dermatologists. The
 deep neural network was trained on a large dataset of images and achieved high
-sensitivity and specificity \cite{SkinCancerDeepNN}. \newline
+sensitivity and specificity \cite{SkinCancerDeepNN}. \\
 
 \vspace{0.5cm} \textbf{Computerized analysis of pigmented skin lesions: A
-review}  \newline
+review}  \\
 
-The goal of this paper is to give a detailed explanation and clear up any
-confusion about the words and phrases used in melanoma studies. And to organize
-and group together useful sources, making it easier to find information on a
-particular sub-topic when searching through the existing literature
-\cite{MelanomaTopicsReview}. \newline
+The goal of this paper is to review the papers on computerized analysis of
+dermoscopy and clinical images of pigmented skin lesions. The paper also
+clarifies terminology that is often misused in the literature, and it also
+organizes and group together useful sources, making it easier to find
+information on a particular sub-topic when searching through the existing
+literature \cite{MelanomaTopicsReview}. \\
 
 \newpage
 
 \vspace{0.5cm}
-\textbf{CNN-Explainer} \newline
+\textbf{CNN-Explainer} \\
 
 The CNN-Explainer is an interactive web-based tool that aims to provide
 explanations for the predictions made by convolutional neural network (CNN)
@@ -200,7 +214,7 @@ models \cite{CNNExplainer}.
 
 In this section, we present the contribution to the field of melanoma detection
 through the development of a melanoma CAD (Computer-Aided Diagnosis)
-infrastructure classifier. \newline
+infrastructure classifier. \\
 
 The thesis comprises multiple models employing various techniques, including
 transfer learning, data augmentation, just-in-time testing, regularization, and
@@ -211,7 +225,7 @@ computing stack, were utilized. The experiments were conducted using the ISIC
 Archive dataset, consisting of benign and malignant skin lesions. Prior to
 analysis, the dataset underwent preprocessing to enhance quality and normalize
 features. Consequently, accurate classification and differentiation of melanoma
-lesions from benign ones were achieved. \newline
+lesions from benign ones were achieved. \\
 
 In order to to ensure the usability of the trained models,
 two services were developed. These services include a user-friendly UI and an
