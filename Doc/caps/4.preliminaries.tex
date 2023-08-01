@@ -105,7 +105,7 @@ Expert Systems, among others.
       };
     \end{tikzpicture}%
     }
-    \caption[AI Sub-Specialists]{\textit{AI Sub-Specialists. Note that these subfields often intersect and combine. Illustration by Author}}
+    \caption[AI Sub-Specialists]{\textit{AI Sub-Specialists. Note that these subfields often intersect and combine. }}
     {\label{fig:ai_branches}}
 \end{figure}
 
@@ -113,12 +113,10 @@ Expert Systems, among others.
 
 \section{Machine Learning}
 
-Machine learning is a branch of artificial intelligence (\textit{AI}) and
+Machine learning (ML) is a branch of artificial intelligence (\textit{AI}) and
 computer science which focuses on the use of data and algorithms to imitate the
 way that humans learn, gradually improving its accuracy
-\cite{IBMMachineLearning}. The term \textit{AI} was defined by the pioneer
-Arthur Samuel as “the field of study that gives computers the ability to learn
-without explicitly being programmed.” \\
+\cite{IBMMachineLearning}. \\
 
 The central idea of machine learning is the existence of a mathematical
 relationship between any combination of input and output data. Rather than
@@ -186,16 +184,16 @@ machine learning \cite{MITML}.
       };
     \end{tikzpicture}%
     }
-    \caption[Subcategories of Machine Learning.]{\textit{Subcategories of Machine Learning. Illustration by Author}}
+    \caption[Subcategories of Machine Learning.]{\textit{Subcategories of Machine Learning. }}
     {\label{fig:ml_branches}}
 \end{figure}
 
 
 \section{Deep Learning}
 
-Deep learning, is a subset of machine learning algorithms (Figure
+Deep learning, a subset of machine learning algorithms (Figure
 \ref{fig:deep-learning-family}), is primarily associated with supervised
-learning techniques. This algorithms derive conclusions by analyzing data with
+learning techniques. These algorithms derive conclusions by analyzing data with
 a given logical structure. In contrast to traditional machine learning
 algorithms, deep learning algorithms operate at a higher level of abstraction.
 They possess the ability to perform the laborious process of feature
@@ -266,8 +264,8 @@ recognition of complex patterns and high-level abstractions.
 \end{figure}
 
 The minimum unit in a layer is known as a perceptron or neuron, which bears a
-resemblance to human neurons (Figure \ref{fig:perceptron}). The
-perceptron, created by Frank Rosenblatt in 1958, is the oldest form of a simple
+resemblance to human neurons (Figure \ref{fig:perceptron}). The perceptron was
+created by Frank Rosenblatt in 1958 and it is the oldest form of a simple
 neural network. \\
 
 Each perceptron in the network has an associated value that is computed based
@@ -293,7 +291,7 @@ final outcome.
 \section{Convolutional Neural Networks}
 
 A convolutional neural network (CNN) is a specific type of neural network that
-is particularly well-suited for analyzing images. One of the key innovations of
+is particularly well suited for analyzing images. One of the key innovations of
 CNNs is their ability to automatically learn a large number of filters in
 parallel. These filters are learned during the training process and are
 specifically tailored to solve a particular predictive modeling problem, such
@@ -331,11 +329,11 @@ To build a CNN, we need four main types of layers:
 A convolutional layer (Figure \ref{fig:convolutional-layer}) is
 responsible for detecting and extracting features from the input data. It
 consists of a set of learnable filters, also known as kernels or feature
-detectors. Each filter is a small matrix of weights that slides or convolves
+detectors. Each filter is a small matrix of weights that convolves
 across the input data to perform a dot product operation at each spatial
 location.  \\
 
-The filter slides or convolves across the input data with a defined stride,
+The filter convolves across the input data with a defined stride,
 which specifies the amount of shift between each position. At each spatial
 location, a dot product is computed between the filter and the overlapping
 region of the input. The dot product involves element-wise multiplication of
@@ -397,7 +395,7 @@ linear patterns in the data. However, many objects in images exhibit non-linear
 characteristics that cannot be effectively detected using linear operations
 alone. To address this limitation, non-linearity layers, such as activation
 functions, are typically applied immediately after the convolutional layer.
-These non-linearity layers introduce non-linear transformations to the
+These non-linearity layers may introduce non-linear transformations to the
 activation maps, enabling the network to learn and detect complex, non-linear
 patterns in the data. \\
 
@@ -472,7 +470,7 @@ layers, the most popular are: \\
 
 A loss function, also known as a cost function or an objective function, is a
 measure used in machine learning and optimization algorithms to quantify how
-well a model performs on a given task. It represents the discrepancy between
+well a model performs on a given task. It measures the discrepancy between
 the predicted outputs of a model and the true values or labels associated with
 the training data. \\
 
@@ -488,7 +486,7 @@ loss functions include:
 \end{itemize}
 
 For this thesis, the loss function used to train the models is
-Cross-entropy Loss as this is a multiclass problem. Don't confuse the
+Cross-entropy Loss as this is a multiclass problem. Do not confuse the
 optimizer algorithm with the metric used to evaluate how good models are. We
 used the ROC AUC with one-vs-rest strategy to evaluate the models performance,
 explained in Section \ref{sec:metrics}. \\
@@ -556,10 +554,8 @@ From confusion matrix we can obtain other metrics such as:
 
 In a logical sense, when we add up the elements on the main diagonal of the
 confusion matrix, we obtain the total number of correct predictions.
-Conversely, summing the elements on the anti-diagonal provides us with the total
-number of incorrect predictions. Utilizing these values, we can compute
-additional metrics such as accuracy, precision, recall, specificity, and F1
-score.
+Utilizing the confusion matrix values, we can compute
+additional metrics such as accuracy, recall and others.
 
 \subsection{Accuracy}
 
@@ -582,7 +578,7 @@ identified as positive by a classification model or test.
   \text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}
 \]
 
-\subsection{FPR}
+\subsection{FPR or Recall}
 
 FPR stands for False Positive Rate, and it measures the proportion of actual
 negative cases that are incorrectly identified as positive by a classification
@@ -636,8 +632,8 @@ step in the opposite direction of the cost gradient. \\
 Given the following defintions:
 
 \begin{itemize}
-  \item \(\Delta w\) opposite direction and magnitude of the gradient cost.
-  \item \(\eta\) (eta) denotes the learning rate, which controls the step size of the update.
+  \item \(\Delta w\) represents the weights update.
+  \item \(\eta\) (eta) denotes the "learning rate", which controls the step size of the update.
   \item  \(\frac{\partial J}{\partial w_i}\) represents the partial derivative of the cost function \(J\) with respect to the weight \(w_i\).
   \item \(\nabla J(w)\) represents the gradient of the cost function \(J(w)\) with respect to the weights \(w\).
 \end{itemize}
@@ -688,12 +684,12 @@ A high level pseudo-implementation of the Gradient Descent algorithm: \\
 
 \subsection{Stochastic Gradient Descent}
 
-Stochastic Gradient Descent (SGD) work similar to the Gradient Descent but the weight
-updates are not accumulated as we’ve seen above for Gradient Descent. Instead,
-the weights are updated after each training sample. Due to its stochastic
-nature, the path towards the global cost minimum is not “direct” as in Gradient
-Descent, but may go “zig-zag”if we are visualizing the cost surface in a 2D
-space, see Figure \ref{fig:sgdvsgd}. However, it has been shown that
+Stochastic Gradient Descent (SGD) work similar to the Gradient Descent but the
+weight updates are not accumulated as we have seen above for Gradient Descent.
+Instead, the weights are updated after each training sample. Due to its
+stochastic nature, the path towards the global cost minimum is not “direct” as
+in Gradient Descent, but may go “zig-zag”if we are visualizing the cost surface
+in a 2D space, see Figure \ref{fig:sgdvsgd}. However, it has been shown that
 Stochastic Gradient Descent almost surely converges to the global cost minimum
 if the cost function is convex. \\
 
@@ -785,11 +781,14 @@ Over-fitting is also a prevalent challenge in machine learning but it is really
 common in deep learning algorithms. Deep learning models try to fit the
 training data entirely and ends up memorizing the data patterns and the
 noise/random fluctuations. These models fail to generalize and perform well in
-the case of unseen data scenarios, defeating the model's purpose. \\
+the case of training data, but fail in unseen data scenarios, defeating the
+model's purpose.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.8\textwidth]{imatges/preliminaries/over-under-base.jpg}
+  \begin{adjustbox}{width=\textwidth, trim={0cm 1.25cm 0cm 2.25cm}, clip}
+  \includegraphics[width=\textwidth]{imatges/preliminaries/fit-scenes.jpg}
+  \end{adjustbox}
   \caption[Fitting Scenarios]{\textit{Fitting Scenarios. Illustration by towardsdatascience}}
   {\label{fig:underfitting-overfitting-goodfitting}}
 \end{figure}
@@ -805,8 +804,8 @@ Early Stopping involves monitoring the model's performance on a validation
 dataset during training. If the performance stops improving or starts
 deteriorating, the training process is stopped early. By doing this, early
 stopping helps find the optimal balance between model complexity and
-generalization, ensuring the model doesn't become overly specialized to the
-training data and does not performs well on unseen data. \\
+generalization, ensuring the model does not become overly specialized to the
+training data and does not perform well on unseen data. \\
 
 \begin{figure}[H]
   \centering
@@ -825,7 +824,7 @@ process. In most optimization algorithms, such as gradient descent, the
 learning rate controls how quickly or slowly the model learns from the training
 data. \\
 
-There are various approaches in learning rate scheduling, bellow you'll find
+There are various approaches in learning rate scheduling, below you will find
 the scheduling used in the thesis.
 
 \begin{itemize}
@@ -837,7 +836,7 @@ the scheduling used in the thesis.
     A smaller learning rate allows the model to fine-tune its parameters more
     cautiously, preventing it from aggressively fitting to noisy or
     irrelevant patterns in the training data. A smoother or an agresive
-    adjustment helps the model converge to a better generalize solution,
+    adjustment helps the model converge to a better generalized solution,
     reducing the risk of over-fitting. \\
 
     There are varius scheduler policies that we can follow to make the
@@ -851,14 +850,14 @@ the scheduling used in the thesis.
       \includegraphics[width=0.6\textwidth]{imatges/preliminaries/cosinus-scheduler.png}
       \caption[Cosine Annealing Learning Rate Scheduler]{\textit{Cosine
       Annealing Learning Rate Scheduler. A learning rate decay scheduler with
-      smoother behavior. Illustration by Author}}
+      smoother behavior. }}
     {\label{fig:learning-rate-decay-cosine-annealing}} \end{figure}
 
     \begin{figure}[H] \centering
       \includegraphics[width=0.6\textwidth]{imatges/preliminaries/step-scheduler.png}
       \caption[Step Learning Rate Scheduler]{\textit{Step Learning Rate
       Scheduler. A learning rate decay scheduler with and agresive behavior.
-      Illustration by Author}} {\label{fig:learning-rate-decay-step}}
+      }} {\label{fig:learning-rate-decay-step}}
     \end{figure}
 
     \newpage
@@ -879,7 +878,7 @@ the scheduling used in the thesis.
     \begin{figure}[H] \centering
       \includegraphics[width=0.6\textwidth]{imatges/preliminaries/CosineAnnealingWarmRestarts-scheduler.png}
       \caption[Cosine Annealing Warm Restart]{\textit{Cosine Annealing Warm
-      Restart. A cosinus cycling learning scheduler. Illustration by Author}}
+      Restart. A cosinus cycling learning scheduler.}}
     {\label{fig:cycling-rate-decay}} \end{figure} \end{itemize}
 
 \newpage
@@ -1025,9 +1024,9 @@ train.
   {\label{fig:resnet}}
 \end{figure}
 
-To accurately assess the performance of each ResNet architecture, refer to the
-Table \ref{table:resnet}, which provides the accuracy achieved on the
-ImageNet dataset along with the corresponding number of trainable parameters in
+To accurately assess the performance of each ResNet architecture, refer to
+Table \ref{table:resnet}, which provides the accuracy achieved on the ImageNet
+dataset along with the corresponding number of trainable parameters in
 millions.
 
 \begin{table}[H]
@@ -1043,8 +1042,8 @@ millions.
     ResNet-18 & 69.76\% & 11.7M \\
     \bottomrule
   \end{tabular}
-  \caption[Accuracy Achieved on ImageNet and Trainable Parameters of Each ResNet.]
-  {\textit{Accuracy Achieved on ImageNet and Trainable Parameters of Each ResNet.
+  \caption[Accuracy achieved on ImageNet and trainable parameters of each resNet.]
+  {\textit{Accuracy achieved on ImageNet and trainable parameters of each resNet.
   Each image in the ImageNet dataset is associated with 1 of 1,000 classes. Table by paperswithcode}}
   {\label{table:resnet}}
 \end{table}
@@ -1054,11 +1053,10 @@ millions.
 A micro-services architecture is a software design approach that structures an
 application as a collection of small, independent services, each running in its
 own process and communicating with each other through lightweight mechanisms.
-This architecture promotes scalability, modularity, and flexibility. \\
+This architecture promotes scalability, modularity and flexibility. \\
 
-The present thesis consists of two services: an API and a UI. These services
+As a result of this thesis we built two services: an API and a UI. These services
 are built using different frameworks and programming languages.
-
 
 \section{Inference API}
 
