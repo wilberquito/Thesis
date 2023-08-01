@@ -1,4 +1,4 @@
-\chapter{State of the Art}
+\chapter{Related Work and State of the Art}
 \label{cap:estat}
 
 Melanoma, a type of cancer that arises from melanin-producing cells, can be
@@ -44,10 +44,13 @@ The winning approach to the 2020 SIIM-ISIC Melanoma Classification Challenge
 on GitHub \cite{WinningISICGithub} but they also wrote a paper explaining in
 detail their investigation \cite{WinningISIC}. \\
 
-The project is an ensemble of convolutional neural network (CNN) models. These
-models utilize different backbones and input sizes, primarily focusing on image
-data, although some also incorporate image-level and patient-level metadata.
-The success of the project can be attributed to several factors:
+The SIIM-ISIC Melanoma Classification Challenge was conquered by this ensemble of
+convolutional neural networks (CNN). The winning solution involved training 16
+EfficientNets, along with a ResNext101 and a ResNet101. To create this ensemble
+of models, various strategies were employed, including utilizing patients'
+metadata in addition to dermoscopy images, training models with different input
+image sizes, and even training the models for varying numbers of epochs
+\cite{WinningISIC}.
 
 \begin{itemize}
   \item Implementation of a stable validation scheme.
@@ -99,3 +102,21 @@ current thesis, focuses on providing dermoscopy images predictions and
 information about the models used and their outputs. The inspiration for
 incorporating an interactive UI for end users stemmed from CNN Explainer.
 Consequently, we utilized the same web framework to develop the UI.
+
+\section{Dermatologist-level Classification of Skin Cancer with
+Deep Neural Networks}
+
+This study demonstrated the use of a deep learning algorithm to classify skin
+lesions, including melanoma, with accuracy comparable to dermatologists. The
+deep neural network was trained on a large dataset of images and achieved high
+sensitivity and specificity \cite{SkinCancerDeepNN}.
+
+\section{Computerized Analysis of Pigmented Skin Lesions: A
+Review}
+
+The goal of this paper is to review the papers on computerized analysis of
+dermoscopy and clinical images of pigmented skin lesions. The paper also
+clarifies terminology that is often misused in the literature, and it also
+organizes and group together useful sources, making it easier to find
+information on a particular sub-topic when searching through the existing
+literature \cite{MelanomaTopicsReview}.
