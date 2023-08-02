@@ -1,2 +1,57 @@
 \chapter*{Summary}
 %\label{cap:resum}
+
+Skin cancer, including melanoma, is a significant global public health concern.
+Melanoma presents a considerable challenge due to its high mortality rate and
+the critical importance of early detection for successful treatment. Cancer
+begins when healthy cells undergo changes that cause them to grow and divide
+uncontrollably, forming tumors. These tumors can be classified as either
+cancerous (malignant) or non-cancerous (benign). Malignant tumors have the
+potential to invade nearby tissues and spread to other parts of the body
+through metastasis. \\
+
+In recent times, there has been a growing focus on automating tasks in the
+medical field through Computer-Aided Diagnosis (CAD). However, integrating CAD
+into the medical system remains a significant challenge. \\
+
+The objective of this project is to explore the current state of deep learning
+techniques in image detection and assess their applicability and reliability in
+creating a real-time system capable of classifying melanoma images. \\
+
+The investigation led to the training of eight different models based on
+convolutional layers with pre-trained weights from ResNet18 in the ImageNet
+dataset. These models were distinguished by applying various machine learning
+techniques during the training process, including regularization, data
+augmentation, and learning rate scheduling, along with hyper-parameter
+configuration. \\
+
+The resulting models were trained on an unbalanced dataset of eight different
+classes, comprising twenty-five thousand real dermoscopy images. Validation was
+performed using three thousand different samples during the training phase. To
+evaluate the models, a holdout set scheme was used, where they were tested on
+unseen data, achieving good results. To validate and further test the models,
+Test-Time augmentation was employed to emulate an ensemble of models on the
+fly. \\
+
+This project goes beyond pure investigation and includes engineering efforts to
+make sophisticated knowledge accessible to a wider audience. A CAD
+infrastructure, based on micro-services, was created to provide medical
+professionals with a powerful tool for advanced diagnostic capabilities. This
+infrastructure integrates the trained models with an API and a user interface
+(UI), enabling professionals to improve patient care and outcomes. \\
+
+The developed CAD infrastructure stands as a significant advancement in the
+automation of melanoma detection, enhancing the potential for early diagnosis
+and better patient outcomes. \\
+
+The research's final conclusions can be summarized in two key points. Firstly,
+there are significant benefits in developing platforms and infrastructure that
+provide accessible machine learning solutions. Secondly, it is crucial to be
+cautious when implementing certain machine learning solutions, as some "solved"
+problems may raise moral and ethical concerns. \\
+
+This project was carried out in partnership with the VICOROB
+research group at the University of Girona and Accenture S.L. The documentation
+and CAD infrastructure, along with the training and infrastructure code, are
+freely accessible on GitHub at the following URL:
+\url{https://github.com/wilberquito/melanoma.thesis}.
