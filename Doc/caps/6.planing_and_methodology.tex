@@ -98,7 +98,7 @@ The hardware and software used in the project are listed in the Table
   \end{tabular}
   \caption[The Cost of Components.]
   {\textit{The Cost of Components.
-  Components marked with (*) were not paid for out of my own pocket; instead, they were borrowed from VICOROB or
+  Components marked with (*) they were borrowed from VICOROB or
   Google Services. }}
   {\label{table:equipment_cost}}
 \end{table}
@@ -356,19 +356,18 @@ multiples tasks.
   \item{\textbf{Deployment}}
 
     After developing the CAD infrastructure and uploading the source code to a
-    private GitHub repository, and training the models, we proceeded to upload
-    the configurations and trained models to a public GitLab repository at
+    public GitHub repository at
+    \url{https://github.com/wilberquito/melanoma.thesis}, and training the
+    models, we proceeded to upload the services configurations and trained
+    models to a public GitLab repository at
     \url{https://gitlab.com/wilberquito/open.thesis}. They can be easily
-    downloaded using Git\footnote{Git is version control software designed by
-    Linus Torvalds}. However, it's important to note that deployment may be
-    restricted by authentication at the moment of reading this thesis. \\
+    downloaded using Git. \\
 
     The final step of the deployment process involved creating a shell script.
     This script is responsible for downloading the source code from GitHub, as
     well as retrieving the trained models and configurations from GitLab. It
     then utilizes the configuration files specific to each service to create
-    the necessary
-    images and instantiate the containers accordingly.
+    the necessary images and instantiate the containers accordingly.
 
   \item{\textbf{Writing the Report}}
 
@@ -384,28 +383,18 @@ multiples tasks.
 \subsection{Timeline}
 
 \begin{table}[H] \centering
-  \begin{tabular}{| l | c | c | c |}
+  \begin{tabular}{| l | l | c | c | c |}
     \hline
-    \multicolumn{1}{|c|}{\textbf{Task}} & \multicolumn{1}{c|}{\textbf{Time}} & \multicolumn{1}{c|}{\textbf{Color}} \\
-    \hline
-    Definition and boundaries of the project & 40h & \cellcolor{red!50} \\
-    \hline
-    Setting up the environment & 20h & \cellcolor{lime!50} \\
-    \hline
-    Study of the data-set & 20h & \cellcolor{blue!40} \\
-    \hline
-    Searching of existing literature & 60h & \cellcolor{teal!50} \\
-    \hline
-    Acquiring working knowledge & 180h & \cellcolor{amber!30} \\
-    \hline
-    Modeling and development & 240h & \cellcolor{black!70} \\
-    \hline
-    Deployment & 40h & \cellcolor{gray!50} \\
-    \hline
-    Writing the report & 120h & \cellcolor{orange!50} \\
-    \hline
-    \textbf{Total} & \textbf{720h} & \\
-    \hline
+    \textbf{} & \textbf{Task} & \textbf{Time} & \textbf{Color} \\ \hline
+    T1 &    Definition and boundaries of the project & 40h & \cellcolor{red!50} \\ \hline
+    T2 &    Setting up the environment & 20h & \cellcolor{lime!50} \\ \hline
+    T3 &    Study of the data-set & 20h & \cellcolor{blue!40} \\ \hline
+    T4 &    Searching of existing literature & 60h & \cellcolor{teal!50} \\ \hline
+    T5 &    Acquiring working knowledge & 180h & \cellcolor{amber!30} \\ \hline
+    T6 &    Modeling and development & 240h & \cellcolor{black!70} \\ \hline
+    T7 &    Deployment & 40h & \cellcolor{gray!50} \\ \hline
+    T8 &    Writing the report & 120h & \cellcolor{orange!50} \\ \hline
+    \multicolumn{2}{|l|}{\textbf{Total}} & \textbf{720h} & \\ \hline
   \end{tabular}
   \caption[Estimated Hours per Task.]{\textit{Estimated Hours per Task. }}
   {\label{table:timeline_tasks}}
