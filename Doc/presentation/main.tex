@@ -5,7 +5,6 @@
 \setbeamerfont{footline}{series=\bfseries}
 \usepackage{tikz}
 
-
 %\usetheme{Frankfurt}%1
 \usetheme{Darmstadt}%1
 
@@ -81,32 +80,31 @@
       \maketitle
     \end{frame}
 
-    \begin{frame}{ Summery}
+    \begin{frame}{Summery}
       \footnotesize \tableofcontents
     \end{frame}
 
     \section{Introduction}
 
-
-
     \begin{frame}
       \large Motivations:
+      \vspace{0.25cm}
+
+      \footnotesize
       \begin{itemize}
-
         \item Enhance AI\footnote{Artificial Intelligence.} knowledge.
-
         \item Automation as way to democratize access to research and AI solutions.
-
         \item CAD\footnote{Computer-Aided Diagnosis.} system are promising path
           towards medical automation.
-
       \end{itemize}
     \end{frame}
 
 
     \begin{frame}
       \large Objectives:
+      \vspace{0.25cm}
 
+      \footnotesize
       \begin{itemize}
         \item Gain expertise in deep learning theory and its real-world
           applications.
@@ -124,14 +122,95 @@
     \section{Domains}
 
     \begin{frame}
+      \begin{center}
+        \Huge Problem
+      \end{center}
+    \end{frame}
 
-      \large Problem:
+
+    \begin{frame}
+      \large Detection of Melanoma Skin Cancer
+      \vspace{0.25cm}
+
+      \footnotesize
+      \begin{itemize}
+        \item Melanoma exhibits a high mortality rate.
+        \item Dermoscopy procedures are utilized for melanoma detection.
+        \item Dermoscopy images are examined by professionals to study cutaneous lesions.
+        \item Several studies have shown that melanoma task classification
+          achieves comparable or superior results to those of novel
+          dermatologists.
+      \end{itemize}
+
+
+    \end{frame}
+
+
+
+    \begin{frame}
+
+    \large Metastasis
+      \vspace{0.25cm}
+
+      \footnotesize
+    \begin{figure}[H] \centering
+      \includegraphics[width=0.5\textwidth]{images/stage3-skin-cancer.jpg}
+      \caption[Skin Cancer, Stage III]{\textit{Skin Cancer, Stage III. Illustration by
+    Terese Winslow}} {\label{fig:stage3-skin-canceer}} \end{figure}
+
+    \end{frame}
+
+
+
+    \begin{frame}
+      \begin{center}
+        \Huge Solution
+      \end{center}
+    \end{frame}
+
+
+    \begin{frame}
+
+      \large CAD Training and Deployment Pipeline
+      \vspace{0.25cm}
+
+      \begin{figure}[H]
+        %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
+        \centering
+        \includegraphics[width=0.7\textwidth]{images/Pipeline.drawio.png}
+        %\end{adjustbox}
+        \caption[CAD Infrastructure Pipeline]{\textit{CAD Infrastructure Pipeline.}}
+        {\label{fig:cad-infrastructure-training-system}}
+      \end{figure}
 
     \end{frame}
 
     \begin{frame}
+      \large Micro-Service Architecture to Infer Images
+      \vspace{0.25cm}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{images/BackgroundTask.drawio.png}
+        \caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism.  }}
+        {\label{fig:backgrond-task}}
+      \end{figure}
+
+    \end{frame}
+
+
+
+    \begin{frame}
 
       \large Ethical Concern:
+      \vspace{0.25cm}
+
+      \footnotesize
+      \begin{itemize}
+        \item The solution employs "black box" models, lacking explainability.
+        \item The thesis presents a CAD tool designed to aid human decision-making
+          rather than being an autonomous decision-making system.
+      \end{itemize}
 
     \end{frame}
 
@@ -139,25 +218,29 @@
     \begin{frame}
 
       \large Regulatory Framework:
+      \vspace{0.25cm}
+
+      \footnotesize
+
+      \begin{itemize}
+        \item When dealing with medical images, obtaining signed consent is
+          necessary for data publication.
+        \item Recent research collaborations prioritize data sharing through
+          de-identification methods to tackle these challenges.
+        \item The thesis made use of the ISIC Archive database, which serves as
+          a publicly accessible resource.
+      \end{itemize}
 
 
     \end{frame}
 
+
+
+    \section{Data}
 
     \begin{frame}
 
-      \large Solution:
-
     \end{frame}
-
-
-    \begin{frame}
-
-      \large Tools:
-
-    \end{frame}
-
-
 
     \section{Data}
 
