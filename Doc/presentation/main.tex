@@ -4,6 +4,7 @@
 \setbeamercolor{footline}{fg=black}
 \setbeamerfont{footline}{series=\bfseries}
 \usepackage{tikz}
+\usepackage{adjustbox}
 
 %\usetheme{Frankfurt}%1
 \usetheme{Darmstadt}%1
@@ -112,11 +113,12 @@
           of dermoscopy images from the dataset during the training process.
         \item Propose and train deep learning models using transfer learning on ISIC\footnote{Skin Imaging Collaboration.}
           Challenge melanoma images.
-        \item Create a CAD infrastructure with trained models, a user-friendly
-          web UI\footnote{User Interface.}, a HTTP API\footnote{Application
-          Programming Interface.}, and Docker support for easy deployment on
-          Linux systems.
+        \item Create an easy deployment CAD infrastructure running in Docker,
+          with the trained models, a user-friendly web UI\footnote{User
+          Interface.} and a HTTP API\footnote{Application Programming Interface.}.
       \end{itemize}
+
+
     \end{frame}
 
     \section{Domains}
@@ -138,7 +140,7 @@
         \item Dermoscopy procedures are utilized for melanoma detection.
         \item Dermoscopy images are examined by professionals to study cutaneous lesions.
         \item Several studies have shown that melanoma task classification
-          achieves comparable or superior results to those of novel
+          using CAD systems achieve comparable or superior results to
           dermatologists.
       \end{itemize}
 
@@ -207,7 +209,7 @@
 
       \footnotesize
       \begin{itemize}
-        \item The solution employs "black box" models, lacking explainability.
+        \item The solution employs "black box" models, lacking explain-ability.
         \item The thesis presents a CAD tool designed to aid human decision-making
           rather than being an autonomous decision-making system.
       \end{itemize}
@@ -240,15 +242,106 @@
 
     \begin{frame}
 
+      \large Origin Data Decription:
+      \vspace{0.25cm}
+
+      \footnotesize
+
+      \begin{itemize}
+        \item The data originates from the ISIC Archive.
+        \item It includes images from the years 2019 and 2020.
+        \item The images are available in three different resolutions: 512x512,
+          768x768, and 1024x1024 pixels.
+        \item The dataset contains more than eight distinct classes.
+      \end{itemize}
+
     \end{frame}
 
-    \section{Data}
 
     \begin{frame}
 
+      \large Used Data Decription:
+      \vspace{0.25cm}
+
+      \footnotesize
+
+      \begin{itemize}
+        \item Resolution selected: 512x512 pixels.
+        \item The used dataset comprises 31,265 distinct image samples.
+        \item Eight classes were selected to work with.
+        \item Imbalanced dataset.
+      \end{itemize}
+
+    \end{frame}
+
+    \begin{frame}
+
+      \large Classes Distribution in the Dataset
+          \vspace{0.25cm}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{images/hole-dataset-diagnosis.png}
+        \caption[Data Distribution]{\textit{Data Distribution. }}
+        {\label{fig:hole-dataset-distribution}}
+      \end{figure}
+
+    \end{frame}
+
+    \begin{frame}
+
+      \large  Train, Validation and Test Sets
+      \vspace{0.25cm}
+
+      \footnotesize
+
+      \begin{itemize}
+        \item The dataset was stratified to ensure an equal distribution of classes in each subset.
+        \item The training set was created using 80\% of the dataset, the validation set using 10\%, and the test set using the remaining 10\%.
+      \end{itemize}
+
+
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=0.5\textwidth, trim={0cm 0.5cm 0cm 0.5cm}, clip}
+          \includegraphics[width=\textwidth]{images/train-test-validation-sets.png}
+        \end{adjustbox}
+        \caption[Holdout Set Scheme]{\textit{Holdout Set Scheme. Illustration by Qualcomm}}
+        {\label{fig:holdout-test-scheme}}
+      \end{figure}
+
+    \end{frame}
+
+    \begin{frame}
+
+      \large Data Augmentation
+      \vspace{0.25cm}
+
+      \footnotesize
+
+      The train dataset (Figure \ref{fig:sample-of-datasets}),
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{images/random-sample-of-isic.png}
+        \caption[Random Sample of Images]{\footnotesize{\textit{Random Sample of Images.}}}
+        {\label{fig:sample-of-datasets}}
+      \end{figure}
+
+      Is mapped into an augmented train dataset (Figure \ref{fig:aug-sample-of-datasets}).
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{images/random-sample-of-isic-augmented.png}
+        \caption[Augmented Random Sample of Images]{\footnotesize{\textit{Augmented Random Sample of Images.}}}
+        {\label{fig:aug-sample-of-datasets}}
+      \end{figure}
+
     \end{frame}
 
 
+
+%
     \section{Modeling}
     \begin{frame}
       \footnotesize
