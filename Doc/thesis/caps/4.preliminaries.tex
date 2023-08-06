@@ -1099,8 +1099,10 @@ of a shell script that performs the following steps:
   \item Builds the API image.
   \item Builds the UI image.
   \item Clones the artifacts from GitLab.
-  \item Activates the services using a Docker Compose file, which starts the containers with their configurations based on the previously built images.
+  \item Create and start-up the containers from the CAD images services. These
+    containers run with their configurations based on the artificats from
+    GitLab.
 \end{itemize}
 
-By following this approach, professionals can easily distribute the
-containerized services by running the provided shell script.
+By following this approach, we can easily distribute the CAD infrastructure
+using containers.
