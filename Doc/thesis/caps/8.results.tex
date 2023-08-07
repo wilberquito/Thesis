@@ -304,12 +304,9 @@ end-point along with a brief code summary. However, for a comprehensive
 understanding of the implementation, we highly recommend referring to the
 source code attached to the thesis.
 
-\subsection{Consulting The Available Models}
+\subsection{Consulting Exposed Models}
 
-We provided a mechanism to consult the available models that currently the API
-exposes. The supported model are configured in the configuration file of the
-API. \\
-
+We provided a mechanism to consult the exposed models by the API.
 You can consult the exposed models by requesting:
 
 \begin{Verbatim}[fontsize=\scriptsize]
@@ -374,7 +371,7 @@ of images attached to the request body. For example, you can use this endpoint
 as follows:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-http://<api>/predict_bulk?model_id=M1
+http://<api>/predict_bulk?model_id=<model_id>
 \end{Verbatim}
 
 The API will respond with a JSON object containing a unique task identifier
@@ -394,14 +391,13 @@ Lastly, we needed and end-point that given the unique identifier task,
 we could consult the result of the prediction of the models for all images
 sended to the API. \\
 
-You can consult a task prediction as follow:
+You can consult a task prediction by requesting:
 
 \begin{Verbatim}[fontsize=\scriptsize]
-http://<api>/from_task/77d5e834-60a1-49b6-a71a-b3472dc21ce5
+http://<api>/from_task/<task_uuid>
 \end{Verbatim}
 
-A potential JSON response from the API regarding the task prediction inquiry
-could be:
+A potential JSON response from the API regarding the task prediction:
 
 \begin{Verbatim}[fontsize=\scriptsize]
 [

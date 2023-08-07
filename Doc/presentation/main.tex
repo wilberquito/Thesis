@@ -7,11 +7,12 @@
 \usepackage{adjustbox}
 \usepackage{subcaption}
 \usepackage{graphicx}
-\usepackage{fancyvrb}
+\usepackage{verbatim}
 \usepackage{colortbl}
 \usepackage{booktabs}% http://ctan.org/pkg/booktabs
 \usepackage{subcaption}
-
+\usepackage{fancyvrb}
+\usepackage[utf8]{inputenc}
 
 \usepackage{subcaption}
 \usepackage{tikz}
@@ -140,7 +141,7 @@
           Challenge melanoma images.
         \item Create an easy deployment CAD infrastructure running in Docker,
           with the trained models, a user-friendly web UI\footnote{User
-          Interface.} and a HTTP API\footnote{Application Programming Interface.}.
+          Interface.} and a HTTP\footnote{Hypertext Transfer Protocol.} API\footnote{Application Programming Interface.}.
       \end{itemize}
 
 
@@ -176,20 +177,6 @@
 
     \end{frame}
 
-
-
-    \begin{frame}
-
-      \large Metastasis
-      \vspace{0.25cm}
-
-      \footnotesize
-      \begin{figure}[H] \centering
-        \includegraphics[width=0.5\textwidth]{images/stage3-skin-cancer.jpg}
-        \caption[Skin Cancer, Stage III]{\textit{Skin Cancer, Stage III. Illustration by
-      Terese Winslow}} {\label{fig:stage3-skin-canceer}} \end{figure}
-
-    \end{frame}
 
     \begin{frame}
       \begin{center}
@@ -393,11 +380,11 @@
       \footnotesize
 
       \begin{itemize}
-        \item Eight trained models with different ML thecniques.
+        \item Eight trained models with different ML\footnote{Machine Learning.} thecniques.
         \item Used the ResNet18 pre-trained weights.
         \item SGD as optimizer.
         \item Cross-entropy as loss function.
-        \item Model training performance were evaluated with AUC metric.
+        \item Model training performance were evaluated with AUC\footnote{Area Under the Curve.} metric.
       \end{itemize}
 
     \end{frame}
@@ -484,20 +471,6 @@
       \end{figure}
     \end{frame}
 
-    \begin{frame}
-      \large Testing
-      \vspace{0.25cm}
-
-
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.65\textwidth]{images/rocaucanalysis-all.png}
-        \caption[ROC-AUC Results in Test Dataset]{\textit{ROC-AUC Results in Test Dataset. }}
-        {\label{fig:rocaucanalysis-all}}
-      \end{figure}
-
-    \end{frame}
-
 
 
     \section{Workflow \& Results}
@@ -530,10 +503,128 @@
       \end{center}
     \end{frame}
 
-
-
     \begin{frame}
+      \large Testing Models
+      \vspace{0.25cm}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{images/rocaucanalysis-all.png}
+        \caption[ROC-AUC Results in Test Dataset]{\textit{ROC-AUC Results in Test Dataset. }}
+        {\label{fig:rocaucanalysis-all}}
+      \end{figure}
+
     \end{frame}
 
+    \begin{frame}
+
+      \large HTTP API Service
+      \vspace{0.25cm}
+
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=0.9\textwidth, trim={0cm 0cm 0.1cm 0cm}, clip}
+          \includegraphics[width=\textwidth]{images/api-endpoints.png}
+        \end{adjustbox}
+        \caption[API Service End-Points]{\textit{API Service End-Points. }}
+        {\label{fig:api-endpoints}}
+      \end{figure}
+    \end{frame}
+
+
+
+    \begin{frame}[fragile]
+      \large Get Exposed Models
+
+      \vspace{0.25cm}
+      \footnotesize
+You can consult the exposed models by requesting:
+
+      \begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/public_models
+      \end{Verbatim}
+
+      The response of the API's JSON\footnote{JavaScript Object Notation.} response should be something similar to this:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+{
+  "models": [
+    "M0",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "vicorobot.8c_b3_768_512_18ep_best_20_fold0",
+    "vicorobot.8c_b3_768_512_18ep_best_fold0",
+    "vicorobot.8c_b3_768_512_18ep_final_fold0"
+  ]
+}
+\end{Verbatim}
+
+    \end{frame}
+
+
+    \begin{frame}[fragile]
+      \large Predict Images
+
+      \vspace{0.25cm}
+      \footnotesize
+You can consult the exposed models by requesting:
+
+      \begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/predict_bulk?model_id=<model_id>
+      \end{Verbatim}
+The API will respond with a JSON object containing a unique task identifier and
+the total number of images sended to the API:
+
+
+\begin{Verbatim}[fontsize=\scriptsize]
+{
+  "task_uuid": "77d5e834-60a1-49b6-a71a-b3472dc21ce5",
+  "num_images": 2
+}
+\end{Verbatim}
+
+    \end{frame}
+
+    \begin{frame}[fragile]
+      \large Consult Prediction
+
+      \vspace{0.25cm}
+      \footnotesize
+  You can consult a task prediction as follow:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/from_task/<task_uuid>
+\end{Verbatim}
+
+A potential JSON response from the API regarding the task prediction:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+[
+  {
+    "name": "ISIC_0052349.jpg",
+    "probabilities": {
+      "AK": 0.0007466986,
+      "BCC": 0.0005002805,
+      "BKL": 0.015733117,
+      "DF": 0.00086343783,
+      "SCC": 0.0007902466,
+      "VASC": 0.0017217622,
+      "melanoma": 0.017426228,
+      "nevus": 0.9622182
+    },
+    . . .
+  }
+  . . .
+]
+\end{Verbatim}
+
+
+
+
+    \end{frame}
 
     \end{document}
