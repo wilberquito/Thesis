@@ -7,7 +7,6 @@
 \usepackage{adjustbox}
 \usepackage{subcaption}
 \usepackage{graphicx}
-\usepackage{enumitem}
 \usepackage{fancyvrb}
 \usepackage{colortbl}
 \usepackage{booktabs}% http://ctan.org/pkg/booktabs
@@ -421,74 +420,50 @@
 
     \begin{frame}
 
-  \begin{table}
-    \centering
-    \begin{adjustbox}{width=\textwidth}
-    \begin{tabular}{lccccccccc}
-      \toprule
-      & \textbf{Train AUC} & \textbf{Val AUC} & \textbf{Test AUC} & \textbf{Train Recall} & \textbf{Val Recall} & \textbf{Test Recall} & \textbf{Train Acc} & \textbf{Val Acc} & \textbf{Test Acc} \\
+      \begin{table}
+        \centering
+        \begin{adjustbox}{width=0.8\textwidth}
+          \begin{tabular}{lccccccccc}
+            \toprule
+      & \textbf{Train AUC} & \textbf{Val AUC} & \textbf{Train Recall} & \textbf{Val Recall} & \textbf{Train Acc} & \textbf{Val Acc} \\
       \midrule
-      M0 & 0.952 & 0.903 & 0.892 & 0.756 & 0.676 & 0.652 & 0.835 & 0.778 & 0.772 \\
-      M1 $\star$ & 0.947 & 0.900 & 0.892 & 0.695 & 0.633 & 0.599 & 0.829 & 0.779 & 0.771 \\
-      M2 $\ast$ & 0.933 & 0.895 & 0.885 & 0.658 & 0.609 & 0.582 & 0.808 & 0.765 & 0.762 \\
-      M3 $\bullet$ & 0.935 & 0.896 & 0.886 & 0.663 & 0.605 & 0.589 & 0.811 & 0.767 & 0.764 \\
-      \midrule
-      \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.886 & \cellcolor{gray!50}0.877 & \cellcolor{gray!50}0.858 & \cellcolor{gray!50}0.478 & \cellcolor{gray!50}0.475 & \cellcolor{gray!50}0.446 & \cellcolor{gray!50}0.757 & \cellcolor{gray!50}0.750 & \cellcolor{gray!50}0.741 \\
-      \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.867 & \cellcolor{gray!50}0.861 & \cellcolor{gray!50}0.843 & \cellcolor{gray!50}0.423 & \cellcolor{gray!50}0.403 & \cellcolor{gray!50}0.395 & \cellcolor{gray!50}0.728 & \cellcolor{gray!50}0.717 &  \cellcolor{gray!50}0.715 \\
-      \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.874 & \cellcolor{gray!50}0.868 & \cellcolor{gray!50}0.848 & \cellcolor{gray!50}0.451 & \cellcolor{gray!50}0.440 & \cellcolor{gray!50}0.418 & \cellcolor{gray!50}0.738 & \cellcolor{gray!50}0.728 &  \cellcolor{gray!50}0.722 \\
-      \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.877 & \cellcolor{gray!50}0.869 & \cellcolor{gray!50}0.849 & \cellcolor{gray!50}0.470 & \cellcolor{gray!50}0.458 & \cellcolor{gray!50}0.432 & \cellcolor{gray!50}0.742 & \cellcolor{gray!50}0.732 &  \cellcolor{gray!50}0.723 \\
+            M0 & 0.952 & 0.903 & 0.756 & 0.676  & 0.835 & 0.778 \\
+            M1 $\star$ & 0.947 & 0.900 & 0.695 & 0.633 & 0.829 & 0.779 \\
+            M2 $\ast$ & 0.933 & 0.895 & 0.658 & 0.609  & 0.808 & 0.765  \\
+            M3 $\bullet$ & 0.935 & 0.896  & 0.663 & 0.605  & 0.811 & 0.767  \\
+            \midrule
+            \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.886 & \cellcolor{gray!50}0.877 &  \cellcolor{gray!50}0.478 & \cellcolor{gray!50}0.475 &  \cellcolor{gray!50}0.757 & \cellcolor{gray!50}0.750 \\
+            \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.867 & \cellcolor{gray!50}0.861  & \cellcolor{gray!50}0.423 & \cellcolor{gray!50}0.403 &  \cellcolor{gray!50}0.728 & \cellcolor{gray!50}0.717\\
+            \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.874 & \cellcolor{gray!50}0.868 & \cellcolor{gray!50}0.451 & \cellcolor{gray!50}0.440 & \cellcolor{gray!50}0.738 & \cellcolor{gray!50}0.728 \\
+            \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.877  & \cellcolor{gray!50}0.849 & \cellcolor{gray!50}0.470 & \cellcolor{gray!50}0.432 & \cellcolor{gray!50}0.742 & \cellcolor{gray!50}0.732  \\
 
-      \midrule
+            \midrule
 
-      Mean &  94.175\% & 89.850\% & 88.875\%  & 69.300\% & 63.075\% & 60.550\% & 82.075\% & 77.225\% & 76.725\% \\
-      SD   & 0.921\% & 0.370\% & 0.377\%  &  4.509\% & 3.260\% & 3.178\% & 1.327\% & 0.727\% & 0.499\% \\
+            Mean &  94.175\% & 89.850\%   & 69.300\% & 63.075\%  & 82.075\% & 77.225\%  \\
+            SD   & 0.921\% & 0.370\%  &  4.509\% & 3.260\%  & 1.327\% & 0.727\%  \\
 
-      \midrule
+            \midrule
 
-      \cellcolor{gray!50}Mean & \cellcolor{gray!50}87.600\% & \cellcolor{gray!50}86.875\% & \cellcolor{gray!50}84.950\% & \cellcolor{gray!50}45.550\% & \cellcolor{gray!50}44.400\% & \cellcolor{gray!50}42.275\% & \cellcolor{gray!50}74.125\% & \cellcolor{gray!50}73.175\% & \cellcolor{gray!50}72.525\% \\
-      \cellcolor{gray!50}SD & \cellcolor{gray!50}0.787\% & \cellcolor{gray!50}0.655\% & \cellcolor{gray!50}0.625\% & \cellcolor{gray!50}2.445\% & \cellcolor{gray!50}3.084\% & \cellcolor{gray!50}2.175\% & \cellcolor{gray!50}1.204\% & \cellcolor{gray!50}1.372\% &  \cellcolor{gray!50}1.108\% \\
+            \cellcolor{gray!50}Mean & \cellcolor{gray!50}87.600\% & \cellcolor{gray!50}86.875\% & \cellcolor{gray!50}45.550\% & \cellcolor{gray!50}44.400\% &  \cellcolor{gray!50}74.125\% & \cellcolor{gray!50}73.175\%  \\
+            \cellcolor{gray!50}SD & \cellcolor{gray!50}0.787\% & \cellcolor{gray!50}0.655\% & \cellcolor{gray!50}2.445\% & \cellcolor{gray!50}3.084\% & \cellcolor{gray!50}1.204\% & \cellcolor{gray!50}1.372\% \\
 
-      \bottomrule
-    \end{tabular}
-  \end{adjustbox}
-    \caption[Metrics in the Datasets]
-    {\textit{Metrics in the Datasets. }}
-    {\label{table:resume-metrics}}
-  \end{table}
+            \bottomrule
+          \end{tabular}
+        \end{adjustbox}
+        \caption[Train \& Validaton Metrics]
+        {\textit{Train \& Validaton Metrics.}}
+        {\label{table:resume-metrics}}
+      \end{table}
     \end{frame}
-
-
-
-
-    \section{Services}
 
     \begin{frame}
-
-      \large API
+      \large M3 Against M7
       \vspace{0.25cm}
+
+      \footnotesize
 
     \end{frame}
 
-
-    \begin{frame}
-      \large UI
-      \vspace{0.25cm}
-    \end{frame}
-
-
-    \begin{frame}
-      \large Containers
-      \vspace{0.25cm}
-
-
-      \begin{itemize}
-        \item Easy to maintain.
-        \item Portable.
-        \item Fast to start-up.
-      \end{itemize}
-
-
-    \end{frame}
 
     \section{Results}
 
