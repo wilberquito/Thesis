@@ -10,6 +10,19 @@
 \usepackage{fancyvrb}
 \usepackage{colortbl}
 \usepackage{booktabs}% http://ctan.org/pkg/booktabs
+\usepackage{subcaption}
+
+
+\usepackage{subcaption}
+\usepackage{tikz}
+
+\newcommand{\trianglesubfigures}[3]{%
+  \begin{tikzpicture}
+    \node[inner sep=0pt, outer sep=0pt] (a) at (0, 0) {\subcaptionbox{\footnotesize{Loss Curves}}{\includegraphics[width=0.45\textwidth]{#1}}};
+    \node[inner sep=0pt, outer sep=0pt] (b) at (5, 0) {\subcaptionbox{\footnotesize{Accuracy Curves}}{\includegraphics[width=0.45\textwidth]{#2}}};
+    \node[inner sep=0pt, outer sep=0pt] (c) at (2.5, 3.464) {\subcaptionbox{\footnotesize{AUC Curves}}{\includegraphics[width=0.45\textwidth]{#3}}};
+  \end{tikzpicture}
+}
 
 %\usetheme{Frankfurt}%1
 \usetheme{Darmstadt}%1
@@ -167,14 +180,14 @@
 
     \begin{frame}
 
-    \large Metastasis
+      \large Metastasis
       \vspace{0.25cm}
 
       \footnotesize
-    \begin{figure}[H] \centering
-      \includegraphics[width=0.5\textwidth]{images/stage3-skin-cancer.jpg}
-      \caption[Skin Cancer, Stage III]{\textit{Skin Cancer, Stage III. Illustration by
-    Terese Winslow}} {\label{fig:stage3-skin-canceer}} \end{figure}
+      \begin{figure}[H] \centering
+        \includegraphics[width=0.5\textwidth]{images/stage3-skin-cancer.jpg}
+        \caption[Skin Cancer, Stage III]{\textit{Skin Cancer, Stage III. Illustration by
+      Terese Winslow}} {\label{fig:stage3-skin-canceer}} \end{figure}
 
     \end{frame}
 
@@ -301,7 +314,7 @@
     \begin{frame}
 
       \large Classes Distribution in the Dataset
-          \vspace{0.25cm}
+      \vspace{0.25cm}
 
       \begin{figure}[H]
         \centering
@@ -365,7 +378,7 @@
 
 
 
-%
+    %
     \section{Modeling}
 
     \begin{frame}
@@ -375,7 +388,7 @@
     \begin{frame}
 
       \large General Modeling Information
-          \vspace{0.25cm}
+      \vspace{0.25cm}
 
       \footnotesize
 
@@ -392,28 +405,28 @@
     \begin{frame}
 
 
-  \begin{table}
+      \begin{table}
 
-    \centering
-    \begin{adjustbox}{width=\textwidth}
-    \begin{tabular}{lcccccccc}
-      \toprule
+        \centering
+        \begin{adjustbox}{width=\textwidth}
+          \begin{tabular}{lcccccccc}
+            \toprule
       & \textbf{M0} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{M7} \\
       \midrule
-      Model Architecture & R18M & R18M & R18M & R18M & R18DM & R18DM & R18DM & R18DM \\
-      Epochs & 20 & 20 & 20 & 20 & 40 & 40 & 40 & 40 \\
-      Batch Size & 400 & 400 & 400 & 400 & 1024 & 1024 & 1024 & 1024 \\
-      Scheduler & & SLR & CALR & CAWR &  & SLR & CALR & CAWR  \\
-      Data Augmentation & No & No & No & No  & Yes & Yes & Yes & Yes \\
-      Dropout Regularization & No & No & No & No  & Yes & Yes & Yes & Yes \\
-      GPU & TT4 & TT4 & TT4 & TT4 & NA100 & NA100 & NA100 & NA100 \\
-      Training Time & 1h 45m & 1h 22m & 1h 43m & 1h 38m & 1d 7h 30m & 1d 7h 4m & 1d 7h 1m & 1d 12h 55m \\ \bottomrule
-    \end{tabular}
-  \end{adjustbox}
-    \caption[Training Information For Each Model.]
-    {\textit{\footnotesize{Training Information For Each Model. Empty spaces represent non-use of that feature.}}}
-    {\label{table:trained-models-information}}
-  \end{table}
+            Model Architecture & R18M & R18M & R18M & R18M & R18DM & R18DM & R18DM & R18DM \\
+            Epochs & 20 & 20 & 20 & 20 & 40 & 40 & 40 & 40 \\
+            Batch Size & 400 & 400 & 400 & 400 & 1024 & 1024 & 1024 & 1024 \\
+            Scheduler & & SLR & CALR & CAWR &  & SLR & CALR & CAWR  \\
+            Data Augmentation & No & No & No & No  & Yes & Yes & Yes & Yes \\
+            Dropout Regularization & No & No & No & No  & Yes & Yes & Yes & Yes \\
+            GPU & TT4 & TT4 & TT4 & TT4 & NA100 & NA100 & NA100 & NA100 \\
+            Training Time & 1h 45m & 1h 22m & 1h 43m & 1h 38m & 1d 7h 30m & 1d 7h 4m & 1d 7h 1m & 1d 12h 55m \\ \bottomrule
+          \end{tabular}
+        \end{adjustbox}
+        \caption[Training Information For Each Model.]
+        {\textit{\footnotesize{Training Information For Each Model. Empty spaces represent non-use of that feature.}}}
+        {\label{table:trained-models-information}}
+      \end{table}
 
     \end{frame}
 
@@ -456,125 +469,25 @@
       \end{table}
     \end{frame}
 
+
+
+
     \begin{frame}
-      \large M3 Against M7
+      \large M3 vs. M7
       \vspace{0.25cm}
 
-      \footnotesize
-
+      \begin{figure}
+        \centering
+        \trianglesubfigures{images/LossM3M7.png}{images/AccM3M7.png}{images/AUCM3M7.png}
+        \caption{\textit{M3 vs. M7. Combined AUC, Loss and Accuracy Curves.}}
+        \label{fig:combined}
+      \end{figure}
     \end{frame}
+
 
 
     \section{Results}
 
-    \begin{frame}
-      \footnotesize
-      System behavior without controller
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.75\textwidth]{x_1.eps}
-        \caption{System state}
-      \end{figure}
-      System unstable
-    \end{frame}
-
-    \begin{frame}
-      System behavior with controller
-
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.75\textwidth]{kuc.eps}
-        \caption{Control signal }
-        \label{fig3.3}
-      \end{figure}
-    \end{frame}
-    \begin{frame}
-      System behavior with controller
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.75\textwidth]{kstates.eps}
-        \caption{System state}
-        \label{fig3.4}
-      \end{figure}
-
-      The system is stable but it needs more enhancement
-    \end{frame}
-
-
-    \begin{frame}
-      System behavior with the proposed controller
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.75\textwidth]{2uc.eps}
-        \caption{Proposed controller signal }
-        \label{fig3.5}
-      \end{figure}
-    \end{frame}
-    \begin{frame}
-      System behavior with the proposed controller
-
-      \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.75\textwidth]{2states.eps}
-        \caption{System state with the proposed controller }
-        \label{fig3.6}
-      \end{figure}
-
-      \textcolor{blue}{ Stability + better performance}
-
-    \end{frame}
-
-    \begin{frame}
-      \footnotesize
-      Quantification of the comparative study
-      \begin{table}[h]
-        \centering
-        \begin{tabular}{|*{4}{c|}}
-          \hline
-  & Classical controller & Proposed controller & Enhancement rate \\
-  \hline
-          Settling time & $26$  &  $20$ & 23 \% \\
-          \hline
-          Pic to pic $x_3$  &$1.36$ & $1.16 $ &15 \% \\
-          \hline
-          $\int\limits_0^{ts}(x_3^2)dt $
-                            & $2.5540$ & $0.7771$& 70 \% \\
-                            \hline
-          $ \int\limits_0^{ts}(u^2)dt$ & $12.8476$ & $7.1868$& 40 \% \\
-          \hline
-        \end{tabular}
-        \caption{Quantification of the comparative study}
-      \end{table}
-      We remark that
-      \begin{itemize}
-        \item \textcolor{blue}{\textbf{Enhancement of the settling time of $23\%$}}
-        \item \textcolor{blue}{\textbf{ Reduction of the control energy by $40\%$}}
-        \item \textcolor{blue}{\textbf{ Overall enhancement by  $70\%$ }}
-        \item \textcolor{blue}{\textbf{ Pic to pic reduction by  $15\%$}}
-      \end{itemize}
-    \end{frame}
-
-    \section{Conclusion and Perspectives}
-    \begin{frame}
-      \footnotesize
-      We conclude that:
-      \begin{block}{Conclusion}
-        \begin{itemize}
-          \item  \textcolor{blue}{\textbf{Lyapunov method efficiency.}}
-          \item \textcolor{blue}{\textbf{Proposed controller leads to better performance.}}
-          \item \textcolor{blue}{\textbf{Delayed controller enhances the performance.}}
-          \item \textcolor{blue}{\textbf{Proposed approach allows reduction of the control energy.}}
-        \end{itemize}
-      \end{block}
-      As perspectives we propose:
-      \begin{block}{perspectives}
-        \begin{itemize}
-          \item Perspective 1.
-          \item Perspective 2.
-          \item Perspective 3.
-        \end{itemize}
-      \end{block}
-    \end{frame}
 
 
     \end{document}
