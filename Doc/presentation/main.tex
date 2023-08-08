@@ -54,7 +54,7 @@
 \makeatother
 
 % RTL triangle for itemize
-\setbeamertemplate{itemize item}{\scriptsize\raise1.25pt\hbox{\donotcoloroutermaths$\blacktriangleleft$}}
+\setbeamertemplate{itemize item}{\tiny\raise1.25pt\hbox{\donotcoloroutermaths$\blacktriangleleft$}}
 
 %\setbeamertemplate{itemize item}{\rule{4pt}{4pt}}
 
@@ -461,7 +461,6 @@
 
     \begin{frame}
       \large M3 vs. M7
-      \vspace{0.25cm}
 
       \begin{figure}
         \centering
@@ -491,7 +490,7 @@
         \centering
         \includegraphics[width=0.6\textwidth]{images/EmplyedMethodology.png}
         \caption[Activity Diagram Describing the Methodology.]{\textit{Activity
-            Diagram Describing the Workflow Methodology.}}
+        Diagram Describing the Workflow Methodology.}}
         {\label{fig:flux_development}}
       \end{figure}
     \end{frame}
@@ -515,14 +514,26 @@
 
     \end{frame}
 
-    \begin{frame}
+    \begin{frame}[fragile]
 
-      \large HTTP API Service
+      \large API Service
       \vspace{0.25cm}
+
+      \footnotesize
+      To access the documentation of the API, you can make a request in a web
+      browser using the following URL\footnote{Uniform Resource Locator.}:
+
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
+http://<api>/docs
+      \end{Verbatim}
+
+      The web browser will display the endpoints of the API.
 
       \begin{figure}[H]
         \centering
-        \begin{adjustbox}{width=0.9\textwidth, trim={0cm 0cm 0.1cm 0cm}, clip}
+        \begin{adjustbox}{width=0.8\textwidth, trim={0cm 0cm 0.1cm 0cm}, clip}
           \includegraphics[width=\textwidth]{images/api-endpoints.png}
         \end{adjustbox}
         \caption[API Service End-Points]{\textit{API Service End-Points. }}
@@ -533,19 +544,24 @@
 
 
     \begin{frame}[fragile]
-      \large Get Exposed Models
+      \large Exposed Models
 
       \vspace{0.25cm}
       \footnotesize
-You can consult the exposed models by requesting:
+      You can consult the exposed models by requesting:
 
-      \begin{Verbatim}[fontsize=\scriptsize]
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
 http://<api>/public_models
       \end{Verbatim}
 
-      The response of the API's JSON\footnote{JavaScript Object Notation.} response should be something similar to this:
+      The response of the API's JSON\footnote{JavaScript Object Notation.}
+      response should be something similar to this:
 
-\begin{Verbatim}[fontsize=\scriptsize]
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
 {
   "models": [
     "M0",
@@ -561,7 +577,7 @@ http://<api>/public_models
     "vicorobot.8c_b3_768_512_18ep_final_fold0"
   ]
 }
-\end{Verbatim}
+      \end{Verbatim}
 
     \end{frame}
 
@@ -571,21 +587,24 @@ http://<api>/public_models
 
       \vspace{0.25cm}
       \footnotesize
-You can consult the exposed models by requesting:
+      You can consult the exposed models by requesting:
 
-      \begin{Verbatim}[fontsize=\scriptsize]
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
 http://<api>/predict_bulk?model_id=<model_id>
       \end{Verbatim}
-The API will respond with a JSON object containing a unique task identifier and
-the total number of images sended to the API:
+      The API will respond with a JSON object containing a unique task identifier and
+      the total number of images sended to the API:
 
+      \vspace{0.1cm}
 
-\begin{Verbatim}[fontsize=\scriptsize]
+      \begin{Verbatim}[fontsize=\tiny]
 {
   "task_uuid": "77d5e834-60a1-49b6-a71a-b3472dc21ce5",
   "num_images": 2
 }
-\end{Verbatim}
+      \end{Verbatim}
 
     \end{frame}
 
@@ -594,15 +613,19 @@ the total number of images sended to the API:
 
       \vspace{0.25cm}
       \footnotesize
-  You can consult a task prediction as follow:
+      You can consult a task prediction as follow:
 
-\begin{Verbatim}[fontsize=\scriptsize]
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
 http://<api>/from_task/<task_uuid>
-\end{Verbatim}
+      \end{Verbatim}
 
-A potential JSON response from the API regarding the task prediction:
+      A potential JSON response from the API regarding the task prediction:
 
-\begin{Verbatim}[fontsize=\scriptsize]
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
 [
   {
     "name": "ISIC_0052349.jpg",
@@ -620,11 +643,125 @@ A potential JSON response from the API regarding the task prediction:
   }
   . . .
 ]
-\end{Verbatim}
-
-
-
+      \end{Verbatim}
 
     \end{frame}
+
+
+    \begin{frame}[fragile]
+      \large UI Service
+      \vspace{0.25cm}
+
+      \footnotesize
+      Accesing the UI service through a web browser using the following URL:
+
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
+http://<ui>
+      \end{Verbatim}
+
+      As a result, a single-page web application with several interactive buttons will appear (Figure \ref{fig:ui-tools}).
+
+      \vspace{0.2cm}
+      The state of these button depends on the application state.
+
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{images/ui-tools.png}
+        \caption[Main Interactive buttons of the UI Service]{\textit{Main Interactive buttons of the UI Service.}}
+        {\label{fig:ui-tools}}
+      \end{figure}
+
+    \end{frame}
+
+
+    \begin{frame}
+
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=0.55\textwidth, trim={0cm 2.8cm 0cm 0cm}, clip}
+          \includegraphics[width=\textwidth]{images/loaded-images.png}
+        \end{adjustbox}
+        \caption[Dermoscopy Images Loaded in the UI]{\footnotesize{\textit{Dermoscopy Images
+        Loaded in the UI.}}}
+        {\label{fig:loaded-images}}
+
+        \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.55\textwidth]{images/selecting-model.png}
+          \caption[Selecting Exposed Models by the API]{\footnotesize{\textit{Selecting
+          Exposed Models by the API.}}}
+          {\label{fig:selecting-model}}
+        \end{figure}
+
+        \begin{figure}[H]
+          \centering
+          \begin{adjustbox}{width=0.55\textwidth, trim={0cm 2.8cm 0cm 0cm}, clip}
+            \includegraphics[width=\textwidth]{images/after-prediction.png}
+          \end{adjustbox}
+          \caption[UI State After Prediction Response]{\footnotesize{\textit{UI State After Prediction Response.}}}
+          {\label{fig:after-prediction}}
+        \end{figure}
+
+      \end{figure}
+
+    \end{frame}
+
+    \begin{frame}
+
+      \large Pop-up Extra Information
+      \vspace{0.25cm}
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.7\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
+    \includegraphics[]{images/extra-inf-popup.png}
+  \end{adjustbox}
+  \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
+  {\label{fig:extra-inf-popup}}
+\end{figure}
+
+    \end{frame}
+
+
+    \begin{frame}[fragile]
+
+
+      \large Open Source CAD Infrastructure
+      \vspace{0.25cm}
+
+      \footnotesize
+
+      The thesis assets (trained models weights and configurations) can be found in
+      this public GitLab repository:
+
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
+https://gitlab.com/wilberquito/open.thesis
+      \end{Verbatim}
+
+      The CAD infrastructure (install guide, install script, experiments and source code) can be found in
+      this public GitHub repository:
+
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
+https://github.com/wilberquito/melanoma.thesis
+      \end{Verbatim}
+
+      After following the instruction and installing the required tools, installing the CAD infrastructure should
+      be as simple as running this command in a bash terminal.
+
+      \vspace{0.1cm}
+
+      \begin{Verbatim}[fontsize=\tiny]
+curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh | bash
+      \end{Verbatim}
+
+    \end{frame}
+
 
     \end{document}

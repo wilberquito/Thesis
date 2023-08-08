@@ -456,11 +456,10 @@ A potential JSON response from the API regarding the task prediction:
 
 The UI service plays a crucial role in the CAD infrastructure as it serves as
 the interface for interacting with health professionals. In this section, we
-highlight some of the most interesting features provided by this service.
+highlight some of the most interesting features provided by this service. \\
 
 Upon accessing the UI service through your web browser, you will immediately
-notice a single-page web application with several interactive buttons, as
-depicted in Figure \ref{fig:ui-tools}.
+notice a single-page web application with several interactive buttons (Figure \ref{fig:ui-tools}).
 
 \begin{figure}[H]
   \centering
@@ -491,8 +490,10 @@ images and select the images from our device
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{imatges/results/selecting-images.png}
-  \caption[Loading Dermoscopy Images From Device]{\textit{Loading Dermoscopy Images From Device. }}
+  \begin{adjustbox}{width=\textwidth, trim={0.05cm 1.25cm 0cm 0.1cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/selecting-images.png}
+  \end{adjustbox}
+  \caption[Loading Dermoscopy Images from Device]{\textit{Loading Dermoscopy Images from Device. }}
   {\label{fig:selecting-imgs}}
 \end{figure}
 
@@ -500,7 +501,18 @@ After selecting the images, they will be shown in a scrollable section within
 the UI service (Figure \ref{fig:loaded-images}), at this point you can
 unload any image clicking to the cross in the top-right corner of each image.
 You will also notice that the sorting button is now available, along with the
-prediction button. Before making any predictions, there is an option to change
+prediction button.
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=\textwidth, trim={0cm 3.5cm 0cm 0cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/loaded-images.png}
+  \end{adjustbox}
+  \caption[Dermoscopy Images Loaded in the UI]{\textit{Dermoscopy Images Loaded in the UI. }}
+  {\label{fig:loaded-images}}
+\end{figure}
+
+Before making any predictions, there is an option to change
 the model for inference. By clicking on the "Select Model" button, a scrollable
 section will appear next to the working button tools (Figure
 \ref{fig:selecting-model}). This allows us to easily switch between different
@@ -511,16 +523,6 @@ models for the prediction process.
   \includegraphics[width=\textwidth]{imatges/results/selecting-model.png}
   \caption[Selecting Exposed Models by the API]{\textit{Selecting Exposed Models by the API. }}
   {\label{fig:selecting-model}}
-\end{figure}
-
-
-\begin{figure}[H]
-  \centering
-  \begin{adjustbox}{width=\textwidth, trim={0cm 3.5cm 0cm 0cm}, clip}
-    \includegraphics[width=\textwidth]{imatges/results/loaded-images.png}
-  \end{adjustbox}
-  \caption[Dermoscopy Images Loaded in the UI]{\textit{Dermoscopy Images Loaded in the UI. }}
-  {\label{fig:loaded-images}}
 \end{figure}
 
 Once we have loaded the images and selected the desired model for prediction,
@@ -553,7 +555,9 @@ prediction.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{imatges/results/extra-inf-popup.png}
-  \caption[Pop-up Information For Dermoscopy Prediction]{\textit{Pop-up Information For Dermoscopy Prediction. }}
+  \begin{adjustbox}{width=\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
+    \includegraphics[]{imatges/results/extra-inf-popup.png}
+  \end{adjustbox}
+  \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
   {\label{fig:extra-inf-popup}}
 \end{figure}
