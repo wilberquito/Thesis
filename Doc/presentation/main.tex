@@ -105,11 +105,26 @@
 
     \end{frame}
 
+    \begin{frame}
+
+      \[f^{\circ n} \equiv \underbrace{f \circ f \circ \ldots \circ f}_{n \text{ times}} \]
+
+      \[succ \equiv \lambda n. \lambda f. \lambda x. f (n f x) \]
+
+      \[zero \equiv \lambda f. \lambda x. x\]
+
+      \[n \equiv \lambda f. \lambda x. f^{\circ n} x\]
+
+    \end{frame}
+
     \section{Introduction}
 
 
     \begin{frame}
       \frametitle{Introduction}
+
+      \[(\lambda f. \lambda x. f^{\circ 1} x)\ succ\ zero\]
+
     \end{frame}
 
 
@@ -151,6 +166,8 @@
 
     \begin{frame}
       \frametitle{Domain}
+
+      \[(\lambda f. \lambda x. f^{\circ 2} x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -223,6 +240,8 @@
 
     \begin{frame}
       \frametitle{Concerns}
+
+      \[(\lambda f. \lambda x. f^{\circ 3} x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -262,6 +281,8 @@
 
     \begin{frame}
       \frametitle{Data}
+
+      \[(\lambda f. \lambda x. f^{\circ 4} x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -364,12 +385,12 @@
     \end{frame}
 
 
-
-    %
     \section{Modeling}
 
     \begin{frame}
       \frametitle{Modeling}
+
+      \[(\lambda f. \lambda x. f^{\circ 5} x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -382,7 +403,7 @@
       \begin{itemize}
         \item Eight trained models with different ML\footnote{Machine Learning.} thecniques.
         \item Used the ResNet18 pre-trained weights.
-        \item SGD as optimizer.
+        \item SGD\footnote{Stochastic Gradient Descent} as optimizer.
         \item Cross-entropy as loss function.
         \item Model training performance were evaluated with AUC\footnote{Area Under the Curve.} metric.
       \end{itemize}
@@ -470,20 +491,14 @@
       \end{figure}
     \end{frame}
 
+    \section{Workflow}
 
-
-    \section{Workflow \& Results}
 
     \begin{frame}
-      \frametitle{Workflow \& Results}
-    \end{frame}
+      \frametitle{Workflow Methodology}
 
-    \begin{frame}
-      \begin{center}
-        \Huge Workflow Methodology
-      \end{center}
+      \[(\lambda f. \lambda x. f^{\circ 6} x)\ succ\ zero\]
     \end{frame}
-
 
     \begin{frame}
       \begin{figure}[H]
@@ -496,11 +511,16 @@
     \end{frame}
 
 
+
+    \section{Results}
+
     \begin{frame}
-      \begin{center}
-        \Huge Results
-      \end{center}
+      \frametitle{Results}
+
+
+      \[(\lambda f. \lambda x. f^{\circ 7} x)\ succ\ zero\]
     \end{frame}
+
 
     \begin{frame}
       \large Testing Models
@@ -714,14 +734,14 @@ http://<ui>
       \large Pop-up Extra Information
       \vspace{0.25cm}
 
-\begin{figure}[H]
-  \centering
-  \begin{adjustbox}{width=0.7\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
-    \includegraphics[]{images/extra-inf-popup.png}
-  \end{adjustbox}
-  \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
-  {\label{fig:extra-inf-popup}}
-\end{figure}
+      \begin{figure}[H]
+        \centering
+        \begin{adjustbox}{width=0.7\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
+          \includegraphics[]{images/extra-inf-popup.png}
+        \end{adjustbox}
+        \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
+        {\label{fig:extra-inf-popup}}
+      \end{figure}
 
     \end{frame}
 
@@ -760,6 +780,54 @@ https://github.com/wilberquito/melanoma.thesis
       \begin{Verbatim}[fontsize=\tiny]
 curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh | bash
       \end{Verbatim}
+
+    \end{frame}
+
+
+    \section{Conclusions}
+
+
+    \begin{frame}
+      \frametitle{Conclusions}
+
+
+      \[(\lambda f. \lambda x. f^{\circ 8} x)\ succ\ zero\]
+    \end{frame}
+
+    \begin{frame}
+      \begin{itemize}
+        \item Eight different models were trained with different approaches (Table \ref{table:test-set-resume-metrics}).
+        \item Unregularized models showed better performance but struggled with overfitting.
+        \item Regularized models were trained for double the epochs, showing
+          improved potential with longer training despite initially lower
+          performance.
+        \item The impact of scheduler can be appreciated in longer training sessions (SD\footnote{Standard Deviation.})
+        \item The CAD infrastructure was built and public published with an easy mechanism to be tested.
+      \end{itemize}
+
+
+
+          \begin{table}[H]
+            \centering
+            \begin{adjustbox}{width=0.4\textwidth}
+              \begin{tabular}{lc|lc}
+                \toprule
+                \textbf{Model} & \textbf{Test AUC} & \cellcolor{gray!50}\textbf{Model} & \cellcolor{gray!50}\textbf{Test AUC}  \\
+                \midrule
+                M0 & 0.892 & \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.858 \\
+                M1 $\star$ & 0.892 & \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.843 \\
+                M2 $\ast$ &  0.885 &  \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.848 \\
+                M3 $\bullet$ & 0.886 & \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.849 \\
+                \midrule
+                Mean &  88.875\% & \cellcolor{gray!50}Mean & \cellcolor{gray!50}84.950\%  \\
+                SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
+                \bottomrule
+              \end{tabular}
+            \end{adjustbox}
+            \caption[Metrics in Test Dataset]
+            {\textit{Metrics in Test Dataset.}}
+            {\label{table:test-set-resume-metrics}}
+          \end{table}
 
     \end{frame}
 
