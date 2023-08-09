@@ -11,7 +11,7 @@ prognosis. Misdiagnosis of melanoma leads to more pathology and dermatology
 malpractice claims than any cancer except breast cancer, as an early
 misdiagnosis can greatly reduce a patient's survival chances \cite{Melanoma}. \\
 
-Dermoscopy, also known as dermatoscopy (Figure \ref{fig:procedure_dermoscopy}),
+Dermoscopy, also known as dermatoscopy (see Figure \ref{fig:procedure_dermoscopy}),
 is a noninvasive technique widely utilized for the examination of cutaneous
 lesions. It involves the use of a handheld instrument called a dermatoscope to
 visualize subsurface skin structures that are typically not visible to the
@@ -30,11 +30,11 @@ associated with various skin conditions, including melanoma \cite{Dermoscopy}.
 Worldwide, in 2020 an estimated 324,635 people were diagnosed with melanoma and
 an estimated 57,043 people worldwide died from melanoma the same year
 \cite{CancerStats}. The introduction of sophisticated machinery and new
-techniques in dermoscopy procedures (Figure \ref{fig:subset_isic}) seems not
-enough to fight against melanoma, but the developments in artificial
-intelligence (AI) especially in deep learning techniques, have made
-Computer-Aided Diagnosis (CAD) a promising path towards
-medical automation.
+techniques in dermoscopy procedures to capture better samples (see Figure
+\ref{fig:subset_isic}) seems not enough to fight against melanoma, but the
+developments in artificial intelligence (AI\footnote{Artificial Inteligence.})
+especially in deep learning techniques, have made Computer-Aided Diagnosis
+a promising path towards medical automation.
 
 \begin{figure}[H] \centering
   \begin{subfigure}{0.3\textwidth}
@@ -92,8 +92,8 @@ must be accomplished are:
     of dermoscopy images from the dataset during the training process.
   \item Propose and train
     deep learning models with different techniques based on tranfer-learning,
-    exploiting images of the melanoma ISIC \footnote{International Skin Imaging
-    Collaboration, an international effort to improve melanoma diagnosis.}
+    exploiting images of the melanoma ISIC\footnote{International Skin Imaging
+    Collaboration. An international effort to improve melanoma diagnosis.}
     Challenge \cite{IsicChallenge}.
   \item Developing a CAD infrastructure. The CAD infrastructure, should contain
     the already trained models with a simple web UI an API and finally a
@@ -180,14 +180,15 @@ state-of-the-art projects, which are elaborated in Chapter \ref{cap:estat}. \\
 
 The thesis comprises multiple models employing various techniques, including
 transfer learning, data augmentation, just-in-time testing, regularization, and
-others. To compare these models, tools like W\&B (Weight \& Biases), a MLOps
-platform for experiment tracking, and MLXTEND, providing utilities and
-extensions for machine learning and data science in Python's scientific
-computing stack, were utilized. The experiments were conducted using the ISIC
-Archive dataset, consisting of benign and malignant skin lesions. Prior to
-analysis, the dataset underwent preprocessing to enhance quality and normalize
-features. Consequently, accurate classification and differentiation of melanoma
-lesions from benign ones were achieved. \\
+others. To compare these models, tools like W\&B (Weight \& Biases), a
+MLOps\footnote{Machine Learning Operations.} platform for experiment tracking,
+and MLXTEND, providing utilities and extensions for machine learning and data
+science in Python's scientific computing stack, were utilized. The experiments
+were conducted using the ISIC Archive dataset, consisting of benign and
+malignant skin lesions. Prior to analysis, the dataset underwent preprocessing
+to enhance quality and normalize features. Consequently, accurate
+classification and differentiation of melanoma lesions from benign ones were
+achieved. \\
 
 In order to to ensure the usability of the trained models,
 two services were developed. These services include a user-friendly UI and an

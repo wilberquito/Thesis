@@ -109,11 +109,11 @@
 
       \[f^{\circ n} \equiv \underbrace{f \circ f \circ \ldots \circ f}_{n \text{ times}} \]
 
-      \[succ \equiv \lambda n. \lambda f. \lambda x. f (n f x) \]
+      \[succ \equiv \lambda n. \lambda f. \lambda x.\ f\ (n\ f\ x) \]
 
-      \[zero \equiv \lambda f. \lambda x. x\]
+      \[zero \equiv \lambda f. \lambda x.\ x\]
 
-      \[n \equiv \lambda f. \lambda x. f^{\circ n} x\]
+      \[n \equiv \lambda f. \lambda x.\ f^{\circ n}\ x\]
 
     \end{frame}
 
@@ -123,7 +123,7 @@
     \begin{frame}
       \frametitle{Introduction}
 
-      \[(\lambda f. \lambda x. f^{\circ 1} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 1}\ x)\ succ\ zero\]
 
     \end{frame}
 
@@ -156,7 +156,8 @@
           Challenge melanoma images.
         \item Create an easy deployment CAD infrastructure running in Docker,
           with the trained models, a user-friendly web UI\footnote{User
-          Interface.} and a HTTP\footnote{Hypertext Transfer Protocol.} API\footnote{Application Programming Interface.}.
+          Interface.} and a HTTP\footnote{Hypertext Transfer Protocol.}
+          API\footnote{Application Programming Interface.}.
       \end{itemize}
 
 
@@ -167,7 +168,7 @@
     \begin{frame}
       \frametitle{Domain}
 
-      \[(\lambda f. \lambda x. f^{\circ 2} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 2}\ x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -241,7 +242,7 @@
     \begin{frame}
       \frametitle{Concerns}
 
-      \[(\lambda f. \lambda x. f^{\circ 3} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 3}\ x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -282,7 +283,7 @@
     \begin{frame}
       \frametitle{Data}
 
-      \[(\lambda f. \lambda x. f^{\circ 4} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 4}\ x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -364,7 +365,7 @@
 
       \footnotesize
 
-      The train dataset (Figure \ref{fig:sample-of-datasets}),
+      The train dataset (see Figure \ref{fig:sample-of-datasets}),
 
       \begin{figure}[H]
         \centering
@@ -373,7 +374,7 @@
         {\label{fig:sample-of-datasets}}
       \end{figure}
 
-      Is mapped into an augmented train dataset (Figure \ref{fig:aug-sample-of-datasets}).
+      Is mapped into an augmented train dataset (see Figure \ref{fig:aug-sample-of-datasets}).
 
       \begin{figure}[H]
         \centering
@@ -390,7 +391,7 @@
     \begin{frame}
       \frametitle{Modeling}
 
-      \[(\lambda f. \lambda x. f^{\circ 5} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 5}\ x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -497,7 +498,7 @@
     \begin{frame}
       \frametitle{Workflow Methodology}
 
-      \[(\lambda f. \lambda x. f^{\circ 6} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 6}\ x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
@@ -518,7 +519,7 @@
       \frametitle{Results}
 
 
-      \[(\lambda f. \lambda x. f^{\circ 7} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 7}\ x)\ succ\ zero\]
     \end{frame}
 
 
@@ -681,7 +682,7 @@ http://<api>/from_task/<task_uuid>
 http://<ui>
       \end{Verbatim}
 
-      As a result, a single-page web application with several interactive buttons will appear (Figure \ref{fig:ui-tools}).
+      As a result, a single-page web application with several interactive buttons will appear (see Figure \ref{fig:ui-tools}).
 
       \vspace{0.2cm}
       The state of these button depends on the application state.
@@ -791,18 +792,19 @@ curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh 
       \frametitle{Conclusions}
 
 
-      \[(\lambda f. \lambda x. f^{\circ 8} x)\ succ\ zero\]
+      \[(\lambda f. \lambda x.\ f^{\circ 8}\ x)\ succ\ zero\]
     \end{frame}
 
     \begin{frame}
       \begin{itemize}
-        \item Eight different models were trained with different approaches (Table \ref{table:test-set-resume-metrics}).
-        \item Unregularized models showed better performance but struggled with overfitting.
+        \item Eight different models were trained with different approaches and results (refer to Table \ref{table:test-set-resume-metrics}).
+        \item Non-regularized models showed better performance but struggled with over-fitting.
         \item Regularized models were trained for double the epochs, showing
           improved potential with longer training despite initially lower
           performance.
         \item The impact of scheduler can be appreciated in longer training sessions (SD\footnote{Standard Deviation.})
-        \item The CAD infrastructure was built and public published with an easy mechanism to be tested.
+        \item The CAD infrastructure has been constructed and is publicly available,
+          featuring a straightforward installation mechanism.
       \end{itemize}
 
 

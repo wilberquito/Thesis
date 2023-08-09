@@ -16,9 +16,9 @@ models and their final deployment.
 In this section, we will elucidate the data source, the data analysis aimed at
 highlighting the data distribution, the methods employed for data
 transformation to facilitate regularization, our approach to dealing with the
-challenge of a multiclass unbalanced data distribution. We finally explain the
+challenge of a multi-class unbalanced data distribution. We finally explain the
 way we create the necessary datasets from this data to effectively conduct our
-work.
+work. \\
 
 As previously mentioned, the data is acquired from the ISIC Archive,
 specifically from the SIIM-ISIC Melanoma Classification competition available
@@ -26,7 +26,7 @@ on Kaggle \cite{ISICKaggle}. This challenge's dataset is a subset of the larger
 ISIC Archive and includes data from 2019 and 2020. \\
 
 For the thesis, we opted to use images with a resolution of 512x512 pixels,
-despite the availability of higher resolutions such as 768x768 and 1024x1024.
+despite the availability of higher resolutions such as 768x768 pixels and 1024x1024 pixels.
 The decision to select a lower resolution was purely technical, as higher
 resolution images would require greater computational resources. \\
 
@@ -197,7 +197,7 @@ As a result of applying the following data augmentation pipeline,
     ])
 \end{Verbatim}
 
-The train dataset (Figure \ref{fig:sample-of-datasets}),
+The train dataset (see Figure \ref{fig:sample-of-datasets}),
 
 \begin{figure}[H]
   \centering
@@ -206,7 +206,7 @@ The train dataset (Figure \ref{fig:sample-of-datasets}),
   {\label{fig:sample-of-datasets}}
 \end{figure}
 
-Is mapped into an augmented train dataset (Figure \ref{fig:aug-sample-of-datasets}).
+Is mapped into an augmented train dataset (see Figure \ref{fig:aug-sample-of-datasets}).
 
 \begin{figure}[H]
   \centering
@@ -233,7 +233,7 @@ dataset, which may not be as high as some other models. However, due to its
 relatively small number of trainable parameters (11.7 million), we decided to
 select this model over other available options. \\
 
-In ResNet architecture (Figure \ref{fig:resnet-18-arch}), each layer of the
+In ResNet architecture (see Figure \ref{fig:resnet-18-arch}), each layer of the
 network contains a residual block (BasicBlock).
 
 \begin{figure}[H]
@@ -247,8 +247,8 @@ network contains a residual block (BasicBlock).
 \end{figure}
 
 A residual block consists of multiple convolutional layers followed by batch
-normalization and activation functions (\textit{Figure
-\ref{fig:resnet-18-residual-block}}).
+normalization and activation functions (see Figure
+\ref{fig:resnet-18-residual-block}).
 
 \newpage
 
@@ -262,7 +262,7 @@ normalization and activation functions (\textit{Figure
 \end{figure}
 
 The input to a residual block is added to its output through a skip connection,
-which directly connects the input to the output Figure
+which directly connects the input to the output (see Figure
 \ref{fig:skip-connection}). This allows the network to learn the residual
 information, or the difference between the input and the desired output, making
 it easier for the network to learn the mapping.
@@ -316,7 +316,7 @@ class ResNet18_Melanoma(nn.Module):
 \end{Verbatim}
 
 As shown above, we employ the weights of the trained ResNet-18 model and save
-it as an instance of the \texttt{ResNet18\_Melanoma} class (Figure
+it as an instance of the \texttt{ResNet18\_Melanoma} class (see Figure
 \ref{fig:resnet-18-melanoma-arch}). Next, we access this instance of ResNet-18
 and modify its fully connected layer by replacing it with an Identity layer,
 which effectively performs no operations. Subsequently, we instantiate a new
@@ -375,7 +375,7 @@ class ResNet18_Dropout_Melanoma(nn.Module):
 \end{Verbatim}
 
 The term "recursive" used in the context of the architecture for
-\texttt{ResNet18\_Dropout\_Melanoma} (Figure
+\texttt{ResNet18\_Dropout\_Melanoma} (see Figure
 \ref{fig:resnet-18-dropout-melanoma-arch}) indicates that the layers have been
 "forwarded" multiple times instead of being constructed multiple times.
 
@@ -476,8 +476,8 @@ def model_writter(model_name: str):
 
 \subsection{Training Models}
 
-To facilitate understanding of the training descitions, we include a name
-mapping in Table \ref{table:mapping-names}.
+To facilitate understanding of the training decisions, we include a name
+mapping (refer to Table \ref{table:mapping-names}).
 
 \begin{table}[H]
   \centering
@@ -512,9 +512,10 @@ mapping in Table \ref{table:mapping-names}.
 We conducted training for eight models, employing various training approaches,
 all of which relied on transfer learning with ResNet-18 pretrained weights.
 These models utilized the Stochastic Gradient Descent optimizer with a base
-learning rate of 0.001 and employed Cross-entropy loss as their loss function.
-Descition that are not shared regarding the training process, including the
-training environment and hyperparameters can be found in
+learning rate of 0.001 and employed Cross-entropy loss as their loss function. \\
+
+Non-shared decisions regarding the training process, including the
+training environment and hyper-parameters are provided in
 Table \ref{table:trained-models-information}.
 
 \newpage
@@ -570,7 +571,7 @@ AUC as a suitable metric to evaluate the models.
 
 \subsection{Test-Time Augmentation}
 
-Test-time augmentation (TTA) serves as an ensemble mechanism that proves
+Test-time Augmentation (TTA) serves as an ensemble mechanism that proves
 beneficial not only for making inferences on the test set but also for
 inferring the validation set. Since the validation set doesn't undergo any data
 augmentation during the prediction phase, we apply multiple dummy
@@ -623,10 +624,10 @@ def test_time_transform(img: torch.Tensor, n: int):
 
 \section{Pipeline}
 
-In this section, we present the pipeline that was employed (Figure
-\ref{fig:cad-infrastructure-training-system}), starting from data acquisition,
-through the training process and evaluation, and finally to serving the trained
-models for inference. \\
+In this section, we present the pipeline that was employed to train, validate,
+test and deploy the models (see Figure
+\ref{fig:cad-infrastructure-training-system}). The pipeline shows the stages
+from data acquisition to the deployment of the trained models. \\
 
 The first stage involves cleaning and splitting the initial dataset into
 smaller datasets. This step ensures that the data is organized and ready for
