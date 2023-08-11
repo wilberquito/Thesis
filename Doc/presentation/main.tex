@@ -152,12 +152,12 @@
           applications.
         \item Explore and study the optimal approach for utilizing the distribution
           of dermoscopy images from the dataset during the training process.
-        \item Propose and train deep learning models using transfer learning on ISIC\footnote{Skin Imaging Collaboration.}
-          Challenge melanoma images.
-        \item Create an easy deployment CAD infrastructure running in Docker,
-          with the trained models, a user-friendly web UI\footnote{User
-          Interface.} and a HTTP\footnote{Hypertext Transfer Protocol.}
+        \item Propose and train deep learning models using transfer learning.
+        \item Create the CAD infrastructure with the trained models, a
+          user-friendly web UI\footnote{User Interface.} and a
+          HTTP\footnote{Hypertext Transfer Protocol.}
           API\footnote{Application Programming Interface.}.
+        \item Crate an easy deployment mechanism in Linux environments using containers.
       \end{itemize}
 
 
@@ -185,7 +185,6 @@
       \footnotesize
       \begin{itemize}
         \item Melanoma exhibits a high mortality rate.
-        \item Dermoscopy procedures are utilized for melanoma detection.
         \item Dermoscopy images are examined by professionals to study cutaneous lesions.
         \item Several studies have shown that melanoma task classification
           using CAD systems achieve comparable or superior results to
@@ -211,7 +210,7 @@
       \begin{figure}[H]
         %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
         \centering
-        \includegraphics[width=0.7\textwidth]{images/Pipeline.drawio.png}
+        \includegraphics[width=0.8\textwidth]{images/Pipeline.drawio.png}
         %\end{adjustbox}
         \caption[CAD Infrastructure Pipeline]{\textit{CAD Infrastructure Pipeline.}}
         {\label{fig:cad-infrastructure-training-system}}
@@ -225,7 +224,7 @@
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=0.65\textwidth]{images/BackgroundTask.drawio.png}
+        \includegraphics[width=0.75\textwidth]{images/BackgroundTask.drawio.png}
         \caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism.  }}
         {\label{fig:backgrond-task}}
       \end{figure}
@@ -313,8 +312,8 @@
 
       \begin{itemize}
         \item Resolution selected: 512x512 pixels.
+        \item A total of 8 different classes were selected to work with.
         \item The used dataset comprises 31,265 distinct image samples.
-        \item Eight classes were selected to work with.
         \item Imbalanced dataset.
       \end{itemize}
 
@@ -342,14 +341,14 @@
       \footnotesize
 
       \begin{itemize}
-        \item The dataset was stratified to ensure an equal distribution of classes in each subset.
         \item The training set was created using 80\% of the dataset, the validation set using 10\%, and the test set using the remaining 10\%.
+        \item The dataset was stratified to ensure an equal distribution of classes in each subset.
       \end{itemize}
 
 
       \begin{figure}[H]
         \centering
-        \begin{adjustbox}{width=0.5\textwidth, trim={0cm 0.5cm 0cm 0.5cm}, clip}
+        \begin{adjustbox}{width=0.6\textwidth, trim={0cm 0.5cm 0cm 0.5cm}, clip}
           \includegraphics[width=\textwidth]{images/train-test-validation-sets.png}
         \end{adjustbox}
         \caption[Holdout Set Scheme]{\textit{Holdout Set Scheme. Illustration by Qualcomm}}
@@ -369,7 +368,7 @@
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=0.6\textwidth]{images/random-sample-of-isic.png}
+        \includegraphics[width=0.65\textwidth]{images/random-sample-of-isic.png}
         \caption[Random Sample of Images]{\footnotesize{\textit{Random Sample of Images.}}}
         {\label{fig:sample-of-datasets}}
       \end{figure}
@@ -378,7 +377,7 @@
 
       \begin{figure}[H]
         \centering
-        \includegraphics[width=0.6\textwidth]{images/random-sample-of-isic-augmented.png}
+        \includegraphics[width=0.65\textwidth]{images/random-sample-of-isic-augmented.png}
         \caption[Augmented Random Sample of Images]{\footnotesize{\textit{Augmented Random Sample of Images.}}}
         {\label{fig:aug-sample-of-datasets}}
       \end{figure}
@@ -403,7 +402,7 @@
 
       \begin{itemize}
         \item Eight trained models with different ML\footnote{Machine Learning.} thecniques.
-        \item Used the ResNet18 pre-trained weights.
+        \item Pre-trained weights of the ResNet18 were used.
         \item SGD\footnote{Stochastic Gradient Descent} as optimizer.
         \item Cross-entropy as loss function.
         \item Model training performance were evaluated with AUC\footnote{Area Under the Curve.} metric.
@@ -420,16 +419,17 @@
         \begin{adjustbox}{width=\textwidth}
           \begin{tabular}{lcccccccc}
             \toprule
-      & \textbf{M0} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{M7} \\
+      & \textbf{M0} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \cellcolor{gray!50}{\textbf{M4}} & \cellcolor{gray!50}{\textbf{M5}} & \cellcolor{gray!50}{\textbf{M6}} & \cellcolor{gray!50}{\textbf{M7}} \\
       \midrule
-            Model Architecture & R18M & R18M & R18M & R18M & R18DM & R18DM & R18DM & R18DM \\
-            Epochs & 20 & 20 & 20 & 20 & 40 & 40 & 40 & 40 \\
-            Batch Size & 400 & 400 & 400 & 400 & 1024 & 1024 & 1024 & 1024 \\
-            Scheduler & & SLR & CALR & CAWR &  & SLR & CALR & CAWR  \\
-            Data Augmentation & No & No & No & No  & Yes & Yes & Yes & Yes \\
-            Dropout Regularization & No & No & No & No  & Yes & Yes & Yes & Yes \\
-            GPU & TT4 & TT4 & TT4 & TT4 & NA100 & NA100 & NA100 & NA100 \\
-            Training Time & 1h 45m & 1h 22m & 1h 43m & 1h 38m & 1d 7h 30m & 1d 7h 4m & 1d 7h 1m & 1d 12h 55m \\ \bottomrule
+            Model Architecture & R18M & R18M & R18M & R18M & \cellcolor{gray!50} R18DM & \cellcolor{gray!50}  R18DM & \cellcolor{gray!50} R18DM & \cellcolor{gray!50} R18DM \\
+            Epochs & 20 & 20 & 20 & 20 & \cellcolor{gray!50} 40 & \cellcolor{gray!50} 40 & \cellcolor{gray!50} 40 & \cellcolor{gray!50} 40 \\
+            Batch Size & 400 & 400 & 400 & 400 & \cellcolor{gray!50} 1024 & \cellcolor{gray!50} 1024 & \cellcolor{gray!50} 1024 & \cellcolor{gray!50} 1024 \\
+            Scheduler & & SLR & CALR & CAWR & \cellcolor{gray!50}  & \cellcolor{gray!50} SLR & \cellcolor{gray!50} CALR & \cellcolor{gray!50} CAWR  \\
+            Data Augmentation & No & No & No & No  & \cellcolor{gray!50} Yes & \cellcolor{gray!50} Yes & \cellcolor{gray!50} Yes & \cellcolor{gray!50} Yes \\
+            Dropout Regularization & No & No & No & No  & \cellcolor{gray!50} Yes & \cellcolor{gray!50} Yes & \cellcolor{gray!50} Yes & \cellcolor{gray!50} Yes \\
+            GPU & TT4 & TT4 & TT4 & TT4 & \cellcolor{gray!50} NA100 & \cellcolor{gray!50} NA100 & \cellcolor{gray!50} NA100 & \cellcolor{gray!50} NA100 \\
+            Training Time & 1h 45m & 1h 22m & 1h 43m & 1h 38m & \cellcolor{gray!50} 1d 7h 30m & \cellcolor{gray!50} 1d 7h 4m & \cellcolor{gray!50} 1d 7h 1m & \cellcolor{gray!50} 1d 12h 55m \\
+            \bottomrule
           \end{tabular}
         \end{adjustbox}
         \caption[Training Information For Each Model.]
@@ -528,7 +528,7 @@
       \vspace{0.25cm}
       \begin{figure}[H]
         \centering
-        \includegraphics[width=0.65\textwidth]{images/rocaucanalysis-all.png}
+        \includegraphics[width=0.75\textwidth]{images/rocaucanalysis-all.png}
         \caption[ROC-AUC Results in Test Dataset]{\textit{ROC-AUC Results in Test Dataset. }}
         {\label{fig:rocaucanalysis-all}}
       \end{figure}
@@ -554,7 +554,7 @@ http://<api>/docs
 
       \begin{figure}[H]
         \centering
-        \begin{adjustbox}{width=0.8\textwidth, trim={0cm 0cm 0.1cm 0cm}, clip}
+        \begin{adjustbox}{width=0.85\textwidth, trim={0cm 0cm 0.1cm 0cm}, clip}
           \includegraphics[width=\textwidth]{images/api-endpoints.png}
         \end{adjustbox}
         \caption[API Service End-Points]{\textit{API Service End-Points. }}
@@ -737,7 +737,7 @@ http://<ui>
 
       \begin{figure}[H]
         \centering
-        \begin{adjustbox}{width=0.7\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
+        \begin{adjustbox}{width=0.8\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
           \includegraphics[]{images/extra-inf-popup.png}
         \end{adjustbox}
         \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
@@ -802,9 +802,9 @@ curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh 
         \item Regularized models were trained for double the epochs, showing
           improved potential with longer training despite initially lower
           performance.
-        \item The impact of scheduler can be appreciated in longer training sessions (SD\footnote{Standard Deviation.})
-        \item The CAD infrastructure has been constructed and is publicly available,
-          featuring a straightforward installation mechanism.
+        \item The scheduler's impact is better seen in longer training sessions through SD\footnote{Standard Deviation.}.
+        \item The CAD infrastructure has been constructed and is publicly available
+          with a a straightforward installation mechanism.
       \end{itemize}
 
 
