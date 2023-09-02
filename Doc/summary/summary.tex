@@ -1,4 +1,4 @@
-\section {Introduction}
+\section*{Introduction}
 
 Skin cancer, including melanoma, is a significant global public health concern.
 Melanoma presents a considerable challenge due to its high mortality rate and
@@ -31,7 +31,6 @@ encompass an extended array of morphologies, integrate comprehensive patient
 information, and exhibit resilience in real-world situations are essential
 steps in the development of automated tools that can provide assistance to
 healthcare professionals.
-
 
 \newpage
 
@@ -129,11 +128,12 @@ convenient way to utilize the trained models for various tasks. \\
 
 \section{Results}
 
-The training fase concluded with 8 models trained with different learning
-policies and Artificial Inteligence (AI) techniques were experimented with. The
-models were categorized into two groups: one with any additional
-regularization and another with extra regularization, like data augmentation
-and dropout layers.
+The training phase ended with the development of eight models using an
+imbalanced dataset comprising eight classes. Various learning policies and
+Artificial Intelligence (AI) techniques were tested during the experimentation
+process. These models were divided into two categories: one without any
+additional regularization and another with additional regularization techniques
+such as data augmentation and the inclusion of dropout layers.
 
 \begin{table}[H]
 \centering
@@ -156,29 +156,32 @@ SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
 {\label{table:test-set-resume-metrics}}
 \end{table}
 
-The first group of models, which did not have extra regularization,
-demonstrated superior performance with a mean AUC metric of 88.875\% and a
-standard deviation of ±0.377\% on the test set. However, it was evident that
-these models suffered from over-fitting during training, as indicated by their
-performance on the validation set. On the other hand, the second group of
-models, which were trained with additional regularization, achieved lower
-results compared to the first group. Nevertheless, these models did not
-experience over-fitting, suggesting the potential for better results with
-longer training epochs. The second group of models achieved an average AUC of
-84.950\% with a standard deviation of ±0.625\%. As for the increase in the
-standard deviation in the second group of models, we attribute it to the effect
-of using more epochs, making the behavior of the schedulers more notable. \\
+The initial group of models, lacking extra regularization, displayed impressive
+performance on the test set, boasting a mean AUC metric of 88.875\% with a minor
+standard deviation of ±0.377\%. However, this group exhibited signs of
+overfitting during training, as evidenced by their performance on the
+validation set. In contrast, the second group of models, which underwent
+training with additional regularization techniques, achieved lower results
+compared to the first group. Nonetheless, these models did not suffer from
+overfitting, indicating potential for improved results with extended training
+epochs. The second group of models attained an average AUC of 84.950\% with a
+standard deviation of ±0.625\%. The increase in standard deviation in the second
+group is attributed to the impact of using more training epochs, rendering the
+behavior of the schedulers more noticeable. \\
 
-While the models were in the training phase, we took the opportunity to develop
-the CAD infrastructure to support the project. For the API (see Figure
-\ref{fig:api-endpoints}), we opted for a soft-configuration approach, where the
-configurations are specified through file-based configurations, providing
-flexibility and ease of management. Additionally, we designed a simple and
-intuitive user UI to streamline the interaction of healthcare professionals
-with the exposed models (see Figures from \ref{fig:ui-tools} to
-\ref{fig:extra-inf-popup}).
+Concurrently, while in the model training phase, we seized the opportunity to
+build the CAD infrastructure required to support the project. For
+the API, we embraced a flexible approach utilizing soft configurations,
+allowing for the specification of settings through file-based parameters. This
+approach offers both adaptability and simplified management. Furthermore, we
+meticulously crafted an intuitive and UI to
+facilitate seamless interaction between healthcare professionals and the
+accessible models (refer to Figures \ref{fig:ui-tools} to \ref{fig:extra-inf-popup}). \\
 
-\newpage
+Moreover, we have included a script to initiate the infrastructure, leveraging
+Docker images, which can be executed on any Linux operating system. This script
+ensures the efficient startup of the infrastructure components, enhancing the
+ease of deployment and operation.
 
 \begin{figure}[H]
   \centering
@@ -230,6 +233,8 @@ with the exposed models (see Figures from \ref{fig:ui-tools} to
   {\label{fig:after-prediction}}
 \end{figure}
 
+
+\newpage
 
 \begin{figure}[H]
   \centering
