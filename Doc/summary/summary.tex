@@ -34,7 +34,7 @@ healthcare professionals.
 
 \newpage
 
-\section{Objectives}
+\section*{Objectives}
 
 The main objective of this thesis is to create a health care infrastructure,
 focused on melanoma detection using deep learning methods to train a system
@@ -66,7 +66,7 @@ must be accomplished are:
 \end{itemize}
 
 
-\section{Development Process}
+\section*{Development Process}
 
 The project methodology employed in this endeavor follows a continuous process
 that builds upon previous approaches. Additionally, the project incorporates
@@ -83,7 +83,7 @@ project (see Figure \ref{fig:flux_development}).
   \begin{figure}[H]
   \centering
   \includegraphics[width=0.82\textwidth]{imatges/planing_and_methodology/EmplyedMethodology.png}
-  \caption{Activity Diagram Describing the Methodology.}
+  \caption{Activity diagram describing the methodology.}
   \label{fig:flux_development}
   \end{figure}
 
@@ -106,7 +106,7 @@ performance by introducing variations in the data and improving its
 generalization ability. \\
 
 The third stage involves analyzing the training results obtained from different
-training approaches. In this section, we evaluate and analyze the model's
+training approaches. In this section*, we evaluate and analyze the model's
 performance by comparing the predicted results against the test dataset. This
 step helps us understand how well the models are learning and performing on
 unseen data. \\
@@ -122,16 +122,18 @@ convenient way to utilize the trained models for various tasks. \\
   \centering
   \includegraphics[width=0.9\textwidth]{imatges/methodological_contribution/Pipeline.drawio.png}
   %\end{adjustbox}
-  \caption[CAD Infrastructure Pipeline]{\textit{CAD Infrastructure Pipeline. }}
+  \caption[CAD infrastructure pipeline]{\textit{CAD infrastructure pipeline. }}
   {\label{fig:cad-infrastructure-training-system}}
 \end{figure}
 
-\section{Results}
+\section*{Results}
 
 The training phase ended with the development of eight models using an
 imbalanced dataset comprising eight classes. Various learning policies and
 Artificial Intelligence (AI) techniques were tested during the experimentation
-process. These models were divided into two categories: one without any
+process.  \\
+
+These models were divided into two categories: one without any
 additional regularization and another with additional regularization techniques
 such as data augmentation and the inclusion of dropout layers.
 
@@ -151,8 +153,8 @@ SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
 
 \bottomrule
 \end{tabular}
-\caption[Models Metrics in Test Dataset]
-  {\textit{Models Metrics in Test Dataset.}}
+\caption[Models metrics in test dataset]
+  {\textit{Models metrics in test dataset.}}
 {\label{table:test-set-resume-metrics}}
 \end{table}
 
@@ -188,14 +190,14 @@ ease of deployment and operation.
   \begin{adjustbox}{width=\textwidth, trim={0.2cm 0cm 0.1cm 0cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/api-endpoints.png}
   \end{adjustbox}
-  \caption[API Service End-Points]{\textit{API Service End-Points. }}
+  \caption[API service End-Points]{\textit{API service End-Points. }}
   {\label{fig:api-endpoints}}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/ui-tools.png}
-  \caption[Main Interactive Buttons of the UI Service]{\textit{Main Interactive Buttons of the UI Service. }}
+  \caption[Main interactive Buttons of the UI service]{\textit{Main interactive buttons of the UI service. }}
   {\label{fig:ui-tools}}
 \end{figure}
 
@@ -204,7 +206,7 @@ ease of deployment and operation.
   \begin{adjustbox}{width=\textwidth, trim={0.05cm 1.25cm 0cm 0.1cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/selecting-images.png}
   \end{adjustbox}
-  \caption[Loading Dermoscopy Images from Device]{\textit{Loading Dermoscopy Images from Device. }}
+  \caption[Loading dermoscopy images from device]{\textit{Loading dermoscopy images from device. }}
   {\label{fig:selecting-imgs}}
 \end{figure}
 
@@ -213,14 +215,14 @@ ease of deployment and operation.
   \begin{adjustbox}{width=\textwidth, trim={0cm 3.5cm 0cm 0cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/loaded-images.png}
   \end{adjustbox}
-  \caption[Dermoscopy Images Loaded in the UI]{\textit{Dermoscopy Images Loaded in the UI. }}
+  \caption[Dermoscopy images loaded in the UI]{\textit{Dermoscopy images loaded in the UI. }}
   {\label{fig:loaded-images}}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/selecting-model.png}
-  \caption[Selecting Exposed Models by the API]{\textit{Selecting Exposed Models by the API. }}
+  \caption[Selecting exposed models by the API]{\textit{Selecting exposed models by the API. }}
   {\label{fig:selecting-model}}
 \end{figure}
 
@@ -229,7 +231,7 @@ ease of deployment and operation.
   \begin{adjustbox}{width=\textwidth, trim={0cm 3.55cm 0cm 0cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/after-prediction.png}
   \end{adjustbox}
-  \caption[UI State After Prediction Response]{\textit{UI State After Prediction Response. }}
+  \caption[UI state after prediction response]{\textit{UI state after prediction response. }}
   {\label{fig:after-prediction}}
 \end{figure}
 
@@ -241,7 +243,7 @@ ease of deployment and operation.
   \begin{adjustbox}{width=\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
     \includegraphics[]{imatges/results/extra-inf-popup.png}
   \end{adjustbox}
-  \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
+  \caption[Extra prediction information]{\textit{Extra prediction information.}}
   {\label{fig:extra-inf-popup}}
 \end{figure}
 
