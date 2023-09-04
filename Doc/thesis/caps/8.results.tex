@@ -24,7 +24,7 @@ The accuracy metric in Table \ref{table:resume-metrics} represents the
 overall performance of the model in the multi-class classification problem with
 8 different labels. However, as unbalanced multi-class problem, accuracy may not
 be the most suitable metric to assess the model's performance in this
-situation. Instead, metrics like AUC (Area Under the Curve) and recall should
+situation. Instead, metrics such as AUC (Area Under the Curve) and recall should
 be considered, as they specifically indicate how well the model is performing
 in classifying melanoma from the other classes. \\
 
@@ -60,8 +60,8 @@ used and the corresponding symbol is provided in Table
     $\bullet$   & Cosine Annealing Warm Restarts \\
     \bottomrule
   \end{tabular}
-  \caption[Scheduler Mapping]
-  {\textit{Scheduler Mapping.}}
+  \caption[Scheduler mapping]
+  {\textit{Scheduler mapping.}}
   \label{table:scheduler-mapping}
 \end{table}
 
@@ -97,8 +97,8 @@ used and the corresponding symbol is provided in Table
 
       \bottomrule
     \end{tabular}
-    \caption[Metrics in the Datasets]
-    {\textit{Metrics in the Datasets. }}
+    \caption[Metrics in the datasets]
+    {\textit{Metrics in the datasets. }}
     {\label{table:resume-metrics}}
   \end{table}
 
@@ -109,21 +109,32 @@ used and the corresponding symbol is provided in Table
 
 In this section, we analyze the performance of the models throughout the
 training process. Most of the graphics seen in this section were generated
-using W\&B (Weight \& Biasses).\\
+using W\&B (Weight \& Biases).\\
 
+Just to recap, the training dataset consists of 80\% of the filtered dataset,
+equating to a total of 25,012 samples. In contrast, both the validation and
+test datasets consist of 10\% of the filtered dataset, totaling 3,126 samples
+each. To address the uneven distribution, we employed stratification to
+guarantee that each set maintains a proportional representation of every class. \\
 
-Every pair of models in the set \(S\), \(S=\{\{M0, M4\}, \{M2, M5\}, \{M3,
-M6\}, \{M4, M8\}\}\), shares the same scheduler if they were used in the
-training phase. However, each pair differs in batch size, the number of epochs,
+Every pair of models in the set \(S\), \(S=\{(M0, M4), (M2, M5), (M3,
+M6), (M4, M8)\}\), share the same scheduler if they were used in the
+training phase. However, each pair differs in batch size, number of epochs,
 and regularization techniques. \\
 
-We are providing this comparison to demonstrate the impact of regularization on
-the training process. It is evident that models trained for 20 epochs
-experience overfitting due to the absence of regularization techniques. On the
-other hand, models trained for 40 epochs do not suffer from overfitting, but
-their performance is still inferior to models without additional
-regularization. However, this issue probably can be resolved by increasing the
-number of training epochs.
+Below, we present a comparison of the training sessions for each pair of models
+to demonstrate the impact of regularization on the training process. It is
+evident that models trained for 20 epochs experience overfitting due to the
+absence of regularization techniques. On the other hand, models trained for 40
+epochs do not suffer from overfitting, but their performance is still inferior
+to models without additional regularization. However, this issue probably can
+be resolved by increasing the number of training epochs. \\
+
+In all these comparisons, a continuous line represents the model's
+performance on the training dataset, while a dashed line represents the model's
+performance on the validation dataset.
+
+\newpage
 
 \subsection{M0 against M4}
 
@@ -133,8 +144,6 @@ number of training epochs.
   \caption[M0 vs. M4, Train \& Validation AUC Curve]{\textit{M0 vs. M4, Train \& Validation AUC Curve. }}
 \end{figure}
 
-\newpage
-
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/LossM0M4.png}
@@ -142,14 +151,13 @@ number of training epochs.
   {\label{fig:lossm0m4}}
 \end{figure}
 
+\newpage
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/AccM0M4.png}
   \caption[M0 vs. M4, Train \& Validation Accuracy Curve]{\textit{M0 vs. M4, Train \& Validation Accuracy Curve. }}
 \end{figure}
-
-\newpage
-
 
 \subsection{M1 against M5}
 
@@ -159,6 +167,7 @@ number of training epochs.
   \caption[M1 vs. M5, Train \& Validation AUC Curve]{\textit{M1 vs. M5, Train \& Validation AUC Curve. }}
 \end{figure}
 
+\newpage
 
 \begin{figure}[H]
   \centering
@@ -166,7 +175,6 @@ number of training epochs.
   \caption[M1 vs. M5, Train \& Validation Loss Curve]{\textit{M1 vs. M5, Train \& Validation Loss Curve. }}
 \end{figure}
 
-\newpage
 
 \begin{figure}[H]
   \centering
@@ -174,6 +182,7 @@ number of training epochs.
   \caption[M1 vs. M5, Train \& Validation Accuracy Curve]{\textit{M1 vs. M5, Train \& Validation Accuracy Curve. }}
 \end{figure}
 
+\newpage
 
 \subsection{M2 against M6}
 
@@ -183,7 +192,6 @@ number of training epochs.
   \caption[M2 vs. M6, Train \& Validation AUC Curve]{\textit{M2 vs. M6, Train \& Validation AUC Curve. }}
 \end{figure}
 
-\newpage
 
 \begin{figure}[H]
   \centering
@@ -191,6 +199,7 @@ number of training epochs.
   \caption[M2 vs. M6, Train \& Validation Loss Curve]{\textit{M2 vs. M6, Train \& Validation Loss Curve. }}
 \end{figure}
 
+\newpage
 
 \begin{figure}[H]
   \centering
@@ -198,7 +207,6 @@ number of training epochs.
   \caption[M2 vs. M6, Train \& Validation Accuracy Curve]{\textit{M2 vs. M6, Train \& Validation Accuracy Curve. }}
 \end{figure}
 
-\newpage
 
 \subsection{M3 against M7}
 
@@ -208,6 +216,7 @@ number of training epochs.
   \caption[M3 vs. M7, Train \& Validation AUC Curve]{\textit{M3 vs. M7, Train \& Validation AUC Curve. }}
 \end{figure}
 
+\newpage
 
 \begin{figure}[H]
   \centering
@@ -215,14 +224,11 @@ number of training epochs.
   \caption[M3 vs. M7, Train \& Validation Loss Curve]{\textit{M3 vs. M7, Train \& Validation Loss Curve. }}
 \end{figure}
 
-\newpage
-
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/AccM3M7.png}
   \caption[M3 vs. M7, Train \& Validation Accuracy Curve]{\textit{M3 vs. M7, Train \& Validation Accuracy Curve. }}
 \end{figure}
-
 
 \newpage
 
@@ -242,12 +248,53 @@ the non-regularized models if they undergo additional epochs of training.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/rocaucanalysis-all.png}
-  \caption[ROC-AUC Results in Test Dataset]{\textit{ROC-AUC Results in Test Dataset. }}
+  \caption[ROC-AUC results in test dataset]{\textit{ROC-AUC results in test dataset.}}
   {\label{fig:rocaucanalysis-all}}
 \end{figure}
 
 \newpage
 
+During the training of these eight models, various hyper-parameters and learning
+policies were experimented with, including the use of schedulers. The models
+were categorized into two groups: one with any additional regularization and
+another with extra regularization, like data augmentation and dropout layers.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc|lc}
+    \toprule
+  \textbf{Model} & \textbf{Test AUC} & \cellcolor{gray!50}\textbf{Model} & \cellcolor{gray!50}\textbf{Test AUC}  \\
+\midrule
+ M0 & 0.892 & \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.858 \\
+ M1 $\star$ & 0.892 & \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.843 \\
+ M2 $\ast$ &  0.885 &  \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.848 \\
+ M3 $\bullet$ & 0.886 & \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.849 \\
+ \midrule
+Mean &  88.875\% & \cellcolor{gray!50}Mean & \cellcolor{gray!50}84.950\%  \\
+SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
+
+\bottomrule
+\end{tabular}
+\caption[Models metrics in test dataset]
+  {\textit{Models metrics in test dataset.}}
+{\label{table:test-set-resume-metrics}}
+\end{table}
+
+The first group of models, which did not have extra regularization,
+demonstrated superior performance with a mean AUC metric of 88.875\% and a
+standard deviation of ±0.377\% on the test set. However, it was evident that
+these models suffered from over-fitting during training, as indicated by their
+performance on the validation set. On the other hand, the second group of
+models, which were trained with additional regularization, achieved lower
+results compared to the first group. Nevertheless, these models did not
+experience over-fitting, suggesting the potential for better results with longer
+training epochs. The second group of models achieved an average AUC of 84.950\%
+with a standard deviation of ±0.625\%. \\
+
+As for the increase in the standard deviation in the second group of models, we
+attribute it to the effect of using more epochs, making the behavior of the
+schedulers more notable.
 
 \section{Micro-services Communication}
 
@@ -272,7 +319,7 @@ infrastructure.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{imatges/preliminaries/BackgroundTask.drawio.png}
-  \caption[Inferring Images Through the Background Task Mechanism]{\textit{Inferring Images Through the Background Task Mechanism.  }}
+  \caption{Inferring images through the background task mechanism}
   {\label{fig:backgrond-task}}
 \end{figure}
 
@@ -295,7 +342,7 @@ the framework chosen for building the API, which operates on the OpenAPI scheme.
   \begin{adjustbox}{width=\textwidth, trim={0.2cm 0cm 0.1cm 0cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/api-endpoints.png}
   \end{adjustbox}
-  \caption[API Service End-Points]{\textit{API Service End-Points. }}
+  \caption[]{\textit{API service End-Points. }}
   {\label{fig:api-endpoints}}
 \end{figure}
 
@@ -464,7 +511,7 @@ notice a single-page web application with several interactive buttons (see Figur
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/ui-tools.png}
-  \caption[Main Interactive Buttons of the UI Service]{\textit{Main Interactive Buttons of the UI Service. }}
+  \caption[Main interactive buttons of the UI service]{\textit{Main interactive buttons of the UI service. }}
   {\label{fig:ui-tools}}
 \end{figure}
 
@@ -478,20 +525,20 @@ notice a single-page web application with several interactive buttons (see Figur
 
 
 The first thing we would like to do is to load the desired images to make the
-prediction. But we can notice that in the state of no having image loaded some
-of this buttons are disabled. When no image is loaded the prediction and the
+prediction. But we can notice that in the state of no having image loaded, some
+of these buttons are disabled. When no image is loaded the prediction and the
 sort button are disabled. \\
 
-To load the desired dermoscopy images we click the button that allows us load
-images and select the images from our device
-(see Figure \ref{fig:selecting-imgs}).
+To load the desired dermoscopy images, we click the button that allows us to load
+images and select the images from our device (see Figure
+\ref{fig:selecting-imgs}).
 
 \begin{figure}[H]
   \centering
   \begin{adjustbox}{width=\textwidth, trim={0.05cm 1.25cm 0cm 0.1cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/selecting-images.png}
   \end{adjustbox}
-  \caption[Loading Dermoscopy Images from Device]{\textit{Loading Dermoscopy Images from Device. }}
+  \caption[Loading dermoscopy images from device]{\textit{Loading dermoscopy images from device.}}
   {\label{fig:selecting-imgs}}
 \end{figure}
 
@@ -506,7 +553,7 @@ prediction button.
   \begin{adjustbox}{width=\textwidth, trim={0cm 3.5cm 0cm 0cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/loaded-images.png}
   \end{adjustbox}
-  \caption[Dermoscopy Images Loaded in the UI]{\textit{Dermoscopy Images Loaded in the UI. }}
+  \caption[Dermoscopy images loaded in the UI]{\textit{Dermoscopy images loaded in the UI. }}
   {\label{fig:loaded-images}}
 \end{figure}
 
@@ -519,7 +566,7 @@ models for the prediction process.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/results/selecting-model.png}
-  \caption[Selecting Exposed Models by the API]{\textit{Selecting Exposed Models by the API. }}
+  \caption[Selecting exposed models by the API]{\textit{Selecting exposed models by the API. }}
   {\label{fig:selecting-model}}
 \end{figure}
 
@@ -534,7 +581,7 @@ This visual distinction helps to easily identify the different classifications p
   \begin{adjustbox}{width=\textwidth, trim={0cm 3.55cm 0cm 0cm}, clip}
     \includegraphics[width=\textwidth]{imatges/results/after-prediction.png}
   \end{adjustbox}
-  \caption[UI State After Prediction Response]{\textit{UI State After Prediction Response. }}
+  \caption[UI state after prediction response]{\textit{UI state after prediction response.}}
   {\label{fig:after-prediction}}
 \end{figure}
 
@@ -555,6 +602,6 @@ the relevant details for that particular prediction.
   \begin{adjustbox}{width=\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
     \includegraphics[]{imatges/results/extra-inf-popup.png}
   \end{adjustbox}
-  \caption[Extra Prediction Information]{\textit{Extra Prediction Information.}}
+  \caption[Extra prediction information]{\textit{Extra prediction information.}}
   {\label{fig:extra-inf-popup}}
 \end{figure}

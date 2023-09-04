@@ -50,7 +50,7 @@ process.
 
 The filtered dataset comprises 31,265 distinct image samples, demonstrating an
 imbalanced distribution across all classes. As evident from Figure
-\ref{fig:hole-dataset-distribution}, we encounter the issue of dealing with an
+\ref{fig:hole-dataset-distribution}, we encounter the issue of dealing with a highly
 imbalanced dataset, which poses challenges during the training process. Due to
 the ease of targeting the majority class, models often exhibit a tendency to
 overfit to the more frequent classes.
@@ -58,7 +58,7 @@ overfit to the more frequent classes.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{imatges/methodological_contribution/hole-dataset-diagnosis.png}
-  \caption[Categories Distribution in Dataset]{\textit{Categories Distribution in Dataset. }}
+  \caption[Categories distribution in dataset]{\textit{Categories distribution in dataset.}}
   {\label{fig:hole-dataset-distribution}}
 \end{figure}
 
@@ -126,41 +126,46 @@ For the thesis, the python package {\tt albumentations} was used for this goal,
 the package support a big variety of transformations, some of these
 transformations are represented bellow. \\
 
-\textbf{Horizontal and Vertical Flip} \\
+\textbf{Horizontal and Vertical Flip}
 
 An image flip means reversing the rows or columns of pixels in the case of a vertical or horizontal flip respectively.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.6\textwidth]{imatges/methodological_contribution/horizontal-flip.png}
-  \caption[Horizontal Flip]{\textit{Horizontal Flip. \textbf{Left}: original image, \textbf{Right}: augmented image. }}
+  \includegraphics[width=0.5\textwidth]{imatges/methodological_contribution/horizontal-flip.png}
+  \caption[Horizontal flip]{\textit{Horizontal flip. \textbf{Left}: original image, \textbf{Right}: augmented image. }}
 \end{figure}
 
 \vspace{0.5cm}
-\textbf{Gaussian Blur} \\
+\textbf{Gaussian Blur}
 
 Blur the input image using a Gaussian filter with a random kernel size.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.6\textwidth]{imatges/methodological_contribution/gaussianblur.png}
-  \caption[Gaussian Blur]{\textit{Gaussian Blur. \textbf{Left}: original image, \textbf{Right}: augmented image. }}
+  \includegraphics[width=0.5\textwidth]{imatges/methodological_contribution/gaussianblur.png}
+  \caption[Gaussian blur]{\textit{Gaussian blur. \textbf{Left}: original image, \textbf{Right}: augmented image. }}
 \end{figure}
 
 \newpage
 
-\textbf{Random Brightness Contrast} \\
+\textbf{Random Brightness Contrast}
 
 Randomly change brightness and contrast of the input image.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.6\textwidth]{imatges/methodological_contribution/random-brigness-constrast.png}
-  \caption[Random Brightness Contrast]{\textit{Random Brightness Contrast. \textbf{Left}: original image, \textbf{Right}: augmented image. }}
+  \includegraphics[width=0.5\textwidth]{imatges/methodological_contribution/random-brigness-constrast.png}
+  \caption[Random brightness contrast]{\textit{Random brightness contrast. \textbf{Left}: original image, \textbf{Right}: augmented image. }}
 \end{figure}
 
-As a result of applying the following data augmentation pipeline,
+As a result of applying the data augmentation pipeline (see Figure
+\ref{fig:data-augmentation-pipeline}), the train dataset (see Figure
+\ref{fig:sample-of-datasets}), is mapped into an augmented train dataset (see
+Figure \ref{fig:aug-sample-of-datasets}).
 
+
+\begin{figure}[H]
 \begin{Verbatim}[fontsize=\scriptsize]
     transforms_train = A.Compose([
         A.Transpose(p=0.5),
@@ -196,22 +201,24 @@ As a result of applying the following data augmentation pipeline,
         A.Normalize(mean=mean, std=std)
     ])
 \end{Verbatim}
+  \caption[Data augmentation pipeline]{\textit{Data augmentation pipeline.}}
+  {\label{fig:data-augmentation-pipeline}}
+\end{figure}
 
-The train dataset (see Figure \ref{fig:sample-of-datasets}),
+\newpage
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/random-sample-of-isic.png}
-  \caption[Random Sample of Images]{\textit{Random Sample of Images.}}
+  \caption[Random sample of images]{\textit{Random sample of images.}}
   {\label{fig:sample-of-datasets}}
 \end{figure}
 
-Is mapped into an augmented train dataset (see Figure \ref{fig:aug-sample-of-datasets}).
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/random-sample-of-isic-augmented.png}
-  \caption[Augmented Random Sample of Images]{\textit{Augmented Random Sample of Images.}}
+  \caption[Augmented random sample of images]{\textit{Augmented random sample of images.}}
   {\label{fig:aug-sample-of-datasets}}
 \end{figure}
 
@@ -233,7 +240,7 @@ dataset, which may not be as high as some other models. However, due to its
 relatively small number of trainable parameters (11.7 million), we decided to
 select this model over other available options. \\
 
-In ResNet architecture (see Figure \ref{fig:resnet-18-arch}), each layer of the
+In the ResNet architecture (see Figure \ref{fig:resnet-18-arch}), each layer of the
 network contains a residual block (BasicBlock).
 
 \begin{figure}[H]
@@ -241,8 +248,7 @@ network contains a residual block (BasicBlock).
     \centering
     \includegraphics[width=\textwidth]{imatges/methodological_contribution/residual-blocks.png}
   \end{adjustbox}
-  \caption[Resume of the ResNet-18 Architecture]{\textit{Resume of the
-  ResNet-18 Architecture. }}
+  \caption[Resume of the ResNet-18 architecture]{\textit{Resume of the ResNet-18 architecture.}}
   {\label{fig:resnet-18-arch}}
 \end{figure}
 
@@ -257,7 +263,7 @@ normalization and activation functions (see Figure
   \centering
   \includegraphics[width=0.4\textwidth]{imatges/methodological_contribution/basic-block.png}
   %\end{adjustbox}
-  \caption[ResNet18 Residual Block]{\textit{ResNet18 Residual Block. }}
+  \caption[ResNet18 residual block]{\textit{ResNet18 residual block.}}
   {\label{fig:resnet-18-residual-block}}
 \end{figure}
 
@@ -272,11 +278,11 @@ it easier for the network to learn the mapping.
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/skip-connections.png}
   %\end{adjustbox}
-  \caption[ResNet Skip Connection]{\textit{ResNet Skip Connection. Illustration by medium}}
+  \caption[ResNet skip connection]{\textit{ResNet skip connection. Illustration by medium}}
   {\label{fig:skip-connection}}
 \end{figure}
 
-We made use of the PyTorch API to use the pre-trained weight of ResNet-18 as follow:
+We made use of the PyTorch API to use the pre-trained weight of ResNet-18 as follows:
 
 \begin{Verbatim}[fontsize=\scriptsize]
 from torchvision.models import (resnet18,
@@ -291,10 +297,13 @@ model classify between 1000 classes. But our goal is to classify between 8
 different classes. \\
 
 The initial strategy to address this problem involved encapsulating the ResNet
-within a "Module" class, following the PyTorch framework. This approach enables
-the weights within the class to undergo back-propagation, allowing them to be
-trained effectively.
+within a "Module" class, following the PyTorch framework (see Figure
+\ref{fig:pytorch-module}). This approach enables the weights within the class
+to undergo back-propagation, allowing them to be trained effectively.
 
+\newpage
+
+\begin{figure}[H]
 \begin{Verbatim}[fontsize=\scriptsize]
 class ResNet18_Melanoma(nn.Module):
 
@@ -314,6 +323,9 @@ class ResNet18_Melanoma(nn.Module):
         x = self.myfc(x)
         return x
 \end{Verbatim}
+\caption[Multiclass classifier using ResNet-18]{\textit{Multiclass classifier using ResNet-18.}}
+  {\label{fig:pytorch-module}}
+\end{figure}
 
 As shown above, we employ the weights of the trained ResNet-18 model and save
 it as an instance of the \texttt{ResNet18\_Melanoma} class (see Figure
@@ -326,23 +338,26 @@ representing the number of classes.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/ResNet18_Melanoma.png}
-  \caption[ResNet18\_Melanoma Architecture]{\textit{ResNet18\_Melanoma Architecture. }}
+  \caption[ResNet18\_Melanoma architecture]{\textit{ResNet18\_Melanoma architecture.}}
   {\label{fig:resnet-18-melanoma-arch}}
 \end{figure}
 
 During the model training process, the {\tt forward} function is triggered with
 images represented as a tensor. It first performs transfer learning using the
 base model through the transfer function. Then, it utilizes the output of the
-transfer process to train the new fully connected layer. \\
+transfer process to train the new fully connected layer.
+
+\newpage
 
 In the evaluation and analyse stage of the different training approaches of the
 {\tt ResNet18\_Melanoma} we observed significant over-fitting. To address this
-issue, we propose the {\tt ResNet18\_Dropout\_Melanoma} model, which follows
-the same behavior as the previous model but includes a regularization layer
-that utilizes the average of 5 dropout layers after the transfer learning
-process. This regularization layer helps to mitigate the over-fitting problem
-found in the previous model.
+issue, we propose the {\tt ResNet18\_Dropout\_Melanoma} model (see Figure
+\ref{fig:pytorch-module-dropout}), which follows the same behavior as the
+previous model but includes a regularization layer that utilizes the average of
+5 dropout layers after the transfer learning process. This regularization layer
+helps to mitigate the over-fitting problem found in the previous model.
 
+\begin{figure}[H]
 \begin{Verbatim}[fontsize=\scriptsize]
 class ResNet18_Dropout_Melanoma(nn.Module):
     """This model is based on ResNet18 but uses the
@@ -373,31 +388,40 @@ class ResNet18_Dropout_Melanoma(nn.Module):
         out /= len(self.dropouts)
         return out
 \end{Verbatim}
+\caption[Multiclass classifier using ResNet-18 and Dropout]{\textit{Multiclass classifier using ResNet-18 and Dropout.}}
+  {\label{fig:pytorch-module-dropout}}
+\end{figure}
+
 
 The term "recursive" used in the context of the architecture for
 \texttt{ResNet18\_Dropout\_Melanoma} (see Figure
 \ref{fig:resnet-18-dropout-melanoma-arch}) indicates that the layers have been
 "forwarded" multiple times instead of being constructed multiple times.
 
+\newpage
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/ResNet18_Dropout_Melanoma.png}
-  \caption[ResNet18\_Dropout\_Melanoma
-  Architecture]{\textit{ResNet18\_Dropout\_Melanoma Architecture.
-  }}
+  \caption[ResNet18\_Dropout\_Melanoma architecture]{\textit{ResNet18\_Dropout\_Melanoma architecture.}}
   {\label{fig:resnet-18-dropout-melanoma-arch}}
 \end{figure}
 
-You can instantiate any of these models with the necessary {\tt out\_features}
-by following the code snippet below:
+Any of this models can be instantiated as is manifested in Figure
+\ref{fig:model-instantiation}. Note that the variable {\tt out\_features}
+should be defined before doing any instance.
 
+\begin{figure}[H]
 \begin{Verbatim}[fontsize=\scriptsize]
 out_features = len(mapping)
 model = m_models.ResNet18_Dropout_Melanoma(out_features)
 \end{Verbatim}
+\caption[Model instantiation]{\textit{Model instantiation.}}
+  {\label{fig:model-instantiation}}
+\end{figure}
 
-Note that the variable {\tt out\_features} should be defined before doing any
-instance.
+
+\newpage
 
 \subsection{Train-Validate Loop}
 
@@ -427,6 +451,8 @@ Among other features, the train validate loop supports:
   \item Apply test-time augmentation during the validation phase, repeating it a certain number of times using the {\tt val\_times} argument.
 \end{itemize}
 
+\newpage
+
 \subsection{Writer Callback}
 
 PyTorch does not provide built-in wrappers to automatically save model
@@ -434,13 +460,15 @@ performance during the training and validation phases. However, it is essential
 to have information on how well a model performs after each epoch in order to
 compare different training approaches. \\
 
-In order to tackle this concern, we've incorporated a feature that saves the
+In order to tackle this concern, we have incorporated a feature that saves the
 model's weights at the end of each epoch. We also keep a record of the metrics
 from both the training and validation stages in a CSV file. Furthermore, we
 monitor the training procedure by sending the most recent metric updates using
 the Weights \& Biases service. This approach enables us to effectively monitor
-and analyze the training progress in real-time.
+and analyze the training progress in real-time (see Figure \ref{fig:writter-callback}).
 
+
+\begin{figure}[H]
 \begin{Verbatim}[fontsize=\scriptsize]
 def model_writter(model_name: str):
     """Saves the pythorch trainned model and generates
@@ -470,9 +498,11 @@ def model_writter(model_name: str):
 
     return writter
 \end{Verbatim}
+\caption[Writter callback function to track train performance]{\textit{Writter callback function to track train performance.}}
+  {\label{fig:writter-callback}}
+\end{figure}
 
 \newpage
-
 
 \subsection{Training Models}
 
@@ -503,8 +533,8 @@ mapping (refer to Table \ref{table:mapping-names}).
     Nvidia A100, 80GB (GPU) & NA100 \\
     \bottomrule
   \end{tabular}
-  \caption[Name Mapping]
-  {\textit{Name Mapping. Simple visualization for next tables.
+  \caption[Name mapping]
+  {\textit{Name mapping. Simple visualization for next tables.
   }}
   {\label{table:mapping-names}}
 \end{table}
@@ -537,8 +567,8 @@ Table \ref{table:trained-models-information}.
       GPU & TT4 & TT4 & TT4 & TT4 & NA100 & NA100 & NA100 & NA100 \\
       Training Time & 1h 45m & 1h 22m & 1h 43m & 1h 38m & 1d 7h 30m & 1d 7h 4m & 1d 7h 1m & 1d 12h 55m \\ \bottomrule
     \end{tabular}
-    \caption[Training Information For Each Model.]
-    {\textit{Training Information For Each Model. Empty spaces represent non-use of that feature.
+    \caption[Training information for each model.]
+    {\textit{Training information for each model. Empty spaces represent non-use of that feature.
     }}
     {\label{table:trained-models-information}}
   \end{table}
@@ -582,6 +612,7 @@ reliability when making predictions on previously unseen data. \\
 When applying TTA for prediction, we generate multiple predictions
 by employing various transformations, and then we average these predictions to
 arrive at the final outcome.
+
 
 \begin{Verbatim}[fontsize=\scriptsize]
 @torch.inference_mode()
@@ -657,6 +688,6 @@ convenient way to utilize the trained models for various tasks. \\
   \centering
   \includegraphics[width=\textwidth]{imatges/methodological_contribution/Pipeline.drawio.png}
   %\end{adjustbox}
-  \caption[CAD Infrastructure Pipeline]{\textit{CAD Infrastructure Pipeline. }}
+  \caption[CAD infrastructure pipeline]{\textit{CAD infrastructure pipeline.}}
   {\label{fig:cad-infrastructure-training-system}}
 \end{figure}
