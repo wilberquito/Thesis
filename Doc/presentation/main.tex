@@ -78,11 +78,17 @@
 
 
 \titlegraphic {
-  \begin{tikzpicture}[overlay,remember picture, opacity=0.1,]
-    \node[] at (0, 2.9){
-        \includegraphics[width=0.63\textwidth]{udglogo.png}
-  };\end{tikzpicture}}
+  \begin{tikzpicture}[overlay,remember picture, opacity=0.15,]
+    \node[] at (0, 2.4){ \includegraphics[width=0.63\textwidth]{udglogo.png} };
+    \node[] at (-4, 0){ \includegraphics[width=0.1\textwidth]{accenturelogo.png} };
+    \node[] at (4.1, 0){ \includegraphics[width=0.1\textwidth]{vicoroblogo.png} };
+  \end{tikzpicture}
+}
   \setbeamertemplate{caption}[numbered]
+
+
+
+
   \begin{document}
 
   \rightskip\rightmargin
@@ -91,8 +97,9 @@
   \institute{\large\textbf{Master in Data Science}\\
     ---------\\
     Higher Polytechnic School\\
-    ---------\\
-  University of Girona}
+  %   ---------\\
+  % University of Girona
+}
   \footnotesize{\date{\today }
 
 
@@ -148,8 +155,6 @@
 
       \footnotesize
       \begin{itemize}
-        \item Gain expertise in deep learning theory and its real-world
-          applications.
         \item Explore and study the optimal approach for utilizing the distribution
           of dermoscopy images from the dataset during the training process.
         \item Propose and train deep learning models using transfer learning.
@@ -293,7 +298,6 @@
       \footnotesize
 
       \begin{itemize}
-        \item The data originates from the ISIC Archive.
         \item It includes images from the years 2019 and 2020.
         \item The images are available in three different resolutions: 512x512,
           768x768, and 1024x1024 pixels.
@@ -832,6 +836,14 @@ curl https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/MAKE.sh 
           \end{table}
 
     \end{frame}
+
+
+%% Final page
+\begin{frame}
+
+  \maketitle
+
+\end{frame}
 
 
     \end{document}
