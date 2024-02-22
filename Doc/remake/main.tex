@@ -1,0 +1,155 @@
+ \documentclass[a4paper,12pt,twoside]{ThesisStyle}
+\usepackage[utf8]{inputenc}
+\usepackage{thesis-style}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{fancyvrb}
+\usepackage[toc,page]{appendix}
+\usepackage{adjustbox}
+\usepackage{pdflscape}
+\usepackage{booktabs}% http://ctan.org/pkg/booktabs
+
+\renewcommand\thesection{\arabic{section}}
+
+\usepackage[table]{xcolor}
+\definecolor{signaturegray}{gray}{0.98}
+
+\RequirePackage{tikz}
+\definecolor{ao}{rgb}{0.0, 0.5, 0.0}
+\definecolor{darkpastelgreen}{rgb}{0.01, 0.75, 0.24}
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+\usetikzlibrary{mindmap}  % Mindmap drawing library
+
+\setlength{\parindent}{0pt} % Drops all identation of all paragraphs
+
+\newenvironment{abstract}{}{}
+\usepackage{abstract}
+
+% Redefine the abstract environment
+\renewenvironment{abstract}
+{\small
+	\begin{center}
+		\bfseries \abstractname\vspace{-\baselineskip}
+	\end{center}
+	\list{}{%
+		\setlength{\leftmargin}{12pt}%
+		\setlength{\rightmargin}{\leftmargin}%
+	}%
+	\item\relax}
+{\endlist}
+
+\begin{document}
+
+\frontmatter
+
+\pagenumbering{gobble}
+
+\thispagestyle{empty}
+\begin{table}[htb]
+\centering
+\begin{Large}
+\resizebox{\textwidth}{!}{\begin{tabular}{ | l |}
+ \hline
+ \\
+\includegraphics[scale=0.9]{imatges/logo_eps.png} \\[0.7cm]
+\centerline{Treball Final de Màster}\\[1cm]
+\hline
+\\
+Estudi: Màster en Ciència de Dades\\[0.7cm]
+\hline
+\\
+Títol: Plataforma per Classificar Melanomes \\[0.7cm]
+\hline
+\\
+Document: Memòria\\[0.7cm]
+\hline
+\\
+Alumne: Wilber Eduardo Bermeo Quito \\[0.7cm]
+\hline
+\\
+Tutor: Rafael Garcia Campos \\
+Departament:  ARQUITECTURA I TECNOLOGIA DE COMPUTADORS \\
+Àrea: ARQUITECTURA I TECNOLOGIA DE COMPUTADORS \\[0.7cm]
+\hline
+\\
+Convocatòria (mes/any): Setembre 2023\\[0.7cm]
+\hline
+
+\end{tabular}}
+\end{Large}
+\end{table}
+
+\newpage
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+
+% Upper part of the page
+\includegraphics[scale=0.9]{imatges/logo_eps.png} \\[1cm]
+\begin{center}
+\textsc{\Large Master's thesis} \\[1cm]
+
+% Title
+\begin{spacing}{2}
+\HRule \\
+\textbf{\Huge A Platform for Classifying Melanoma} \\
+\HRule \\[0.5cm]
+\end{spacing}
+
+% Author and supervisor and other data
+{
+\large
+\textsc{Wilber Eduardo Bermeo Quito} \\
+\small{September 2023} \\[0.75cm]
+Master in Data Science \\[0.75cm]
+\emph{Advisors:} \\[0.1cm]
+\large
+\textsc{Dr. Rafael Garcia Campos} \\
+\small{University of Girona} \\
+\small{Departament of Computer Architecture and Technology} \\[0.5cm]
+
+\large
+\textsc{Sr. Luis Pla Llopis} \\
+\small{Accenture S.L.} \\
+
+}
+
+\end{center}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\titlepage
+
+%\dominitoc
+
+
+\pagenumbering{roman}
+
+
+
+% \tableofcontents
+%
+% \listoffigures
+%
+% \listoftables
+
+\mainmatter
+
+
+\include{summary}
+
+
+\backmatter
+
+%\appendix
+
+
+\bibliographystyle{ThesisStyleBreakable}
+\bibliography{biblio}
+
+%\printnomenclature
+
+\end{document}

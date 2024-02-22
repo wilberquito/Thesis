@@ -9,3 +9,10 @@ To work with this notebooks you need to install apart from
 external packages:
 
 - modular
+
+
+## Environment
+
+```sh
+conda env create -f environment.yml
+```
