@@ -1,8 +1,8 @@
 \begin{abstract}
-	We present a platform for Melanoma Classification, leveraging a technical infrastructure based on Convolutional Neural Network (CNN) models. The models exclusively utilize image data, and no additional metadata is incorporated during the training process. Various training strategies were employed to enhance model performance.
-	
+	We present a platform for Melanoma Classification, leveraging a technical infrastructure based on Convolution Neural Network (CNN) models based on ResNet18.  For training and validation, exclusively we have utilized image data, and no additional metadata is incorporated during the training process. Various training strategies, such as data augmentation, learning rate decay, dropout, etc., were employed to enhance model performance.
+
 	The resulting models are accessible through a  API, enabling users to interact with them via a straightforward web application. Users can submit batches of images to the API for classification, contributing to a user-friendly experience.
-	
+
 	This platform demonstrates the efficacy of CNNs in melanoma classification, highlighting the importance of diverse training approaches. The API provides a practical interface for users to seamlessly integrate melanoma classification into their workflows.
 \end{abstract}
 
@@ -37,8 +37,8 @@ must be accomplished are:
 
   \item Gaining a comprehensive understanding of the theory
     behind deep learning vision models and its practical applications.
-    
-   \item Select a base transfer model. Figuring out why, is this base model enough for our thesis?, the selection of this model is given by the technical limitations?, or any other justification.
+
+   \item Select a base transfer model. Is the model good enough?, the selection of this model is given by the technical limitations?, or any other justification.
 
   \item Study different approaches to train the models and select a good  evaluate metric given the dataset distribution of dermoscopy images.
 
@@ -53,7 +53,7 @@ must be accomplished are:
 \end{itemize}
 
 
-\section{Development Process}
+\section{Development process}
 
 The project methodology employed in this endeavor follows a continuous process.
 The project incorporates the concept of utilizing idle time effectively. For
@@ -69,38 +69,17 @@ throughout the project (see Figure \ref{fig:flux_development}).
   \begin{figure}[H]
   \centering
   \includegraphics[width=0.82\textwidth]{imatges/planing_and_methodology/EmplyedMethodology.png}
-  \caption{Activity diagram describing the methodology.}
+  \caption{\textit{Development process methodology.}}
   \label{fig:flux_development}
   \end{figure}
 
 \end{landscape}
 
+\newpage
 
-The process used to train, validate, test, and implement the models is
-illustrated in Figure \ref{fig:cad-infrastructure-training-system}. This
-sequence consists of several stages elaborated below. \\
+\section{CAD infrastructure pipeline}
 
-The first stage involves cleaning and splitting the initial dataset into
-smaller datasets. This step ensures that the data is organized and ready for
-further processing. \\
-
-The second stage focuses on training and validating the models using the
-training and validation datasets. During this stage, the system reads images
-and applies data augmentation techniques to train images and Test Time
-Augmentation (TTA) to validation images. These techniques enhance the model's
-performance by introducing variations in the data and improving its
-generalization ability. \\
-
-The third stage involves analyzing the training results obtained from different
-training approaches. In this section*, we evaluate and analyze the model's
-performance by comparing the predicted results against the test dataset. This
-step helps us understand how well the models are learning and performing on
-unseen data. \\
-
-The last stage revolves around exposing the trained models through an API's
-container image. This container image allows for easy deployment and
-integration of the models into other systems or applications, providing a
-convenient way to utilize the trained models for various tasks. \\
+Our CAD infrastructure pipeline  (see Figure \ref{fig:cad-pipeline}), consists of different steps, beginning with data acquisition, followed by data preprocessing. We then set up different datasets for training, validation, and testing. Subsequently, we train the models and, assess the models gathering metrics and finally we deploy the models under an API.
 
 
 \begin{figure}[H]
@@ -108,11 +87,113 @@ convenient way to utilize the trained models for various tasks. \\
   \centering
   \includegraphics[width=0.9\textwidth]{imatges/methodological_contribution/Pipeline.drawio.png}
   %\end{adjustbox}
-  \caption[CAD infrastructure pipeline]{\textit{CAD infrastructure pipeline. }}
-  {\label{fig:cad-infrastructure-training-system}}
+  \caption{\textit{CAD infrastructure pipeline. Train, test and deploy. }}
+  {\label{fig:cad-pipeline}}
 \end{figure}
 
-\section{Results}
+\section{Validation strategy}
+
+In any machine learning project, it is critical to establish a reliable
+validation scheme to properly evaluate and compare models. This becomes
+particularly crucial when dealing with a small to medium-sized dataset or when
+the evaluation metric is unstable, as is the case with the dataset provided in
+the competition. We adopted the approach of the Winning Solution to the
+SIIM-ISIC Melanoma Classification Challenge \cite{WinningISIC}. The Winning
+Solution team observed that in the entire dataset of 2020, comprising 33K
+images, only 1.76\% were positive samples (i.e., malignant). In response, they
+decided to augment this data by incorporating information from the datasets of
+the same competition from the previous years (2018 and 2019). Although the
+individual datasets from these earlier years were smaller, totaling 25K images,
+they exhibited a positive ratio of 17.85\%. This strategic combination allowed
+for a more balanced representation of positive cases in the training data.
+
+
+There are various metrics commonly used to assess the quality of a model's
+predictions. We present a selection of metrics that we find relevant for
+evaluating our models.
+
+A confusion matrix (see Figure \ref{fig:confusion-matrix}) is a square matrix
+with dimensions {\tt NxN}, where {\tt N} represents the total number of classes being
+predicted. \\
+
+\begin{figure}[H]
+  \begin{adjustbox}{trim={0pt 0.5cm 0pt 1cm}, clip}
+    \centering
+    \includegraphics[width=0.9\textwidth]{imatges/validation-strategy/confusion-matrix.png}
+  \end{adjustbox}
+  \caption[Confusion matrix multi-class]{\textit{Confusion matrix multi-class. Illustration by kaggle}}
+  {\label{fig:confusion-matrix}}
+\end{figure}
+
+From confusion matrix we can obtain other metrics such as:
+
+\begin{itemize}
+
+  \item {\bf Accuracy}
+
+    The Accuracy metric, calculates the ratio of correct predictions to the total number of
+    predictions made on a dataset. It is not a good matric when working with
+    unbalanced datasets.
+
+    \[Accuracy = \frac{TP + TN}{TP + TN + FP + FN}\]
+
+  \item {\bf True Positive Rate (TPR) or Sensitivity}
+
+    The True Positive Rate tells about how many of the true class samples were
+    correctly classified.
+
+    \[TPR = \frac{TP}{TP + FN}\]
+
+
+  \item {\bf False Positive Rate (FPR) or False Alarm Ratio}
+
+    The False Positive Rate tells the proportion of the true class samples that
+    were not correctly classified and are False Positive.
+
+    \[FPR = \frac{FP}{FP + TN}\]
+
+
+  \item {\bf Receiver Operator Characteristic (ROC)}
+
+	  An ROC curve plots TPR vs. FPR at different classification thresholds {\tt
+	  T}, where $T \ \text{for} \ 0 <= x <= 1$. Lowering the classification
+	  threshold classifies more items as positive, thus increasing both False
+	  Positives and True Positives. By plotting the curve, you can say which
+	  threshold is better, depeding on how many False Positive we are willing to
+	  accept.
+
+    \begin{figure}[H]
+      \centering
+      \begin{adjustbox}{trim={0pt 0cm 0pt 0cm}, clip}
+        \centering
+        \includegraphics[width=0.55\textwidth]{imatges/validation-strategy/ROCCurve.png}
+      \end{adjustbox}
+        \caption{\textit{Typical ROC Curve. Illustration by Alphabet Inc.}}
+      {\label{fig:ROCCurve}}
+    \end{figure}
+
+
+  \item {\bf Area Under the Curve (AUC)}
+
+  The Area Under the Curve is a value between 0 and 1 that measures the
+  ability of a classifier to distinguish between classes. It is used as a summary of
+  the ROC curve. The higher the AUC, the better the performance of the model at
+  distinguishing between the positive and negative classes.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{imatges/validation-strategy/auc.png}
+    \caption[AUC-ROC performance]{\textit{AUC comparation. Illustration by Elizabeth Louise Thomas}}
+    {\label{fig:auc-roc}}
+  \end{figure}
+
+\end{itemize}
+
+\newpage
+
+\section{Data augmentation and training}
+
+\section{Models metrics}
 
 The training phase ended with the development of eight models using an
 imbalanced dataset comprising eight classes. Various learning policies and
@@ -161,3 +242,5 @@ between healthcare professionals and the models. \\
 We also provided a Docker-based script for easy deployment of the
 infrastructure on any Linux operating system, ensuring efficient startup and
 operation.
+
+\section{CAD infrastructure result}
