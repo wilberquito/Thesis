@@ -1,9 +1,22 @@
 \begin{abstract}
-	We present a platform for Melanoma Classification, leveraging a technical infrastructure based on Convolution Neural Network (CNN) models based on ResNet18.  For training and validation, exclusively we have utilized image data, and no additional metadata is incorporated during the training process. Various training strategies, such as data augmentation, learning rate decay, dropout, etc., were employed to enhance model performance.
+  We present a platform for Melanoma Classification, leveraging a technical
+  infrastructure based on Convolution Neural Network (CNN) models based on
+  ResNet18.
 
-	The resulting models are accessible through a  API, enabling users to interact with them via a straightforward web application. Users can submit batches of images to the API for classification, contributing to a user-friendly experience.
+  For training and validation, exclusively we have utilized image data, and no
+  additional metadata is incorporated during the training process. Various
+  training strategies, such as data augmentation, learning rate decay, dropout,
+  etc., were employed to enhance models performance.
 
-	This platform demonstrates the efficacy of CNNs in melanoma classification, highlighting the importance of diverse training approaches. The API provides a practical interface for users to seamlessly integrate melanoma classification into their workflows.
+  The resulting models are accessible through a  API, enabling users to
+  interact with them via a straightforward web application. Users can submit
+  batches of images to the API for classification, contributing to a
+  user-friendly experience.
+
+  This platform demonstrates the efficacy of CNNs in melanoma classification,
+  highlighting the importance of diverse training approaches. The API provides
+  a practical interface for users to seamlessly integrate melanoma
+  classification into their workflows.
 \end{abstract}
 
 
@@ -14,7 +27,7 @@ Melanoma presents a considerable challenge due to its high mortality rate and
 the critical importance of early detection for successful treatment. Cancer
 begins when healthy cells undergo changes that cause them to grow and divide
 uncontrollably, forming tumors. These tumors can be classified as either
-cancerous (malignant) or non-cancerous (benign).\\
+cancerous (malignant) or non-cancerous (benign). \\
 
 In recent times, there has been a growing focus on automating tasks in the
 medical field through Computer-Aided Diagnosis (CAD)\footnote{CAD refers to the
@@ -23,7 +36,14 @@ in the process of medical diagnosis.}. Some studies have demonstrated that
 these systems can achieve results similar to those of professionals. However,
 the integration of CAD into the medical system remains a significant challenge. \\
 
-The development of a CAD system necessitates the creation of models capable of effectively classifying melanoma. The SIIM-ISIC Melanoma Classification challenge specifically tasks participants with building models for identifying melanoma using skin lesion images and associated metadata. This thesis outlines our approach, wherein we leverage data from this challenge to train our models and subsequently expose them through our platform. By doing so, we contribute to the ongoing efforts to bridge the gap between cutting-edge medical imaging technology and practical clinical applications.
+The development of a CAD system necessitates the creation of models capable of
+effectively classifying melanoma. The SIIM-ISIC Melanoma Classification
+challenge specifically tasks participants with building models for identifying
+melanoma using skin lesion images and associated metadata. This thesis outlines
+our approach, wherein we leverage data from this challenge to train our models
+and subsequently expose them through our platform. By doing so, we contribute
+to the ongoing efforts to bridge the gap between cutting-edge medical imaging
+technology and practical clinical applications.
 
 \newpage
 
@@ -60,7 +80,7 @@ The project incorporates the concept of utilizing idle time effectively. For
 instance, during the training of models, there are periods of idle time, which
 we exploited by concurrently working on other tasks related to developing the
 entire infrastructure. This approach allows for maximizing productivity
-throughout the project (see Figure \ref{fig:flux_development}).
+throughout the project, see Figure \ref{fig:flux_development}.
 
 \newpage
 
@@ -79,8 +99,11 @@ throughout the project (see Figure \ref{fig:flux_development}).
 
 \section{CAD infrastructure pipeline}
 
-Our CAD infrastructure pipeline  (see Figure \ref{fig:cad-pipeline}), consists of different steps, beginning with data acquisition, followed by data preprocessing. We then set up different datasets for training, validation, and testing. Subsequently, we train the models and, assess the models gathering metrics and finally we deploy the models under an API.
-
+Our CAD infrastructure pipeline  (see Figure \ref{fig:cad-pipeline}), consists
+of different steps, beginning with data acquisition, followed by data
+preprocessing. We then set up different datasets for training, validation, and
+testing. Subsequently, we train the models and, assess the models gathering
+metrics and finally we deploy the models under an API.
 
 \begin{figure}[H]
   %\begin{adjustbox}{width=\textwidth, trim={0.2cm 0pt 1.5cm 0pt}, clip}
@@ -91,30 +114,151 @@ Our CAD infrastructure pipeline  (see Figure \ref{fig:cad-pipeline}), consists o
   {\label{fig:cad-pipeline}}
 \end{figure}
 
+\section{Data and training strategies}
+
+Inspired by the approach of the Winning Solution to the SIIM-ISIC Melanoma
+Classification Challenge \cite{WinningISIC}. The Winning Solution team observed
+that in the entire dataset of 2020, comprising 33K images, only 1.76\% were
+positive samples (i.e., malignant). In response, they decided to augment this
+data by incorporating information from the datasets of the same competition
+from the previous years (2018 and 2019). Although the individual datasets from
+these earlier years were smaller, totaling 25K images, they exhibited a
+positive ratio of 17.85\%. This strategic combination allowed for a more
+balanced representation of positive cases in the training data. \\
+
+To build the original dataset, we utilized 8 classes selected from the raw
+dataset, as the remaining classes we considered not significant or there were
+very few samples of them. Any sample that was not categorized as one of the
+following classes were excluded from the training process.
+
+\begin{itemize}
+  \item melanoma
+  \item nevus
+  \item BCC (Basal Cell Carcinoma)
+  \item BKL (Benign lesions of the keratosis)
+  \item AK (Actinic Keratosis)
+  \item SCC (Squamous Cell Carcinoma)
+  \item VASC (Vascular Lesions)
+  \item DF (Dermatofibroma)
+\end{itemize}
+
+The filtered dataset comprises 31,265 distinct image samples, demonstrating a
+highly imbalanced dataset, as evident from Figure
+\ref{fig:hole-dataset-distribution}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{imatges/data-training-strategies/hole-dataset-diagnosis.png}
+  \caption[Categories distribution in dataset]{\textit{Categories distribution in dataset.}}
+  {\label{fig:hole-dataset-distribution}}
+\end{figure}
+
+
+We started dividing the original dataset into three subsets using the Holdout
+set scheme, see Figure \ref{fig:holdout-test-scheme}. \\
+
+During the training phase, the test set remains completely separate and is not
+used in any way to configure the hyper-parameters. This ensures that the
+performance of a model on the test set is not artificially inflated by
+adjusting hyper-parameters to achieve an exceptionally good outcome in the validation set. \\
+
+\newpage
+
+The data from the ISIC Archive was divided using the following percentages: 80\%
+for training, 10\% for validation, and 10\% for testing. Each subset contain the same
+distribution of classes as the original dataset, i.e., we applied stratification.
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.7\textwidth, trim={0cm 1cm 0cm 1.25cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/data-training-strategies/train-test-validation-sets.png}
+  \end{adjustbox}
+  \caption[Holdout set scheme]{\textit{Holdout set scheme. Illustration by Qualcomm}}
+  {\label{fig:holdout-test-scheme}}
+\end{figure}
+
+In small to medium sized datasets, augmentation is important to prevent
+overfit. For some of our trained models, we used in the training dataset our
+augmentation pipelines, as illustrated in Figure \ref{fig:sample-of-datasets} and
+Figure \ref{fig:aug-sample-of-datasets}, with contains the following augmentations
+from the popular and powerful PyTorch augmentation library Albumentations
+\cite{Albumentations}: Transpose, Flip, Rotate, RandomBrightness,
+RandomContrast, MotionBlur, MedianBlur, Gaus- sianBlur, GaussNoise,
+OpticalDistortion, GridDistortion, ElasticTransform, CLAHE, HueSaturationValue,
+ShiftScaleRotate, Cutout.
+
+\begin{figure}[H] \centering
+  \begin{adjustbox}{width=0.9\textwidth}
+    \includegraphics[width=\textwidth]{imatges/methodological_contribution/random-sample-of-isic.png}
+  \end{adjustbox}
+  \caption[Random sample of images]{\textit{Random sample of images.}}
+  {\label{fig:sample-of-datasets}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.9\textwidth}
+  \includegraphics[width=\textwidth]{imatges/methodological_contribution/random-sample-of-isic-augmented.png}
+  \end{adjustbox}
+  \caption[Augmented random sample of images]{\textit{Augmented random sample of images.}}
+  {\label{fig:aug-sample-of-datasets}}
+\end{figure}
+
+
+We decided to use as transfer model an already trained ResNet in the ImageNet
+database. ResNet is short for "Residual Network," is a deep convolutional
+neural network (CNN) architecture that was introduced in 2015 by researchers
+from Microsoft Research \cite{ResNetPaper}. It revolutionized the field of deep
+learning by addressing the challenge of training very deep neural networks. \\
+
+There are various architectural variants or "flavors" of ResNet, including
+ResNet-152,  ResNet-101,  ResNet-50,  ResNet-34, and  ResNet-18. The number
+following the name of each ResNet variant indicates the number of inner layers
+present in the architecture. The more the number of the layers the more the
+accuracy, yet the number of parameters to be trained increase. To accurately
+assess the performance of each ResNet architecture, refer to Table
+\ref{table:resnet}, which provides the accuracy achieved on the ImageNet
+dataset along with the corresponding number of trainable parameters in
+millions.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Model} & \textbf{Accuracy} & \textbf{Parameters} \\
+    \midrule
+    ResNet-152 & 78.31\% & 60.2M \\
+    ResNet-101 & 77.37\% & 44.5M \\
+    ResNet-50 & 76.15\% & 25.6M \\
+    ResNet-34 & 73.30\% & 21.8M \\
+    ResNet-18 & 69.76\% & 11.7M \\
+    \bottomrule
+  \end{tabular}
+  \caption[Accuracy achieved on ImageNet and trainable parameters of each ResNet]
+  {\textit{Accuracy achieved on ImageNet and trainable parameters of each ResNet.
+  Each image in the ImageNet dataset is associated with 1 of 1,000 classes. Table by paperswithcode}}
+  {\label{table:resnet}}
+\end{table}
+
+We decided to use ResNet18 as base model only for technical reasons. The lack
+of powerfull GPUs took us to pick this estimator agains the others. There are
+other architectures that we could have tried as: AlexNet, ResNetXt, VGG, etc,
+but comparing the performance of those models in the SIIM-ISIC Melanoma
+competition is not the goal of this thesis.
+
 \section{Validation strategy}
 
 In any machine learning project, it is critical to establish a reliable
 validation scheme to properly evaluate and compare models. This becomes
 particularly crucial when dealing with a small to medium-sized dataset or when
 the evaluation metric is unstable, as is the case with the dataset provided in
-the competition. We adopted the approach of the Winning Solution to the
-SIIM-ISIC Melanoma Classification Challenge \cite{WinningISIC}. The Winning
-Solution team observed that in the entire dataset of 2020, comprising 33K
-images, only 1.76\% were positive samples (i.e., malignant). In response, they
-decided to augment this data by incorporating information from the datasets of
-the same competition from the previous years (2018 and 2019). Although the
-individual datasets from these earlier years were smaller, totaling 25K images,
-they exhibited a positive ratio of 17.85\%. This strategic combination allowed
-for a more balanced representation of positive cases in the training data.
-
-
-There are various metrics commonly used to assess the quality of a model's
+the competition. There are various metrics commonly used to assess the quality of a model's
 predictions. We present a selection of metrics that we find relevant for
-evaluating our models.
+evaluating our models. \\
 
 A confusion matrix (see Figure \ref{fig:confusion-matrix}) is a square matrix
 with dimensions {\tt NxN}, where {\tt N} represents the total number of classes being
-predicted. \\
+predicted.
 
 \begin{figure}[H]
   \begin{adjustbox}{trim={0pt 0.5cm 0pt 1cm}, clip}
@@ -191,14 +335,12 @@ From confusion matrix we can obtain other metrics such as:
 
 \newpage
 
-\section{Data augmentation and training}
-
 \section{Models metrics}
 
 The training phase ended with the development of eight models using an
 imbalanced dataset comprising eight classes. Various learning policies and
 Artificial Intelligence (AI) techniques were tested during the experimentation
-process.  \\
+process.
 
 These models were divided into two categories: one without any
 additional regularization and another with additional regularization techniques
@@ -231,13 +373,13 @@ signs of overfitting on the validation set. In contrast, the second group of
 models, trained with additional regularization techniques, achieved lower
 results but did not suffer from overfitting. They had an average AUC of 84.950%
 with a standard deviation of ±0.625\%, which was influenced by more training
-epochs. \\
+epochs.
 
 During model training, we also developed the necessary CAD infrastructure. For
 the API, we used a flexible approach with soft configurations that could be
 specified through file-based parameters, offering adaptability and simplified
 management. Additionally, we created an intuitive UI for seamless interaction
-between healthcare professionals and the models. \\
+between healthcare professionals and the models.
 
 We also provided a Docker-based script for easy deployment of the
 infrastructure on any Linux operating system, ensuring efficient startup and
