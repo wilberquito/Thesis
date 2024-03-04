@@ -335,45 +335,114 @@ From confusion matrix we can obtain other metrics such as:
 
 \newpage
 
-\section{Models metrics}
+We used Test-time augmentation (TTA) in the inference phases, i.e., validation
+and testing. The idea behind TTA, is to generate multiple augmented versions of
+the test input and average the predictions of the model over these augmented
+samples to get a more robust and accurate result. \\
 
-The training phase ended with the development of eight models using an
-imbalanced dataset comprising eight classes. Various learning policies and
-Artificial Intelligence (AI) techniques were tested during the experimentation
-process.
+Let's denote the original test input as \(X\) and the model's prediction for
+\(X\) as \(Y\). TTA involves generating \(N\) augmented versions per each
+\(X_i\), obtaining predictions for each of these augmented samples (\(Y_i^1, Y_i^2,
+..., Y_i^N\)), and then averaging these predictions.
 
-These models were divided into two categories: one without any
-additional regularization and another with additional regularization techniques
-such as data augmentation and the inclusion of dropout layers.
+\[ \text{TTA}(X_i) = \frac{1}{N} \sum_{j=1}^{N} f(j, Y_i^j) \]
+
+Where:
+
+\begin{itemize}
+  \item \(X\) is the original test input.
+  \item \(Y\) is the model's prediction for the original input.
+  \item \(X_i\) represents the \(i\)-th augmented version of the test input.
+  \item \(Y_i\) is the model's prediction for the \(i\)-th augmented input.
+  \item \(N\) is the number of augmented samples generated.
+  \item \(f\) is defined as \(f: Int \rightarrow X \rightarrow X\). The
+    function applies simple transformations such as rotation and flips.
+\end{itemize}
+
+
+\section{Model metrics}
+
+The training phase ended with the development of eight models. Various learning
+policies such as; Learning Decay with schedulers and regularization with Data
+Agumentation and Dropout were applied. We computed other metrics such as,
+recall and presition but in Table \ref{table:resume-metrics} we show the AUC
+metric of in all datasets for the all models. \\
+
+The metrics with a gray background in Table \ref{table:resume-metrics}
+are from models that incorporated additional regularization techniques. These
+models were trained for 40 epochs since regularization tends to slow down the
+minimization of the objective function compared to the other models that were
+trained for only 20 epochs. \\
+
+
+\newpage
+
+Models that used a scheduler during the training stage are denoted with a
+symbol next to their names. For reference, the mapping between the scheduler
+used and the corresponding symbol is provided in Table
+\ref{table:scheduler-mapping}.
+
 
 \begin{table}[H]
-\centering
-\begin{tabular}{lc|lc}
+  \centering
+  \begin{tabular}{cc}
     \toprule
-  \textbf{Model} & \textbf{Test AUC} & \cellcolor{gray!50}\textbf{Model} & \cellcolor{gray!50}\textbf{Test AUC}  \\
-\midrule
- M0 & 0.892 & \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.858 \\
- M1 $\star$ & 0.892 & \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.843 \\
- M2 $\ast$ &  0.885 &  \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.848 \\
- M3 $\bullet$ & 0.886 & \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.849 \\
- \midrule
-Mean &  88.875\% & \cellcolor{gray!50}Mean & \cellcolor{gray!50}84.950\%  \\
-SD &  0.377\%  &   \cellcolor{gray!50}SD &  \cellcolor{gray!50}0.625\%  \\
-
-\bottomrule
-\end{tabular}
-\caption[Models metrics in test dataset]
-  {\textit{Models metrics in test dataset.}}
-{\label{table:test-set-resume-metrics}}
+    \multicolumn{2}{c}{\textbf{Scheduler Mapping}} \\
+    \midrule
+    $\star$     & Step Learning Rate \\
+    $\ast$      & Cosine Annealing Learning Rate \\
+    $\bullet$   & Cosine Annealing Warm Restarts \\
+    \bottomrule
+  \end{tabular}
+  \caption[Scheduler mapping]
+  {\textit{Scheduler mapping.}}
+  \label{table:scheduler-mapping}
 \end{table}
 
-The initial group of models performed well on the test set with an average AUC
-of 88.875\% and a small standard deviation of ±0.377\%. However, they showed
-signs of overfitting on the validation set. In contrast, the second group of
-models, trained with additional regularization techniques, achieved lower
-results but did not suffer from overfitting. They had an average AUC of 84.950%
-with a standard deviation of ±0.625\%, which was influenced by more training
-epochs.
+  \begin{table}
+    \centering
+    \begin{tabular}{lrrr}
+      \toprule
+      & \textbf{Train AUC} & \textbf{Val AUC} & \textbf{Test AUC} \\
+      \midrule
+      M0 & 0.952 & 0.903 & 0.892  \\
+      M1 $\star$ & 0.947 & 0.900 & 0.892 \\
+      M2 $\ast$ & 0.933 & 0.895 & 0.885 \\
+      M3 $\bullet$ & 0.935 & 0.896 & 0.886 \\
+      \midrule
+      \cellcolor{gray!50}M4 & \cellcolor{gray!50}0.886 & \cellcolor{gray!50}0.877 & \cellcolor{gray!50}0.858 \\
+      \cellcolor{gray!50}M5 $\star$ & \cellcolor{gray!50}0.867 & \cellcolor{gray!50}0.861 & \cellcolor{gray!50}0.843 \\
+      \cellcolor{gray!50}M6 $\ast$ & \cellcolor{gray!50}0.874 & \cellcolor{gray!50}0.868 & \cellcolor{gray!50}0.848 \\
+      \cellcolor{gray!50}M7 $\bullet$ & \cellcolor{gray!50}0.877 & \cellcolor{gray!50}0.869 & \cellcolor{gray!50}0.849 \\
+
+      \midrule
+
+      Mean &  94.175\% & 89.850\% & 88.875\%  \\
+      SD   & 0.921\% & 0.370\% & 0.377\%  \\
+
+      \midrule
+
+      \cellcolor{gray!50}Mean & \cellcolor{gray!50}87.600\% & \cellcolor{gray!50}86.875\% & \cellcolor{gray!50}84.950\% \\
+      \cellcolor{gray!50}SD & \cellcolor{gray!50}0.787\% & \cellcolor{gray!50}0.655\% & \cellcolor{gray!50}0.625\% \\
+
+      \bottomrule
+    \end{tabular}
+    \caption[Metrics in the datasets]
+    {\textit{AUC metric in all datasets. }}
+    {\label{table:resume-metrics}}
+  \end{table}
+
+As a result, we conclude that the first group of models performed well on the
+test set with an average AUC of 88.875\% and a small standard deviation of
+±0.377\%. However, they showed signs of overfitting in the training process, as
+model performed excelent in the training data but poorer in the validation set.
+In contrast, the second group of models that were trained with additional
+regularization techniques, achieved lower results in the test set, but did not
+suffer from overfitting. They had an average AUC of 84.950\% with a standard
+deviation of ±0.625\%.
+
+\section{CAD infrastructure result}
+
 
 During model training, we also developed the necessary CAD infrastructure. For
 the API, we used a flexible approach with soft configurations that could be
@@ -384,5 +453,3 @@ between healthcare professionals and the models.
 We also provided a Docker-based script for easy deployment of the
 infrastructure on any Linux operating system, ensuring efficient startup and
 operation.
-
-\section{CAD infrastructure result}
