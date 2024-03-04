@@ -1,4 +1,4 @@
-# Melanoma Thesis
+# A platform for classifying melanoma
 
 This repository contains the source code of my master's thesis in Data Science,
 I hardly recommend you to [read
