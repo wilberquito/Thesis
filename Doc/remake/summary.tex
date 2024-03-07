@@ -49,26 +49,30 @@ technology and practical clinical applications.
 
 \section{Objectives}
 
-The final objective of this thesis is to craft a CAD infrastructure,
-focused on melanoma detection using deep learning vision models capable of detecting melanoma on dermoscopy images. To this end, the gradual achievements that
-must be accomplished are:
+The final objective of this thesis is to craft a CAD infrastructure, focused on
+melanoma detection using deep learning vision models capable of detecting
+melanoma on dermoscopy images. To this end, the gradual achievements that must
+be accomplished are:
 
 \begin{itemize}
 
-  \item Gaining a comprehensive understanding of the theory
-    behind deep learning vision models and its practical applications.
+  \item Gaining a comprehensive understanding of the theory behind deep
+    learning vision models and its practical applications.
 
-   \item Select a base transfer model. Is the model good enough?, the selection of this model is given by the technical limitations?, or any other justification.
+   \item Select a base transfer model. Is the model good enough?, the selection
+     of this model is given by the technical limitations?, or any other
+     justification.
 
-  \item Study different approaches to train the models and select a good  evaluate metric given the dataset distribution of dermoscopy images.
+  \item Study different approaches to train the models and select a good
+    evaluate metric given the dataset distribution of dermoscopy images.
 
-  \item  Develop the CAD infrastructure. It should contain
-    the  trained models, a simple web UI\footnote{User Interface. Is
-    the point of human-computer interaction and communication in a device.}, an
-    API\footnote{Application Programming Interface. Is a set of protocols,
-      routines, tools, and definitions that allow different software applications
-    to communicate with each othe} and finally a mechanism using Docker to create
-    the images of these services making it ease to deploy in any based Linux System.
+  \item  Develop the CAD infrastructure. It should contain the  trained models,
+    a simple web UI\footnote{User Interface. Is the point of human-computer
+    interaction and communication in a device.}, an API\footnote{Application
+      Programming Interface. Is a set of protocols, routines, tools, and
+    definitions that allow different software applications to communicate with
+  each othe} and finally a mechanism using Docker to create the images of these
+  services making it ease to deploy in any system that supports virtualization.
 
 \end{itemize}
 
@@ -356,7 +360,7 @@ Where:
   \item \(Y_i\) is the model's prediction for the \(i\)-th augmented input.
   \item \(N\) is the number of augmented samples generated.
   \item \(f\) is defined as \(f: Int \rightarrow X \rightarrow X\). The
-    function applies simple transformations such as rotation and flips.
+    function applies simple transformations such as rotations and flips.
 \end{itemize}
 
 
@@ -443,13 +447,324 @@ deviation of ±0.625\%.
 
 \section{CAD infrastructure result}
 
+In this section, we briefly present the CAD infrastructure in its entirety (see
+Figure \ref{fig:background-task}). The CAD infrastructure essentially consists
+of two services: an API used to expose and interact with the trained models via
+the HTTP protocol, and a web application (UI). The UI features a simple layout
+that displays prediction data and metadata for dermoscopy images, along with
+information about the model used for the prediction. For each service, we
+created a Docker image to facilitate easy deployment of the infrastructure on
+any system that supports virtualization. \\
 
-During model training, we also developed the necessary CAD infrastructure. For
-the API, we used a flexible approach with soft configurations that could be
-specified through file-based parameters, offering adaptability and simplified
-management. Additionally, we created an intuitive UI for seamless interaction
-between healthcare professionals and the models.
+The necessary steps to install the infrastructure are explained in the README
+of the repository where the research and source code are available. Please
+visit the repository at
+\href{https://github.com/wilberquito/melanoma.thesis}{https://github.com/wilberquito/melanoma.thesis}.
 
-We also provided a Docker-based script for easy deployment of the
-infrastructure on any Linux operating system, ensuring efficient startup and
-operation.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.8\textwidth]{imatges/cad-result/BackgroundTask.drawio.png}
+  \caption{Comunication protocol for infering a bulk of dermoscopy images.}
+  {\label{fig:background-task}}
+\end{figure}
+
+The API basically has 5 end-points.
+
+\begin{itemize}
+  \item {\bf Consult the exposed models}
+
+
+Request:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/public_models
+\end{Verbatim}
+
+Possible response:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+{
+  "models": [
+    "M0",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "vicorobot.8c_b3_768_512_18ep_best_20_fold0",
+    "vicorobot.8c_b3_768_512_18ep_best_fold0",
+    "vicorobot.8c_b3_768_512_18ep_final_fold0"
+  ]
+}
+\end{Verbatim}
+
+
+
+  \item {\bf Trigger inference for a simple image}
+
+This endpoint expects an HTTP request containing a JPEG image in the body,
+along with the specified model name for performing the inference.
+
+Request:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+POST http://<api>/predict?model_id=<model-id>
+\end{Verbatim}
+
+Possible response:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+{
+  "task_uuid": "721445f5-ff37-4c99-af74-7157925b4a7c"
+}
+\end{Verbatim}
+
+
+  \item {\bf Trigger inference for a bulk of images}
+
+This endpoint is designed to handle requests for predicting multiple images
+simultaneously. To use this endpoint, you are required to provide two pieces of
+information in the HTTP request: the model you wish to use for image inference
+and a list of images attached to the request body.
+
+Request:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/predict_bulk?model_id=<model-id>
+\end{Verbatim}
+
+Possible response:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+{
+  "task_uuid": "77d5e834-60a1-49b6-a71a-b3472dc21ce5",
+  "num_images": 2
+}
+\end{Verbatim}
+
+
+  \item {\bf Consult the results of a triggered inference}
+
+Given the unique identifier for a triggered task inference, we can consult the
+result of the inference.
+
+Request:
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/from_task/<task_uuid>
+\end{Verbatim}
+
+Possbile response:
+
+
+\begin{Verbatim}[fontsize=\scriptsize]
+[
+  {
+    "name": "ISIC_0052349.jpg",
+    "probabilities": {
+      "AK": 0.0007466986,
+      "BCC": 0.0005002805,
+      "BKL": 0.015733117,
+      "DF": 0.00086343783,
+      "SCC": 0.0007902466,
+      "VASC": 0.0017217622,
+      "melanoma": 0.017426228,
+      "nevus": 0.9622182
+    },
+    "metadata": {
+      "origin": "wilberquito",
+      "net_type": "resnet18",
+      "img_size": 256,
+      "out_dim": 8
+    },
+    "prediction": {
+      "target": false,
+      "label": 7,
+      "prediction": "nevus"
+    }
+  },
+  {
+    "name": "ISIC_1766619.jpg",
+    "probabilities": {
+      "AK": 0.00016253705,
+      "BCC": 0.00011373816,
+      "BKL": 0.00052201655,
+      "DF": 0.0006251502,
+      "SCC": 0.00032183932,
+      "VASC": 0.00025595966,
+      "melanoma": 0.0012655357,
+      "nevus": 0.9967333
+    },
+    "metadata": {
+      "origin": "wilberquito",
+      "net_type": "resnet18",
+      "img_size": 256,
+      "out_dim": 8
+    },
+    "prediction": {
+      "target": false,
+      "label": 7,
+      "prediction": "nevus"
+    }
+  }
+]
+\end{Verbatim}
+
+
+
+  \item {\bf Consult the public end-points}
+
+All end-points are easy accessible by consulting the documentation.
+
+\begin{Verbatim}[fontsize=\scriptsize]
+http://<api>/docs
+\end{Verbatim}
+
+
+\end{itemize}
+
+\newpage
+
+Upon accessing the UI service through your web browser, you will immediately
+notice a single-page web application with several interactive buttons (see
+Figure \ref{fig:ui-tools}).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{imatges/results/ui-tools.png}
+  \caption[Main interactive buttons of the UI service]{\textit{Main interactive buttons of the UI service. }}
+  {\label{fig:ui-tools}}
+\end{figure}
+
+
+\begin{enumerate}
+
+  \item This button serves a dual purpose based on the UI's current state.
+    Either allows user make the prediction request or reset the UI clearing the
+    results of a inference.
+
+  \item This button enables users to load images directly from their device,
+    see Figure \ref{fig:selecting-imgs} and Figure \ref{fig:loaded-images}.
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.8\textwidth, trim={0.05cm 1.25cm 0cm 0.1cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/selecting-images.png}
+  \end{adjustbox}
+  \caption[Loading dermoscopy images from device]{\textit{Loading dermoscopy images from device.}}
+  {\label{fig:selecting-imgs}}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.9\textwidth, trim={0cm 3.5cm 0cm 0cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/loaded-images.png}
+  \end{adjustbox}
+  \caption[Dermoscopy images loaded in the UI]{\textit{Dermoscopy images loaded in the UI. }}
+  {\label{fig:loaded-images}}
+\end{figure}
+
+  \item Designed to sort the loaded images in the UI, this button operates
+    differently depending on whether the inference has been performed. If the
+    inference has not been executed, it sorts the images by name. However, if
+    the inference results have been obtained from the API, the button sorts the
+    images by importance, prioritizing melanoma classifications followed by
+    others.
+
+  \item This button displays a list of models exposed by the API, see Figure
+    \ref{fig:selecting-model}.
+
+
+    \begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{imatges/results/selecting-model.png}
+  \caption[Selecting exposed models by the API]{\textit{Selecting exposed models by the API. }}
+  {\label{fig:selecting-model}}
+\end{figure}
+
+\end{enumerate}
+
+Once we have loaded the images and selected the desired model for prediction,
+we are ready to make the request to the API for inference using the chosen
+model. The UI will display the images classified as melanoma with a red
+background and the images classified as other classes with a blue background,
+see Figure \ref{fig:after-prediction}.
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.9\textwidth, trim={0cm 3.55cm 0cm 0cm}, clip}
+    \includegraphics[width=\textwidth]{imatges/results/after-prediction.png}
+  \end{adjustbox}
+  \caption[UI state after prediction response]{\textit{UI state after prediction response.}}
+  {\label{fig:after-prediction}}
+\end{figure}
+
+On the top-right corner of every image appears button with a
+square symbol. When you click on any of these buttons, a pop-up window appears,
+providing additional information about the prediction for that specific image. \\
+
+For instance, let's inquire about more information about the dermoscopy image
+that was classified as melanoma in Figure \ref{fig:after-prediction}. Clicking
+on the corresponding square button will trigger a pop-up as showed in Figure
+\ref{fig:extra-inf-popup}. The pop-up provides extra information about the
+prediction, image, mode's author, etc.
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \begin{adjustbox}{width=0.9\textwidth, trim={0.05cm 0cm 0.25cm 0cm}, clip}
+    \includegraphics[]{imatges/results/extra-inf-popup.png}
+  \end{adjustbox}
+  \caption[Extra prediction information]{\textit{Extra prediction information.}}
+  {\label{fig:extra-inf-popup}}
+\end{figure}
+
+
+\section{Conclusions and Future Work}
+\label{cap:concl}
+
+The main goal of this thesis was to utilize machine learning techniques to
+train multiple CNNs models for detecting melanoma in an imbalanced dataset of
+dermoscopy images, adding value creating a CAD infrastructure to make models easy
+available to make predictions. \\
+
+While the models were in the training phase, we took the opportunity to develop
+the CAD (Computer-Aided Diagnosis) infrastructure. For the API, we opted for a
+soft-configuration approach, where the configurations are specified through
+file-based configurations, providing flexibility and ease of management.
+Additionally, we designed a simple and intuitive user interface (UI) to
+streamline the interaction of healthcare professionals with the exposed models.
+\\
+
+Furthermore, we achieved a significant milestone by successfully implementing a
+mechanism for deploying the models and services using containers. By leveraging
+containers, we ensured that the entire CAD architecture could be easily
+replicated and deployed across different environments. To further simplify the
+setup process, we also developed a shell script capable of downloading the
+necessary images and initiating the container services effectively. \\
+
+This approach combined both research and engineering efforts, enabling us to
+make sophisticated knowledge accessible to a wider audience. By integrating
+cutting-edge research and engineering principles, we have created a powerful
+tool for medical professionals, providing them with advanced diagnostic
+capabilities to improve patient care and outcomes. \\
+
+As we evaluate the current state of the CAD infrastructure, we acknowledge the
+existence of various potential implementations that could enhance its
+capabilities. One promising approach involves establishing a mechanism for
+iterative model training, continuously monitoring and tracking their
+performance. Models exhibiting exceptional behavior could be promptly exposed
+and made available for use. In the user interface (UI), professionals can
+access the training results of the models, even instances where the selected
+model may not have performed optimally. By providing this additional
+information, our aim is to boost professionals' confidence, preventing them
+from relying blindly on the models' inferences. Another promising approach
+involves exploring more complex CNN models or other architectures, such as the
+Transformer \cite{Transformer}. \\
+
+{\bf The resulting CAD infrastructure is a tool to assist, not a replacement for
+human expertise in desition making.}
