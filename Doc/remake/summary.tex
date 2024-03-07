@@ -130,7 +130,7 @@ these earlier years were smaller, totaling 25K images, they exhibited a
 positive ratio of 17.85\%. This strategic combination allowed for a more
 balanced representation of positive cases in the training data. \\
 
-To build the original dataset, we utilized 8 classes selected from the raw
+To build the original dataset, we utilized eight classes selected from the raw
 dataset, as the remaining classes we considered not significant or there were
 very few samples of them. Any sample that was not categorized as one of the
 following classes were excluded from the training process.
@@ -248,7 +248,49 @@ We decided to use ResNet18 as base model only for technical reasons and time
 constrains. The lack of powerfull GPUs took us to pick this estimator agains
 the others. There are other architectures that we could have tried as: AlexNet,
 ResNetXt, VGG, etc, but comparing the performance of those models in the
-SIIM-ISIC Melanoma competition is not the goal of this thesis.
+SIIM-ISIC Melanoma competition is not the goal of this thesis. \\
+
+Upon the ResNet18 we propose two models. For both models, we transformed their
+last layer into an identity layer, i.e., \(\mathbf{y} = Identity(\mathbf{y}),
+\quad \mathbf{y} \in \mathbb{R}^{512}\) and added a new trainable linear layer,
+\(\mathbf{y} = Linear(\mathbf{x}), \quad \mathbf{y} \in \mathbb{R}^8, \quad
+\mathbf{x} \in \mathbb{R}^{512}\). \\
+
+To train the models, we only need to define the forward propagation. The result
+of the forward propagation for the first model is given by:
+
+\[ \mathbf{y} = Forward(\mathbf{x}) = Linear(ResNet18(\mathbf{x})), \]
+
+where \( \mathbf{y} \) \in \( \mathbb{R}^8 \), and \( \mathbf{x} \) \in \(
+\mathbb{R}^{3 \times 256 \times 256} \). Figure \ref{fig:resnet-18-melanoma-arch} shows
+the architecture of the first model.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{imatges/methodological_contribution/ResNet18_Melanoma.png}
+  \caption[ResNet18\_Melanoma architecture]{\textit{ResNet18 Melanoma architecture.}}
+  {\label{fig:resnet-18-melanoma-arch}}
+\end{figure}
+
+The forward propagation of the second model is more intricate, involving the
+averaging of predictions \(N\) times through the application of \(Linear \circ
+Dropout\).
+
+\[ \quad \mathbf{y} = Forward(\mathbf{x}) = \frac{\sum_{j=1}^{N} Linear(Dropout(\mathbf{r}))}{\mathbf{N}}, \]
+
+where \( \mathbf{y} \) \in \( \mathbb{R}^8 \), \( \mathbf{x} \) \in \(
+\mathbb{R}^{3 \times 256 \times 256} \),  and \(\mathbf{r} =
+ResNet18(\mathbf{x}), \quad \mathbf{r} \in \mathbb{R}^{512}\). Figure
+\ref{fig:resnet-18-dropout-melanoma-arch} shows the architecture of the second
+model.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{imatges/methodological_contribution/ResNet18_Dropout_Melanoma.png}
+  \caption[ResNet18\_Dropout\_Melanoma architecture]{\textit{ResNet18 Dropout Melanoma architecture.}}
+  {\label{fig:resnet-18-dropout-melanoma-arch}}
+\end{figure}
+
 
 \section{Validation strategy}
 
@@ -337,8 +379,6 @@ From confusion matrix we can obtain other metrics such as:
 
 \end{itemize}
 
-\newpage
-
 We used Test-time augmentation (TTA) in the inference phases, i.e., validation
 and testing. The idea behind TTA, is to generate multiple augmented versions of
 the test input and average the predictions of the model over these augmented
@@ -349,7 +389,7 @@ Let's denote the original test input as \(X\) and the model's prediction for
 \(X_i\), obtaining predictions for each of these augmented samples (\(Y_i^1, Y_i^2,
 ..., Y_i^N\)), and then averaging these predictions.
 
-\[ \text{TTA}(X_i) = \frac{1}{N} \sum_{j=1}^{N} f(j, Y_i^j) \]
+\[ TTA(X_i) = \frac{1}{N} \sum_{j=1}^{N} f(j, Y_i^j) \]
 
 Where:
 
@@ -377,9 +417,6 @@ are from models that incorporated additional regularization techniques. These
 models were trained for 40 epochs since regularization tends to slow down the
 minimization of the objective function compared to the other models that were
 trained for only 20 epochs. \\
-
-
-\newpage
 
 Models that used a scheduler during the training stage are denoted with a
 symbol next to their names. For reference, the mapping between the scheduler
@@ -626,8 +663,6 @@ http://<api>/docs
 
 \end{itemize}
 
-\newpage
-
 Upon accessing the UI service through your web browser, you will immediately
 notice a single-page web application with several interactive buttons (see
 Figure \ref{fig:ui-tools}).
@@ -691,7 +726,11 @@ Once we have loaded the images and selected the desired model for prediction,
 we are ready to make the request to the API for inference using the chosen
 model. The UI will display the images classified as melanoma with a red
 background and the images classified as other classes with a blue background,
-see Figure \ref{fig:after-prediction}.
+see Figure \ref{fig:after-prediction}. \\
+
+On the top-right corner of every image appears button with a
+square symbol. When you click on any of these buttons, a pop-up window appears,
+providing additional information about the prediction for that specific image. \\
 
 \begin{figure}[H]
   \centering
@@ -702,17 +741,12 @@ see Figure \ref{fig:after-prediction}.
   {\label{fig:after-prediction}}
 \end{figure}
 
-On the top-right corner of every image appears button with a
-square symbol. When you click on any of these buttons, a pop-up window appears,
-providing additional information about the prediction for that specific image. \\
 
 For instance, let's inquire about more information about the dermoscopy image
 that was classified as melanoma in Figure \ref{fig:after-prediction}. Clicking
 on the corresponding square button will trigger a pop-up as showed in Figure
 \ref{fig:extra-inf-popup}. The pop-up provides extra information about the
 prediction, image, mode's author, etc.
-
-\newpage
 
 \begin{figure}[H]
   \centering
