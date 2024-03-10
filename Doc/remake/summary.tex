@@ -24,7 +24,7 @@ Melanoma presents a considerable challenge due to its high mortality rate and
 the critical importance of early detection for successful treatment. Cancer
 begins when healthy cells undergo changes that cause them to grow and divide
 uncontrollably, forming tumors. These tumors can be classified as either
-cancerous (malignant) or non-cancerous (benign). \\
+cancerous (malignant) or non-cancerous (benign) \cite{Melanoma}. \\
 
 In recent times, there has been a growing focus on automating tasks in the
 medical field through Computer-Aided Diagnosis (CAD)\footnote{CAD refers to the
@@ -59,7 +59,7 @@ be accomplished are:
     learning vision models and its practical applications.
 
    \item Select a base transfer model. Is the model good enough?, the selection
-     of this model is given by the technical limitations?, or any other
+     of this model is given by the technical limitations or by any other
      justification.
 
   \item Study different approaches to train the models and select a good
@@ -378,7 +378,7 @@ From confusion matrix we can obtain other metrics such as:
 
 \end{itemize}
 
-We used Test-time augmentation (TTA) in the inference phases, i.e., validation
+We used Test-time augmentation (TTA) \cite{TTA} in the inference phases, i.e., validation
 and testing. The idea behind TTA, is to generate multiple augmented versions of
 the test input and average the predictions of the model over these augmented
 samples to get a more robust and accurate result. \\
