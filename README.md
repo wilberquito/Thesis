@@ -2,7 +2,7 @@
 
 This repository contains the source code of my master's thesis in Data Science,
 I hardly recommend you to [read
-it](https://raw.githubusercontent.com/wilberquito/melanoma.thesis/remake/Doc/remake/main.pdf).
+it](https://raw.githubusercontent.com/wilberquito/melanoma.thesis/main/Doc/remake/main.pdf).
 The assets and the trained models can be found in this public GitLab
 [repository](https://gitlab.com/wilberquito/open.thesis).
 
