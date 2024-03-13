@@ -36,13 +36,14 @@ the integration of CAD into the medical system remains a significant challenge.
 \\
 
 The development of a CAD system necessitates the creation of models capable of
-effectively classifying melanoma. The SIIM-ISIC Melanoma Classification
-challenge specifically tasks participants with building models for identifying
-melanoma using skin lesion images and associated metadata. This thesis outlines
-our approach, wherein we leverage data from this challenge to train our models
-and subsequently expose them through our platform. By doing so, we contribute
-to the ongoing efforts to bridge the gap between cutting-edge medical imaging
-technology and practical clinical applications.
+effectively classifying melanoma. The SIIM-ISIC\footnote{Society for Imaging
+Informatics in Medicine \& International Skin Imaging Collaboration.} Melanoma
+Classification challenge specifically tasks participants with building models
+for identifying melanoma using skin lesion images and associated metadata. This
+thesis outlines our approach, wherein we leverage data from this challenge to
+train our models and subsequently expose them through our platform. By doing
+so, we contribute to the ongoing efforts to bridge the gap between cutting-edge
+medical imaging technology and practical clinical applications.
 
 \newpage
 
@@ -58,12 +59,12 @@ be accomplished are:
   \item Gaining a comprehensive understanding of the theory behind deep
     learning vision models and its practical applications.
 
-   \item Select a base transfer model. Is the model good enough?, the selection
+   \item Select a base transfer model. Is the model good enough? The selection
      of this model is given by the technical limitations or by any other
-     justification.
+     justification?
 
   \item Study different approaches to train the models and select a good
-    evaluate metric given the dataset distribution of dermoscopy images.
+    evaluate metric given by the dataset distribution of dermoscopy images.
 
   \item  Develop the CAD infrastructure. It should contain the  trained models,
     a simple web UI\footnote{User Interface. Is the point of human-computer
@@ -106,7 +107,7 @@ throughout the project, see Figure \ref{fig:flux_development}.
 
 Our CAD infrastructure pipeline  (see Figure \ref{fig:cad-pipeline}), consists
 of different steps, beginning with data acquisition, followed by data
-preprocessing. We then set up different datasets for training, validation, and
+preprocessing. Then we set up different datasets for training, validation, and
 testing. Subsequently, we train the models and, assess the models gathering
 metrics and finally we deploy the models under a crafted API.
 
@@ -134,17 +135,17 @@ balanced representation of positive cases in the training data. \\
 To build the original dataset, we utilized eight classes selected from the raw
 dataset, as the remaining classes we considered not significant or there were
 very few samples of them. Any sample that was not categorized as one of the
-following classes were excluded from the training process.
+following classes were excluded from the training process:
 
 \begin{itemize}
-  \item melanoma
-  \item nevus
-  \item BCC (Basal Cell Carcinoma)
-  \item BKL (Benign lesions of the keratosis)
-  \item AK (Actinic Keratosis)
-  \item SCC (Squamous Cell Carcinoma)
-  \item VASC (Vascular Lesions)
-  \item DF (Dermatofibroma)
+  \item Nevus
+  \item Melanoma
+  \item Basal Cell Carcinoma (BCC)
+  \item Benign lesions of the keratosis (BKL)
+  \item Actinic Keratosis (AK)
+  \item Squamous Cell Carcinoma (SCC)
+  \item Vascular Lesions (VASC)
+  \item Dermatofibroma (DF)
 \end{itemize}
 
 The filtered dataset comprises 31,265 distinct image samples, demonstrating a
@@ -164,8 +165,9 @@ set scheme, see Figure \ref{fig:holdout-test-scheme}. \\
 
 During the training phase, the test set remains completely separate and is not
 used in any way to configure the hyper-parameters. This ensures that the
-performance of a model on the test set is not artificially inflated by
-adjusting hyper-parameters to achieve an exceptionally good outcome in the validation set. \\
+performance of a model on the test set, is not artificially inflated by
+adjusting hyper-parameters, in order to achieve an exceptionally good outcome
+in the validation set. \\
 
 \newpage
 
@@ -210,16 +212,16 @@ ShiftScaleRotate, Cutout.
 \end{figure}
 
 
-We decided to use as transfer model an already trained ResNet in the ImageNet
-database. ResNet is short for "Residual Network," is a deep convolutional
-neural network (CNN) architecture that was introduced in 2015 by researchers
-from Microsoft Research \cite{ResNetPaper}. It revolutionized the field of deep
+We decided to use as transfer model an already trained Residual Network
+(ResNet) in the ImageNet database. ResNet is a deep convolutional neural
+network (CNN) architecture that was introduced in 2015 by researchers from
+Microsoft Research \cite{ResNetPaper}. It revolutionized the field of deep
 learning by addressing the challenge of training very deep neural networks. \\
 
 There are various architectural variants or "flavors" of ResNet, including
 ResNet-152,  ResNet-101,  ResNet-50,  ResNet-34, and  ResNet-18. The number
 following the name of each ResNet variant indicates the number of inner layers
-present in the architecture. The more the number of the layers the more the
+present in the architecture. The more the number of layers, the more the
 accuracy, yet the number of parameters to be trained increase. To accurately
 assess the performance of each ResNet architecture refer to Table
 \ref{table:resnet}.
@@ -244,10 +246,10 @@ assess the performance of each ResNet architecture refer to Table
 \end{table}
 
 We decided to use ResNet18 as base model only for technical reasons and time
-constrains. The lack of powerfull GPUs took us to pick this estimator and not
+constrains. The lack of powerfull (Graphical Processing Units) GPUs took us to pick this estimator and not
 other. There are other lightweight architectures that we could have tried as:
 AlexNet, ResNetXt, VGG, etc, but finding the model that performance the best in
-the SIIM-ISIC Melanoma competition is not the goal of this thesis. \\
+the SIIM-ISIC Melanoma competition is not the goal of this project. \\
 
 Upon the ResNet18 we propose two models. For both models, we transformed the
 ResNet18's last layer into an identity layer, i.e., \(\mathbf{y} =
@@ -302,9 +304,9 @@ the competition. There are various metrics commonly used to assess the quality o
 predictions. We present a selection of metrics that we find relevant for
 evaluating our models. \\
 
-A confusion matrix (see Figure \ref{fig:confusion-matrix}) is a square matrix
-with dimensions \(N\times N\) where \(N\) represents the total number of classes being
-predicted.
+A confusion matrix (Figure \ref{fig:confusion-matrix}) is a square matrix with
+dimensions \(N\times N\) where \(N\) represents the total number of classes
+being predicted.
 
 \begin{figure}[H]
   \begin{adjustbox}{trim={0pt 0.5cm 0pt 1cm}, clip}
@@ -364,9 +366,9 @@ From confusion matrix we can obtain other metrics such as:
 
   \item {\bf Area Under the Curve (AUC)}
 
-  Area Under the Curve is a value between 0 and 1 that measures the
-  ability of a classifier to distinguish between classes. It is used as a summary of
-  the ROC curve. The higher the AUC, the better the performance of the model at
+  Area Under the Curve is a value between 0 and 1 that measures the ability of
+  a classifier to distinguish between classes. It is used as a summary of the
+  ROC curve. The higher the AUC the better the performance of the model at
   distinguishing between the positive and negative classes.
 
   \begin{figure}[H]
@@ -406,7 +408,7 @@ Where:
 \section{Model metrics}
 
 The training phase ended with the development of eight models. Various learning
-policies such as; Learning Decay with schedulers and regularization with Data
+policies such as: Learning Decay with schedulers and regularization with Data
 Agumentation and Dropout were applied. We computed other metrics such as,
 recall and presition but in Table \ref{table:resume-metrics} we show the AUC
 metric of in all datasets for all models. \\
@@ -502,7 +504,7 @@ visit the repository at
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\textwidth]{imatges/cad-result/BackgroundTask.drawio.png}
-  \caption{Comunication protocol for infering a bulk of dermoscopy images.}
+  \caption[]{\textit{Communication protocol for infering a bulk of dermoscopy images.}}
   {\label{fig:background-task}}
 \end{figure}
 
@@ -748,7 +750,7 @@ For instance, let's inquire about more information about the dermoscopy image
 that was classified as melanoma in Figure \ref{fig:after-prediction}. Clicking
 on the corresponding square button will trigger a pop-up as showed in Figure
 \ref{fig:extra-inf-popup}. The pop-up provides extra information about the
-prediction, image, mode's author, etc.
+prediction, image, model's author, etc.
 
 \begin{figure}[H]
   \centering
@@ -769,7 +771,7 @@ dermoscopy images, adding value creating a CAD infrastructure to make models eas
 available to make predictions. \\
 
 While the models were in the training phase, we took the opportunity to develop
-the CAD (Computer-Aided Diagnosis) infrastructure. For the API, we opted for a
+the CAD infrastructure. For the API, we opted for a
 soft-configuration approach, where the configurations are specified through
 file-based configurations, providing flexibility and ease of management.
 Additionally, we designed a simple and intuitive user interface (UI) to
@@ -800,10 +802,9 @@ model may not have performed optimally. By providing this additional
 information, our goal is to boost professionals' confidence, preventing them
 from relying blindly on the models' inferences. \\
 
-Another promising approach involves exploring more complex Convolutional Neural
-Network (CNN) models or other architectures, such as the Transformer
-\cite{Transformer}. Finally, we could train our models with patient metadata
-and expand the dataset. \\
+Another promising approach involves exploring more complex CNN models or other
+architectures, such as the Transformer \cite{Transformer}. Finally, we could
+train our models with patient metadata and expand the dataset. \\
 
 {\bf The resulting CAD infrastructure is a tool to assist, not a replacement for
 human expertise in desition making.}
